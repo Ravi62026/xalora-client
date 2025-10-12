@@ -1,8 +1,10 @@
 import axios from "axios";
 
-// Check if we're in a Vercel environment
+// Check if we're in a Vercel environment or custom domain
 const isVercel = window.location.hostname.includes('vercel') || window.location.hostname.includes('xalora-client');
+const isCustomDomain = window.location.hostname.includes('xalora.one');
 console.log(`🌐 AXIOS: Running in Vercel environment: ${isVercel}`);
+console.log(`🌐 AXIOS: Running in Custom domain: ${isCustomDomain}`);
 console.log(`🌐 AXIOS: Window location: ${window.location.hostname}`);
 
 const baseURL = import.meta.env.VITE_API_URL || "";
@@ -27,7 +29,7 @@ axiosInstance.interceptors.request.use(
         }
         
         // Add additional headers for cross-origin requests
-        if (baseURL && (baseURL.includes('vercel') || baseURL.includes('https') || isVercel)) {
+        if (baseURL && (baseURL.includes('vercel') || baseURL.includes('https') || isVercel || isCustomDomain)) {
             config.headers['Cache-Control'] = 'no-cache';
             config.headers['Pragma'] = 'no-cache';
             config.headers['Expires'] = '0';
@@ -35,7 +37,7 @@ axiosInstance.interceptors.request.use(
         
         console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
         console.log(`🌐 AXIOS-REQUEST: Using baseURL: ${baseURL}`);
-        console.log(`🌐 AXIOS-REQUEST: Vercel environment: ${isVercel}`);
+        console.log(`🌐 AXIOS-REQUEST: Vercel environment: ${isVercel}, Custom domain: ${isCustomDomain}`);
         console.log(`🍪 AXIOS-COOKIES: Sending credentials: ${config.withCredentials}`);
         return config;
     },
