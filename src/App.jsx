@@ -121,6 +121,7 @@ const AppContent = () => {
     
     window.addEventListener('focus', handleFocus);
     
+    // Clean up event listener
     return () => {
       window.removeEventListener('focus', handleFocus);
     };

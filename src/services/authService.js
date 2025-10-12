@@ -57,7 +57,7 @@ const authService = {
     refreshToken: async () => {
         console.log("🔄 AUTH-SERVICE: Refreshing token...");
         try {
-            const response = await axiosInstance.post("/api/v1/users/refresh-token");
+            const response = await axiosInstance.post(ApiRoutes.user.refreshToken);
             console.log("✅ AUTH-SERVICE: Token refreshed:", response.data);
             return response.data;
         } catch (error) {

@@ -7,6 +7,8 @@ export const initializeAuth = createAsyncThunk(
     async () => {
         try {
             console.log("🔄 REDUX: Initializing authentication...");
+            
+            // First, try to get user from server (with current tokens)
             const response = await authService.getUser();
             if (response.success && response.data) {
                 console.log("✅ REDUX: User authenticated via cookies:", response.data.email);
@@ -21,9 +23,29 @@ export const initializeAuth = createAsyncThunk(
         } catch (error) {
             console.log("❌ REDUX: Cookie auth failed, checking localStorage...", error.response?.status);
             
-            // If it's a 401 error, clear localStorage and logout
+            // If it's a 401 error, try to refresh token first
             if (error.response?.status === 401) {
-                console.log("🚪 REDUX: 401 error - clearing localStorage and logging out");
+                console.log("🚪 REDUX: 401 error - attempting token refresh");
+                try {
+                    // Try to refresh the token
+                    const refreshResponse = await authService.refreshToken();
+                    if (refreshResponse.success) {
+                        console.log("✅ REDUX: Token refreshed successfully, retrying user fetch");
+                        // If refresh successful, try to get user again
+                        const retryResponse = await authService.getUser();
+                        if (retryResponse.success && retryResponse.data) {
+                            console.log("✅ REDUX: User authenticated after token refresh:", retryResponse.data.email);
+                            // Update localStorage
+                            localStorage.setItem('hireveu_user', JSON.stringify(retryResponse.data));
+                            return retryResponse.data;
+                        }
+                    }
+                } catch (refreshError) {
+                    console.log("❌ REDUX: Token refresh failed:", refreshError.response?.data?.message);
+                }
+                
+                // If refresh failed or still can't get user, clear localStorage and logout
+                console.log("🚪 REDUX: Clearing localStorage and logging out");
                 localStorage.removeItem('hireveu_user');
                 return null;
             }
