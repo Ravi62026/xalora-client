@@ -153,9 +153,7 @@ const ResumeAI = () => {
           ApiRoutes.resumeAI.analyze,
           formData,
           {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+            // Don't set Content-Type for FormData - let browser set it with boundary
           }
         );
         return res.data;

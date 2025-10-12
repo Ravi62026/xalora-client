@@ -159,9 +159,7 @@ const ResumeAI = () => {
           ApiRoutes.resumeAI.analyze,
           formData,
           {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+            // Don't set Content-Type for FormData - let browser set it with boundary
             timeout: 180000, // 3 minute timeout for resume analysis
           }
         );
