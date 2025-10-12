@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Logs
+logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Debug files
+src/test_*
+test_*
+
+# Documentation
+*.md
+!README.md# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Logs
+logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Debug files
+src/test_*
+test_*
+
+# Documentation
+*.md
+!README.md

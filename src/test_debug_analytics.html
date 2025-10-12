@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Analytics API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Quiz Analytics Debug Tool</h1>
+    
+    <div class="section">
+        <h3>Step 1: Test Authentication</h3>
+        <button onclick="testAuth()">Test Auth</button>
+        <div id="auth-result"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Step 2: Debug Submissions</h3>
+        <button onclick="debugSubmissions()">Debug Submissions</button>
+        <div id="debug-result"></div>
+    </div>
+    
+    <div class="section">
+        <h3>Step 3: Test Analytics API</h3>
+        <button onclick="testAnalytics()">Test Analytics</button>
+        <div id="analytics-result"></div>
+    </div>
+
+    <script>
+        async function testAuth() {
+            try {
+                const response = await fetch('/api/v1/users/user', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('auth-result').innerHTML = 
+                        '<div class="success"><h4>✅ Auth Success</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                } else {
+                    document.getElementById('auth-result').innerHTML = 
+                        '<div class="error"><h4>❌ Auth Failed</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                }
+            } catch (error) {
+                document.getElementById('auth-result').innerHTML = 
+                    '<div class="error"><h4>❌ Auth Error</h4><p>' + error.message + '</p></div>';
+            }
+        }
+
+        async function debugSubmissions() {
+            try {
+                const response = await fetch('/api/v1/quizzes/debug/submissions', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('debug-result').innerHTML = 
+                        '<div class="success"><h4>✅ Debug Success</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                } else {
+                    document.getElementById('debug-result').innerHTML = 
+                        '<div class="error"><h4>❌ Debug Failed</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                }
+            } catch (error) {
+                document.getElementById('debug-result').innerHTML = 
+                    '<div class="error"><h4>❌ Debug Error</h4><p>' + error.message + '</p></div>';
+            }
+        }
+
+        async function testAnalytics() {
+            try {
+                const response = await fetch('/api/v1/quizzes/analytics', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('analytics-result').innerHTML = 
+                        '<div class="success"><h4>✅ Analytics Success</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                } else {
+                    document.getElementById('analytics-result').innerHTML = 
+                        '<div class="error"><h4>❌ Analytics Failed</h4><pre>' + 
+                        JSON.stringify(data, null, 2) + '</pre></div>';
+                }
+            } catch (error) {
+                document.getElementById('analytics-result').innerHTML = 
+                    '<div class="error"><h4>❌ Analytics Error</h4><p>' + error.message + '</p></div>';
+            }
+        }
+    </script>
+</body>
+</html>
