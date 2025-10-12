@@ -2,11 +2,29 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
 import { debugCookies } from "../../utils/cookieDebug";
 
-// Async thunks
+// Add a timestamp to track the last auth check
+let lastAuthCheck = 0;
+const AUTH_CHECK_INTERVAL = 5000; // 5 seconds minimum between auth checks
+
 export const initializeAuth = createAsyncThunk(
     "user/initializeAuth",
-    async () => {
+    async (_, { getState }) => {
         try {
+            const now = Date.now();
+            
+            // Check if we're already authenticated to avoid unnecessary requests
+            const { user } = getState().user;
+            if (user && user.email) {
+                // Check if we've made a recent auth check
+                if (now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
+                    console.log("🔄 REDUX: Skipping auth check, too soon since last check");
+                    return user;
+                }
+            }
+            
+            // Update the last auth check timestamp
+            lastAuthCheck = now;
+            
             console.log("🔄 REDUX: Initializing authentication...");
             console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
             debugCookies();

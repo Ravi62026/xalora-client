@@ -107,28 +107,36 @@ const LoadingMessage = () => {
 
 const AppContent = () => {
   const dispatch = useDispatch();
-  const { isInitializing } = useSelector((state) => state.user);
+  const { isInitializing, user } = useSelector((state) => state.user);
+  
+  // Use a ref to track if we've already initialized
+  const hasInitialized = React.useRef(false);
 
   useEffect(() => {
-    // Initialize auth on app load
-    dispatch(initializeAuth());
-    
-    // Also re-initialize auth when the window regains focus
-    // This helps detect if the user logged out in another tab
-    const handleFocus = () => {
+    // Initialize auth on app load only once
+    if (!hasInitialized.current) {
+      console.log("🔄 APP: Initializing authentication for the first time");
       dispatch(initializeAuth());
-    };
+      hasInitialized.current = true;
+    }
     
-    window.addEventListener('focus', handleFocus);
+    // Periodic auth check every 30 seconds
+    const authCheckInterval = setInterval(() => {
+      // Only check auth if we're not already initializing
+      if (!isInitializing) {
+        console.log("🕒 APP: Periodic auth check");
+        dispatch(initializeAuth());
+      }
+    }, 30000); // Check every 30 seconds
     
-    // Clean up event listener
+    // Clean up interval
     return () => {
-      window.removeEventListener('focus', handleFocus);
+      clearInterval(authCheckInterval);
     };
-  }, [dispatch]);
+  }, [dispatch, isInitializing]);
 
   // Show loading screen while checking authentication
-  if (isInitializing) {
+  if (isInitializing && !user) {
     return <LoadingMessage />;
   }
 
