@@ -110,7 +110,20 @@ const AppContent = () => {
   const { isInitializing } = useSelector((state) => state.user);
 
   useEffect(() => {
+    // Initialize auth on app load
     dispatch(initializeAuth());
+    
+    // Also re-initialize auth when the window regains focus
+    // This helps detect if the user logged out in another tab
+    const handleFocus = () => {
+      dispatch(initializeAuth());
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
   }, [dispatch]);
 
   // Show loading screen while checking authentication

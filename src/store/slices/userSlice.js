@@ -34,6 +34,18 @@ export const initializeAuth = createAsyncThunk(
                 if (storedUser) {
                     const userData = JSON.parse(storedUser);
                     console.log("✅ REDUX: User restored from localStorage:", userData.email);
+                    // Verify with server that the user is still valid
+                    try {
+                        const verifyResponse = await authService.getUser();
+                        if (verifyResponse.success && verifyResponse.data) {
+                            console.log("✅ REDUX: User verified with server:", verifyResponse.data.email);
+                            return verifyResponse.data;
+                        }
+                    } catch (verifyError) {
+                        console.log("❌ REDUX: User verification failed:", verifyError.response?.status);
+                        // If verification fails, clear localStorage
+                        localStorage.removeItem('hireveu_user');
+                    }
                     return userData;
                 }
             } catch (localStorageError) {
@@ -207,6 +219,8 @@ const userSlice = createSlice({
                 state.isAuthenticated = false;
                 state.user = null;
                 state.error = null;
+                // Clear localStorage even if API call fails
+                localStorage.removeItem('hireveu_user');
             });
     },
 });

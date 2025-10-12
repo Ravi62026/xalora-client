@@ -26,10 +26,37 @@ axiosInstance.interceptors.response.use(
     (response) => {
         return response;
     },
-    (error) => {
+    async (error) => {
+        const originalRequest = error.config;
+        
         // Handle 401 errors globally
-        if (error.response?.status === 401) {
-            console.log("🚪 AXIOS: 401 error detected, clearing localStorage and logging out");
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            console.log("🚪 AXIOS: 401 error detected");
+            
+            // Try to refresh token
+            if (!originalRequest._retry) {
+                originalRequest._retry = true;
+                
+                try {
+                    console.log("🔄 AXIOS: Attempting to refresh token");
+                    const refreshResponse = await axios.post(
+                        `${baseURL}/api/v1/users/refresh-token`,
+                        {},
+                        { withCredentials: true }
+                    );
+                    
+                    if (refreshResponse.data.success) {
+                        console.log("✅ AXIOS: Token refreshed successfully");
+                        // Retry the original request
+                        return axiosInstance(originalRequest);
+                    }
+                } catch (refreshError) {
+                    console.log("❌ AXIOS: Token refresh failed:", refreshError.response?.data?.message);
+                }
+            }
+            
+            // If refresh failed or not attempted, clear localStorage and logout
+            console.log("🚪 AXIOS: Clearing localStorage and logging out");
             localStorage.removeItem('hireveu_user');
             
             // Dispatch logout action if store is available

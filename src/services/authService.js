@@ -54,6 +54,17 @@ const authService = {
         });
         return response.data;
     },
+    refreshToken: async () => {
+        console.log("🔄 AUTH-SERVICE: Refreshing token...");
+        try {
+            const response = await axiosInstance.post("/api/v1/users/refresh-token");
+            console.log("✅ AUTH-SERVICE: Token refreshed:", response.data);
+            return response.data;
+        } catch (error) {
+            console.log("❌ AUTH-SERVICE: Failed to refresh token:", error.response?.data?.message);
+            throw error;
+        }
+    },
 };
 
 export default authService;

@@ -9,6 +9,8 @@ const ApiRoutes = {
         updateUser: "/api/v1/users/user",
         getAllUsers: "/api/v1/users/admin/users",
         updateUserRole: (userId) => `/api/v1/users/admin/users/${userId}/role`,
+        refreshToken: "/api/v1/users/refresh-token",
+        checkAuth: "/api/v1/users/check-auth",
     },
     problems: {
         create: "/api/v1/problems",
