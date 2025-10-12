@@ -17,7 +17,7 @@ export const initializeAuth = createAsyncThunk(
             if (user && user.email) {
                 // Check if we've made a recent auth check
                 if (now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
-                    console.log("🔄 REDUX: Skipping auth check, too soon since last check");
+                    // console.log("🔄 REDUX: Skipping auth check, too soon since last check");
                     return user;
                 }
             }
@@ -25,50 +25,50 @@ export const initializeAuth = createAsyncThunk(
             // Update the last auth check timestamp
             lastAuthCheck = now;
             
-            console.log("🔄 REDUX: Initializing authentication...");
-            console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
+            // console.log("🔄 REDUX: Initializing authentication...");
+// console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
             debugCookies();
             
             // First, try to get user from server (with current tokens)
             const response = await authService.getUser();
             if (response.success && response.data) {
-                console.log("✅ REDUX: User authenticated via cookies:", response.data.email);
+                // console.log("✅ REDUX: User authenticated via cookies:", response.data.email);
                 // Update localStorage
                 localStorage.setItem('hireveu_user', JSON.stringify(response.data));
                 return response.data;
             }
-            console.log("❌ REDUX: No user data in response");
+            // console.log("❌ REDUX: No user data in response");
             // Clear localStorage if server auth failed
             localStorage.removeItem('hireveu_user');
             return null;
         } catch (error) {
-            console.log("❌ REDUX: Cookie auth failed, checking localStorage...", error.response?.status);
-            console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
+            // console.log("❌ REDUX: Cookie auth failed, checking localStorage...", error.response?.status);
+// console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
             debugCookies();
             
             // If it's a 401 error, try to refresh token first
             if (error.response?.status === 401) {
-                console.log("🚪 REDUX: 401 error - attempting token refresh");
+                // console.log("🚪 REDUX: 401 error - attempting token refresh");
                 try {
                     // Try to refresh the token
                     const refreshResponse = await authService.refreshToken();
                     if (refreshResponse.success) {
-                        console.log("✅ REDUX: Token refreshed successfully, retrying user fetch");
+                        // console.log("✅ REDUX: Token refreshed successfully, retrying user fetch");
                         // If refresh successful, try to get user again
                         const retryResponse = await authService.getUser();
                         if (retryResponse.success && retryResponse.data) {
-                            console.log("✅ REDUX: User authenticated after token refresh:", retryResponse.data.email);
+                            // console.log("✅ REDUX: User authenticated after token refresh:", retryResponse.data.email);
                             // Update localStorage
                             localStorage.setItem('hireveu_user', JSON.stringify(retryResponse.data));
                             return retryResponse.data;
                         }
                     }
                 } catch (refreshError) {
-                    console.log("❌ REDUX: Token refresh failed:", refreshError.response?.data?.message);
+                    // console.log("❌ REDUX: Token refresh failed:", refreshError.response?.data?.message);
                 }
                 
                 // If refresh failed or still can't get user, clear localStorage and logout
-                console.log("🚪 REDUX: Clearing localStorage and logging out");
+                // console.log("🚪 REDUX: Clearing localStorage and logging out");
                 localStorage.removeItem('hireveu_user');
                 return null;
             }
@@ -78,23 +78,23 @@ export const initializeAuth = createAsyncThunk(
                 const storedUser = localStorage.getItem('hireveu_user');
                 if (storedUser) {
                     const userData = JSON.parse(storedUser);
-                    console.log("✅ REDUX: User restored from localStorage:", userData.email);
+                    // console.log("✅ REDUX: User restored from localStorage:", userData.email);
                     // Verify with server that the user is still valid
                     try {
                         const verifyResponse = await authService.getUser();
                         if (verifyResponse.success && verifyResponse.data) {
-                            console.log("✅ REDUX: User verified with server:", verifyResponse.data.email);
+                            // console.log("✅ REDUX: User verified with server:", verifyResponse.data.email);
                             return verifyResponse.data;
                         }
                     } catch (verifyError) {
-                        console.log("❌ REDUX: User verification failed:", verifyError.response?.status);
+                        // console.log("❌ REDUX: User verification failed:", verifyError.response?.status);
                         // If verification fails, clear localStorage
                         localStorage.removeItem('hireveu_user');
                     }
                     return userData;
                 }
             } catch (localStorageError) {
-                console.log("❌ REDUX: localStorage also failed");
+                // console.log("❌ REDUX: localStorage also failed");
             }
             
             // Clear localStorage if no valid data found
@@ -108,17 +108,17 @@ export const loginUser = createAsyncThunk(
     "user/loginUser",
     async ({ email, password }, { rejectWithValue }) => {
         try {
-            console.log("🔐 REDUX: Attempting login...");
+// console.log("🔐 REDUX: Attempting login...");
             const response = await authService.login(email, password);
-            console.log("✅ REDUX: Login successful, checking if cookies were set");
-            console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
+// console.log("✅ REDUX: Login successful, checking if cookies were set");
+// console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
             debugCookies();
             
             // Check if auth cookies are present
             const cookies = document.cookie;
             const hasAuthCookies = cookies.includes('accessToken') || cookies.includes('refreshToken') || cookies.includes('sessionId');
             if (!hasAuthCookies) {
-                console.warn("⚠️ REDUX: No auth cookies found after login. This may cause authentication issues.");
+                // console.warn("⚠️ REDUX: No auth cookies found after login. This may cause authentication issues.");
             }
             
             if (response.success) {
@@ -126,7 +126,7 @@ export const loginUser = createAsyncThunk(
             }
             return rejectWithValue(response.message || "Login failed");
         } catch (error) {
-            console.log("Login error:", error);
+            // console.log("Login error:", error);
             // Provide more specific error messages
             if (error.response?.status === 400) {
                 return rejectWithValue(
@@ -199,7 +199,7 @@ const userSlice = createSlice({
             state.error = null;
         },
         setUser: (state, action) => {
-            console.log("🔄 REDUX: Setting user data:", action.payload);
+            // console.log("🔄 REDUX: Setting user data:", action.payload);
             state.user = action.payload;
             state.isAuthenticated = true;
             state.isInitializing = false;

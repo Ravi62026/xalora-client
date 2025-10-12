@@ -86,7 +86,7 @@ const ResumeAI = () => {
       });
       setRoles(response.data.roles || []);
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      // console.error("Error fetching roles:", error);
     }
   };
 
@@ -98,7 +98,7 @@ const ResumeAI = () => {
       });
       setHistory(response.data.analyses || []);
     } catch (error) {
-      console.error("Error fetching history:", error);
+      // console.error("Error fetching history:", error);
     }
   };
 
@@ -186,7 +186,7 @@ const ResumeAI = () => {
           resumeText: analysisData.resume_text || ""
         };
 
-        console.log("📋 Formatted analysis data:", formattedAnalysisData);
+        // console.log("📋 Formatted analysis data:", formattedAnalysisData);
         setAnalysisResult(formattedAnalysisData);
         setCurrentSession(sessionId);
         handleTabChange("analysis");
@@ -220,7 +220,7 @@ const ResumeAI = () => {
           pollCount++;
 
           if (pollCount > maxPolls) {
-            console.error("❌ Analysis polling timeout after 1 hour");
+            // console.error("❌ Analysis polling timeout after 1 hour");
             setIsAnalyzing(false);
 
             // Show a more helpful error message with options
@@ -279,21 +279,21 @@ const ResumeAI = () => {
                 resumeText: pollData.analysisResult?.resume_text || ""
               };
 
-              console.log("📋 Formatted analysis data:", formattedAnalysisData);
+              // console.log("📋 Formatted analysis data:", formattedAnalysisData);
               setAnalysisResult(formattedAnalysisData);
               setCurrentSession(sessionId);
               handleTabChange("analysis");
 
               // Restore AI session for interactive features (Q&A, Improvements, etc.)
-              console.log("🔄 Restoring AI session for interactive features...");
+              // console.log("🔄 Restoring AI session for interactive features...");
               try {
                 await axiosInstance.post(
                   ApiRoutes.resumeAI.restoreSession(sessionId)
                 );
                 setSessionRestored(true);
-                console.log("✅ AI session restored successfully");
+                // console.log("✅ AI session restored successfully");
               } catch (restoreError) {
-                console.warn("⚠️ Could not restore AI session:", restoreError.message);
+                // console.warn("⚠️ Could not restore AI session:", restoreError.message);
                 setSessionRestored(false);
               }
       
@@ -322,7 +322,7 @@ const ResumeAI = () => {
       
       fetchHistory();
     } catch (error) {
-      console.error("Error analyzing resume:", error);
+      // console.error("Error analyzing resume:", error);
       setIsAnalyzing(false);
     }
   };
@@ -333,7 +333,7 @@ const ResumeAI = () => {
       setSessionRestored(false);
       navigate(`/resume-ai/${sessionId}`);
 
-      console.log("🚀 Loading analysis for session:", sessionId);
+      // console.log("🚀 Loading analysis for session:", sessionId);
 
       // Make both API calls in parallel to reduce loading time
       const [analysisResponse, restoreResponse] = await Promise.allSettled([

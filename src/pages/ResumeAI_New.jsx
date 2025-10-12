@@ -88,7 +88,7 @@ const ResumeAI = () => {
       });
       setRoles(response.data.roles || []);
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      // console.error("Error fetching roles:", error);
     }
   };
 
@@ -100,7 +100,7 @@ const ResumeAI = () => {
       });
       setHistory(response.data.analyses || []);
     } catch (error) {
-      console.error("Error fetching history:", error);
+      // console.error("Error fetching history:", error);
     }
   };
 
@@ -168,7 +168,7 @@ const ResumeAI = () => {
       
       fetchHistory();
     } catch (error) {
-      console.error("Error analyzing resume:", error);
+      // console.error("Error analyzing resume:", error);
     }
   };
 
@@ -216,7 +216,7 @@ const ResumeAI = () => {
       setCurrentSession(sessionId);
       setShowHistory(false);
     } catch (error) {
-      console.error("Error loading analysis:", error);
+      // console.error("Error loading analysis:", error);
     }
   };
 
@@ -245,7 +245,7 @@ const ResumeAI = () => {
       ]);
       setQuestion("");
     } catch (error) {
-      console.error("Error asking question:", error);
+      // console.error("Error asking question:", error);
       alert(
         "Failed to get answer. Please try loading this analysis again from history."
       );
@@ -281,7 +281,7 @@ const ResumeAI = () => {
 
       setInterviewQuestions(response.data.questions || []);
     } catch (error) {
-      console.error("Error generating interview questions:", error);
+      // console.error("Error generating interview questions:", error);
       alert(
         "Failed to generate questions. Please try loading this analysis again from history."
       );
@@ -313,7 +313,7 @@ const ResumeAI = () => {
 
       setImprovements(response.data.improvements || {});
     } catch (error) {
-      console.error("Error getting improvements:", error);
+      // console.error("Error getting improvements:", error);
       alert(
         "Failed to get improvements. Please try loading this analysis again from history."
       );
@@ -366,7 +366,7 @@ const ResumeAI = () => {
 
       setImprovedResume(response.data.improvedResume || "");
     } catch (error) {
-      console.error("Error generating improved resume:", error);
+      // console.error("Error generating improved resume:", error);
       alert(
         "Failed to generate improved resume. Please try loading this analysis again from history."
       );
