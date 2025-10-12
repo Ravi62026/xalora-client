@@ -1,6 +1,13 @@
 import axios from "axios";
 
+// Check if we're in a Vercel environment
+const isVercel = window.location.hostname.includes('vercel') || window.location.hostname.includes('xalora-client');
+console.log(`🌐 AXIOS: Running in Vercel environment: ${isVercel}`);
+console.log(`🌐 AXIOS: Window location: ${window.location.hostname}`);
+
 const baseURL = import.meta.env.VITE_API_URL || "";
+console.log(`🌐 AXIOS: Using baseURL: ${baseURL}`);
+
 const compilerURL =
     import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
 
@@ -20,13 +27,15 @@ axiosInstance.interceptors.request.use(
         }
         
         // Add additional headers for cross-origin requests
-        if (baseURL && baseURL.includes('vercel') || baseURL.includes('https')) {
+        if (baseURL && (baseURL.includes('vercel') || baseURL.includes('https') || isVercel)) {
             config.headers['Cache-Control'] = 'no-cache';
             config.headers['Pragma'] = 'no-cache';
             config.headers['Expires'] = '0';
         }
         
         console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
+        console.log(`🌐 AXIOS-REQUEST: Using baseURL: ${baseURL}`);
+        console.log(`🌐 AXIOS-REQUEST: Vercel environment: ${isVercel}`);
         console.log(`🍪 AXIOS-COOKIES: Sending credentials: ${config.withCredentials}`);
         return config;
     },
@@ -86,6 +95,7 @@ axiosInstance.interceptors.response.use(
             
             try {
                 console.log("🔄 AXIOS: Attempting to refresh token");
+                console.log(`🌐 AXIOS: Using refresh URL: ${baseURL}/api/v1/users/refresh-token`);
                 const refreshResponse = await axios.post(
                     `${baseURL}/api/v1/users/refresh-token`,
                     {},
