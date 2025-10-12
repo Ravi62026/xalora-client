@@ -14,6 +14,20 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         config.withCredentials = true;
+        // Ensure proper headers for cookie handling
+        if (!config.headers) {
+            config.headers = {};
+        }
+        
+        // Add additional headers for cross-origin requests
+        if (baseURL && baseURL.includes('vercel') || baseURL.includes('https')) {
+            config.headers['Cache-Control'] = 'no-cache';
+            config.headers['Pragma'] = 'no-cache';
+            config.headers['Expires'] = '0';
+        }
+        
+        console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
+        console.log(`🍪 AXIOS-COOKIES: Sending credentials: ${config.withCredentials}`);
         return config;
     },
     (error) => {
@@ -45,6 +59,12 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         
+        // Log response errors
+        console.log(`❌ AXIOS-RESPONSE-ERROR: ${error.response?.status} for ${originalRequest?.url}`);
+        if (error.response?.status === 401) {
+            console.log(`🍪 AXIOS-RESPONSE-COOKIES: Document cookies:`, document.cookie);
+        }
+        
         // Handle 401 errors globally
         if (error.response?.status === 401 && !originalRequest._retry) {
             console.log("🚪 AXIOS: 401 error detected");
@@ -69,12 +89,22 @@ axiosInstance.interceptors.response.use(
                 const refreshResponse = await axios.post(
                     `${baseURL}/api/v1/users/refresh-token`,
                     {},
-                    { withCredentials: true }
+                    { 
+                        withCredentials: true,
+                        // Ensure proper headers for cookie handling
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
                 );
                 
                 if (refreshResponse.data.success) {
                     console.log("✅ AXIOS: Token refreshed successfully");
-                    processQueue(null, refreshResponse.data.data.accessToken);
+                    processQueue(null, refreshResponse.data.data?.accessToken);
+                    // Update the Authorization header for the original request
+                    if (refreshResponse.data.data?.accessToken) {
+                        originalRequest.headers['Authorization'] = 'Bearer ' + refreshResponse.data.data.accessToken;
+                    }
                     // Retry the original request
                     return axiosInstance(originalRequest);
                 }
@@ -110,6 +140,10 @@ export const compilerAxios = axios.create({
 compilerAxios.interceptors.request.use(
     (config) => {
         config.withCredentials = true;
+        // Ensure proper headers for cookie handling
+        if (!config.headers) {
+            config.headers = {};
+        }
         return config;
     },
     (error) => {

@@ -69,6 +69,7 @@ const Login = () => {
             return;
         }
 
+        console.log("🔐 LOGIN: Attempting login with email:", formData.email);
         const result = await dispatch(
             loginUser({
                 email: formData.email,
@@ -77,12 +78,15 @@ const Login = () => {
         );
 
         if (loginUser.fulfilled.match(result)) {
+            console.log("✅ LOGIN: Successful, redirecting to home");
             // Clear form data on successful login
             setFormData({
                 email: "",
                 password: "",
             });
             navigate("/");
+        } else {
+            console.log("❌ LOGIN: Failed with error:", result.payload);
         }
     };
 

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
+import { debugCookies } from "../../utils/cookieDebug";
 
 // Async thunks
 export const initializeAuth = createAsyncThunk(
@@ -7,6 +8,8 @@ export const initializeAuth = createAsyncThunk(
     async () => {
         try {
             console.log("🔄 REDUX: Initializing authentication...");
+            console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
+            debugCookies();
             
             // First, try to get user from server (with current tokens)
             const response = await authService.getUser();
@@ -22,6 +25,8 @@ export const initializeAuth = createAsyncThunk(
             return null;
         } catch (error) {
             console.log("❌ REDUX: Cookie auth failed, checking localStorage...", error.response?.status);
+            console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
+            debugCookies();
             
             // If it's a 401 error, try to refresh token first
             if (error.response?.status === 401) {
@@ -85,8 +90,12 @@ export const loginUser = createAsyncThunk(
     "user/loginUser",
     async ({ email, password }, { rejectWithValue }) => {
         try {
+            console.log("🔐 REDUX: Attempting login...");
             const response = await authService.login(email, password);
             if (response.success) {
+                console.log("✅ REDUX: Login successful, cookies should be set");
+                console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
+                debugCookies();
                 return response.data;
             }
             return rejectWithValue(response.message || "Login failed");
