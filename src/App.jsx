@@ -213,7 +213,7 @@ const AppContent = () => {
         <Route path="/subscription-debug" element={<SubscriptionDebug />} />
       </Routes>
       {/* Debug component - remove in production */}
-      <DebugUserInfo />
+      {/* <DebugUserInfo /> */}
     </>
   );
 };
