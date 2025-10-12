@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useAnimation } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "../components";
 import { Button } from "../components/ui/Button";
 
 const Home = () => {
+  const navigate = useNavigate();
 
   // Floating animation controls
   const floatingControls = useAnimation();
@@ -308,10 +310,16 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2, duration: 1 }}
           >
-            <Button className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-2xl shadow-2xl shadow-red-500/30 transition-all duration-300 transform hover:scale-105 animate-pulse">
+            <Button
+              className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-2xl shadow-2xl shadow-red-500/30 transition-all duration-300 transform hover:scale-105 animate-pulse"
+              onClick={() => navigate('/pricing')}
+            >
               🔥 Claim 51% OFF Now
             </Button>
-            <Button className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl shadow-2xl shadow-blue-500/30 transition-all duration-300 transform hover:scale-105">
+            <Button
+              className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl shadow-2xl shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
+              onClick={() => navigate('/dashboard')}
+            >
               Start Learning Free
             </Button>
           </motion.div>
@@ -573,10 +581,16 @@ const Home = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Button className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-2xl shadow-2xl shadow-red-500/30 transition-all duration-300 transform hover:scale-105 animate-pulse">
+              <Button
+                className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-2xl shadow-2xl shadow-red-500/30 transition-all duration-300 transform hover:scale-105 animate-pulse"
+                onClick={() => navigate('/pricing')}
+              >
                 🔥 Claim 51% OFF - Limited Time
               </Button>
-              <Button className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl shadow-2xl shadow-blue-500/30 transition-all duration-300 transform hover:scale-105">
+              <Button
+                className="px-8 py-4 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl shadow-2xl shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
+                onClick={() => navigate('/dashboard')}
+              >
                 Start Free Trial
               </Button>
             </div>

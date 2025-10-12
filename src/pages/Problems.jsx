@@ -19,12 +19,13 @@ const Problems = () => {
     });
     const [filters, setFilters] = useState({
         difficulty: "all",
-        status: "all",
+        company: "all",
         search: "",
         tags: "",
         solvedStatus: "all" // Add solved status filter
     });
     const [allTags, setAllTags] = useState([]);
+    const [allCompanies, setAllCompanies] = useState([]);
 
     useEffect(() => {
         const fetchProblems = async () => {
@@ -34,9 +35,8 @@ const Problems = () => {
                 ...(filters.difficulty !== "all" && {
                     difficulty: filters.difficulty,
                 }),
-                // Only include status filter if user is authenticated
-                ...((filters.status !== "all" && isAuthenticated) && {
-                    status: filters.status,
+                ...(filters.company !== "all" && {
+                    company: filters.company,
                 }),
                 ...(filters.search && { search: filters.search }),
                 ...(filters.tags && { tags: filters.tags }),
@@ -95,10 +95,13 @@ const Problems = () => {
 
                         // Extract unique tags from all problems for filter dropdown
                         const tags = new Set();
+                        const companies = new Set();
                         problemsData.forEach((problem) => {
                             problem.tags?.forEach((tag) => tags.add(tag));
+                            problem.companies?.forEach((company) => companies.add(company));
                         });
                         setAllTags(Array.from(tags).sort());
+                        setAllCompanies(Array.from(companies).sort());
                     }
                 }
             );
@@ -203,26 +206,25 @@ const Problems = () => {
                                     <option value="Hard" className="bg-gray-900">Hard</option>
                                 </select>
                             </div>
-                            {/* Only show status filter if user is authenticated */}
-                            {isAuthenticated && (
-                                <div>
-                                    <label className="block text-sm font-medium text-white/90 mb-1">
-                                        Status
-                                    </label>
-                                    <select
-                                        className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white transition-all duration-300"
-                                        value={filters.status}
-                                        onChange={(e) =>
-                                            handleFilterChange("status", e.target.value)
-                                        }
-                                    >
-                                        <option value="all" className="bg-gray-900">All Statuses</option>
-                                        <option value="Solved" className="bg-gray-900">Solved</option>
-                                        <option value="Attempted" className="bg-gray-900">Attempted</option>
-                                        <option value="Unattempted" className="bg-gray-900">Unattempted</option>
-                                    </select>
-                                </div>
-                            )}
+                            <div>
+                                <label className="block text-sm font-medium text-white/90 mb-1">
+                                    Company
+                                </label>
+                                <select
+                                    className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white transition-all duration-300"
+                                    value={filters.company}
+                                    onChange={(e) =>
+                                        handleFilterChange("company", e.target.value)
+                                    }
+                                >
+                                    <option value="all" className="bg-gray-900">All Companies</option>
+                                    {allCompanies.map((company) => (
+                                        <option key={company} value={company} className="bg-gray-900">
+                                            {company}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             {/* Solved/Unsolved filter */}
                             {isAuthenticated && (
                                 <div>

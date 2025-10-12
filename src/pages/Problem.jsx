@@ -1012,6 +1012,22 @@ fn main() {
                     </span>
                   )}
                 </div>
+                {/* Companies Section */}
+                {problem.companies && problem.companies.length > 0 && (
+                  <div className="mt-2">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Companies:</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {problem.companies.map((company, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full border border-blue-200"
+                        >
+                          {company}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="mt-1 flex items-center gap-4 text-sm text-gray-500">
                   <span>Submissions: {submissions.length}</span>
                 </div>
@@ -1689,7 +1705,7 @@ fn main() {
                               <div className="mb-2">
                                 <p className="text-sm text-gray-600">
                                   Passed {executionResult.summary.passed}
-                                  of {executionResult.summary.total}
+                                  of  {executionResult.summary.total} 
                                   test cases
                                   {executionResult.summary.maxMemory &&
                                     ` • Memory: ${executionResult.summary.maxMemory}KB`}

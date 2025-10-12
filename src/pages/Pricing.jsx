@@ -54,8 +54,8 @@ const Pricing = () => {
       id: "pulse",
       name: "Xalora Pulse",
       tagline: "Get in the flow — code, learn, evolve.",
-      price: 245, // 51% discount from 499
-      originalPrice: 499,
+      price: 196, // 51% discount from 499
+      originalPrice: 399,
       period: "per month",
       bestFor: "Intermediate users (1st–2nd year students serious about CS)",
       description: "For consistent learners who want AI-backed coding support",
@@ -82,8 +82,8 @@ const Pricing = () => {
       id: "nexus",
       name: "Xalora Nexus",
       tagline: "Connect with the future of AI learning.",
-      price: 490, // 51% discount from 999
-      originalPrice: 999,
+      price: 349, // 51% discount from 999
+      originalPrice: 699,
       period: "per month",
       bestFor: "2nd–3rd year students & project builders",
       description: "AI-powered skill acceleration + project-based growth",
