@@ -273,14 +273,14 @@ const Problems = () => {
                             const actualStatus = isLocalSolved ? "Solved" : (problem.userStatus || "Unattempted");
                             
                             // Debug logging
-                            console.log("🔍 Problem Render Debug:", {
-                                title: problem.title,
-                                backendStatus: problem.userStatus,
-                                isLocalSolved,
-                                actualStatus,
-                                solvedProblems,
-                                problemId: problem._id
-                            });
+                            // console.log("🔍 Problem Render Debug:", {
+                            //     title: problem.title,
+                            //     backendStatus: problem.userStatus,
+                            //     isLocalSolved,
+                            //     actualStatus,
+                            //     solvedProblems,
+                            //     problemId: problem._id
+                            // });
                             
                             return (
                             <Link

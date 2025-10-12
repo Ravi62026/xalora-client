@@ -7,8 +7,21 @@ console.log(`🌐 AXIOS: Running in Vercel environment: ${isVercel}`);
 console.log(`🌐 AXIOS: Running in Custom domain: ${isCustomDomain}`);
 console.log(`🌐 AXIOS: Window location: ${window.location.hostname}`);
 
-const baseURL = import.meta.env.VITE_API_URL || "";
-console.log(`🌐 AXIOS: Using baseURL: ${baseURL}`);
+// Determine the correct baseURL based on environment
+let baseURL = import.meta.env.VITE_API_URL || "";
+console.log(`🌐 AXIOS: Initial baseURL from env: ${baseURL}`);
+
+// If no baseURL is set and we're in production, use relative path (same origin)
+if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === 'production')) {
+    baseURL = "";
+    console.log(`🌐 AXIOS: Using relative path for production environment`);
+} else if (!baseURL) {
+    // Default to localhost for development
+    baseURL = "http://localhost:8000";
+    console.log(`🌐 AXIOS: Using default localhost baseURL for development`);
+}
+
+console.log(`🌐 AXIOS: Final baseURL: ${baseURL}`);
 
 const compilerURL =
     import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
