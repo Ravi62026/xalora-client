@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAnimation } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components";
 import { Button } from "../components/ui/Button";
