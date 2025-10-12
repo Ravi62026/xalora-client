@@ -1,6 +1,6 @@
 // Utility functions for debugging cookies
 export const debugCookies = () => {
-    console.log('🍪 COOKIE-DEBUG: Document cookies:', document.cookie);
+    // console.log('🍪 COOKIE-DEBUG: Document cookies:', document.cookie);
     
     // Try to get cookies using different methods
     const cookies = {};

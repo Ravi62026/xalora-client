@@ -115,7 +115,7 @@ const AppContent = () => {
   useEffect(() => {
     // Initialize auth on app load only once
     if (!hasInitialized.current) {
-      console.log("🔄 APP: Initializing authentication for the first time");
+      // console.log("🔄 APP: Initializing authentication for the first time");
       dispatch(initializeAuth());
       hasInitialized.current = true;
     }
