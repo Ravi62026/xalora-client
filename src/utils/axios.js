@@ -40,7 +40,7 @@ const compilerURL =
 const axiosInstance = axios.create({
     baseURL,
     withCredentials: true,
-    timeout: 10000, // 10 second timeout
+    timeout: 120000, // 120 second timeout (2 minutes) for long operations like resume analysis
 });
 
 // Add request interceptor to ensure credentials are sent
@@ -60,7 +60,12 @@ axiosInstance.interceptors.request.use(
         }
         
         // Always include credentials and proper headers
-        config.headers['Content-Type'] = 'application/json';
+        // Don't set Content-Type for FormData - browser will set it automatically with boundary
+        if (!(config.data instanceof FormData)) {
+            if (!config.headers['Content-Type']) {
+                config.headers['Content-Type'] = 'application/json';
+            }
+        }
         config.headers['Accept'] = 'application/json';
         
         console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
