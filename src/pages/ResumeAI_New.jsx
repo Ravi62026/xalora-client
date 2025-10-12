@@ -177,8 +177,6 @@ const ResumeAI = () => {
       setSessionRestored(false);
       navigate(`/resume-ai/${sessionId}`);
 
-      console.log("🔄 Loading previous analysis and restoring AI session...");
-
       const response = await execute(async () => {
         const res = await axiosInstance.get(
           ApiRoutes.resumeAI.getAnalysis(sessionId)
@@ -190,7 +188,6 @@ const ResumeAI = () => {
 
       // Restore AI session
       try {
-        console.log("🔄 Restoring AI session for interactive features...");
         const restoreResponse = await axiosInstance.post(
           ApiRoutes.resumeAI.restoreSession(sessionId)
         );
@@ -198,18 +195,11 @@ const ResumeAI = () => {
         const hasActualText = restoreResponse.data?.data?.hasActualResumeText;
 
         if (hasActualText) {
-          console.log(
-            "✅ AI session restored with full resume text - all features available"
-          );
           setSessionRestored(true);
         } else {
-          console.warn(
-            "⚠️ Old analysis without resume text - limited functionality"
-          );
           setSessionRestored(false);
         }
       } catch (restoreError) {
-        console.warn("⚠️ Could not restore AI session:", restoreError.message);
         setSessionRestored(false);
       }
 

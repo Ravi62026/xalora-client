@@ -3,17 +3,10 @@ import axios from "axios";
 // Check if we're in a Vercel environment or custom domain
 const isVercel = window.location.hostname.includes('vercel') || window.location.hostname.includes('xalora-client');
 const isCustomDomain = window.location.hostname.includes('xalora.one');
-const isLocalhost = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1');
-
-console.log(`🌐 AXIOS: Running in Vercel environment: ${isVercel}`);
-console.log(`🌐 AXIOS: Running in Custom domain: ${isCustomDomain}`);
-console.log(`🌐 AXIOS: Running in Localhost: ${isLocalhost}`);
-console.log(`🌐 AXIOS: Window location: ${window.location.hostname}`);
-console.log(`🌐 AXIOS: Window protocol: ${window.location.protocol}`);
+// const isLocalhost = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1');
 
 // Determine the correct baseURL based on environment
 let baseURL = import.meta.env.VITE_API_URL || "";
-console.log(`🌐 AXIOS: Initial baseURL from env: ${baseURL}`);
 
 // If no baseURL is set and we're in production, use relative path (same origin)
 if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === 'production')) {
@@ -21,18 +14,13 @@ if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === 'product
     if (isCustomDomain) {
         // Use the same protocol and domain but with API subdomain or same domain
         baseURL = `${window.location.protocol}//${window.location.hostname}:8000`;
-        console.log(`🌐 AXIOS: Using custom domain API URL: ${baseURL}`);
     } else {
         baseURL = "";
-        console.log(`🌐 AXIOS: Using relative path for production environment`);
     }
 } else if (!baseURL) {
     // Default to localhost for development
     baseURL = "http://localhost:8000";
-    console.log(`🌐 AXIOS: Using default localhost baseURL for development`);
 }
-
-console.log(`🌐 AXIOS: Final baseURL: ${baseURL}`);
 
 const compilerURL =
     import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
@@ -68,10 +56,6 @@ axiosInstance.interceptors.request.use(
         }
         config.headers['Accept'] = 'application/json';
         
-        console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
-        console.log(`🌐 AXIOS-REQUEST: Using baseURL: ${baseURL}`);
-        console.log(`🌐 AXIOS-REQUEST: Vercel environment: ${isVercel}, Custom domain: ${isCustomDomain}`);
-        console.log(`🍪 AXIOS-COOKIES: Sending credentials: ${config.withCredentials}`);
         return config;
     },
     (error) => {
@@ -103,18 +87,9 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         
-        // Log response errors
-        console.log(`❌ AXIOS-RESPONSE-ERROR: ${error.response?.status} for ${originalRequest?.url}`);
-        if (error.response?.status === 401) {
-            console.log(`🍪 AXIOS-RESPONSE-COOKIES: Document cookies:`, document.cookie);
-        }
-        
         // Handle 401 errors globally
         if (error.response?.status === 401 && !originalRequest._retry) {
-            console.log("🚪 AXIOS: 401 error detected");
-            
             if (isRefreshing) {
-                console.log("⏳ AXIOS: Token refresh in progress, queuing request");
                 return new Promise(function(resolve, reject) {
                     failedQueue.push({ resolve, reject });
                 }).then(token => {
@@ -129,8 +104,6 @@ axiosInstance.interceptors.response.use(
             isRefreshing = true;
             
             try {
-                console.log("🔄 AXIOS: Attempting to refresh token");
-                console.log(`🌐 AXIOS: Using refresh URL: ${baseURL}/api/v1/users/refresh-token`);
                 const refreshResponse = await axios.post(
                     `${baseURL}/api/v1/users/refresh-token`,
                     {},
@@ -144,7 +117,6 @@ axiosInstance.interceptors.response.use(
                 );
                 
                 if (refreshResponse.data.success) {
-                    console.log("✅ AXIOS: Token refreshed successfully");
                     processQueue(null, refreshResponse.data.data?.accessToken);
                     // Update the Authorization header for the original request
                     if (refreshResponse.data.data?.accessToken) {
@@ -154,7 +126,6 @@ axiosInstance.interceptors.response.use(
                     return axiosInstance(originalRequest);
                 }
             } catch (refreshError) {
-                console.log("❌ AXIOS: Token refresh failed:", refreshError.response?.data?.message);
                 processQueue(refreshError, null);
                 // Clear localStorage and logout
                 localStorage.removeItem('hireveu_user');
@@ -173,24 +144,21 @@ axiosInstance.interceptors.response.use(
         
         // Handle 403 errors for AI service
         if (error.response?.status === 403 && originalRequest.url?.includes('/ai/review-code')) {
-            console.log("❌ AXIOS: 403 Forbidden on AI service - likely authentication issue");
             // Try to refresh token and retry once
             if (!originalRequest._retry) {
                 originalRequest._retry = true;
                 try {
-                    console.log("🔄 AXIOS: Attempting token refresh for AI service");
                     const refreshResponse = await axios.post(
                         `${baseURL}/api/v1/users/refresh-token`,
                         {},
                         { withCredentials: true }
                     );
-                    
+
                     if (refreshResponse.data.success) {
-                        console.log("✅ AXIOS: Token refreshed, retrying AI request");
                         return axiosInstance(originalRequest);
                     }
                 } catch (refreshError) {
-                    console.log("❌ AXIOS: Token refresh failed for AI service");
+                    // Token refresh failed, continue with rejection
                 }
             }
         }

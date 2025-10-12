@@ -42,7 +42,6 @@ const ResumeAI = () => {
 
   // Debug function to track tab changes (memoized to prevent re-renders)
   const handleTabChange = useCallback((newTab) => {
-    console.log(`🔄 Tab changing from "${activeTab}" to "${newTab}"`);
     setActiveTab(newTab);
   }, [activeTab]);
 
@@ -69,21 +68,14 @@ const ResumeAI = () => {
       const expectedPath = `/resume-ai/${analysisResult.sessionId}`;
 
       if (currentPath !== expectedPath) {
-        console.log("🔄 Auto-redirecting to analysis results:", expectedPath);
         navigate(expectedPath, { replace: true });
       }
     }
   }, [analysisResult, currentSession, navigate]);
 
-  // Debug effect to monitor state changes
+  // Monitor state changes
   useEffect(() => {
-    console.log("🔍 State updated:", {
-      currentSession,
-      analysisResult: analysisResult ? "HAS_DATA" : "NO_DATA",
-      isAnalyzing,
-      isLoadingSession,
-      activeTab
-    });
+    // State monitoring removed for production
   }, [currentSession, analysisResult, isAnalyzing, isLoadingSession, activeTab]);
 
   const fetchRoles = async () => {
@@ -169,29 +161,16 @@ const ResumeAI = () => {
       const sessionId = response.data.sessionId || response.data.session_id;
       const analysisData = response.data;
 
-      console.log("📨 Received response for session:", sessionId);
-      console.log("📊 Response data:", analysisData);
-
       // Check if analysis is actually complete or still in progress
       const hasAnalysisResults = analysisData.overall_score !== undefined ||
                                 analysisData.overallScore !== undefined ||
                                 (analysisData.skill_scores && Object.keys(analysisData.skill_scores).length > 0) ||
                                 (analysisData.strengths && analysisData.strengths.length > 0);
 
-      console.log("🔍 Initial response check:", {
-        hasAnalysisResults,
-        responseKeys: Object.keys(analysisData),
-        overall_score: analysisData.overall_score,
-        skill_scores: analysisData.skill_scores,
-        strengths: analysisData.strengths
-      });
-
       if (hasAnalysisResults) {
         // Analysis is complete, process the results
-        console.log("✅ Analysis complete, processing results");
 
         // Immediately navigate to the session URL
-        console.log("🔄 Navigating to session URL:", `/resume-ai/${sessionId}`);
         navigate(`/resume-ai/${sessionId}`, { replace: true });
 
         // Ensure the response structure matches what the UI expects
@@ -213,30 +192,24 @@ const ResumeAI = () => {
         handleTabChange("analysis");
 
         // Restore AI session for interactive features (Q&A, Improvements, etc.)
-        console.log("🔄 Restoring AI session for interactive features...");
         try {
           await axiosInstance.post(
             ApiRoutes.resumeAI.restoreSession(sessionId)
           );
           setSessionRestored(true);
-          console.log("✅ AI session restored successfully");
         } catch (restoreError) {
-          console.warn("⚠️ Could not restore AI session:", restoreError.message);
           setSessionRestored(false);
         }
 
         // Show results
         setTimeout(() => {
-          console.log("🚀 Analysis complete, showing results for session:", sessionId);
           setIsAnalyzing(false);
         }, 300);
 
       } else {
         // Analysis is still in progress, poll for results
-        console.log("⏳ Analysis still in progress, polling for results...");
 
         // Immediately navigate to the session URL
-        console.log("🔄 Navigating to session URL:", `/resume-ai/${sessionId}`);
         navigate(`/resume-ai/${sessionId}`, { replace: true });
 
         // Start polling after a short delay with timeout
@@ -292,15 +265,7 @@ const ResumeAI = () => {
                                 Array.isArray(pollData.analysisResult.strengths) &&
                                 pollData.analysisResult.strengths.length > 0;
 
-            console.log(`🔍 Polling check (${pollCount}/${maxPolls}):`, {
-              hasOverallScore,
-              hasSkillScores,
-              hasStrengths,
-              analysisResult: pollData.analysisResult ? "EXISTS" : "MISSING"
-            });
-
             if (hasOverallScore || hasSkillScores || hasStrengths) {
-              console.log("✅ Polling found complete analysis!");
 
               const formattedAnalysisData = {
                 sessionId: sessionId,
@@ -333,20 +298,16 @@ const ResumeAI = () => {
               }
       
               setTimeout(() => {
-                console.log("🚀 Polling complete, showing results");
                 setIsAnalyzing(false);
               }, 300);
 
             } else {
               // Still no results, keep polling
-              console.log(`⏳ Still no results, polling again in 5 seconds... (${pollCount}/${maxPolls})`);
               setTimeout(checkForResults, 5000);
             }
 
           } catch (pollError) {
-            console.error("❌ Error polling for results:", pollError);
             if (pollCount < maxPolls) {
-              console.log("🔄 Retrying poll in 5 seconds...");
               setTimeout(checkForResults, 5000);
             } else {
               setIsAnalyzing(false);
@@ -401,24 +362,21 @@ const ResumeAI = () => {
         });
         setCurrentSession(sessionId);
         handleTabChange("analysis");
-        console.log("✅ Analysis loaded successfully, sessionId:", sessionId);
       } else {
-        console.error("❌ Failed to load analysis:", analysisResponse.reason);
+        // Handle error silently in production
       }
 
       // Handle restore response
       if (restoreResponse.status === 'fulfilled') {
         const hasActualText = restoreResponse.value.data?.data?.hasActualResumeText;
         setSessionRestored(hasActualText);
-        console.log("✅ Session restore:", hasActualText ? "Success" : "Limited functionality");
       } else {
-        console.warn("⚠️ Could not restore AI session:", restoreResponse.reason?.message);
         setSessionRestored(false);
       }
 
       setShowHistory(false);
     } catch (error) {
-      console.error("Error loading analysis:", error);
+      // Handle error silently in production
     } finally {
       setIsLoadingSession(false);
     }
