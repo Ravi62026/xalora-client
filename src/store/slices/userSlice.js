@@ -92,10 +92,18 @@ export const loginUser = createAsyncThunk(
         try {
             console.log("🔐 REDUX: Attempting login...");
             const response = await authService.login(email, password);
+            console.log("✅ REDUX: Login successful, checking if cookies were set");
+            console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
+            debugCookies();
+            
+            // Check if auth cookies are present
+            const cookies = document.cookie;
+            const hasAuthCookies = cookies.includes('accessToken') || cookies.includes('refreshToken') || cookies.includes('sessionId');
+            if (!hasAuthCookies) {
+                console.warn("⚠️ REDUX: No auth cookies found after login. This may cause authentication issues.");
+            }
+            
             if (response.success) {
-                console.log("✅ REDUX: Login successful, cookies should be set");
-                console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
-                debugCookies();
                 return response.data;
             }
             return rejectWithValue(response.message || "Login failed");

@@ -9,6 +9,8 @@ const authService = {
             password,
         });
         console.log("✅ AUTH-SERVICE: Login response received");
+        console.log("🍪 AUTH-SERVICE: Response headers:", response.headers);
+        console.log("🍪 AUTH-SERVICE: Document cookies after login request:", document.cookie);
         return response.data;
     },
     register: async (email, password, name, username) => {
