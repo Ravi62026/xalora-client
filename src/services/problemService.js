@@ -47,14 +47,36 @@ const problemService = {
     },
 
     submitSolution: async ({ problemId, code, language }) => {
-        const response = await axios.post(
-            ApiRoutes.problems.submit(problemId),
-            {
-                code,
-                language,
+        try {
+            const response = await axios.post(
+                ApiRoutes.problems.submit(problemId),
+                {
+                    code,
+                    language,
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.log("❌ PROBLEM SERVICE - Error in submitSolution:", {
+                message: error.message,
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                responseData: error.response?.data
+            });
+            
+            // Handle authentication errors
+            if (error.response?.status === 401) {
+                throw new Error("Authentication required. Please log in and try again.");
             }
-        );
-        return response.data;
+            
+            // Handle server errors
+            if (error.response?.status === 500) {
+                throw new Error("Server error while submitting solution. Please try again later.");
+            }
+            
+            // Re-throw the error for the calling function to handle
+            throw error;
+        }
     },
 
     getProblemSubmissions: async (problemId) => {

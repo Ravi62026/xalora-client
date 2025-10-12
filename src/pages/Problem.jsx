@@ -716,9 +716,21 @@ fn main() {
       });
 
       // Try to parse error from the exception
-      let errorMessage =
-        error.response?.data?.message || "Failed to submit solution";
+      let errorMessage = error.message || "Failed to submit solution";
       let errorData = error.response?.data || {};
+
+      // Provide more specific error messages based on status codes
+      if (error.response?.status === 500) {
+        errorMessage = "Server error while processing your submission. Please try again in a few minutes. If the problem persists, contact support.";
+      } else if (error.response?.status === 401) {
+        errorMessage = "Authentication required. Please log in and try again.";
+      } else if (error.response?.status === 403) {
+        errorMessage = "Access denied. Please check your permissions or contact support.";
+      } else if (error.response?.status === 429) {
+        errorMessage = "Too many requests. Please wait a moment and try again.";
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
 
       const execResult = {
         success: false,
@@ -743,28 +755,31 @@ fn main() {
         setErrorMarkers([]); // Clear markers if no error
       }
 
-      // Automatically run AI review with error information
-      try {
-        console.log(
-          "🤖 AI REVIEW - Starting automatic review with error info..."
-        );
-        const aiResult = await aiService.reviewCode(
-          code,
-          selectedLanguage,
-          execResult
-        );
-        if (aiResult.success) {
-          setReviewResult(aiResult.data.review);
-          setRightActiveTab("review");
+      // Automatically run AI review with error information (only if it's not an auth issue)
+      if (error.response?.status !== 401 && error.response?.status !== 403) {
+        try {
           console.log(
-            "✅ AI REVIEW - Review generated successfully with error analysis"
+            "🤖 AI REVIEW - Starting automatic review with error info..."
           );
+          const aiResult = await aiService.reviewCode(
+            code,
+            selectedLanguage,
+            execResult
+          );
+          if (aiResult.success) {
+            setReviewResult(aiResult.data.review);
+            setRightActiveTab("review");
+            console.log(
+              "✅ AI REVIEW - Review generated successfully with error analysis"
+            );
+          }
+        } catch (aiError) {
+          console.log(
+            "❌ AI REVIEW - Failed to generate review:",
+            aiError.message
+          );
+          // Don't show AI error to user since the main error is more important
         }
-      } catch (aiError) {
-        console.log(
-          "❌ AI REVIEW - Failed to generate review:",
-          aiError.message
-        );
       }
     } finally {
       setExecuting(false);
@@ -829,6 +844,13 @@ fn main() {
         }
       }
     } catch (error) {
+      console.log("❌ AI REVIEW - Error occurred:", {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        responseData: error.response?.data
+      });
+      
       // Check if it's a subscription error
       if (error.response?.data?.redirectToPricing) {
         alert("AI code review is not available in your current plan. Please upgrade to unlock this feature.");
@@ -839,8 +861,18 @@ fn main() {
             window.location.href = '/pricing';
           }
         }, 1000);
+      } else if (error.response?.status === 401) {
+        alert("Authentication required for AI code review. Please log in and try again.");
+        // Redirect to login page
+        navigate("/login");
+      } else if (error.response?.status === 403) {
+        alert("Access denied for AI code review. Please check your permissions or contact support.");
+      } else if (error.response?.status === 500) {
+        alert("Server error while processing AI code review. Please try again later.");
+      } else if (error.response?.status === 429) {
+        alert("Too many requests. Please wait a moment and try again.");
       } else {
-        alert(error.message || "Failed to get code review");
+        alert(error.message || "Failed to get code review. Please try again.");
       }
     } finally {
       setReviewLoading(false);

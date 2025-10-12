@@ -121,18 +121,18 @@ const AppContent = () => {
     }
     
     // Periodic auth check every 30 seconds
-    const authCheckInterval = setInterval(() => {
-      // Only check auth if we're not already initializing
-      if (!isInitializing) {
-        console.log("🕒 APP: Periodic auth check");
-        dispatch(initializeAuth());
-      }
-    }, 30000); // Check every 30 seconds
+    // const authCheckInterval = setInterval(() => {
+    //   // Only check auth if we're not already initializing
+    //   if (!isInitializing) {
+    //     console.log("🕒 APP: Periodic auth check");
+    //     dispatch(initializeAuth());
+    //   }
+    // }, 30000); // Check every 30 seconds
     
-    // Clean up interval
-    return () => {
-      clearInterval(authCheckInterval);
-    };
+    // // Clean up interval
+    // return () => {
+    //   clearInterval(authCheckInterval);
+    // };
   }, [dispatch, isInitializing]);
 
   // Show loading screen while checking authentication

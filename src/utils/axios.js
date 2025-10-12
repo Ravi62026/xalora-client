@@ -3,9 +3,13 @@ import axios from "axios";
 // Check if we're in a Vercel environment or custom domain
 const isVercel = window.location.hostname.includes('vercel') || window.location.hostname.includes('xalora-client');
 const isCustomDomain = window.location.hostname.includes('xalora.one');
+const isLocalhost = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1');
+
 console.log(`🌐 AXIOS: Running in Vercel environment: ${isVercel}`);
 console.log(`🌐 AXIOS: Running in Custom domain: ${isCustomDomain}`);
+console.log(`🌐 AXIOS: Running in Localhost: ${isLocalhost}`);
 console.log(`🌐 AXIOS: Window location: ${window.location.hostname}`);
+console.log(`🌐 AXIOS: Window protocol: ${window.location.protocol}`);
 
 // Determine the correct baseURL based on environment
 let baseURL = import.meta.env.VITE_API_URL || "";
@@ -13,8 +17,15 @@ console.log(`🌐 AXIOS: Initial baseURL from env: ${baseURL}`);
 
 // If no baseURL is set and we're in production, use relative path (same origin)
 if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === 'production')) {
-    baseURL = "";
-    console.log(`🌐 AXIOS: Using relative path for production environment`);
+    // For custom domains, we need to determine the correct API URL
+    if (isCustomDomain) {
+        // Use the same protocol and domain but with API subdomain or same domain
+        baseURL = `${window.location.protocol}//${window.location.hostname}:8000`;
+        console.log(`🌐 AXIOS: Using custom domain API URL: ${baseURL}`);
+    } else {
+        baseURL = "";
+        console.log(`🌐 AXIOS: Using relative path for production environment`);
+    }
 } else if (!baseURL) {
     // Default to localhost for development
     baseURL = "http://localhost:8000";
@@ -47,6 +58,10 @@ axiosInstance.interceptors.request.use(
             config.headers['Pragma'] = 'no-cache';
             config.headers['Expires'] = '0';
         }
+        
+        // Always include credentials and proper headers
+        config.headers['Content-Type'] = 'application/json';
+        config.headers['Accept'] = 'application/json';
         
         console.log(`📡 AXIOS-REQUEST: ${config.method?.toUpperCase()} ${config.url}`);
         console.log(`🌐 AXIOS-REQUEST: Using baseURL: ${baseURL}`);
@@ -151,6 +166,30 @@ axiosInstance.interceptors.response.use(
             }
         }
         
+        // Handle 403 errors for AI service
+        if (error.response?.status === 403 && originalRequest.url?.includes('/ai/review-code')) {
+            console.log("❌ AXIOS: 403 Forbidden on AI service - likely authentication issue");
+            // Try to refresh token and retry once
+            if (!originalRequest._retry) {
+                originalRequest._retry = true;
+                try {
+                    console.log("🔄 AXIOS: Attempting token refresh for AI service");
+                    const refreshResponse = await axios.post(
+                        `${baseURL}/api/v1/users/refresh-token`,
+                        {},
+                        { withCredentials: true }
+                    );
+                    
+                    if (refreshResponse.data.success) {
+                        console.log("✅ AXIOS: Token refreshed, retrying AI request");
+                        return axiosInstance(originalRequest);
+                    }
+                } catch (refreshError) {
+                    console.log("❌ AXIOS: Token refresh failed for AI service");
+                }
+            }
+        }
+        
         return Promise.reject(error);
     }
 );
@@ -169,6 +208,8 @@ compilerAxios.interceptors.request.use(
         if (!config.headers) {
             config.headers = {};
         }
+        config.headers['Content-Type'] = 'application/json';
+        config.headers['Accept'] = 'application/json';
         return config;
     },
     (error) => {
