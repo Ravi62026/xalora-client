@@ -4,6 +4,11 @@ const ApiRoutes = {
         register: "/api/v1/users/register",
         logout: "/api/v1/users/logout",
     },
+    email: {
+        sendVerification: "/api/v1/email/send-verification",
+        verify: "/api/v1/email/verify",
+        resendVerification: "/api/v1/email/resend-verification",
+    },
     user: {
         getUser: "/api/v1/users/user",
         updateUser: "/api/v1/users/user",

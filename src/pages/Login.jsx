@@ -85,6 +85,11 @@ const Login = () => {
                 password: "",
             });
             navigate("/");
+        } else if (result.payload?.requiresVerification) {
+            console.log("📧 LOGIN: Email verification required, redirecting to verification page");
+            // Store user data temporarily for verification page
+            localStorage.setItem('pending_verification_user', JSON.stringify(result.payload.user));
+            navigate("/verify-email");
         } else {
             console.log("❌ LOGIN: Failed with error:", result.payload);
         }

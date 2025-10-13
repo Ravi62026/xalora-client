@@ -5,6 +5,7 @@ import {
   Home,
   Login,
   Signup,
+  EmailVerification,
   Profile,
   Dashboard,
   CreateProblem,
@@ -147,6 +148,7 @@ const AppContent = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment-history" element={<PaymentHistory />} />
         <Route path="/create-problem" element={<CreateProblem />} />
