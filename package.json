@@ -13,6 +13,7 @@
     "vercel-build": "vite build"
   },
   "dependencies": {
+    "@langchain/google-vertexai": "^0.2.18",
     "@monaco-editor/react": "^4.7.0",
     "@reduxjs/toolkit": "^2.1.0",
     "@tailwindcss/vite": "^4.1.10",

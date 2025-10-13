@@ -8,12 +8,11 @@ const isCustomDomain = window.location.hostname.includes('xalora.one');
 // Determine the correct baseURL based on environment
 let baseURL = import.meta.env.VITE_API_URL || "";
 
-// If no baseURL is set and we're in production, use relative path (same origin)
+// If no baseURL is set and we're in production, use the deployed backend
 if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === 'production')) {
-    // For custom domains, we need to determine the correct API URL
     if (isCustomDomain) {
-        // Use the same protocol and domain but with API subdomain or same domain
-        baseURL = `${window.location.protocol}//${window.location.hostname}:8000`;
+        // Use the deployed Cloud Run backend URL
+        baseURL = "https://hireveu-server-758139154845.asia-south1.run.app";
     } else {
         baseURL = "";
     }
