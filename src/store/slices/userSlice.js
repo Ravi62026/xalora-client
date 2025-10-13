@@ -108,20 +108,15 @@ export const loginUser = createAsyncThunk(
     "user/loginUser",
     async ({ email, password }, { rejectWithValue }) => {
         try {
-// console.log("🔐 REDUX: Attempting login...");
             const response = await authService.login(email, password);
-// console.log("✅ REDUX: Login successful, checking if cookies were set");
-// console.log("🍪 REDUX-COOKIES: Document cookies after login:", document.cookie);
-            debugCookies();
-            
-            // Check if auth cookies are present
-            const cookies = document.cookie;
-            const hasAuthCookies = cookies.includes('accessToken') || cookies.includes('refreshToken') || cookies.includes('sessionId');
-            if (!hasAuthCookies) {
-                // console.warn("⚠️ REDUX: No auth cookies found after login. This may cause authentication issues.");
-            }
-            
+
             if (response.success) {
+                // Store the access token in localStorage
+                if (response.data.accessToken) {
+                    localStorage.setItem('accessToken', response.data.accessToken);
+                }
+                // Store user data in localStorage for persistence
+                localStorage.setItem('hireveu_user', JSON.stringify(response.data.user));
                 return response.data;
             }
             return rejectWithValue(response.message || "Login failed");
@@ -159,13 +154,38 @@ export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
     }
 });
 
-const initialState = {
-    isAuthenticated: false,
-    user: null,
-    loading: false,
-    error: null,
-    isInitializing: true, // Track initial auth check
+// Initialize state from localStorage
+const getInitialState = () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const userData = localStorage.getItem('hireveu_user');
+
+        if (token && userData) {
+            const user = JSON.parse(userData);
+            return {
+                isAuthenticated: true,
+                user,
+                loading: false,
+                error: null,
+                isInitializing: false,
+            };
+        }
+    } catch (error) {
+        // Clear corrupted data
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('hireveu_user');
+    }
+
+    return {
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+        error: null,
+        isInitializing: true,
+    };
 };
+
+const initialState = getInitialState();
 
 const userSlice = createSlice({
     name: "user",
@@ -270,6 +290,16 @@ const userSlice = createSlice({
                 state.error = null;
                 // Clear localStorage
                 localStorage.removeItem('hireveu_user');
+                localStorage.removeItem('accessToken');
+            })
+            .addCase('user/forceLogout', (state) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+                state.error = null;
+                // Clear localStorage on forced logout
+                localStorage.removeItem('hireveu_user');
+                localStorage.removeItem('accessToken');
             })
             .addCase(logoutUser.rejected, (state) => {
                 state.loading = false;
