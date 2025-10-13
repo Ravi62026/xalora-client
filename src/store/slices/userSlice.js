@@ -19,7 +19,7 @@ export const initializeAuth = createAsyncThunk(
                 if (now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
                     // console.log("🔄 REDUX: Skipping auth check, too soon since last check");
                     return user;
-                }
+                }  
             }
             
             // Update the last auth check timestamp
