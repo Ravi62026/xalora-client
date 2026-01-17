@@ -580,11 +580,11 @@ void vectorAlgorithms() {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 Arrays & Dynamic Arrays
               </span>
@@ -595,74 +595,67 @@ void vectorAlgorithms() {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "overview"
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveSection("theory")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "theory"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "theory"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Theory
             </button>
             <button
               onClick={() => setActiveSection("operations")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "operations"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "operations"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Operations
             </button>
             <button
               onClick={() => setActiveSection("manipulation")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "manipulation"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "manipulation"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Manipulation
             </button>
             <button
               onClick={() => setActiveSection("algorithms")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "algorithms"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "algorithms"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Algorithms
             </button>
             <button
               onClick={() => setActiveSection("multidim")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "multidim"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "multidim"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               2D Arrays
             </button>
             <button
               onClick={() => setActiveSection("dynamic")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "dynamic"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "dynamic"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Dynamic Arrays
             </button>
@@ -670,8 +663,8 @@ void vectorAlgorithms() {
 
           {/* Theory Section */}
           {activeSection === "theory" && (
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Array Theory & Deep Concepts</h2>
+            <div className="mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 text-center">Array Theory & Deep Concepts</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Memory Layout & Cache Behavior */}
@@ -797,9 +790,9 @@ void vectorAlgorithms() {
                           <div className="bg-yellow-900/20 border border-yellow-700/50 p-4 rounded-lg">
                             <h5 className="text-yellow-400 font-medium mb-2">Off-by-One Errors</h5>
                             <p className="text-sm mb-2">Common indexing mistakes:</p>
-                              <pre className="bg-gray-900 text-yellow-300 p-2 rounded text-xs">
-                                <code>{`for(int i = 0; i <= n; i++) // Wrong: accesses arr[n]`}</code>
-                              </pre>
+                            <pre className="bg-gray-900 text-yellow-300 p-2 rounded text-xs">
+                              <code>{`for(int i = 0; i <= n; i++) // Wrong: accesses arr[n]`}</code>
+                            </pre>
                             <p className="text-xs text-gray-400">Valid indices: 0 to n-1 for array of size n</p>
                           </div>
                         </div>
@@ -1441,11 +1434,10 @@ void vectorAlgorithms() {
                   <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${
-                        problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                        problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                        'bg-red-900/50 text-red-300'
-                      }`}>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
+                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
+                            'bg-red-900/50 text-red-300'
+                        }`}>
                         {problem.difficulty}
                       </span>
                     </div>

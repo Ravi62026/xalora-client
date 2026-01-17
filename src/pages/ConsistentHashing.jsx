@@ -673,11 +673,11 @@ struct ConsistentHashingConfig {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 Consistent Hashing
               </span>
@@ -689,44 +689,40 @@ struct ConsistentHashingConfig {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "overview"
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-cyan-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveSection("implementation")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "implementation"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementation"
                   ? "bg-cyan-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Implementation
             </button>
             <button
               onClick={() => setActiveSection("mathematical")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "mathematical"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "mathematical"
                   ? "bg-cyan-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Mathematical Analysis
             </button>
             <button
               onClick={() => setActiveSection("applications")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "applications"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-cyan-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Applications
             </button>
@@ -734,8 +730,8 @@ struct ConsistentHashingConfig {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Consistent Hashing Overview</h2>
+            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Consistent Hashing Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>

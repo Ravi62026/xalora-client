@@ -248,11 +248,11 @@ const Algorithms = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
+          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Algorithms
               </span>
@@ -263,10 +263,10 @@ const Algorithms = () => {
           </div>
 
           {/* Categories Grid - Enhanced UI */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
             {algorithmCategories.map((category) => (
-              <div 
-                key={category.id} 
+              <div
+                key={category.id}
                 className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 transform hover:-translate-y-2 hover:scale-[1.02]"
               >
                 <div className="p-6">
@@ -279,14 +279,14 @@ const Algorithms = () => {
                     <h3 className="text-2xl font-bold text-white transition-all duration-300 hover:text-emerald-400">{category.name}</h3>
                   </div>
                   <p className="text-gray-300 mb-6 transition-all duration-300 hover:text-gray-200">{category.description}</p>
-                  
+
                   {/* Algorithm List */}
                   <div className="mb-6">
                     <h4 className="text-gray-200 font-bold mb-3 transition-all duration-300 hover:text-white">Algorithms Covered:</h4>
                     <div className="flex flex-wrap gap-2">
                       {category.algorithms.slice(0, 6).map((algorithm, idx) => (
-                        <span 
-                          key={idx} 
+                        <span
+                          key={idx}
                           className={`px-3 py-2 bg-${category.color}-900/50 text-${category.color}-300 text-sm rounded-xl transition-all duration-300 hover:bg-${category.color}-700 hover:scale-105 hover:shadow-md border border-${category.color}-700/50`}
                         >
                           {algorithm}
@@ -299,9 +299,9 @@ const Algorithms = () => {
                       )}
                     </div>
                   </div>
-                  
-                  <button 
-                    className={`w-full py-4 px-6 bg-gradient-to-r from-${category.color}-600 to-${category.color}-500 rounded-xl font-bold text-white hover:from-${category.color}-500 hover:to-${category.color}-400 transition-all duration-500 transform hover:scale-105 hover:shadow-xl`}
+
+                  <button
+                    className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-${category.color}-600 to-${category.color}-500 rounded-xl font-bold text-white text-sm sm:text-base hover:from-${category.color}-500 hover:to-${category.color}-400 transition-all duration-500 transform hover:scale-105 hover:shadow-xl`}
                     onClick={() => {
                       if (category.id === 'searching') navigate('/algorithms/searching');
                       else if (category.id === 'sorting') navigate('/algorithms/sorting');
@@ -325,8 +325,8 @@ const Algorithms = () => {
           </div>
 
           {/* Additional Resources - Enhanced UI */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-10 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-4xl font-bold text-white text-center mb-12 transition-all duration-300 hover:text-cyan-400">
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-700 p-6 sm:p-10 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12 transition-all duration-300 hover:text-cyan-400">
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Algorithm Complexity Cheatsheet
               </span>

@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../components/ui/Button';
-import authService from '../services/authService';
-import { loginSuccess, loginFailure } from '../store/slices/userSlice';
 
 const EmailVerification = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { loading, error } = useSelector(state => state.user);
 
     const [verifying, setVerifying] = useState(false);
     const [verified, setVerified] = useState(false);

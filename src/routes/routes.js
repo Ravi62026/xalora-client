@@ -85,6 +85,22 @@ const ApiRoutes = {
         upgrade: "/api/v1/subscription/upgrade",
         cancel: "/api/v1/subscription/cancel",
         aiUsage: "/api/v1/subscription/ai-usage"
+    },
+    interview: {
+        start: "/api/v1/interview/start",
+        question: "/api/v1/interview/question",
+        answer: "/api/v1/interview/answer",
+        followupAnswer: "/api/v1/interview/followup-answer",
+        report: "/api/v1/interview/report",
+        status: (sessionId) => `/api/v1/interview/status/${sessionId}`,
+        history: "/api/v1/interview/history",
+        shared: (shareToken) => `/api/v1/interview/shared/${shareToken}`,
+        tts: "/api/v1/interview/tts",
+        stt: "/api/v1/interview/stt",
+        completeRound: "/api/v1/interview/complete-round",
+        myInterviews: "/api/v1/interview/my-interviews",
+        details: (sessionId) => `/api/v1/interview/details/${sessionId}`,
+        delete: (sessionId) => `/api/v1/interview/${sessionId}`,
     }
 };
 

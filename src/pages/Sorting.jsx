@@ -558,14 +558,14 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
         </span>
       );
     }
-    
+
     let color = "bg-gray-100 text-gray-800";
     if (complexity.includes("log")) color = "bg-blue-100 text-blue-800";
     if (complexity === "O(1)") color = "bg-green-100 text-green-800";
     if (complexity.includes("n") && !complexity.includes("log")) color = "bg-yellow-100 text-yellow-800";
     if (complexity.includes("n²") || complexity.includes("n^2")) color = "bg-red-100 text-red-800";
     if (complexity.includes("k")) color = "bg-purple-100 text-purple-800";
-    
+
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${color}`}>
         {complexity}
@@ -575,11 +575,11 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 Sorting Algorithms
               </span>
@@ -590,54 +590,49 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "overview"
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveSection("comparison")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "comparison"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "comparison"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Comparison Sorts
             </button>
             <button
               onClick={() => setActiveSection("linear")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "linear"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "linear"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Linear-Time Sorts
             </button>
             <button
               onClick={() => setActiveSection("hybrid")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "hybrid"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "hybrid"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Hybrid Sorts
             </button>
             <button
               onClick={() => setActiveSection("cheatsheet")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "cheatsheet"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "cheatsheet"
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Cheat Sheet
             </button>
@@ -645,16 +640,16 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Sorting Algorithms Overview</h2>
-              
+            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Sorting Algorithms Overview</h2>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-2xl font-semibold text-blue-400 mb-4">What is Sorting?</h3>
                   <p className="text-gray-300 mb-6">
                     Sorting is the process of arranging elements in a specific order (ascending or descending). It's one of the most fundamental operations in computer science, serving as a building block for many other algorithms.
                   </p>
-                  
+
                   <h3 className="text-2xl font-semibold text-blue-400 mb-4">Key Concepts</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
@@ -679,7 +674,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                     </li>
                   </ul>
                 </div>
-                
+
                 <div>
                   <h3 className="text-2xl font-semibold text-blue-400 mb-4">Classification</h3>
                   <div className="space-y-4">
@@ -688,19 +683,19 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                       <p className="text-gray-300">Bubble, Selection, Insertion Sort</p>
                       <p className="text-sm text-gray-400 mt-2">Best for: Small datasets, nearly sorted data, educational purposes</p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Efficient O(n log n) Sorts</h4>
                       <p className="text-gray-300">Merge, Quick, Heap Sort</p>
                       <p className="text-sm text-gray-400 mt-2">Best for: General-purpose sorting, large datasets</p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Linear Time Sorts O(n)</h4>
                       <p className="text-gray-300">Counting, Radix, Bucket Sort</p>
                       <p className="text-sm text-gray-400 mt-2">Best for: Integer/fixed-range data, specific constraints</p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Hybrid Sorts</h4>
                       <p className="text-gray-300">Tim Sort, Intro Sort</p>
@@ -716,11 +711,11 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
           {activeSection === "comparison" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Comparison-Based Sorting Algorithms</h2>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {comparisonSorts.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
                   >
                     <div className="p-6">
@@ -740,9 +735,9 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                           )}
                         </div>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       {algorithm.variants && (
                         <div className="mb-6">
                           <h4 className="text-lg font-semibold text-blue-400 mb-3">Variants</h4>
@@ -755,7 +750,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-blue-400 mb-3">Time & Space Complexity</h4>
@@ -777,20 +772,20 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                               <p className="text-white font-mono mt-1">{renderComplexityBadge(algorithm.complexity.space)}</p>
                             </div>
                           </div>
-                          
+
                           {algorithm.whenToUse && (
                             <div className="mt-4 bg-blue-900/20 border border-blue-700/50 p-3 rounded-lg">
                               <p className="text-blue-300 text-sm"><strong>When to use:</strong> {algorithm.whenToUse}</p>
                             </div>
                           )}
-                          
+
                           {algorithm.realWorld && (
                             <div className="mt-4 bg-green-900/20 border border-green-700/50 p-3 rounded-lg">
                               <p className="text-green-300 text-sm"><strong>Real-world:</strong> {algorithm.realWorld}</p>
                             </div>
                           )}
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-blue-400 mb-3">C++ Implementation</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
@@ -809,17 +804,17 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
           {activeSection === "linear" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Linear-Time Sorting Algorithms</h2>
-              
+
               <div className="bg-yellow-900/20 border border-yellow-700/50 p-4 rounded-lg mb-8">
                 <p className="text-yellow-300">
                   <strong>⚡ Key Insight:</strong> These algorithms break the O(n log n) comparison-based sorting lower bound by using non-comparison techniques. They work only under specific constraints (integer range, digit count, etc.).
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {linearSorts.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
                   >
                     <div className="p-6">
@@ -837,9 +832,9 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                           </span>
                         </div>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-purple-400 mb-3">Time & Space Complexity</h4>
@@ -861,20 +856,20 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                               <p className="text-white font-mono mt-1">{renderComplexityBadge(algorithm.complexity.space)}</p>
                             </div>
                           </div>
-                          
+
                           {algorithm.whenToUse && (
                             <div className="mt-4 bg-purple-900/20 border border-purple-700/50 p-3 rounded-lg">
                               <p className="text-purple-300 text-sm"><strong>When to use:</strong> {algorithm.whenToUse}</p>
                             </div>
                           )}
-                          
+
                           {algorithm.realWorld && (
                             <div className="mt-4 bg-green-900/20 border border-green-700/50 p-3 rounded-lg">
                               <p className="text-green-300 text-sm"><strong>Real-world:</strong> {algorithm.realWorld}</p>
                             </div>
                           )}
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-purple-400 mb-3">C++ Implementation</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
@@ -893,17 +888,17 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
           {activeSection === "hybrid" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Hybrid Sorting Algorithms</h2>
-              
+
               <div className="bg-cyan-900/20 border border-cyan-700/50 p-4 rounded-lg mb-8">
                 <p className="text-cyan-300">
                   <strong>🚀 Production-Ready:</strong> These hybrid algorithms combine multiple sorting techniques to achieve optimal real-world performance. Used in production systems like Python, Java, C++, and Rust.
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {hybridSorts.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/20"
                   >
                     <div className="p-6">
@@ -923,9 +918,9 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                           )}
                         </div>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-cyan-400 mb-3">Time & Space Complexity</h4>
@@ -947,20 +942,20 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                               <p className="text-white font-mono mt-1">{renderComplexityBadge(algorithm.complexity.space)}</p>
                             </div>
                           </div>
-                          
+
                           {algorithm.whenToUse && (
                             <div className="mt-4 bg-cyan-900/20 border border-cyan-700/50 p-3 rounded-lg">
                               <p className="text-cyan-300 text-sm"><strong>When to use:</strong> {algorithm.whenToUse}</p>
                             </div>
                           )}
-                          
+
                           {algorithm.realWorld && (
                             <div className="mt-4 bg-green-900/20 border border-green-700/50 p-3 rounded-lg">
                               <p className="text-green-300 text-sm"><strong>Real-world:</strong> {algorithm.realWorld}</p>
                             </div>
                           )}
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
@@ -972,7 +967,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                   </div>
                 ))}
               </div>
-              
+
               {/* Special Sorts Note */}
               <div className="mt-12 bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6">
                 <h3 className="text-2xl font-bold text-white mb-4">Other Notable Sorting Algorithms</h3>
@@ -1005,7 +1000,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
           {activeSection === "cheatsheet" && (
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Sorting Algorithms Cheat Sheet</h2>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>
@@ -1021,8 +1016,8 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                   </thead>
                   <tbody>
                     {cheatSheetData.map((row, index) => (
-                      <tr 
-                        key={index} 
+                      <tr
+                        key={index}
                         className="border-b border-gray-700 hover:bg-gray-700/30 transition-all duration-300"
                       >
                         <td className="py-4 text-white font-medium">{row.algorithm}</td>
@@ -1031,16 +1026,14 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                         <td className="py-4">{renderComplexityBadge(row.worst)}</td>
                         <td className="py-4">{renderComplexityBadge(row.space)}</td>
                         <td className="py-4">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            row.stable === "Yes" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                          }`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${row.stable === "Yes" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}>
                             {row.stable}
                           </span>
                         </td>
                         <td className="py-4">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            row.inPlace === "Yes" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
-                          }`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${row.inPlace === "Yes" ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
+                            }`}>
                             {row.inPlace}
                           </span>
                         </td>
@@ -1049,7 +1042,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="mt-12">
                 <h3 className="text-2xl font-bold text-white mb-6">Quick Decision Guide</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1058,31 +1051,31 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                     <p className="text-gray-300">Use <strong className="text-white">Insertion Sort</strong></p>
                     <p className="text-sm text-gray-400 mt-2">Simple, adaptive, works great for small datasets</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-blue-400 mb-2">🎯 General Purpose</h4>
                     <p className="text-gray-300">Use <strong className="text-white">Quick Sort</strong> or <strong className="text-white">Intro Sort</strong></p>
                     <p className="text-sm text-gray-400 mt-2">Excellent average performance, cache-friendly</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-purple-400 mb-2">🔒 Stability Required</h4>
                     <p className="text-gray-300">Use <strong className="text-white">Merge Sort</strong> or <strong className="text-white">Tim Sort</strong></p>
                     <p className="text-sm text-gray-400 mt-2">Guaranteed stable with O(n log n) time</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-cyan-400 mb-2">💾 Memory Constrained</h4>
                     <p className="text-gray-300">Use <strong className="text-white">Heap Sort</strong></p>
                     <p className="text-sm text-gray-400 mt-2">O(n log n) time with O(1) extra space</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-yellow-400 mb-2">⚡ Integer Range Small</h4>
                     <p className="text-gray-300">Use <strong className="text-white">Counting Sort</strong></p>
                     <p className="text-sm text-gray-400 mt-2">O(n + k) when k ≈ n, linear time</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-red-400 mb-2">🔢 Fixed-Width Integers</h4>
                     <p className="text-gray-300">Use <strong className="text-white">Radix Sort</strong></p>
@@ -1098,7 +1091,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
             <h2 className="text-3xl font-bold text-white text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Beginner</h3>
@@ -1121,7 +1114,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Intermediate</h3>
                 <ul className="space-y-2 text-gray-300">
@@ -1147,7 +1140,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Advanced</h3>
                 <ul className="space-y-2 text-gray-300">
@@ -1170,7 +1163,7 @@ void intro_sort(vector<int>& arr, int begin, int end, int depth_limit) {
                 </ul>
               </div>
             </div>
-            
+
             {/* Common Interview Questions */}
             <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
               <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Common Interview Questions</h3>

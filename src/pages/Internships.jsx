@@ -50,7 +50,7 @@ const Internships = () => {
 
       // Use the proper API route instead of direct axios call
       const response = await axios.get(`${ApiRoutes.internships.getAll}?${params}`);
-      
+
       // Log cache information for debugging
       console.log('Internships API Response:', response);
       if (response.data.message && response.data.message.includes('cached')) {
@@ -58,7 +58,7 @@ const Internships = () => {
       } else {
         console.log('🔄 Fresh data fetched from database');
       }
-      
+
       setInternships(response.data.data.internships);
       setPagination(response.data.data.pagination);
     } catch (error) {
@@ -72,7 +72,7 @@ const Internships = () => {
     try {
       // Add cache-busting parameter to prevent browser caching
       const response = await axios.get(`${ApiRoutes.internships.getEnrolled}?_t=${Date.now()}`);
-      
+
       // Log cache information for debugging
       console.log('Enrolled Internships API Response:', response);
       if (response.data.message && response.data.message.includes('cached')) {
@@ -80,7 +80,7 @@ const Internships = () => {
       } else {
         console.log('🔄 Fresh enrolled internships fetched from database');
       }
-      
+
       const enrolledIds = new Set(response.data.data.map(enrollment => enrollment.internshipId._id));
       setEnrolledInternships(enrolledIds);
     } catch (error) {
@@ -129,15 +129,15 @@ const Internships = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-3xl font-bold text-white">Internship Portal</h1>
-                <p className="mt-2 text-emerald-100">Discover and enroll in exciting internship opportunities</p>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-center md:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">Internship Portal</h1>
+                <p className="mt-2 text-sm sm:text-base text-emerald-100">Discover and enroll in exciting internship opportunities</p>
               </div>
               <div className="flex space-x-4">
                 <Link
                   to="/internships/enrolled"
-                  className="bg-white text-emerald-600 px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors flex items-center shadow-lg"
+                  className="bg-white text-emerald-600 px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors flex items-center shadow-lg text-sm sm:text-base"
                 >
                   <Users className="w-4 h-4 mr-2" />
                   My Internships
@@ -149,9 +149,9 @@ const Internships = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Filters */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6 mb-8 border border-white/10">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 mb-8 border border-white/10">
             {/* Added onSubmit handler to prevent form submission */}
-            <form onSubmit={(e) => e.preventDefault()} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form onSubmit={(e) => e.preventDefault()} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search */}
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-white/70" />
@@ -206,23 +206,23 @@ const Internships = () => {
           </div>
 
           {/* Internships Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {internships.map((internship) => (
-              <div 
-                key={internship._id} 
+              <div
+                key={internship._id}
                 className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/10 hover:border-emerald-400/30 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
                 onClick={() => navigate(`/internships/${internship._id}`)}
               >
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-white">{internship.title}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(internship.difficulty)}`}>
+                    <h3 className="text-lg sm:text-xl font-bold text-white line-clamp-1">{internship.title}</h3>
+                    <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(internship.difficulty)}`}>
                       {internship.difficulty}
                     </span>
                   </div>
-                  
-                  <p className="text-white/70 mb-4 line-clamp-3">{internship.description}</p>
-                  
+
+                  <p className="text-white/70 mb-4 line-clamp-3 text-sm">{internship.description}</p>
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     {internship.techStack?.slice(0, 3).map((tech, index) => (
                       <span key={index} className="px-2 py-1 bg-emerald-900/30 text-emerald-300 text-xs rounded-full border border-emerald-700">
@@ -235,18 +235,18 @@ const Internships = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center text-sm text-white/70 mb-4">
                     <Calendar className="w-4 h-4 mr-2" />
                     <span>{internship.duration} weeks</span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
-                    <div className="text-emerald-400 font-semibold">
+                    <div className="text-emerald-400 font-semibold text-sm sm:text-base">
                       {internship.stipend ? `₹${internship.stipend}/month` : 'Unpaid'}
                     </div>
                     <button
-                      className="flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                      className="flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300 text-sm sm:text-base"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/internships/${internship._id}`);
@@ -257,7 +257,7 @@ const Internships = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {enrolledInternships.has(internship._id) && (
                   <div className="px-6 py-3 bg-emerald-900/30 border-t border-emerald-700">
                     <div className="flex items-center text-emerald-400 text-sm">
@@ -272,16 +272,15 @@ const Internships = () => {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-center mt-8 pb-8">
               <nav className="flex items-center space-x-2">
                 <button
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={!pagination.hasPrevPage}
-                  className={`px-4 py-2 rounded-lg ${
-                    pagination.hasPrevPage
+                  className={`px-4 py-2 rounded-lg ${pagination.hasPrevPage
                       ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                       : "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700"
-                  } transition-all duration-300`}
+                    } transition-all duration-300`}
                 >
                   Previous
                 </button>
@@ -291,11 +290,10 @@ const Internships = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-lg ${
-                        page === pagination.currentPage
+                      className={`px-4 py-2 rounded-lg ${page === pagination.currentPage
                           ? "bg-emerald-600 text-white border border-emerald-500"
                           : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                      } transition-all duration-300`}
+                        } transition-all duration-300`}
                     >
                       {page}
                     </button>
@@ -304,11 +302,10 @@ const Internships = () => {
                 <button
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={!pagination.hasNextPage}
-                  className={`px-4 py-2 rounded-lg ${
-                    pagination.hasNextPage
+                  className={`px-4 py-2 rounded-lg ${pagination.hasNextPage
                       ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                       : "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700"
-                  } transition-all duration-300`}
+                    } transition-all duration-300`}
                 >
                   Next
                 </button>

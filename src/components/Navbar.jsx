@@ -5,7 +5,7 @@ import { logoutUser } from "../store/slices/userSlice";
 
 const Navbar = () => {
     const { isAuthenticated, user } = useSelector((state) => state.user);
-    console.log("🔍 NAVBAR: User state:", { isAuthenticated, user });
+    // console.log("🔍 NAVBAR: User state:", { isAuthenticated, user });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -93,6 +93,13 @@ const Navbar = () => {
                             className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Resume AI</span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </Link>
+                        <Link
+                            to="/ai-interview/setup"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                        >
+                            <span className="relative z-10">🎥 AI Interview</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         {/* Dashboard button - only shown when user is authenticated */}
@@ -316,6 +323,14 @@ const Navbar = () => {
                                 <span className="relative z-10">🤖 Resume AI</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </Link>
+                            <Link
+                                to="/ai-interview/setup"
+                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                onClick={closeMobileMenu}
+                            >
+                                <span className="relative z-10">🎥 AI Interview</span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </Link>
                             {/* Dashboard button for mobile - only shown when user is authenticated */}
                             {isAuthenticated && (
                                 <Link
@@ -466,8 +481,8 @@ const Navbar = () => {
             </div>
             {/* Close profile menu when clicking outside */}
             {isProfileMenuOpen && (
-                <div 
-                    className="fixed inset-0 z-40" 
+                <div
+                    className="fixed inset-0 z-40"
                     onClick={() => setIsProfileMenuOpen(false)}
                 ></div>
             )}

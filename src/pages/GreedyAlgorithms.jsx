@@ -511,11 +511,11 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Greedy Algorithms
               </span>
@@ -527,54 +527,49 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "overview"
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-teal-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveSection("fundamentals")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "fundamentals"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "fundamentals"
                   ? "bg-teal-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Fundamentals
             </button>
             <button
               onClick={() => setActiveSection("classic")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "classic"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "classic"
                   ? "bg-teal-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Classic Problems
             </button>
             <button
               onClick={() => setActiveSection("graphs")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "graphs"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "graphs"
                   ? "bg-teal-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Graph Algorithms
             </button>
             <button
               onClick={() => setActiveSection("advanced")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "advanced"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
                   ? "bg-teal-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Advanced
             </button>
@@ -582,8 +577,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Greedy Algorithms Overview</h2>
+            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Greedy Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
@@ -829,22 +824,19 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {greedyAnalysis.map((analysis, idx) => (
-                      <div key={idx} className={`p-4 rounded-xl ${
-                        analysis.name.includes("Works")
+                      <div key={idx} className={`p-4 rounded-xl ${analysis.name.includes("Works")
                           ? "bg-green-900/20 border border-green-700/50"
                           : "bg-red-900/20 border border-red-700/50"
-                      }`}>
-                        <h4 className={`text-lg font-semibold mb-3 ${
-                          analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
                         }`}>
+                        <h4 className={`text-lg font-semibold mb-3 ${analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
+                          }`}>
                           {analysis.name}
                         </h4>
                         <ul className="space-y-2 text-gray-300">
                           {analysis.examples.map((example, i) => (
                             <li key={i} className="flex items-start">
-                              <span className={`mr-2 ${
-                                analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
-                              }`}>
+                              <span className={`mr-2 ${analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
+                                }`}>
                                 {analysis.name.includes("Works") ? "✓" : "✗"}
                               </span>
                               <span className="text-sm">{example}</span>
@@ -949,11 +941,10 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                   <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${
-                        problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                        problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                        'bg-red-900/50 text-red-300'
-                      }`}>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
+                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
+                            'bg-red-900/50 text-red-300'
+                        }`}>
                         {problem.difficulty}
                       </span>
                     </div>

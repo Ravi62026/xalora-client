@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Home,
@@ -63,7 +63,12 @@ import {
   BloomFilters,
   ConsistentHashing,
   PerfectHashing,
-  CuckooHashing
+  CuckooHashing,
+  InterviewSetup,
+  WaitingRoom,
+  InterviewRound,
+  InterviewReport,
+  MyInterviews
 } from "./pages";
 import DebugUserInfo from "./components/DebugUserInfo";
 import { initializeAuth } from "./store/slices/userSlice";
@@ -109,7 +114,7 @@ const LoadingMessage = () => {
 const AppContent = () => {
   const dispatch = useDispatch();
   const { isInitializing, user } = useSelector((state) => state.user);
-  
+
   // Use a ref to track if we've already initialized
   const hasInitialized = React.useRef(false);
 
@@ -120,7 +125,7 @@ const AppContent = () => {
       dispatch(initializeAuth());
       hasInitialized.current = true;
     }
-    
+
     // Periodic auth check every 30 seconds
     // const authCheckInterval = setInterval(() => {
     //   // Only check auth if we're not already initializing
@@ -129,7 +134,7 @@ const AppContent = () => {
     //     dispatch(initializeAuth());
     //   }
     // }, 30000); // Check every 30 seconds
-    
+
     // // Clean up interval
     // return () => {
     //   clearInterval(authCheckInterval);
@@ -213,6 +218,20 @@ const AppContent = () => {
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/subscription-debug" element={<SubscriptionDebug />} />
+
+        {/* AI Interview Routes */}
+        <Route path="/ai-interview/setup" element={<InterviewSetup />} />
+        <Route path="/my-interviews" element={<MyInterviews />} />
+
+        {/* Routes with sessionId - Valid interview pages */}
+        <Route path="/ai-interview/:sessionId/waiting-room" element={<WaitingRoom />} />
+        <Route path="/ai-interview/:sessionId/round/:roundType" element={<InterviewRound />} />
+        <Route path="/ai-interview/:sessionId/report" element={<InterviewReport />} />
+
+        {/* Redirect old routes without sessionId to setup */}
+        <Route path="/ai-interview/waiting-room" element={<Navigate to="/ai-interview/setup" replace />} />
+        <Route path="/ai-interview/round/:roundType" element={<Navigate to="/ai-interview/setup" replace />} />
+        <Route path="/ai-interview/report" element={<Navigate to="/ai-interview/setup" replace />} />
       </Routes>
       {/* Debug component - remove in production */}
       {/* <DebugUserInfo /> */}

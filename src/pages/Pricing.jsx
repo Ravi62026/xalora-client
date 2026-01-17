@@ -138,7 +138,7 @@ const Pricing = () => {
   useEffect(() => {
     // In a real implementation, this would fetch from the API
     setPlans(updatedPlans);
-    
+
     // Log user subscription info for debugging
     console.log("=== PRICING PAGE LOADED ===");
     console.log("User authentication status:", isAuthenticated);
@@ -151,7 +151,7 @@ const Pricing = () => {
         subscription: user.subscription
       });
     }
-    
+
     // Fetch current subscription
     fetchCurrentSubscription();
   }, [isAuthenticated, user]);
@@ -174,11 +174,11 @@ const Pricing = () => {
     try {
       console.log("=== PRICING: Calculating prorated amount ===");
       console.log("User is upgrading from", currentPlanId, "to", newPlanId);
-      
+
       // Call backend API to calculate prorated amount
       const result = await subscriptionService.calculateProratedAmount(currentPlanId, newPlanId);
       console.log("Backend prorated calculation result:", result);
-      
+
       if (result.isProrated) {
         console.log("=== PRORATED BILLING DETAILS ===");
         console.log("User is paying DIFFERENCE amount because they already have", currentPlanId);
@@ -189,7 +189,7 @@ const Pricing = () => {
       } else {
         console.log("No prorated billing - full amount charged: ₹", result.amount);
       }
-      
+
       return result;
     } catch (error) {
       console.error("Error calculating prorated amount:", error);
@@ -202,13 +202,13 @@ const Pricing = () => {
     console.log("=== PLAN SELECTION INITIATED ===");
     console.log("Selected plan ID:", planId);
     console.log("User authenticated:", isAuthenticated);
-    
+
     // Check if it's the Infinity plan (Coming Soon)
     if (planId === "infinity") {
       alert("Xalora Infinity is coming soon! Stay tuned for the ultimate AI learning experience.");
       return;
     }
-    
+
     if (!isAuthenticated) {
       console.log("User not authenticated, redirecting to login");
       navigate("/login");
@@ -221,7 +221,7 @@ const Pricing = () => {
     // Get the selected plan details
     const selectedPlan = plans.find(plan => plan.id === planId);
     console.log("Selected plan details:", selectedPlan);
-    
+
     if (!selectedPlan) {
       console.error("Plan not found for ID:", planId);
       alert("Plan not found");
@@ -272,21 +272,21 @@ const Pricing = () => {
 
     // For paid plans, check if user has existing subscription for prorated billing
     console.log("Processing paid plan:", selectedPlan.name);
-    
+
     try {
       let finalAmount = selectedPlan.price;
       let isProrated = false;
       let proratedInfo = null;
-      
+
       // Calculate prorated amount if upgrading
       if (currentSubscription && currentSubscription.planId !== planId) {
         console.log("User is upgrading from", currentSubscription.planId, "to", planId);
         console.log("Calculating prorated amount for plan upgrade");
         const proratedResult = await calculateProratedAmount(
-          currentSubscription.planId, 
+          currentSubscription.planId,
           planId
         );
-        
+
         if (proratedResult && proratedResult.isProrated && proratedResult.amount < selectedPlan.price && proratedResult.amount > 0) {
           finalAmount = proratedResult.amount;
           isProrated = true;
@@ -336,9 +336,9 @@ const Pricing = () => {
         setIsLoading(prev => ({ ...prev, [planId]: false }));
         return;
       }
-      
+
       console.log("Order creation result:", orderData);
-      
+
       // If it's a free plan activation response
       if (orderData.order === null) {
         console.log("Free plan activation confirmed");
@@ -361,14 +361,14 @@ const Pricing = () => {
         console.log("Original price: ₹", proratedInfo.fullAmount);
         console.log("Prorated amount: ₹", proratedInfo.amount.toFixed(2));
         console.log("Savings: ₹", proratedInfo.savings.toFixed(2));
-        
+
         alert(`You're upgrading your plan!\n\n` +
-              `You already have: ${proratedInfo.currentPlan}\n` +
-              `Upgrading to: ${planId}\n\n` +
-              `Original price: ₹${proratedInfo.fullAmount}\n` +
-              `Prorated amount: ₹${proratedInfo.amount.toFixed(2)}\n` +
-              `You save: ₹${proratedInfo.savings.toFixed(2)}\n\n` +
-              `Click OK to proceed with payment.`);
+          `You already have: ${proratedInfo.currentPlan}\n` +
+          `Upgrading to: ${planId}\n\n` +
+          `Original price: ₹${proratedInfo.fullAmount}\n` +
+          `Prorated amount: ₹${proratedInfo.amount.toFixed(2)}\n` +
+          `You save: ₹${proratedInfo.savings.toFixed(2)}\n\n` +
+          `Click OK to proceed with payment.`);
       }
 
       // Razorpay options
@@ -382,7 +382,7 @@ const Pricing = () => {
         handler: async function (response) {
           console.log("=== PAYMENT SUCCESSFUL ===");
           console.log("Razorpay response:", response);
-          
+
           try {
             // Verify payment on backend
             const verificationData = {
@@ -392,7 +392,7 @@ const Pricing = () => {
               planId: planId,
               amount: finalAmount
             };
-            
+
             console.log("Verifying payment with backend...");
             console.log("Verification data:", {
               orderId: verificationData.razorpay_order_id,
@@ -403,17 +403,17 @@ const Pricing = () => {
 
             const verificationResult = await subscriptionService.verifyPayment(verificationData);
             console.log("Payment verification result:", verificationResult);
-            
+
             // Show success message and refresh
             if (isProrated && proratedInfo) {
               console.log("=== PAYMENT SUCCESS WITH PRORATED BILLING ===");
               console.log("User paid DIFFERENCE amount: ₹", proratedInfo.amount.toFixed(2));
               console.log("They saved: ₹", proratedInfo.savings.toFixed(2));
-              
+
               alert(`${selectedPlan.name} plan upgraded successfully!\n\n` +
-                    `You've been charged ₹${proratedInfo.amount.toFixed(2)} (prorated amount).\n` +
-                    `You saved ₹${proratedInfo.savings.toFixed(2)}!\n\n` +
-                    `Your subscription has been updated.`);
+                `You've been charged ₹${proratedInfo.amount.toFixed(2)} (prorated amount).\n` +
+                `You saved ₹${proratedInfo.savings.toFixed(2)}!\n\n` +
+                `Your subscription has been updated.`);
             } else {
               alert(`${selectedPlan.name} plan activated successfully!`);
             }
@@ -438,7 +438,7 @@ const Pricing = () => {
           color: '#017a8d',
         },
         modal: {
-          ondismiss: function() {
+          ondismiss: function () {
             console.log("=== PAYMENT MODAL DISMISSED ===");
             setIsLoading(prev => ({ ...prev, [planId]: false }));
             console.log("Payment dialog closed by user");
@@ -500,43 +500,41 @@ const Pricing = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-red-500 text-white px-6 py-2 rounded-full font-bold text-sm mb-4 animate-pulse">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-flex items-center bg-red-500 text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-full font-bold text-xs sm:text-sm mb-4 animate-pulse">
               🔥 LIMITED TIME: 51% OFF ALL PAID PLANS!
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-4 sm:mb-6">
               Choose Your Plan
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Unlock your coding potential with our flexible subscription plans. 
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-2">
+              Unlock your coding potential with our flexible subscription plans.
               Start for free and upgrade as you grow.
             </p>
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {plans.map((plan) => (
-              <div 
+              <div
                 key={plan.id}
-                className={`relative rounded-2xl shadow-2xl overflow-hidden border transition-all duration-500 hover:scale-105 transform-gpu ${
-                  currentSubscription && currentSubscription.planId === plan.id
+                className={`relative rounded-2xl shadow-2xl overflow-hidden border transition-all duration-500 hover:scale-105 transform-gpu ${currentSubscription && currentSubscription.planId === plan.id
                     ? "cursor-default bg-gradient-to-br from-green-900/30 to-green-900/10 border-green-500 ring-4 ring-green-500/20"
                     : "cursor-pointer bg-gradient-to-br from-gray-800/30 to-gray-900/30 border-gray-700 hover:border-gray-600"
-                } ${
-                  plan.popular && !(currentSubscription && currentSubscription.planId === plan.id)
-                    ? "ring-4 ring-purple-500/20 border-purple-500" 
+                  } ${plan.popular && !(currentSubscription && currentSubscription.planId === plan.id)
+                    ? "ring-4 ring-purple-500/20 border-purple-500"
                     : ""
-                }`}
+                  }`}
                 onClick={() => {
                   // Check if it's Coming Soon
                   if (plan.comingSoon) {
                     alert("Xalora Infinity is coming soon! Stay tuned for the ultimate AI learning experience.");
                     return;
                   }
-                  
+
                   // Only allow clicking if it's not the current plan
                   if (!(currentSubscription && currentSubscription.planId === plan.id)) {
                     console.log("Plan card clicked:", plan.id);
@@ -548,7 +546,7 @@ const Pricing = () => {
                       window.location.href = "/";
                       return;
                     }
-                    
+
                     handlePlanSelect(plan.id);
                   }
                 }}
@@ -567,19 +565,19 @@ const Pricing = () => {
                   </div>
                 )}
 
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   {/* Plan Icon */}
-                  <div className={`flex justify-center mb-6 ${plan.bgColor} backdrop-blur-sm rounded-2xl p-4`}>
+                  <div className={`flex justify-center mb-4 sm:mb-6 ${plan.bgColor} backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4`}>
                     {getPlanIcon(plan.id)}
                   </div>
 
                   {/* Plan Name */}
-                  <h2 className="text-2xl font-bold text-white text-center mb-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white text-center mb-2">
                     {plan.name}
                   </h2>
 
                   {/* Tagline */}
-                  <p className="text-center italic mb-4">
+                  <p className="text-center italic mb-4 text-sm sm:text-base">
                     <span className={`font-medium bg-clip-text text-transparent bg-gradient-to-r ${plan.iconColor} to-white`}>
                       {plan.tagline}
                     </span>
@@ -588,39 +586,39 @@ const Pricing = () => {
                   {/* Best For */}
                   <div className={`rounded-xl p-4 mb-6 ${plan.bgColor} backdrop-blur-sm border ${plan.borderColor}`}>
                     <p className="text-sm">
-                      <span className="font-semibold text-white">Best for:</span> 
+                      <span className="font-semibold text-white">Best for:</span>
                       <span className="text-gray-300"> {plan.bestFor}</span>
                     </p>
                   </div>
 
                   {/* Price */}
-                  <div className="text-center mb-8">
+                  <div className="text-center mb-6 sm:mb-8">
                     {plan.price === 0 ? (
                       <div>
-                        <span className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">
+                        <span className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">
                           Free
                         </span>
                         <span className="block text-gray-400 mt-2">Forever</span>
                       </div>
                     ) : plan.comingSoon ? (
                       <div>
-                        <span className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-500">
+                        <span className="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-500">
                           Coming Soon
                         </span>
                         <div className="mt-2">
-                          <span className="text-2xl text-gray-500 line-through">₹{plan.originalPrice}</span>
+                          <span className="text-xl sm:text-2xl text-gray-500 line-through">₹{plan.originalPrice}</span>
                           <span className="block text-gray-400 text-sm mt-1">/{plan.period}</span>
                         </div>
                       </div>
                     ) : (
                       <div>
                         <div className="flex items-center justify-center gap-2 mb-2">
-                          <span className="text-2xl text-gray-500 line-through">₹{plan.originalPrice}</span>
-                          <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          <span className="text-lg sm:text-xl md:text-2xl text-gray-500 line-through">₹{plan.originalPrice}</span>
+                          <span className="bg-red-500 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full">
                             51% OFF
                           </span>
                         </div>
-                        <span className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                        <span className="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
                           ₹{plan.price}
                         </span>
                         <span className="block text-gray-400 mt-2">/{plan.period}</span>
@@ -629,19 +627,19 @@ const Pricing = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-400 text-center mb-8 italic">
+                  <p className="text-gray-400 text-center mb-6 sm:mb-8 italic text-sm sm:text-base">
                     {plan.description}
                   </p>
 
                   {/* Features */}
-                  <div className="mb-8">
-                    <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+                  <div className="mb-6 sm:mb-8">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-3 flex items-center">
                       <svg className="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       Included Features
                     </h3>
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {plan.features.map((feature, index) => (
                         <li key={index} className="flex items-start">
                           <svg className={`h-5 w-5 ${plan.iconColor} mr-3 mt-0.5 flex-shrink-0`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -680,13 +678,13 @@ const Pricing = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       console.log("Button clicked for plan:", plan.id);
-                      
+
                       // Check if it's Coming Soon
                       if (plan.comingSoon) {
                         alert("Xalora Infinity is coming soon! Stay tuned for the ultimate AI learning experience.");
                         return;
                       }
-                      
+
                       // Check if user is trying to downgrade
                       if (currentSubscription && planValues[plan.id] < planValues[currentSubscription.planId]) {
                         console.log("Downgrade attempt detected:", currentSubscription.planId, "->", plan.id);
@@ -695,15 +693,14 @@ const Pricing = () => {
                         window.location.href = "/";
                         return;
                       }
-                      
+
                       handlePlanSelect(plan.id);
                     }}
                     disabled={isLoading[plan.id] || false || (currentSubscription && currentSubscription.planId === plan.id) || plan.comingSoon}
-                    className={`w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-gray-900 ${
-                      currentSubscription && currentSubscription.planId === plan.id 
-                        ? "bg-gray-600 cursor-not-allowed" 
+                    className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl font-bold text-white text-sm sm:text-base transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-gray-900 ${currentSubscription && currentSubscription.planId === plan.id
+                        ? "bg-gray-600 cursor-not-allowed"
                         : plan.buttonStyle
-                    } ${(isLoading[plan.id] || false) ? "opacity-75 cursor-not-allowed" : ""} shadow-lg hover:shadow-xl`}
+                      } ${(isLoading[plan.id] || false) ? "opacity-75 cursor-not-allowed" : ""} shadow-lg hover:shadow-xl`}
                   >
                     {(isLoading[plan.id] || false) ? (
                       <div className="flex items-center justify-center">
@@ -715,12 +712,12 @@ const Pricing = () => {
                       </div>
                     ) : (
                       // Show different button text based on current subscription
-                      currentSubscription && currentSubscription.planId === plan.id 
-                        ? "Current Plan" 
+                      currentSubscription && currentSubscription.planId === plan.id
+                        ? "Current Plan"
                         : (currentSubscription && planValues[plan.id] < planValues[currentSubscription.planId])
                           ? (plan.id === "spark" ? "Get Started" : "Start Learning")
-                          : (currentSubscription && plan.id !== "spark" && plan.id !== currentSubscription.planId) 
-                            ? `Upgrade to ${plan.name.split(" ")[1]}` 
+                          : (currentSubscription && plan.id !== "spark" && plan.id !== currentSubscription.planId)
+                            ? `Upgrade to ${plan.name.split(" ")[1]}`
                             : plan.buttonText
                     )}
                   </button>
@@ -730,61 +727,61 @@ const Pricing = () => {
           </div>
 
           {/* FAQ Section */}
-          <div className="mt-24 max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-white text-center mb-16">
+          <div className="mt-16 sm:mt-24 max-w-4xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12 sm:mb-16">
               Frequently Asked Questions
             </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 hover:border-cyan-500/30 transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-700 hover:border-cyan-500/30 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
                   <svg className="w-6 h-6 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Can I upgrade or downgrade my plan anytime?
                 </h3>
                 <p className="text-gray-300">
-                  Yes, you can change your subscription plan at any time. 
-                  When upgrading, you'll get immediate access to premium features. 
+                  Yes, you can change your subscription plan at any time.
+                  When upgrading, you'll get immediate access to premium features.
                   When downgrading, changes will take effect at the end of your current billing cycle.
                 </p>
               </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 hover:border-blue-500/30 transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-700 hover:border-blue-500/30 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
                   <svg className="w-6 h-6 text-blue-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   What payment methods do you accept?
                 </h3>
                 <p className="text-gray-300">
-                  We accept all major credit cards including Visa, Mastercard, and American Express. 
+                  We accept all major credit cards including Visa, Mastercard, and American Express.
                   We also support UPI payments for Indian users. All payments are processed securely through Razorpay.
                 </p>
               </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 hover:border-purple-500/30 transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-700 hover:border-purple-500/30 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
                   <svg className="w-6 h-6 text-purple-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Is there a free trial for paid plans?
                 </h3>
                 <p className="text-gray-300">
-                  While we don't offer a traditional free trial, our Xalora Spark plan gives you access to basic features. 
+                  While we don't offer a traditional free trial, our Xalora Spark plan gives you access to basic features.
                   You can upgrade to any paid plan at any time to unlock premium features.
                 </p>
               </div>
-              
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 hover:border-amber-500/30 transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-gray-700 hover:border-amber-500/30 transition-all duration-300">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 flex items-center">
                   <svg className="w-6 h-6 text-amber-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                   What happens if I cancel my subscription?
                 </h3>
                 <p className="text-gray-300">
-                  You can cancel your subscription at any time. Your access to premium features will continue 
+                  You can cancel your subscription at any time. Your access to premium features will continue
                   until the end of your current billing period. We don't offer refunds for partial months.
                 </p>
               </div>

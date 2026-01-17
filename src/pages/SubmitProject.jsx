@@ -115,10 +115,10 @@ const SubmitProject = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading submission details...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto"></div>
+            <p className="mt-4 text-white/70">Loading submission details...</p>
           </div>
         </div>
       </Layout>
@@ -128,11 +128,11 @@ const SubmitProject = () => {
   if (!enrollment) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
           <div className="text-center">
-            <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Enrollment Not Found</h2>
-            <p className="text-gray-600">The enrollment you're trying to access doesn't exist.</p>
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-white mb-2">Enrollment Not Found</h2>
+            <p className="text-gray-400">The enrollment you're trying to access doesn't exist.</p>
           </div>
         </div>
       </Layout>
@@ -146,31 +146,30 @@ const SubmitProject = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black">
         {/* Header */}
-        <div className="bg-white shadow-sm">
+        <div className="bg-white/5 backdrop-blur-md border-b border-white/10">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <button
               onClick={() => navigate('/internships/enrolled')}
-              className="flex items-center text-purple-600 hover:text-purple-800 mb-4"
+              className="flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to My Internships
             </button>
 
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Submit Project</h1>
-                <p className="mt-2 text-gray-600">{enrollment.internshipId.title}</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Submit Project</h1>
+                <p className="text-gray-300">{enrollment.internshipId.title}</p>
               </div>
 
               {submission && (
-                <div className="text-right">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    submission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    submission.status === 'approved' ? 'bg-green-100 text-green-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+                <div className="w-full sm:w-auto text-left sm:text-right">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${submission.status === 'pending' ? 'bg-yellow-900/30 text-yellow-400 border border-yellow-700/50' :
+                      submission.status === 'approved' ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-700/50' :
+                        'bg-red-900/30 text-red-400 border border-red-700/50'
+                    }`}>
                     {submission.status.charAt(0).toUpperCase() + submission.status.slice(1)}
                   </span>
                 </div>
@@ -180,33 +179,37 @@ const SubmitProject = () => {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-white rounded-lg shadow-sm">
-            <div className="p-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 shadow-xl overflow-hidden">
+            <div className="p-6 sm:p-8">
               {/* Submission Status */}
               {submission && (
-                <div className={`mb-6 p-4 rounded-lg ${
-                  submission.status === 'pending' ? 'bg-yellow-50 border-yellow-200' :
-                  submission.status === 'approved' ? 'bg-green-50 border-green-200' :
-                  'bg-red-50 border-red-200'
-                } border`}>
-                  <div className="flex items-center">
-                    {submission.status === 'pending' && <AlertCircle className="w-5 h-5 text-yellow-600 mr-2" />}
-                    {submission.status === 'approved' && <CheckCircle className="w-5 h-5 text-green-600 mr-2" />}
-                    {submission.status === 'rejected' && <AlertCircle className="w-5 h-5 text-red-600 mr-2" />}
+                <div className={`mb-8 p-4 rounded-xl border ${submission.status === 'pending' ? 'bg-yellow-900/10 border-yellow-500/30' :
+                    submission.status === 'approved' ? 'bg-emerald-900/10 border-emerald-500/30' :
+                      'bg-red-900/10 border-red-500/30'
+                  }`}>
+                  <div className="flex items-start">
+                    {submission.status === 'pending' && <AlertCircle className="w-5 h-5 text-yellow-500 mr-3 mt-0.5 flex-shrink-0" />}
+                    {submission.status === 'approved' && <CheckCircle className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0" />}
+                    {submission.status === 'rejected' && <AlertCircle className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />}
 
                     <div>
-                      <h3 className="font-medium text-gray-900">
+                      <h3 className={`font-semibold ${submission.status === 'pending' ? 'text-yellow-400' :
+                          submission.status === 'approved' ? 'text-emerald-400' :
+                            'text-red-400'
+                        }`}>
                         {submission.status === 'pending' && 'Submission Under Review'}
                         {submission.status === 'approved' && 'Submission Approved!'}
                         {submission.status === 'rejected' && 'Submission Rejected'}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Submitted on {new Date(submission.submittedAt).toLocaleDateString()}
+                      <p className="text-sm text-gray-400 mt-1">
+                        Submitted on <span className="text-gray-300">{new Date(submission.submittedAt).toLocaleDateString()}</span>
                       </p>
                       {submission.adminComments && (
-                        <p className="text-sm text-gray-700 mt-2">
-                          <strong>Admin Comments:</strong> {submission.adminComments}
-                        </p>
+                        <div className="mt-3 p-3 bg-black/20 rounded-lg">
+                          <p className="text-sm text-gray-300">
+                            <strong className="text-white block mb-1">Feedback:</strong> {submission.adminComments}
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -216,12 +219,12 @@ const SubmitProject = () => {
               {/* Submission Form */}
               {canSubmit && (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-5">
                     <div className="flex items-start">
-                      <FileText className="w-5 h-5 text-blue-600 mr-2 mt-0.5" />
+                      <FileText className="w-5 h-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
                       <div>
-                        <h3 className="font-medium text-blue-900">Submission Requirements</h3>
-                        <ul className="text-sm text-blue-800 mt-2 space-y-1">
+                        <h3 className="font-bold text-blue-300">Submission Requirements</h3>
+                        <ul className="text-sm text-blue-200/80 mt-2 space-y-1.5">
                           <li>• Upload your complete project code to GitHub</li>
                           <li>• Create a demo video showcasing your project</li>
                           <li>• Upload the video to YouTube and provide the link</li>
@@ -234,67 +237,65 @@ const SubmitProject = () => {
 
                   {/* GitHub URL */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      GitHub Repository URL *
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      GitHub Repository URL <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <Github className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <Github className="absolute left-3 top-3.5 h-5 w-5 text-gray-500" />
                       <input
                         type="url"
                         value={formData.githubUrl}
                         onChange={(e) => handleInputChange('githubUrl', e.target.value)}
-                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                          errors.githubUrl ? 'border-red-300' : 'border-gray-300'
-                        }`}
+                        className={`w-full pl-10 pr-4 py-3 bg-black/20 border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all ${errors.githubUrl ? 'border-red-500/50 focus:ring-red-500/50' : 'border-white/10'
+                          }`}
                         placeholder="https://github.com/username/project-name"
                         required
                       />
                     </div>
                     {errors.githubUrl && (
-                      <p className="mt-1 text-sm text-red-600">{errors.githubUrl}</p>
+                      <p className="mt-1 text-sm text-red-400 pl-1">{errors.githubUrl}</p>
                     )}
                   </div>
 
                   {/* YouTube URL */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      YouTube Demo Video URL *
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      YouTube Demo Video URL <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <Youtube className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <Youtube className="absolute left-3 top-3.5 h-5 w-5 text-gray-500" />
                       <input
                         type="url"
                         value={formData.youtubeUrl}
                         onChange={(e) => handleInputChange('youtubeUrl', e.target.value)}
-                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                          errors.youtubeUrl ? 'border-red-300' : 'border-gray-300'
-                        }`}
-                        placeholder="https://youtube.com/watch?v=VIDEO_ID or https://youtu.be/VIDEO_ID"
+                        className={`w-full pl-10 pr-4 py-3 bg-black/20 border rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all ${errors.youtubeUrl ? 'border-red-500/50 focus:ring-red-500/50' : 'border-white/10'
+                          }`}
+                        placeholder="https://youtube.com/watch?v=VIDEO_ID"
                         required
                       />
                     </div>
                     {errors.youtubeUrl && (
-                      <p className="mt-1 text-sm text-red-600">{errors.youtubeUrl}</p>
+                      <p className="mt-1 text-sm text-red-400 pl-1">{errors.youtubeUrl}</p>
                     )}
                   </div>
 
                   {/* Submit Button */}
-                  <div className="flex justify-end space-x-4">
+                  <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:gap-4 pt-4">
                     <button
                       type="button"
                       onClick={() => navigate('/internships/enrolled')}
-                      className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                      className="px-6 py-3 bg-white/5 text-gray-300 border border-white/10 rounded-xl hover:bg-white/10 transition-colors font-medium text-center"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                      className="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-semibold shadow-lg shadow-emerald-900/20"
                     >
                       {submitting ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white mr-2"></div>
                           Submitting...
                         </>
                       ) : (
@@ -310,12 +311,12 @@ const SubmitProject = () => {
 
               {/* Cannot Submit Message */}
               {!canSubmit && (
-                <div className="text-center py-8">
-                  <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">
+                <div className="text-center py-8 sm:py-12">
+                  <AlertCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-white mb-2">
                     {enrollment.status === 'submitted' ? 'Submission Under Review' : 'Cannot Submit Project'}
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
                     {enrollment.status === 'submitted'
                       ? 'Your project is currently being reviewed by our team. You will be notified once the review is complete.'
                       : 'You are not eligible to submit a project for this internship at this time.'
@@ -323,7 +324,7 @@ const SubmitProject = () => {
                   </p>
                   <button
                     onClick={() => navigate('/internships/enrolled')}
-                    className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+                    className="bg-emerald-600 text-white px-6 py-3 rounded-xl hover:bg-emerald-500 transition-colors font-medium shadow-lg shadow-emerald-900/20"
                   >
                     Back to My Internships
                   </button>

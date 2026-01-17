@@ -76,7 +76,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             if (!isAuthenticated) return;
-            
+
             await execute(
                 () => authService.getUser(),
                 (response) => {
@@ -107,7 +107,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchSubscription = async () => {
             if (!isAuthenticated || !user) return;
-            
+
             try {
                 const subscriptionData = await subscriptionService.getCurrentSubscription();
                 setSubscription(subscriptionData.data);
@@ -127,7 +127,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchAIUsage = async () => {
             if (!isAuthenticated || !user) return;
-            
+
             try {
                 const usageData = await subscriptionService.getAIUsageInfo();
                 setAiUsage(usageData.data);
@@ -147,12 +147,12 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserStats = async () => {
             if (!isAuthenticated || !user) return;
-            
+
             try {
                 // Fetch problems data
                 const problemsRes = await problemService.getAllProblems({ limit: 1000 });
                 console.log('Problems response:', problemsRes);
-                
+
                 // Extract problems array with multiple fallbacks
                 let problems = [];
                 if (problemsRes?.data?.data?.problems && Array.isArray(problemsRes.data.data.problems)) {
@@ -166,30 +166,30 @@ const Profile = () => {
                 } else if (problemsRes?.problems && Array.isArray(problemsRes.problems)) {
                     problems = problemsRes.problems;
                 }
-                
+
                 console.log('Parsed problems array:', problems.length, 'problems');
-                
+
                 // Check localStorage for solved problems as fallback (like in DSAAnalytics)
                 const solvedProblemsStorage = JSON.parse(localStorage.getItem('solvedProblems') || '[]');
-                
+
                 // Calculate solved problems based on userStatus (with localStorage fallback)
                 const solvedProblems = Array.isArray(problems) ? problems.filter(p => {
                     return p.userStatus === "Solved" || solvedProblemsStorage.includes(p._id);
                 }).length : 0;
-                
+
                 // Fetch quiz data
                 const quizRes = await quizService.getUserSubmissions();
                 console.log('Quiz response:', quizRes);
-                
+
                 const quizzes = quizRes?.data?.submissions || quizRes?.submissions || quizRes?.data || [];
-                
+
                 // Update stats
                 setStats({
                     problemsSolved: solvedProblems,
                     quizzesTaken: Array.isArray(quizzes) ? quizzes.length : 0,
                     currentStreak: user?.stats?.currentStreak || 0
                 });
-                
+
                 console.log('Stats updated:', {
                     problemsSolved: solvedProblems,
                     quizzesTaken: Array.isArray(quizzes) ? quizzes.length : 0,
@@ -264,7 +264,7 @@ const Profile = () => {
     // Get plan details for display
     const getPlanDetails = () => {
         if (!subscription) return null;
-        
+
         const planId = subscription.planId;
         const plans = {
             "spark": {
@@ -318,7 +318,7 @@ const Profile = () => {
                 ]
             }
         };
-        
+
         return plans[planId] || plans["spark"];
     };
 
@@ -336,12 +336,12 @@ const Profile = () => {
 
     return (
         <Layout showNavbar={false}>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12">
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header with gradient */}
-                    <div className="mb-8">
-                        <div className="flex items-center justify-between">
-                            <h1 className="text-3xl font-bold text-white">
+                    <div className="mb-6 sm:mb-8">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-white">
                                 My Profile
                             </h1>
                             <Link
@@ -354,7 +354,7 @@ const Profile = () => {
                                 Back to Home
                             </Link>
                         </div>
-                        <p className="mt-2 text-white/70">
+                        <p className="mt-2 text-sm sm:text-base text-white/70">
                             Manage your account settings and preferences.
                         </p>
                     </div>
@@ -380,21 +380,21 @@ const Profile = () => {
 
                     {/* Subscription Info Card */}
                     {subscription && (
-                        <div className="mb-8 bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                            <div className={`px-6 py-4 ${planDetails?.color || "bg-gray-600"} text-white`}>
+                        <div className="mb-6 sm:mb-8 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
+                            <div className={`px-4 sm:px-6 py-4 ${planDetails?.color || "bg-gray-600"} text-white`}>
                                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                                     <div>
-                                        <h2 className="text-2xl font-bold">
+                                        <h2 className="text-xl sm:text-2xl font-bold">
                                             {planDetails?.name || "Xalora Spark"} Plan
                                         </h2>
-                                        <p className="text-white/90 mt-1">
+                                        <p className="text-white/90 mt-1 text-sm sm:text-base">
                                             {planDetails?.description || "Free forever plan"}
                                         </p>
                                     </div>
                                     <div className="mt-4 md:mt-0">
-                                        <Link 
-                                            to="/pricing" 
-                                            className="inline-flex items-center px-4 py-2 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-300"
+                                        <Link
+                                            to="/pricing"
+                                            className="inline-flex items-center px-3 sm:px-4 py-2 text-sm sm:text-base bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-300"
                                         >
                                             Change Plan
                                             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -404,20 +404,20 @@ const Profile = () => {
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div className="px-6 py-6">
-                                <h3 className="text-lg font-semibold text-white mb-4">Plan Features</h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                            <div className="px-4 sm:px-6 py-4 sm:py-6">
+                                <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Plan Features</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                     {planDetails?.features.map((feature, index) => (
                                         <div key={index} className="flex items-start">
                                             <svg className="h-5 w-5 text-emerald-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                             </svg>
-                                            <span className="text-gray-300">{feature}</span>
+                                            <span className="text-sm sm:text-base text-gray-300">{feature}</span>
                                         </div>
                                     ))}
                                 </div>
-                                
+
                                 <div className="mt-6 pt-4 border-t border-gray-700">
                                     <div className="flex items-center text-sm text-gray-400 mb-2">
                                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -446,9 +446,9 @@ const Profile = () => {
                                         </div>
                                     )}
                                     <div className="mt-4">
-                                        <Link 
-                                            to="/payment-history" 
-                                            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
+                                        <Link
+                                            to="/payment-history"
+                                            className="inline-flex items-center px-3 sm:px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
                                         >
                                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -463,37 +463,37 @@ const Profile = () => {
 
                     {/* AI Usage Card */}
                     {aiUsage && (
-                        <div className="mb-8 bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                            <div className="px-6 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
-                                <h2 className="text-2xl font-bold">AI Usage</h2>
-                                <p className="text-white/90 mt-1">Track your daily AI requests</p>
+                        <div className="mb-6 sm:mb-8 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
+                            <div className="px-4 sm:px-6 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
+                                <h2 className="text-xl sm:text-2xl font-bold">AI Usage</h2>
+                                <p className="text-white/90 mt-1 text-sm sm:text-base">Track your daily AI requests</p>
                             </div>
-                            
-                            <div className="px-6 py-6">
+
+                            <div className="px-4 sm:px-6 py-4 sm:py-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 className="text-lg font-semibold text-white">Daily AI Requests</h3>
+                                        <h3 className="text-base sm:text-lg font-semibold text-white">Daily AI Requests</h3>
                                         <p className="text-gray-400 text-sm">
                                             {aiUsage.requestsUsed} of {aiUsage.requestsLimit} used
                                         </p>
                                     </div>
                                     <div className="text-right">
-                                        <span className="text-2xl font-bold text-white">
+                                        <span className="text-xl sm:text-2xl font-bold text-white">
                                             {aiUsage.requestsRemaining}
                                         </span>
                                         <p className="text-gray-400 text-sm">remaining</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="w-full bg-gray-700 rounded-full h-4">
-                                    <div 
-                                        className="bg-gradient-to-r from-cyan-500 to-blue-500 h-4 rounded-full" 
-                                        style={{ 
-                                            width: `${(aiUsage.requestsUsed / aiUsage.requestsLimit) * 100}%` 
+                                    <div
+                                        className="bg-gradient-to-r from-cyan-500 to-blue-500 h-4 rounded-full"
+                                        style={{
+                                            width: `${(aiUsage.requestsUsed / aiUsage.requestsLimit) * 100}%`
                                         }}
                                     ></div>
                                 </div>
-                                
+
                                 <div className="mt-4 text-sm text-gray-400">
                                     <p>Reset daily at midnight</p>
                                 </div>
@@ -502,9 +502,9 @@ const Profile = () => {
                     )}
 
                     {/* Profile Card */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg border border-white/10 overflow-hidden">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
                         {/* Profile Header with gradient */}
-                        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-8">
+                        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-4 sm:px-6 py-6 sm:py-8">
                             <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <div className="relative">
                                     <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-1 rounded-full">
@@ -514,16 +514,16 @@ const Profile = () => {
                                                 "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                             }
                                             alt="Profile"
-                                            className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
+                                            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white shadow-lg object-cover"
                                         />
                                     </div>
                                     <div className="absolute bottom-2 right-2 w-6 h-6 bg-gray-00 border-4 border-white rounded-full"></div>
                                 </div>
                                 <div className="text-center md:text-left text-white">
-                                    <h2 className="text-2xl font-bold">
+                                    <h2 className="text-xl sm:text-2xl font-bold">
                                         {formData.name || "User"}
                                     </h2>
-                                    <p className="text-emerald-100 text-lg">
+                                    <p className="text-emerald-100 text-base sm:text-lg">
                                         @{formData.username || "username"}
                                     </p>
                                     <div className="flex items-center justify-center md:justify-start mt-2">
@@ -547,9 +547,9 @@ const Profile = () => {
                             </div>
 
                             {/* Statistics Section */}
-                            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                                 <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-3xl font-bold text-white">
+                                    <div className="text-2xl sm:text-3xl font-bold text-white">
                                         {stats.problemsSolved}
                                     </div>
                                     <div className="text-emerald-200 text-sm mt-1">
@@ -557,7 +557,7 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-3xl font-bold text-white">
+                                    <div className="text-2xl sm:text-3xl font-bold text-white">
                                         {stats.quizzesTaken}
                                     </div>
                                     <div className="text-emerald-200 text-sm mt-1">
@@ -565,7 +565,7 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-3xl font-bold text-white">
+                                    <div className="text-2xl sm:text-3xl font-bold text-white">
                                         {stats.currentStreak}
                                     </div>
                                     <div className="text-emerald-200 text-sm mt-1">
@@ -576,11 +576,11 @@ const Profile = () => {
                         </div>
 
                         {/* Profile Form */}
-                        <div className="px-6 py-8">
-                            <h3 className="text-xl font-semibold text-white mb-6">
+                        <div className="px-4 sm:px-6 py-6 sm:py-8">
+                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
                                 Account Settings
                             </h3>
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label
@@ -595,7 +595,7 @@ const Profile = () => {
                                             name="name"
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                             placeholder="Enter your full name"
                                         />
                                     </div>
@@ -612,7 +612,7 @@ const Profile = () => {
                                             name="username"
                                             value={formData.username}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                             placeholder="Choose a username"
                                         />
                                     </div>
@@ -630,7 +630,7 @@ const Profile = () => {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                         placeholder="Enter your email"
                                     />
                                 </div>
@@ -647,7 +647,7 @@ const Profile = () => {
                                         name="avatar"
                                         value={formData.avatar}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                         placeholder="Enter avatar URL"
                                     />
                                 </div>
@@ -655,7 +655,7 @@ const Profile = () => {
                                     <button
                                         type="submit"
                                         disabled={updateLoading}
-                                        className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium rounded-lg transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium rounded-lg transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {updateLoading ? (
                                             <>
@@ -688,10 +688,10 @@ const Profile = () => {
                                 </div>
                             </form>
                         </div>
-                        
+
                         {/* Token Information Section */}
-                        <div className="px-6 py-6 border-t border-gray-700">
-                            <h3 className="text-lg font-semibold text-white mb-4">
+                        <div className="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-700">
+                            <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
                                 Authentication Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

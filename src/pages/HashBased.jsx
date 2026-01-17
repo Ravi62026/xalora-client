@@ -125,16 +125,16 @@ const HashBased = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                 Hash-Based Data Structures
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-4xl mx-auto">
               Master the fundamental building blocks of efficient data storage and retrieval.
               From basic hash tables to advanced probabilistic structures, explore the world
               of hash-based algorithms that power modern computing systems.
@@ -142,8 +142,8 @@ const HashBased = () => {
           </div>
 
           {/* Overview Section */}
-          <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-            <h2 className="text-3xl font-bold text-white mb-6 text-center">Why Hash-Based Structures Matter</h2>
+          <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">Why Hash-Based Structures Matter</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="text-center">

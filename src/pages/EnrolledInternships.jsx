@@ -32,10 +32,10 @@ const EnrolledInternships = () => {
       setLoading(true);
       // Add cache-busting parameter to prevent browser caching
       const response = await axios.get(`${ApiRoutes.internships.getEnrolled}?_t=${Date.now()}`);
-      
+
       // Log cache information for debugging
       console.log('Enrollments API Response:', response);
-      
+
       setEnrollments(response.data.data);
     } catch (error) {
       console.error('Error fetching enrollments:', error);
@@ -46,11 +46,11 @@ const EnrolledInternships = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'enrolled': return 'bg-blue-100 text-blue-800';
-      case 'submitted': return 'bg-yellow-100 text-yellow-800';
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'enrolled': return 'bg-blue-900/30 text-blue-400 border border-blue-700/50';
+      case 'submitted': return 'bg-yellow-900/30 text-yellow-400 border border-yellow-700/50';
+      case 'completed': return 'bg-emerald-900/30 text-emerald-400 border border-emerald-700/50';
+      case 'rejected': return 'bg-red-900/30 text-red-400 border border-red-700/50';
+      default: return 'bg-gray-900/30 text-gray-400 border border-gray-700/50';
     }
   };
 
@@ -77,7 +77,7 @@ const EnrolledInternships = () => {
     if (!enrollment.internshipId) {
       return 0;
     }
-    
+
     const totalDays = enrollment.internshipId.duration;
     const enrolledDate = new Date(enrollment.enrolledAt);
     const now = new Date();
@@ -88,10 +88,10 @@ const EnrolledInternships = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading your internships...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto"></div>
+            <p className="mt-4 text-white/70">Loading your internships...</p>
           </div>
         </div>
       </Layout>
@@ -100,18 +100,18 @@ const EnrolledInternships = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black">
         {/* Header */}
-        <div className="bg-white shadow-sm">
+        <div className="bg-white/5 backdrop-blur-md border-b border-white/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">My Internships</h1>
-                <p className="mt-2 text-gray-600">Track your internship progress and manage submissions</p>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-center md:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">My Internships</h1>
+                <p className="mt-2 text-sm sm:text-base text-gray-300">Track your internship progress and manage submissions</p>
               </div>
               <Link
                 to="/internships"
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center"
+                className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center text-sm sm:text-base shadow-lg shadow-emerald-900/20"
               >
                 <BookOpen className="w-4 h-4 mr-2" />
                 Browse More
@@ -122,13 +122,13 @@ const EnrolledInternships = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {enrollments.length === 0 ? (
-            <div className="text-center py-12">
-              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">No internships enrolled</h3>
-              <p className="text-gray-600 mb-6">Start your internship journey by enrolling in available opportunities.</p>
+            <div className="text-center py-12 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <BookOpen className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-white mb-2">No internships enrolled</h3>
+              <p className="text-gray-400 mb-6">Start your internship journey by enrolling in available opportunities.</p>
               <Link
                 to="/internships"
-                className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+                className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors inline-block"
               >
                 Browse Internships
               </Link>
@@ -141,27 +141,27 @@ const EnrolledInternships = () => {
                 if (!internship) {
                   return null; // Skip rendering if internship data is missing
                 }
-                
+
                 const daysRemaining = getDaysRemaining(enrollment.deadline);
                 const progressPercentage = getProgressPercentage(enrollment);
 
                 return (
-                  <div key={enrollment._id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                  <div key={enrollment._id} className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 shadow-lg hover:border-emerald-500/30 transition-all">
                     <div className="p-6">
                       {/* Header */}
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">
                             {internship.title}
                           </h3>
-                          <div className="flex items-center space-x-2">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(enrollment.status)} flex items-center`}>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(enrollment.status)} flex items-center shadow-sm`}>
                               {getStatusIcon(enrollment.status)}
                               <span className="ml-1">
                                 {enrollment.status.charAt(0).toUpperCase() + enrollment.status.slice(1)}
                               </span>
                             </span>
-                            <span className="text-sm text-gray-500">
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-800 text-gray-300 border border-gray-700">
                               {internship.difficulty}
                             </span>
                           </div>
@@ -169,43 +169,43 @@ const EnrolledInternships = () => {
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="mb-4">
-                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                      <div className="mb-6">
+                        <div className="flex justify-between text-sm text-gray-300 mb-2">
                           <span>Progress</span>
                           <span>{Math.round(progressPercentage)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
                           <div
-                            className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-emerald-500 to-teal-500 h-2 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                             style={{ width: `${progressPercentage}%` }}
                           ></div>
                         </div>
                       </div>
 
                       {/* Deadline */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Clock className="w-4 h-4 mr-1" />
-                          <span>
+                      <div className="flex items-center justify-between mb-6 bg-black/20 p-3 rounded-lg">
+                        <div className="flex items-center text-sm text-gray-300">
+                          <Clock className="w-4 h-4 mr-2 text-emerald-400" />
+                          <span className={daysRemaining < 3 ? "text-red-400 font-medium" : "text-gray-300"}>
                             {daysRemaining > 0
                               ? `${daysRemaining} days remaining`
                               : daysRemaining === 0
-                              ? 'Due today'
-                              : `${Math.abs(daysRemaining)} days overdue`
+                                ? 'Due today'
+                                : `${Math.abs(daysRemaining)} days overdue`
                             }
                           </span>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          Due: {new Date(enrollment.deadline).toLocaleDateString()}
+                        <div className="text-sm text-gray-400">
+                          Due: <span className="text-white">{new Date(enrollment.deadline).toLocaleDateString()}</span>
                         </div>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {enrollment.status === 'enrolled' && (
                           <Link
                             to={`/internships/submit/${enrollment._id}`}
-                            className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center"
+                            className="w-full bg-emerald-600 text-white py-2 px-4 rounded-xl hover:bg-emerald-500 transition-colors flex items-center justify-center font-medium shadow-lg shadow-emerald-900/20"
                           >
                             <FileText className="w-4 h-4 mr-2" />
                             Submit Project
@@ -213,21 +213,21 @@ const EnrolledInternships = () => {
                         )}
 
                         {enrollment.status === 'submitted' && (
-                          <div className="w-full bg-yellow-50 border border-yellow-200 text-yellow-800 py-2 px-4 rounded-lg flex items-center justify-center">
-                            <AlertCircle className="w-4 h-4 mr-2" />
+                          <div className="w-full bg-yellow-900/20 border border-yellow-500/30 text-yellow-200 py-2 px-4 rounded-xl flex items-center justify-center">
+                            <AlertCircle className="w-4 h-4 mr-2 text-yellow-400" />
                             Awaiting Review
                           </div>
                         )}
 
                         {enrollment.status === 'completed' && (
-                          <div className="space-y-2">
-                            <div className="w-full bg-green-50 border border-green-200 text-green-800 py-2 px-4 rounded-lg flex items-center justify-center">
-                              <Award className="w-4 h-4 mr-2" />
+                          <div className="space-y-3">
+                            <div className="w-full bg-emerald-900/20 border border-emerald-500/30 text-emerald-200 py-2 px-4 rounded-xl flex items-center justify-center">
+                              <Award className="w-4 h-4 mr-2 text-emerald-400" />
                               Completed Successfully
                             </div>
                             <button
                               onClick={() => window.open(ApiRoutes.internships.downloadCertificate(enrollment.submissionId || enrollment._id), '_blank')}
-                              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center"
+                              className="w-full bg-purple-600 text-white py-2 px-4 rounded-xl hover:bg-purple-500 transition-colors flex items-center justify-center font-medium shadow-lg shadow-purple-900/20"
                             >
                               <Download className="w-4 h-4 mr-2" />
                               Download Certificate
@@ -236,14 +236,14 @@ const EnrolledInternships = () => {
                         )}
 
                         {enrollment.status === 'rejected' && (
-                          <div className="space-y-2">
-                            <div className="w-full bg-red-50 border border-red-200 text-red-800 py-2 px-4 rounded-lg flex items-center justify-center">
-                              <AlertCircle className="w-4 h-4 mr-2" />
+                          <div className="space-y-3">
+                            <div className="w-full bg-red-900/20 border border-red-500/30 text-red-200 py-2 px-4 rounded-xl flex items-center justify-center">
+                              <AlertCircle className="w-4 h-4 mr-2 text-red-400" />
                               Submission Rejected
                             </div>
                             <Link
                               to={`/internships/submit/${enrollment._id}`}
-                              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center"
+                              className="w-full bg-emerald-600 text-white py-2 px-4 rounded-xl hover:bg-emerald-500 transition-colors flex items-center justify-center font-medium shadow-lg shadow-emerald-900/20"
                             >
                               <FileText className="w-4 h-4 mr-2" />
                               Resubmit Project
@@ -254,7 +254,7 @@ const EnrolledInternships = () => {
                         {/* Offer Letter Button - Available for all enrolled users */}
                         <button
                           onClick={() => window.open(ApiRoutes.internships.downloadOfferLetter(enrollment._id), '_blank')}
-                          className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center"
+                          className="w-full bg-white/5 text-white border border-white/10 py-2 px-4 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center font-medium"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download Offer Letter
@@ -262,15 +262,15 @@ const EnrolledInternships = () => {
                       </div>
 
                       {/* Tech Stack */}
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <div className="flex flex-wrap gap-1">
+                      <div className="mt-4 pt-4 border-t border-white/10">
+                        <div className="flex flex-wrap gap-2">
                           {internship.techStack.slice(0, 4).map((tech) => (
-                            <span key={tech} className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-md">
+                            <span key={tech} className="px-2 py-1 bg-purple-900/30 text-purple-300 border border-purple-500/30 text-xs rounded-md">
                               {tech}
                             </span>
                           ))}
                           {internship.techStack.length > 4 && (
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                            <span className="px-2 py-1 bg-gray-800 text-gray-400 border border-gray-700 text-xs rounded-md">
                               +{internship.techStack.length - 4}
                             </span>
                           )}
@@ -285,30 +285,30 @@ const EnrolledInternships = () => {
 
           {/* Stats Summary */}
           {enrollments.length > 0 && (
-            <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Internship Summary</h3>
+            <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Internship Summary</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{enrollments.length}</div>
-                  <div className="text-sm text-gray-600">Total Enrolled</div>
+                <div className="text-center p-4 bg-black/20 rounded-xl">
+                  <div className="text-2xl font-bold text-purple-400">{enrollments.length}</div>
+                  <div className="text-sm text-gray-400">Total Enrolled</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                <div className="text-center p-4 bg-black/20 rounded-xl">
+                  <div className="text-2xl font-bold text-blue-400">
                     {enrollments.filter(e => e.status === 'enrolled').length}
                   </div>
-                  <div className="text-sm text-gray-600">In Progress</div>
+                  <div className="text-sm text-gray-400">In Progress</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-600">
+                <div className="text-center p-4 bg-black/20 rounded-xl">
+                  <div className="text-2xl font-bold text-yellow-400">
                     {enrollments.filter(e => e.status === 'submitted').length}
                   </div>
-                  <div className="text-sm text-gray-600">Under Review</div>
+                  <div className="text-sm text-gray-400">Under Review</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="text-center p-4 bg-black/20 rounded-xl">
+                  <div className="text-2xl font-bold text-emerald-400">
                     {enrollments.filter(e => e.status === 'completed').length}
                   </div>
-                  <div className="text-sm text-gray-600">Completed</div>
+                  <div className="text-sm text-gray-400">Completed</div>
                 </div>
               </div>
             </div>

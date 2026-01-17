@@ -501,14 +501,14 @@ struct Trie{
         </span>
       );
     }
-    
+
     let color = "bg-gray-100 text-gray-800";
     if (complexity.includes("log")) color = "bg-blue-100 text-blue-800";
     if (complexity.includes("√")) color = "bg-purple-100 text-purple-800";
     if (complexity === "O(1)") color = "bg-green-100 text-green-800";
     if (complexity.includes("n")) color = "bg-yellow-100 text-yellow-800";
     if (complexity.includes("n²") || complexity.includes("n log n")) color = "bg-red-100 text-red-800";
-    
+
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${color}`}>
         {complexity}
@@ -518,11 +518,11 @@ struct Trie{
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 Searching Algorithms
               </span>
@@ -533,64 +533,58 @@ struct Trie{
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "overview"
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveSection("array")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "array"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "array"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Array Search
             </button>
             <button
               onClick={() => setActiveSection("string")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "string"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "string"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               String Search
             </button>
             <button
               onClick={() => setActiveSection("structures")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "structures"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "structures"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Data Structures
             </button>
             <button
               onClick={() => setActiveSection("graphs")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "graphs"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "graphs"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Graph Search
             </button>
             <button
               onClick={() => setActiveSection("cheatsheet")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeSection === "cheatsheet"
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "cheatsheet"
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               Cheat Sheet
             </button>
@@ -598,9 +592,9 @@ struct Trie{
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Searching Algorithms Overview</h2>
-              
+            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Searching Algorithms Overview</h2>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-2xl font-semibold text-purple-400 mb-4">What is Searching?</h3>
@@ -608,7 +602,7 @@ struct Trie{
                     Searching is the process of finding the position(s) of an item (or whether it exists) in a data container.
                     The efficiency of searching algorithms varies greatly depending on the data structure and whether the data is sorted.
                   </p>
-                  
+
                   <h3 className="text-2xl font-semibold text-purple-400 mb-4">Key Concepts</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
@@ -625,7 +619,7 @@ struct Trie{
                     </li>
                   </ul>
                 </div>
-                
+
                 <div>
                   <h3 className="text-2xl font-semibold text-purple-400 mb-4">Classification</h3>
                   <div className="space-y-4">
@@ -633,17 +627,17 @@ struct Trie{
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Linear-time methods</h4>
                       <p className="text-gray-300">For unsorted data: <span className="text-white">Linear Search</span></p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Sublinear methods</h4>
                       <p className="text-gray-300">For sorted data: <span className="text-white">Binary, Interpolation, Jump, Fibonacci, Exponential</span></p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Hash-based methods</h4>
                       <p className="text-gray-300">O(1) average lookup using: <span className="text-white">Hash Tables</span></p>
                     </div>
-                    
+
                     <div className="bg-gray-700/50 p-4 rounded-xl">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">Specialized structures</h4>
                       <p className="text-gray-300">Trees, tries, suffix arrays: <span className="text-white">BST, Trie, Suffix Array</span></p>
@@ -658,11 +652,11 @@ struct Trie{
           {activeSection === "array" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Array Searching Algorithms</h2>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {algorithms.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
                   >
                     <div className="p-6">
@@ -674,9 +668,9 @@ struct Trie{
                           </span>
                         </div>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       {algorithm.variants && (
                         <div className="mb-6">
                           <h4 className="text-lg font-semibold text-purple-400 mb-3">Variants</h4>
@@ -689,7 +683,7 @@ struct Trie{
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-purple-400 mb-3">Complexity</h4>
@@ -712,7 +706,7 @@ struct Trie{
                             </div>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-purple-400 mb-3">Implementation (C++)</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
@@ -741,20 +735,20 @@ struct Trie{
           {activeSection === "string" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">String Searching Algorithms</h2>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {stringAlgorithms.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
                         <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-cyan-400 mb-3">Complexity</h4>
@@ -773,7 +767,7 @@ struct Trie{
                             </div>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation (C++)</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
@@ -792,20 +786,20 @@ struct Trie{
           {activeSection === "structures" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Search in Specialized Data Structures</h2>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {specializedStructures.map((structure) => (
-                  <div 
-                    key={structure.id} 
+                  <div
+                    key={structure.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
                         <h3 className="text-2xl font-bold text-white mb-2">{structure.name}</h3>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{structure.description}</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-green-400 mb-3">Complexity</h4>
@@ -824,7 +818,7 @@ struct Trie{
                             </div>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-green-400 mb-3">Implementation (C++)</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
@@ -843,20 +837,20 @@ struct Trie{
           {activeSection === "graphs" && (
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Graph Search Algorithms</h2>
-              
+
               <div className="grid grid-cols-1 gap-8">
                 {graphAlgorithms.map((algorithm) => (
-                  <div 
-                    key={algorithm.id} 
+                  <div
+                    key={algorithm.id}
                     className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
                         <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
                       </div>
-                      
+
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                           <h4 className="text-lg font-semibold text-yellow-400 mb-3">Complexity</h4>
@@ -875,7 +869,7 @@ struct Trie{
                             </div>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-yellow-400 mb-3">Implementation (C++)</h4>
                           <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
@@ -894,7 +888,7 @@ struct Trie{
           {activeSection === "cheatsheet" && (
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
               <h2 className="text-3xl font-bold text-white mb-8 text-center">Searching Algorithms Cheat Sheet</h2>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>
@@ -909,8 +903,8 @@ struct Trie{
                   </thead>
                   <tbody>
                     {cheatSheetData.map((row, index) => (
-                      <tr 
-                        key={index} 
+                      <tr
+                        key={index}
                         className="border-b border-gray-700 hover:bg-gray-700/30 transition-all duration-300"
                       >
                         <td className="py-4 text-white font-medium">{row.algorithm}</td>
@@ -940,7 +934,7 @@ struct Trie{
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="mt-12">
                 <h3 className="text-2xl font-bold text-white mb-6">Key Takeaways</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -948,12 +942,12 @@ struct Trie{
                     <h4 className="text-lg font-semibold text-purple-400 mb-2">When to Use Binary Search</h4>
                     <p className="text-gray-300">Whenever you have sorted data and need efficient searching with O(log n) time complexity.</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-purple-400 mb-2">Hash Tables for Multiple Lookups</h4>
                     <p className="text-gray-300">Use hash tables when you need many lookups and order doesn't matter - O(1) average case.</p>
                   </div>
-                  
+
                   <div className="bg-gray-700/50 p-5 rounded-xl">
                     <h4 className="text-lg font-semibold text-purple-400 mb-2">Interpolation Search</h4>
                     <p className="text-gray-300">Best for uniformly distributed numeric data where you can estimate position.</p>
@@ -968,7 +962,7 @@ struct Trie{
             <h2 className="text-3xl font-bold text-white text-center mb-8">
               Practice Problems
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-green-400 mb-3">Beginner</h3>
@@ -991,7 +985,7 @@ struct Trie{
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-yellow-400 mb-3">Intermediate</h3>
                 <ul className="space-y-2 text-gray-300">
@@ -1021,7 +1015,7 @@ struct Trie{
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-red-400 mb-3">Advanced</h3>
                 <ul className="space-y-2 text-gray-300">
@@ -1052,7 +1046,7 @@ struct Trie{
                 </ul>
               </div>
             </div>
-            
+
             <div className="mt-8 bg-gray-700/50 p-6 rounded-xl border border-gray-600">
               <h3 className="text-xl font-semibold text-purple-400 mb-3">Interview Patterns</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -1104,7 +1098,7 @@ struct Trie{
             <h2 className="text-3xl font-bold text-white text-center mb-8">
               Demo Walkthroughs
             </h2>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-purple-400 mb-4">Binary Search Trace</h3>
@@ -1120,7 +1114,7 @@ struct Trie{
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-purple-400 mb-4">Rotated Array Search</h3>
                 <p className="text-gray-300 mb-4">a=[10,11,12,1,2,5,8], key=2</p>
@@ -1135,7 +1129,7 @@ struct Trie{
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600 lg:col-span-2">
                 <h3 className="text-xl font-semibold text-purple-400 mb-4">KMP Example</h3>
                 <p className="text-gray-300 mb-4">s="abababca", p="abab"</p>
@@ -1148,13 +1142,13 @@ struct Trie{
               </div>
             </div>
           </div>
-          
+
           {/* Optimizations & Tips */}
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/10 mb-12">
             <h2 className="text-3xl font-bold text-white text-center mb-8">
               Optimizations & Trick Questions
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-emerald-400 mb-3">Optimization Tips</h3>
@@ -1177,7 +1171,7 @@ struct Trie{
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-emerald-400 mb-3">Trick Questions</h3>
                 <ul className="space-y-3 text-gray-300">

@@ -97,8 +97,8 @@ const Login = () => {
 
     return (
         <Layout showNavbar={false}>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-12 items-center">
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     {/* Left side - Features */}
                     <div className="hidden lg:block">
                         {/* Logo Section */}
@@ -125,7 +125,7 @@ const Login = () => {
                                 Continue your coding journey with our AI-powered platform
                             </p>
                         </div>
-                        
+
                         {/* Feature showcase */}
                         <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 shadow-2xl">
                             <div className="text-center">
@@ -147,11 +147,10 @@ const Login = () => {
                                 <button
                                     key={index}
                                     onClick={() => setCurrentFeature(index)}
-                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                        index === currentFeature 
-                                            ? 'bg-emerald-400 scale-125' 
-                                            : 'bg-white/30 hover:bg-white/50'
-                                    }`}
+                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentFeature
+                                        ? 'bg-emerald-400 scale-125'
+                                        : 'bg-white/30 hover:bg-white/50'
+                                        }`}
                                 />
                             ))}
                         </div>
@@ -176,41 +175,41 @@ const Login = () => {
                     {/* Right side - Login Form */}
                     <div className="max-w-md w-full mx-auto">
                         {/* Header */}
-                        <div className="text-center mb-8">
-                            <Link to="/" className="inline-block mb-6 group">
-                                <div className="flex items-center justify-center space-x-3">
+                        <div className="text-center mb-6 sm:mb-8">
+                            <Link to="/" className="inline-block mb-4 sm:mb-6 lg:hidden group">
+                                <div className="flex items-center justify-center space-x-2 sm:space-x-3">
                                     <div className="relative">
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora Logo"
-                                            className="h-12 w-auto group-hover:scale-110 transition-transform duration-300"
+                                            className="h-10 sm:h-12 w-auto group-hover:scale-110 transition-transform duration-300"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
                                     </div>
-                                    <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
+                                    <span className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
                                         XALORA
                                     </span>
                                 </div>
                             </Link>
-                            <h2 className="text-2xl font-semibold text-white mb-2">
+                            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-2">
                                 Welcome back
                             </h2>
-                            <p className="text-white/70">
+                            <p className="text-sm sm:text-base text-white/70">
                                 Sign in to continue your coding journey
                             </p>
                         </div>
 
                         {/* Login Form */}
-                        <div className="bg-white/10 backdrop-blur-sm py-8 px-6 shadow-2xl rounded-2xl border border-white/20">
+                        <div className="bg-white/10 backdrop-blur-sm py-6 sm:py-8 px-4 sm:px-6 shadow-2xl rounded-xl sm:rounded-2xl border border-white/20">
                             {error && (
-                                <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-sm flex items-center">
+                                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-xs sm:text-sm flex items-center">
                                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                     </svg>
                                     {error}
                                 </div>
                             )}
-                            <form className="space-y-6" onSubmit={handleSubmit}>
+                            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                                 <div>
                                     <label
                                         htmlFor="email"
@@ -226,7 +225,7 @@ const Login = () => {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                         placeholder="Enter your email"
                                     />
                                 </div>
@@ -246,7 +245,7 @@ const Login = () => {
                                             required
                                             value={formData.password}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300 pr-12"
+                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300 pr-10 sm:pr-12"
                                             placeholder="Enter your password"
                                         />
                                         <button
@@ -278,7 +277,7 @@ const Login = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                                     <div className="flex items-center">
                                         <input
                                             id="remember-me"
@@ -306,7 +305,7 @@ const Login = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                                        className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
                                     >
                                         {loading ? (
                                             <>
