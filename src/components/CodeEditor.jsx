@@ -22,12 +22,6 @@ const CodeEditor = ({
       py: "python",
       java: "java",
       cpp: "cpp",
-      c: "c",
-      cs: "csharp",
-      go: "go",
-      rs: "rust",
-      php: "php",
-      rb: "ruby",
     };
     return languageMap[lang] || "plaintext";
   };

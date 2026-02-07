@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import {
   Layout,
   CodeEditor,
-  AuthDebugger,
 } from "../components";
 import { useApiCall } from "../hooks";
 import problemService from "../services/problemService";
@@ -19,6 +18,7 @@ import {
   formatConstraints,
 } from "../utils/verdictUtils";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const Problem = () => {
   const { id } = useParams();
@@ -29,6 +29,7 @@ const Problem = () => {
   const [code, setCode] = useState("");
   const [executionResult, setExecutionResult] = useState(null);
   const [executing, setExecuting] = useState(false);
+  const [activeExecutionAction, setActiveExecutionAction] = useState(null);
   const [input, setInput] = useState("");
   const [submissions, setSubmissions] = useState([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
@@ -41,45 +42,30 @@ const Problem = () => {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewResult, setReviewResult] = useState(null);
   const [editorTheme, setEditorTheme] = useState("vs-dark");
-  const [debugLogs, setDebugLogs] = useState([]);
   const [errorMarkers, setErrorMarkers] = useState([]); // New state for error markers
 
 
   // Import useSelector to access Redux state
   const { isAuthenticated } = useSelector((state) => state.user);
 
+  useEffect(() => {
+    // Ensure each problem detail view opens from top of page.
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [id]);
+
   // Debug logging function
   const addDebugLog = (message, data = null) => {
-    const timestamp = new Date().toLocaleTimeString();
-    // Use timestamp for unique ID to avoid React key conflicts
-    const logId = `debug-${Date.now()}-${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    const logEntry = {
-      id: logId,
-      timestamp,
-      message,
-      data: data ? JSON.stringify(data, null, 2) : null,
-    };
-
-    setDebugLogs((prev) => [logEntry, ...prev.slice(0, 9)]); // Keep last 10 logs
-    // Only log to console in development mode
+    // Only log to console in development mode.
     if (import.meta.env.DEV) {
+      const timestamp = new Date().toLocaleTimeString();
       console.log(`Xalora [${timestamp}]: ${message}`, data || "");
     }
   };
 
   const languages = [
-    // { value: "js", label: "JavaScript" },
     { value: "py", label: "Python" },
     { value: "java", label: "Java" },
     { value: "cpp", label: "C++" },
-    { value: "c", label: "C" },
-    // { value: "cs", label: "C#" },
-    { value: "go", label: "Go" },
-    { value: "rs", label: "Rust" },
-    // { value: "php", label: "PHP" },
-    { value: "rb", label: "Ruby" },
   ];
 
   const getLanguageTemplate = (language) => {
@@ -88,15 +74,6 @@ const Problem = () => {
 using namespace std;
 
 int main() { 
-    // Your code here
-    
-    return 0;
-}`,
-      c: `#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-int main() {
     // Your code here
     
     return 0;
@@ -119,25 +96,6 @@ public class Solution {
         sc.close();
     }
 }`,
-      go: `package main
-
-import (
-    "fmt"
-)
-
-func main() {
-    // Your code here
-    
-}`,
-      rs: `use std::io;
-
-fn main() {
-    // Your code here
-    
-}`,
-      rb: `# Your code here
-
-`,
     };
     return templates[language] || "// Start coding here";
   };
@@ -204,10 +162,7 @@ fn main() {
   // Socket.IO integration for real-time updates
   useEffect(() => {
     if (isAuthenticated) {
-      // Connect to socket with auth token
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        socketService.connect(token);
+      socketService.connect();
 
         // Listen for submission updates
         socketService.on('submission-update', (update) => {
@@ -254,7 +209,6 @@ fn main() {
           });
           setRightActiveTab("result");
         });
-      }
     }
 
     // Cleanup on unmount
@@ -418,6 +372,7 @@ fn main() {
     }
 
     addDebugLog("⏳ RUN CODE - Starting execution...");
+    setActiveExecutionAction("run");
     setExecuting(true);
     setExecutionResult(null);
 
@@ -483,6 +438,7 @@ fn main() {
       setRightActiveTab("result");
     } finally {
       setExecuting(false);
+      setActiveExecutionAction(null);
       console.log("🏁 RUN CODE - Execution completed");
     }
   };
@@ -520,6 +476,7 @@ fn main() {
 
     console.log("⏳ SUBMIT - Starting submission...");
     console.log("🌐 Load Balancer: Submitting solution to server via API");
+    setActiveExecutionAction("submit");
     setExecuting(true);
     setExecutionResult(null);
 
@@ -783,6 +740,7 @@ fn main() {
       }
     } finally {
       setExecuting(false);
+      setActiveExecutionAction(null);
       console.log("🏁 SUBMIT - Submission completed");
     }
   };
@@ -912,14 +870,6 @@ fn main() {
         "Match all opening braces { with closing braces }",
         "Declare variables before using them",
       ],
-      c: [
-        "C requires semicolons at the end of statements",
-        "Include headers with #include<library>",
-        "Remember to declare the main function as 'int main()'",
-        "Match all opening braces { with closing braces }",
-        "Declare variables at the beginning of blocks",
-        "Use proper format specifiers in scanf/printf",
-      ],
       java: [
         "Java class names must match the filename",
         "All code must be inside a class",
@@ -986,76 +936,88 @@ fn main() {
   };
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gray-50">
-        {/* Problem Header */}
-        <div className="bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h1 className="text-xl font-semibold text-gray-900">
-                    {problem.title}
-                  </h1>
-                  <span
-                    className={`px-2.5 py-1 rounded-full text-sm font-medium ${getDifficultyColor(
-                      problem.difficulty
-                    )}`}
-                  >
-                    {problem.difficulty}
-                  </span>
-                  {/* Solved Badge in Title */}
-                  {executionResult?.verdict === "Accepted" && (
-                    <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold rounded-full shadow-md flex items-center gap-1">
-                      <span>✅</span>
-                      SOLVED
-                    </span>
-                  )}
-                </div>
-                {/* Companies Section */}
-                {problem.companies && problem.companies.length > 0 && (
-                  <div className="mt-2">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Companies:</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {problem.companies.map((company, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full border border-blue-200"
-                        >
-                          {company}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                <div className="mt-1 flex items-center gap-4 text-sm text-gray-500">
-                  <span>Submissions: {submissions.length}</span>
-                </div>
-              </div>
-              <Link
-                to="/problems"
-                className="text-gray-600 hover:text-gray-900"
-              >
-                ← Back to Problems
-              </Link>
-            </div>
+    <Layout showNavbar={false} showFooter={false}>
+      <div className="h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black overflow-hidden">
+        <div className="h-16 border-b border-white/10 bg-slate-950/90 backdrop-blur">
+          <div className="mx-auto flex h-full max-w-[1800px] items-center justify-between px-3 sm:px-5">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-slate-200 transition hover:bg-white/10"
+            >
+              <img src="/logo_xalora.png" alt="Home" className="h-7 w-auto sm:h-8" />
+              <span className="hidden sm:inline">Home</span>
+            </Link>
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-slate-200 transition hover:bg-white/10"
+            >
+              <img src="/logo_xalora.png" alt="Dashboard" className="h-7 w-auto sm:h-8" />
+              <span className="hidden sm:inline">Dashboard</span>
+            </Link>
           </div>
         </div>
 
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="h-[calc(100vh-4rem)] w-full p-2 sm:p-3">
+          <div className="grid h-full grid-cols-1 gap-3 lg:grid-cols-2">
             {/* Left Column - Problem Description */}
-            <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <h1 className="truncate text-xl font-semibold text-slate-900 sm:text-2xl">
+                        {problem.title}
+                      </h1>
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(
+                          problem.difficulty
+                        )}`}
+                      >
+                        {problem.difficulty}
+                      </span>
+                      {executionResult?.verdict === "Accepted" && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-2.5 py-1 text-xs font-bold text-white">
+                          SOLVED
+                        </span>
+                      )}
+                    </div>
+
+                    {problem.companies && problem.companies.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {problem.companies.map((company, index) => (
+                          <span
+                            key={index}
+                            className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700"
+                          >
+                            {company}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <p className="mt-2 text-xs text-slate-500 sm:text-sm">
+                      Submissions: {submissions.length}
+                    </p>
+                  </div>
+
+                  <Link
+                    to="/problems"
+                    className="whitespace-nowrap rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs text-slate-700 transition hover:bg-slate-100 sm:text-sm"
+                  >
+                    Back
+                  </Link>
+                </div>
+              </div>
               {/* Tabs */}
-              <div className="bg-white rounded-lg shadow sticky top-0 z-10">
-                <div className="border-b">
+              <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+                <div>
                   <nav className="flex">
                     <button
                       onClick={() => setLeftActiveTab("description")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         leftActiveTab === "description"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          ? "border-cyan-500 text-cyan-600"
+                          : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       Description
@@ -1064,8 +1026,8 @@ fn main() {
                       onClick={() => setLeftActiveTab("submissions")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         leftActiveTab === "submissions"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          ? "border-cyan-500 text-cyan-600"
+                          : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       Submissions
@@ -1074,14 +1036,14 @@ fn main() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow">
-                <div className="p-6">
+              <div className="min-h-0 flex-1 overflow-y-auto bg-white">
+                <div className="p-4 sm:p-6">
                   {leftActiveTab === "description" ? (
                     <div className="space-y-6">
-                      <div className="prose max-w-none">
-                        <p className="whitespace-pre-wrap">
-                          {problem.description}
-                        </p>
+                      <div className="prose max-w-none prose-slate">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {problem.description || ""}
+                        </ReactMarkdown>
                       </div>
 
                       {problem.constraints && (
@@ -1242,17 +1204,17 @@ fn main() {
             </div>
 
             {/* Right Column - Code Editor */}
-            <div className="space-y-6">
-              <div className="bg-white rounded-lg shadow">
+            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="flex min-h-0 flex-1 flex-col">
                 {/* Code Editor Tabs */}
-                <div className="border-b">
+                <div className="border-b border-slate-200 bg-white/95 backdrop-blur">
                   <nav className="flex">
                     <button
                       onClick={() => setRightActiveTab("code")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "code"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          ? "border-cyan-500 text-cyan-600"
+                          : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       Code
@@ -1261,8 +1223,8 @@ fn main() {
                       onClick={() => setRightActiveTab("result")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "result"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          ? "border-cyan-500 text-cyan-600"
+                          : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       Results
@@ -1271,8 +1233,8 @@ fn main() {
                       onClick={() => setRightActiveTab("review")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "review"
-                          ? "border-purple-500 text-purple-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          ? "border-cyan-500 text-cyan-600"
+                          : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
                       AI Review
@@ -1280,7 +1242,7 @@ fn main() {
                   </nav>
                 </div>
 
-                <div className="p-6">
+                <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
                   {rightActiveTab === "code" ? (
                     <>
                       <div className="mb-4">
@@ -1407,7 +1369,9 @@ fn main() {
                             data-action="run-code"
                             className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-50"
                           >
-                            {executing ? "Running..." : "Run Code"}
+                            {activeExecutionAction === "run"
+                              ? "Running..."
+                              : "Run Code"}
                           </button>
                           <button
                             onClick={handleSubmitSolution}
@@ -1415,7 +1379,9 @@ fn main() {
                             data-action="submit-code"
                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-50"
                           >
-                            {executing ? "Submitting..." : "Submit"}
+                            {activeExecutionAction === "submit"
+                              ? "Submitting..."
+                              : "Submit"}
                           </button>
                         </div>
                         <button
@@ -1455,14 +1421,20 @@ fn main() {
 
                           {/* Solved Badge - Show when problem is solved */}
                           {executionResult.verdict === "Accepted" && (
-                            <div className="mt-4 p-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg border-2 border-green-400 shadow-lg">
-                              <div className="flex items-center justify-center space-x-3">
-                                <span className="text-3xl">🎉</span>
-                                <div className="text-center">
-                                  <h3 className="text-xl font-bold">SOLVED!</h3>
-                                  <p className="text-green-100 text-sm">Congratulations! You've successfully solved this problem.</p>
+                            <div className="mt-4 p-4 bg-emerald-100 text-emerald-900 rounded-lg border border-emerald-300 shadow-sm">
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-sm font-semibold px-2 py-1 rounded bg-emerald-200 text-emerald-800">
+                                    SOLVED
+                                  </span>
+                                  <div>
+                                    <h3 className="text-lg font-bold">Problem Solved</h3>
+                                    <p className="text-sm">
+                                      Great job! Your solution passed all test cases.
+                                    </p>
+                                  </div>
                                 </div>
-                                <span className="text-3xl">✅</span>
+                                <span className="text-xl font-semibold">Accepted</span>
                               </div>
                             </div>
                           )}
@@ -1704,9 +1676,7 @@ fn main() {
                               </h4>
                               <div className="mb-2">
                                 <p className="text-sm text-gray-600">
-                                  Passed {executionResult.summary.passed}
-                                  of  {executionResult.summary.total} 
-                                  test cases
+                                  {`Passed ${executionResult.summary.passed} of ${executionResult.summary.total} test cases`}
                                   {executionResult.summary.maxMemory &&
                                     ` • Memory: ${executionResult.summary.maxMemory}KB`}
                                   {executionResult.summary.totalExecutionTime &&
@@ -2137,39 +2107,11 @@ fn main() {
           </div>
         )}
 
-        {/* Debug Panel */}
-        {debugLogs.length > 0 && (
-          <div className="fixed bottom-4 right-4 w-96 max-h-64 bg-gray-900 text-green-400 rounded-lg shadow-lg overflow-hidden z-50">
-            <div className="bg-gray-800 px-3 py-2 flex justify-between items-center">
-              <span className="text-sm font-medium">Debug Logs</span>
-              <button
-                onClick={() => setDebugLogs([])}
-                className="text-red-400 hover:text-red-300 text-sm"
-              >
-                Clear
-              </button>
-            </div>
-            <div className="p-3 overflow-y-auto max-h-48 text-xs font-mono">
-              {debugLogs.map((log) => (
-                <div
-                  key={log.id}
-                  className="mb-2 border-b border-gray-700 pb-1"
-                >
-                  <div className="text-yellow-400">
-                    [{log.timestamp}] {log.message}
-                  </div>
-                  {log.data && (
-                    <div className="text-gray-300 mt-1 pl-2">{log.data}</div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
-      <AuthDebugger />
     </Layout>
   );
 };
 
 export default Problem;
+
+

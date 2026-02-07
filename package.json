@@ -15,11 +15,13 @@
   "dependencies": {
     "@langchain/google-vertexai": "^0.2.18",
     "@monaco-editor/react": "^4.7.0",
+    "@react-oauth/google": "^0.13.4",
     "@reduxjs/toolkit": "^2.1.0",
     "@tailwindcss/vite": "^4.1.10",
     "axios": "^1.6.7",
     "chart.js": "^4.5.0",
     "framer-motion": "^12.23.22",
+    "gsap": "^3.14.2",
     "jspdf": "^3.0.3",
     "lucide-react": "^0.544.0",
     "react": "^18.2.0",

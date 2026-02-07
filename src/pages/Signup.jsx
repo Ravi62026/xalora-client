@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import authService from "../services/authService";
+import { googleLoginUser } from "../store/slices/userSlice";
+import { GoogleLogin } from "@react-oauth/google";
 import { useApiCall } from "../hooks";
 import { Layout } from "../components";
 
@@ -17,6 +20,17 @@ const Signup = () => {
 
     const { loading, error, execute, setError } = useApiCall();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        console.log("🔐 GOOGLE-SIGNUP: Credential response:", credentialResponse);
+        if (credentialResponse.credential) {
+            const result = await dispatch(googleLoginUser(credentialResponse.credential));
+            if (googleLoginUser.fulfilled.match(result)) {
+                navigate("/");
+            }
+        }
+    };
 
     const features = [
         {
@@ -63,6 +77,13 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+
+        // Client-side Password Validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (!passwordRegex.test(formData.password)) {
+            setError("Password does not meet complexity requirements.");
+            return;
+        }
 
         if (formData.password !== formData.confirmPassword) {
             setError("Passwords do not match!");
@@ -140,8 +161,8 @@ const Signup = () => {
                                     key={index}
                                     onClick={() => setCurrentFeature(index)}
                                     className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentFeature
-                                            ? 'bg-emerald-400 scale-125'
-                                            : 'bg-white/30 hover:bg-white/50'
+                                        ? 'bg-emerald-400 scale-125'
+                                        : 'bg-white/30 hover:bg-white/50'
                                         }`}
                                 />
                             ))}
@@ -274,6 +295,37 @@ const Signup = () => {
                                         className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
                                         placeholder="Create a password"
                                     />
+                                    {formData.password && (
+                                        <div className="mt-2 space-y-1 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
+                                            <p className="text-xs text-white/50 mb-2 font-medium">Password Requirements:</p>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className={`flex items-center text-xs ${formData.password.length >= 8 ? 'text-emerald-400' : 'text-gray-400'}`}>
+                                                    <span className={`mr-1.5 ${formData.password.length >= 8 ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                        {formData.password.length >= 8 ? '✓' : '○'}
+                                                    </span>
+                                                    8+ Characters
+                                                </div>
+                                                <div className={`flex items-center text-xs ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
+                                                    <span className={`mr-1.5 ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                        {/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? '✓' : '○'}
+                                                    </span>
+                                                    Upper & Lower case
+                                                </div>
+                                                <div className={`flex items-center text-xs ${/\d/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
+                                                    <span className={`mr-1.5 ${/\d/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                        {/\d/.test(formData.password) ? '✓' : '○'}
+                                                    </span>
+                                                    One Number
+                                                </div>
+                                                <div className={`flex items-center text-xs ${/[\W_]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
+                                                    <span className={`mr-1.5 ${/[\W_]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                        {/[\W_]/.test(formData.password) ? '✓' : '○'}
+                                                    </span>
+                                                    Special Character
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <label
@@ -368,41 +420,17 @@ const Signup = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="mt-6 grid grid-cols-2 gap-3">
-                                    <div>
-                                        <a
-                                            href="#"
-                                            className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-900 text-sm font-medium text-white hover:bg-gray-800 transition-colors duration-300"
-                                        >
-                                            <svg
-                                                className="h-5 w-5 text-white"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.129 22 16.99 22 12z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <a
-                                            href="#"
-                                            className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-gray-900 text-sm font-medium text-white hover:bg-gray-800 transition-colors duration-300"
-                                        >
-                                            <svg
-                                                className="h-5 w-5 text-white"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path
-                                                    d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"
-                                                />
-                                            </svg>
-                                        </a>
-                                    </div>
+                                <div className="mt-6 flex justify-center">
+                                    <GoogleLogin
+                                        onSuccess={handleGoogleSuccess}
+                                        onError={() => {
+                                            console.log('Login Failed');
+                                        }}
+                                        theme="filled_black"
+                                        shape="pill"
+                                        width="350px"
+                                        text="signup_with"
+                                    />
                                 </div>
                             </div>
                             <div className="mt-6 text-center">

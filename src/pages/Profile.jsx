@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../components";
 import { useApiCall } from "../hooks";
@@ -9,722 +9,504 @@ import problemService from "../services/problemService";
 import quizService from "../services/quizService";
 import { setUser } from "../store/slices/userSlice";
 
+const PLAN_META = {
+  spark: {
+    name: "Xalora Spark",
+    tone: "from-slate-700 to-slate-800",
+    accent: "text-slate-100",
+    features: [
+      "10 AI requests per day",
+      "3 file uploads per day",
+      "Community access",
+    ],
+  },
+  pulse: {
+    name: "Xalora Pulse",
+    tone: "from-blue-600 to-cyan-600",
+    accent: "text-blue-100",
+    features: [
+      "50 AI requests per day",
+      "10 file uploads per day",
+      "Internship access",
+    ],
+  },
+  nexus: {
+    name: "Xalora Nexus",
+    tone: "from-indigo-600 to-fuchsia-600",
+    accent: "text-indigo-100",
+    features: [
+      "100 AI requests per day",
+      "20 file uploads per day",
+      "Advanced model access",
+    ],
+  },
+  infinity: {
+    name: "Xalora Infinity",
+    tone: "from-amber-500 to-orange-600",
+    accent: "text-amber-100",
+    features: [
+      "Unlimited AI requests",
+      "Unlimited file uploads",
+      "Priority support",
+    ],
+  },
+};
+
+const getProblemsArray = (res) => {
+  if (Array.isArray(res?.data?.data?.problems)) return res.data.data.problems;
+  if (Array.isArray(res?.data?.problems)) return res.data.problems;
+  if (Array.isArray(res?.data)) return res.data;
+  if (Array.isArray(res)) return res;
+  if (Array.isArray(res?.problems)) return res.problems;
+  return [];
+};
+
+const getQuizSubmissionsArray = (res) => {
+  if (Array.isArray(res?.data?.submissions)) return res.data.submissions;
+  if (Array.isArray(res?.submissions)) return res.submissions;
+  if (Array.isArray(res?.data)) return res.data;
+  if (Array.isArray(res)) return res;
+  return [];
+};
+
 const Profile = () => {
-    const { user, isAuthenticated } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { loading, error, execute } = useApiCall();
-    const [updateLoading, setUpdateLoading] = useState(false);
-    const [updateError, setUpdateError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const [subscription, setSubscription] = useState(null);
-    const [aiUsage, setAiUsage] = useState(null);
-    const [stats, setStats] = useState({
-        problemsSolved: 0,
-        quizzesTaken: 0,
-        currentStreak: 0
-    });
-    const [tokenInfo, setTokenInfo] = useState({
-        hasToken: false,
-        tokenType: "",
-        tokenSource: ""
-    });
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, execute } = useApiCall();
 
-    const [formData, setFormData] = useState({
-        name: "",
-        username: "",
-        email: "",
-        avatar: "",
-    });
+  const [subscription, setSubscription] = useState(null);
+  const [aiUsage, setAiUsage] = useState(null);
+  const [stats, setStats] = useState({
+    problemsSolved: 0,
+    quizzesTaken: 0,
+    currentStreak: 0,
+  });
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    email: "",
+    avatar: "",
+  });
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateError, setUpdateError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-    // Check for token information
-    useEffect(() => {
-        if (isAuthenticated && user) {
-            // Check if we have a token in localStorage
-            const storedUser = localStorage.getItem('hireveu_user');
-            if (storedUser) {
-                setTokenInfo({
-                    hasToken: true,
-                    tokenType: "localStorage",
-                    tokenSource: "Client-side storage"
-                });
-            } else {
-                // If authenticated but no localStorage token, it's likely cookie-based
-                setTokenInfo({
-                    hasToken: true,
-                    tokenType: "cookie",
-                    tokenSource: "Server-side authentication"
-                });
-            }
-        } else {
-            setTokenInfo({
-                hasToken: false,
-                tokenType: "none",
-                tokenSource: "Not authenticated"
-            });
-        }
-    }, [isAuthenticated, user]);
-
-    // Redirect to login if user is not authenticated
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate("/login");
-        }
-    }, [isAuthenticated, navigate]);
-
-    // Fetch user data on component mount
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!isAuthenticated) return;
-
-            await execute(
-                () => authService.getUser(),
-                (response) => {
-                    if (response.success) {
-                        const userData = response.data;
-                        setFormData({
-                            name: userData.name || "",
-                            username: userData.username || "",
-                            email: userData.email || "",
-                            avatar: userData.avatar || "",
-                        });
-                        dispatch(setUser(userData));
-                    }
-                },
-                (err) => {
-                    // If authentication fails, redirect to login
-                    if (err.response?.status === 401) {
-                        navigate("/login");
-                    }
-                }
-            );
-        };
-
-        fetchUserData();
-    }, [dispatch, execute, isAuthenticated, navigate]);
-
-    // Fetch subscription data
-    useEffect(() => {
-        const fetchSubscription = async () => {
-            if (!isAuthenticated || !user) return;
-
-            try {
-                const subscriptionData = await subscriptionService.getCurrentSubscription();
-                setSubscription(subscriptionData.data);
-            } catch (err) {
-                console.error("Error fetching subscription:", err);
-                // If authentication fails, redirect to login
-                if (err.response?.status === 401) {
-                    navigate("/login");
-                }
-            }
-        };
-
-        fetchSubscription();
-    }, [user, isAuthenticated, navigate]);
-
-    // Fetch AI usage data
-    useEffect(() => {
-        const fetchAIUsage = async () => {
-            if (!isAuthenticated || !user) return;
-
-            try {
-                const usageData = await subscriptionService.getAIUsageInfo();
-                setAiUsage(usageData.data);
-            } catch (err) {
-                console.error("Error fetching AI usage:", err);
-                // If authentication fails, redirect to login
-                if (err.response?.status === 401) {
-                    navigate("/login");
-                }
-            }
-        };
-
-        fetchAIUsage();
-    }, [user, isAuthenticated, navigate]);
-
-    // Fetch user stats
-    useEffect(() => {
-        const fetchUserStats = async () => {
-            if (!isAuthenticated || !user) return;
-
-            try {
-                // Fetch problems data
-                const problemsRes = await problemService.getAllProblems({ limit: 1000 });
-                console.log('Problems response:', problemsRes);
-
-                // Extract problems array with multiple fallbacks
-                let problems = [];
-                if (problemsRes?.data?.data?.problems && Array.isArray(problemsRes.data.data.problems)) {
-                    problems = problemsRes.data.data.problems;
-                } else if (problemsRes?.data?.problems && Array.isArray(problemsRes.data.problems)) {
-                    problems = problemsRes.data.problems;
-                } else if (problemsRes?.data && Array.isArray(problemsRes.data)) {
-                    problems = problemsRes.data;
-                } else if (Array.isArray(problemsRes)) {
-                    problems = problemsRes;
-                } else if (problemsRes?.problems && Array.isArray(problemsRes.problems)) {
-                    problems = problemsRes.problems;
-                }
-
-                console.log('Parsed problems array:', problems.length, 'problems');
-
-                // Check localStorage for solved problems as fallback (like in DSAAnalytics)
-                const solvedProblemsStorage = JSON.parse(localStorage.getItem('solvedProblems') || '[]');
-
-                // Calculate solved problems based on userStatus (with localStorage fallback)
-                const solvedProblems = Array.isArray(problems) ? problems.filter(p => {
-                    return p.userStatus === "Solved" || solvedProblemsStorage.includes(p._id);
-                }).length : 0;
-
-                // Fetch quiz data
-                const quizRes = await quizService.getUserSubmissions();
-                console.log('Quiz response:', quizRes);
-
-                const quizzes = quizRes?.data?.submissions || quizRes?.submissions || quizRes?.data || [];
-
-                // Update stats
-                setStats({
-                    problemsSolved: solvedProblems,
-                    quizzesTaken: Array.isArray(quizzes) ? quizzes.length : 0,
-                    currentStreak: user?.stats?.currentStreak || 0
-                });
-
-                console.log('Stats updated:', {
-                    problemsSolved: solvedProblems,
-                    quizzesTaken: Array.isArray(quizzes) ? quizzes.length : 0,
-                    currentStreak: user?.stats?.currentStreak || 0,
-                    solvedProblemsFromStorage: solvedProblemsStorage
-                });
-            } catch (err) {
-                console.error("Error fetching user stats:", err);
-                // If authentication fails, redirect to login
-                if (err.response?.status === 401) {
-                    navigate("/login");
-                }
-            }
-        };
-
-        fetchUserStats();
-    }, [user, isAuthenticated, navigate]);
-
-    // Update form data when user data changes from Redux
-    useEffect(() => {
-        if (user) {
-            setFormData({
-                name: user.name || "",
-                username: user.username || "",
-                email: user.email || "",
-                avatar: user.avatar || "",
-            });
-        }
-    }, [user]);
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        // Clear messages when user types
-        setUpdateError("");
-        setSuccessMessage("");
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setUpdateLoading(true);
-        setUpdateError("");
-        setSuccessMessage("");
-
-        try {
-            const response = await authService.updateUser(
-                formData.name,
-                formData.username,
-                formData.email,
-                formData.avatar
-            );
-
-            if (response.success) {
-                console.log("✅ PROFILE: User update response:", response);
-                dispatch(setUser(response.data));
-                setSuccessMessage("Profile updated successfully!");
-            } else {
-                setUpdateError(response.message || "Failed to update profile");
-            }
-        } catch (err) {
-            setUpdateError(
-                err.response?.data?.message || "Failed to update profile"
-            );
-            // If authentication fails, redirect to login
-            if (err.response?.status === 401) {
-                navigate("/login");
-            }
-        } finally {
-            setUpdateLoading(false);
-        }
-    };
-
-    // Get plan details for display
-    const getPlanDetails = () => {
-        if (!subscription) return null;
-
-        const planId = subscription.planId;
-        const plans = {
-            "spark": {
-                name: "Xalora Spark",
-                description: "Free forever plan with basic features",
-                color: "bg-gray-600",
-                features: [
-                    "10 AI requests per day",
-                    "3 file uploads per day",
-                    "Basic coding playground",
-                    "Community forum access"
-                ]
-            },
-            "pulse": {
-                name: "Xalora Pulse",
-                description: "Perfect for intermediate learners",
-                color: "bg-blue-600",
-                features: [
-                    "50 AI requests per day",
-                    "10 file uploads per day",
-                    "Access to GPT & Gemini models",
-                    "AI-assisted code review",
-                    "Quiz PDF downloads",
-                    "Internship access"
-                ]
-            },
-            "nexus": {
-                name: "Xalora Nexus",
-                description: "For advanced learners and project builders",
-                color: "bg-purple-600",
-                features: [
-                    "100 AI requests per day",
-                    "20 file uploads per day",
-                    "Access to 20+ AI models",
-                    "Real-time AI code mentor",
-                    "Project workspace",
-                    "Internship access"
-                ]
-            },
-            "infinity": {
-                name: "Xalora Infinity",
-                description: "Ultimate plan for professionals",
-                color: "bg-amber-600",
-                features: [
-                    "Unlimited AI requests",
-                    "Unlimited file uploads",
-                    "Access to 50+ AI models",
-                    "AI Interview Engine",
-                    "Priority support",
-                    "Internship access"
-                ]
-            }
-        };
-
-        return plans[planId] || plans["spark"];
-    };
-
-    const planDetails = getPlanDetails();
-
-    if (loading) {
-        return (
-            <Layout showNavbar={false}>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
-                </div>
-            </Layout>
-        );
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
     }
+  }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (!user) return;
+    setFormData({
+      name: user.name || "",
+      username: user.username || "",
+      email: user.email || "",
+      avatar: user.avatar || "",
+    });
+  }, [user]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!isAuthenticated) return;
+
+      await execute(
+        () => authService.getUser(),
+        (response) => {
+          if (!response?.success || !response?.data) return;
+          dispatch(setUser(response.data));
+          setFormData({
+            name: response.data.name || "",
+            username: response.data.username || "",
+            email: response.data.email || "",
+            avatar: response.data.avatar || "",
+          });
+        },
+        (err) => {
+          if (err?.response?.status === 401) navigate("/login");
+        }
+      );
+    };
+
+    fetchProfile();
+  }, [dispatch, execute, isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const fetchSubscriptionAndUsage = async () => {
+      if (!isAuthenticated) return;
+
+      try {
+        const [subRes, usageRes] = await Promise.all([
+          subscriptionService.getCurrentSubscription(),
+          subscriptionService.getAIUsageInfo(),
+        ]);
+
+        setSubscription(subRes?.data || null);
+        setAiUsage(usageRes || null);
+      } catch (err) {
+        if (err?.response?.status === 401) navigate("/login");
+      }
+    };
+
+    fetchSubscriptionAndUsage();
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!isAuthenticated || !user) return;
+      try {
+        const [problemsRes, quizzesRes] = await Promise.all([
+          problemService.getAllProblems({ limit: 1000 }),
+          quizService.getUserSubmissions(),
+        ]);
+
+        const solvedFromStorage = JSON.parse(localStorage.getItem("solvedProblems") || "[]");
+        const problems = getProblemsArray(problemsRes);
+        const quizzes = getQuizSubmissionsArray(quizzesRes);
+
+        const problemsSolved = problems.filter(
+          (p) => p?.userStatus === "Solved" || solvedFromStorage.includes(p?._id)
+        ).length;
+
+        setStats({
+          problemsSolved,
+          quizzesTaken: quizzes.length,
+          currentStreak: user?.stats?.currentStreak || 0,
+        });
+      } catch (err) {
+        if (err?.response?.status === 401) navigate("/login");
+      }
+    };
+
+    fetchStats();
+  }, [isAuthenticated, navigate, user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setSuccessMessage("");
+    setUpdateError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateLoading(true);
+    setSuccessMessage("");
+    setUpdateError("");
+
+    try {
+      const response = await authService.updateUser(
+        formData.name,
+        formData.username,
+        formData.email,
+        formData.avatar
+      );
+
+      if (!response?.success) {
+        setUpdateError(response?.message || "Profile update failed");
+      } else {
+        dispatch(setUser(response.data));
+        setSuccessMessage("Profile updated successfully.");
+      }
+    } catch (err) {
+      setUpdateError(err?.response?.data?.message || "Profile update failed");
+      if (err?.response?.status === 401) navigate("/login");
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const roleLabel = useMemo(() => {
+    if (user?.role === "setter") return "Problem Setter";
+    return "User";
+  }, [user]);
+
+  const avatarInitial = useMemo(
+    () => (formData.name || formData.username || "U").charAt(0).toUpperCase(),
+    [formData.name, formData.username]
+  );
+
+  const currentPlan = useMemo(() => {
+    const planId = subscription?.planId || "spark";
+    return PLAN_META[planId] || PLAN_META.spark;
+  }, [subscription]);
+
+  const usagePercent = useMemo(() => {
+    if (!aiUsage?.requestsLimit) return 0;
+    const raw = (aiUsage.requestsUsed / aiUsage.requestsLimit) * 100;
+    return Math.max(0, Math.min(100, raw));
+  }, [aiUsage]);
+
+  const uploadPercent = useMemo(() => {
+    if (!aiUsage?.fileUploadsLimit) return 0;
+    const raw = (aiUsage.fileUploadsUsed / aiUsage.fileUploadsLimit) * 100;
+    return Math.max(0, Math.min(100, raw));
+  }, [aiUsage]);
+
+  const statCards = useMemo(
+    () => [
+      {
+        label: "Problems Solved",
+        value: stats.problemsSolved,
+        hint: "Coding progress",
+      },
+      {
+        label: "Quizzes Taken",
+        value: stats.quizzesTaken,
+        hint: "Assessment activity",
+      },
+      {
+        label: "Current Streak",
+        value: stats.currentStreak,
+        hint: "Consecutive days",
+      },
+    ],
+    [stats]
+  );
+
+  if (loading && !user) {
     return (
-        <Layout showNavbar={false}>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Header with gradient */}
-                    <div className="mb-6 sm:mb-8">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-white">
-                                My Profile
-                            </h1>
-                            <Link
-                                to="/"
-                                className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center transition-colors duration-300"
-                            >
-                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                                Back to Home
-                            </Link>
-                        </div>
-                        <p className="mt-2 text-sm sm:text-base text-white/70">
-                            Manage your account settings and preferences.
-                        </p>
-                    </div>
-
-                    {/* Error Messages */}
-                    {error && (
-                        <div className="mb-6 p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-lg">
-                            {error}
-                        </div>
-                    )}
-
-                    {updateError && (
-                        <div className="mb-6 p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-lg">
-                            {updateError}
-                        </div>
-                    )}
-
-                    {successMessage && (
-                        <div className="mb-6 p-4 bg-green-900/30 border border-green-700 text-green-300 rounded-lg">
-                            {successMessage}
-                        </div>
-                    )}
-
-                    {/* Subscription Info Card */}
-                    {subscription && (
-                        <div className="mb-6 sm:mb-8 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                            <div className={`px-4 sm:px-6 py-4 ${planDetails?.color || "bg-gray-600"} text-white`}>
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                                    <div>
-                                        <h2 className="text-xl sm:text-2xl font-bold">
-                                            {planDetails?.name || "Xalora Spark"} Plan
-                                        </h2>
-                                        <p className="text-white/90 mt-1 text-sm sm:text-base">
-                                            {planDetails?.description || "Free forever plan"}
-                                        </p>
-                                    </div>
-                                    <div className="mt-4 md:mt-0">
-                                        <Link
-                                            to="/pricing"
-                                            className="inline-flex items-center px-3 sm:px-4 py-2 text-sm sm:text-base bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-300"
-                                        >
-                                            Change Plan
-                                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="px-4 sm:px-6 py-4 sm:py-6">
-                                <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Plan Features</h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                                    {planDetails?.features.map((feature, index) => (
-                                        <div key={index} className="flex items-start">
-                                            <svg className="h-5 w-5 text-emerald-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span className="text-sm sm:text-base text-gray-300">{feature}</span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-6 pt-4 border-t border-gray-700">
-                                    <div className="flex items-center text-sm text-gray-400 mb-2">
-                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span>
-                                            Subscription period: Monthly
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center text-sm text-gray-400">
-                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span>
-                                            Valid until: {subscription.endDate ? new Date(subscription.endDate).toLocaleDateString() : "N/A"}
-                                        </span>
-                                    </div>
-                                    {subscription.startDate && (
-                                        <div className="flex items-center text-sm text-gray-400 mt-2">
-                                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            <span>
-                                                Started on: {new Date(subscription.startDate).toLocaleDateString()}
-                                            </span>
-                                        </div>
-                                    )}
-                                    <div className="mt-4">
-                                        <Link
-                                            to="/payment-history"
-                                            className="inline-flex items-center px-3 sm:px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
-                                        >
-                                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            View Payment History
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* AI Usage Card */}
-                    {aiUsage && (
-                        <div className="mb-6 sm:mb-8 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                            <div className="px-4 sm:px-6 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
-                                <h2 className="text-xl sm:text-2xl font-bold">AI Usage</h2>
-                                <p className="text-white/90 mt-1 text-sm sm:text-base">Track your daily AI requests</p>
-                            </div>
-
-                            <div className="px-4 sm:px-6 py-4 sm:py-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div>
-                                        <h3 className="text-base sm:text-lg font-semibold text-white">Daily AI Requests</h3>
-                                        <p className="text-gray-400 text-sm">
-                                            {aiUsage.requestsUsed} of {aiUsage.requestsLimit} used
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className="text-xl sm:text-2xl font-bold text-white">
-                                            {aiUsage.requestsRemaining}
-                                        </span>
-                                        <p className="text-gray-400 text-sm">remaining</p>
-                                    </div>
-                                </div>
-
-                                <div className="w-full bg-gray-700 rounded-full h-4">
-                                    <div
-                                        className="bg-gradient-to-r from-cyan-500 to-blue-500 h-4 rounded-full"
-                                        style={{
-                                            width: `${(aiUsage.requestsUsed / aiUsage.requestsLimit) * 100}%`
-                                        }}
-                                    ></div>
-                                </div>
-
-                                <div className="mt-4 text-sm text-gray-400">
-                                    <p>Reset daily at midnight</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Profile Card */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                        {/* Profile Header with gradient */}
-                        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-4 sm:px-6 py-6 sm:py-8">
-                            <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-                                <div className="relative">
-                                    <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-1 rounded-full">
-                                        <img
-                                            src={
-                                                formData.avatar ||
-                                                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                            }
-                                            alt="Profile"
-                                            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white shadow-lg object-cover"
-                                        />
-                                    </div>
-                                    <div className="absolute bottom-2 right-2 w-6 h-6 bg-gray-00 border-4 border-white rounded-full"></div>
-                                </div>
-                                <div className="text-center md:text-left text-white">
-                                    <h2 className="text-xl sm:text-2xl font-bold">
-                                        {formData.name || "User"}
-                                    </h2>
-                                    <p className="text-emerald-100 text-base sm:text-lg">
-                                        @{formData.username || "username"}
-                                    </p>
-                                    <div className="flex items-center justify-center md:justify-start mt-2">
-                                        <svg
-                                            className="w-5 h-5 mr-2 text-emerald-200"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                                        </svg>
-                                        <span className="text-emerald-100">
-                                            {formData.email}
-                                        </span>
-                                    </div>
-                                    <div className="mt-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white bg-opacity-20 backdrop-blur-sm">
-                                        <span className="w-2 h-2 rounded-full bg-green-400 mr-2"></span>
-                                        {user?.role === "admin" ? "Administrator" : user?.role === "setter" ? "Problem Setter" : "User"}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Statistics Section */}
-                            <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                                <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-2xl sm:text-3xl font-bold text-white">
-                                        {stats.problemsSolved}
-                                    </div>
-                                    <div className="text-emerald-200 text-sm mt-1">
-                                        Problems Solved
-                                    </div>
-                                </div>
-                                <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-2xl sm:text-3xl font-bold text-white">
-                                        {stats.quizzesTaken}
-                                    </div>
-                                    <div className="text-emerald-200 text-sm mt-1">
-                                        Quizzes Taken
-                                    </div>
-                                </div>
-                                <div className="bg-gray-600 bg-opacity-10 backdrop-blur-sm rounded-xl p-5 text-center">
-                                    <div className="text-2xl sm:text-3xl font-bold text-white">
-                                        {stats.currentStreak}
-                                    </div>
-                                    <div className="text-emerald-200 text-sm mt-1">
-                                        Day Streak
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Profile Form */}
-                        <div className="px-4 sm:px-6 py-6 sm:py-8">
-                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
-                                Account Settings
-                            </h3>
-                            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label
-                                            htmlFor="name"
-                                            className="block text-sm font-medium text-white/90 mb-2"
-                                        >
-                                            Full Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
-                                            placeholder="Enter your full name"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label
-                                            htmlFor="username"
-                                            className="block text-sm font-medium text-white/90 mb-2"
-                                        >
-                                            Username
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="username"
-                                            name="username"
-                                            value={formData.username}
-                                            onChange={handleChange}
-                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
-                                            placeholder="Choose a username"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="email"
-                                        className="block text-sm font-medium text-white/90 mb-2"
-                                    >
-                                        Email Address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
-                                        placeholder="Enter your email"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="avatar"
-                                        className="block text-sm font-medium text-white/90 mb-2"
-                                    >
-                                        Avatar URL
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="avatar"
-                                        name="avatar"
-                                        value={formData.avatar}
-                                        onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
-                                        placeholder="Enter avatar URL"
-                                    />
-                                </div>
-                                <div className="flex justify-end">
-                                    <button
-                                        type="submit"
-                                        disabled={updateLoading}
-                                        className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium rounded-lg transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {updateLoading ? (
-                                            <>
-                                                <svg
-                                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <circle
-                                                        className="opacity-25"
-                                                        cx="12"
-                                                        cy="12"
-                                                        r="10"
-                                                        stroke="currentColor"
-                                                        strokeWidth="4"
-                                                    ></circle>
-                                                    <path
-                                                        className="opacity-75"
-                                                        fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                                    ></path>
-                                                </svg>
-                                                Updating...
-                                            </>
-                                        ) : (
-                                            "Update Profile"
-                                        )}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        {/* Token Information Section */}
-                        <div className="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-700">
-                            <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
-                                Authentication Information
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="bg-white/5 rounded-lg p-4 border border-gray-700">
-                                    <div className="text-sm text-gray-400 mb-1">Authentication Status</div>
-                                    <div className={`text-lg font-semibold ${isAuthenticated ? 'text-green-400' : 'text-red-400'}`}>
-                                        {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
-                                    </div>
-                                </div>
-                                <div className="bg-white/5 rounded-lg p-4 border border-gray-700">
-                                    <div className="text-sm text-gray-400 mb-1">Token Type</div>
-                                    <div className="text-lg font-semibold text-cyan-400">
-                                        {tokenInfo.tokenType}
-                                    </div>
-                                </div>
-                                <div className="bg-white/5 rounded-lg p-4 border border-gray-700">
-                                    <div className="text-sm text-gray-400 mb-1">Token Source</div>
-                                    <div className="text-lg font-semibold text-purple-400">
-                                        {tokenInfo.tokenSource}
-                                    </div>
-                                </div>
-                            </div>
-                            {tokenInfo.hasToken && (
-                                <div className="mt-4 text-sm text-gray-400">
-                                    <p>You are currently logged in and your authentication is maintained through {tokenInfo.tokenType}-based tokens.</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Layout>
+      <Layout>
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-400" />
+        </div>
+      </Layout>
     );
+  }
+
+  return (
+    <Layout>
+      <section className="min-h-screen bg-[radial-gradient(circle_at_10%_10%,rgba(45,212,191,0.18),transparent_35%),radial-gradient(circle_at_90%_20%,rgba(56,189,248,0.16),transparent_35%),linear-gradient(145deg,#020617,#0b1120,#030712)] py-8 sm:py-10 lg:py-12">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 rounded-3xl border border-cyan-400/20 bg-gradient-to-r from-cyan-500/15 via-transparent to-emerald-500/10 p-5 backdrop-blur sm:p-7">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Account Center</p>
+                <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Profile and Settings</h1>
+                <p className="mt-2 max-w-2xl text-sm text-slate-300 sm:text-base">
+                  Manage your personal details, review your plan, and track daily AI usage in one place.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center rounded-xl border border-cyan-300/35 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-400/20"
+                >
+                  Upgrade Plan
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+                >
+                  Back Home
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {error && (
+            <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {error}
+            </div>
+          )}
+          {updateError && (
+            <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {updateError}
+            </div>
+          )}
+          {successMessage && (
+            <div className="mb-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+              {successMessage}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+            <aside className="space-y-6 xl:col-span-4">
+              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_16px_40px_-20px_rgba(6,182,212,0.45)] backdrop-blur">
+                <div className="bg-gradient-to-r from-cyan-600/45 to-blue-600/20 p-6">
+                  <div className="flex items-start gap-4">
+                    {formData.avatar ? (
+                      <img
+                        src={formData.avatar}
+                        alt={formData.name || "User"}
+                        className="h-20 w-20 shrink-0 rounded-2xl border border-cyan-200/45 object-cover"
+                      />
+                    ) : (
+                      <div className="h-20 w-20 shrink-0 rounded-2xl border border-cyan-200/45 bg-cyan-500/20 text-white flex items-center justify-center text-2xl font-semibold">
+                        {avatarInitial}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h2 className="truncate text-2xl font-semibold text-white">{formData.name || "User"}</h2>
+                      <p className="mt-1 truncate text-sm text-cyan-100">@{formData.username || "username"}</p>
+                      <p className="mt-1 break-all text-xs text-slate-200">{formData.email || "No email"}</p>
+                      <span className="mt-3 inline-flex rounded-full border border-emerald-200/35 bg-emerald-400/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-100">
+                        {roleLabel}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 xl:grid-cols-1">
+                  {statCards.map((card) => (
+                    <div key={card.label} className="rounded-2xl border border-white/10 bg-slate-900/50 p-4">
+                      <p className="text-xs uppercase tracking-wide text-slate-400">{card.label}</p>
+                      <p className="mt-1 text-2xl font-bold text-white">{card.value}</p>
+                      <p className="mt-1 text-xs text-slate-500">{card.hint}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur">
+                <div className={`bg-gradient-to-r ${currentPlan.tone} p-5`}>
+                  <p className="text-xs uppercase tracking-wide text-white/75">Current Plan</p>
+                  <h3 className="mt-1 text-xl font-semibold text-white">{currentPlan.name}</h3>
+                  {subscription?.endDate && (
+                    <p className={`mt-1 text-xs ${currentPlan.accent}`}>
+                      Valid until {new Date(subscription.endDate).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2 p-5 text-sm text-slate-200">
+                  {currentPlan.features.map((item) => (
+                    <p key={item}>- {item}</p>
+                  ))}
+                </div>
+              </div>
+            </aside>
+
+            <main className="space-y-6 xl:col-span-8">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                  <h3 className="text-lg font-semibold text-white">AI Requests</h3>
+                  <p className="mt-1 text-sm text-slate-300">
+                    {aiUsage
+                      ? `${aiUsage.requestsUsed} of ${aiUsage.requestsLimit} used today`
+                      : "Usage data unavailable"}
+                  </p>
+                  <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                    <div
+                      className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                      style={{ width: `${usagePercent}%` }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400">
+                    {aiUsage ? `${aiUsage.requestsRemaining} requests remaining` : "No active quota"}
+                  </p>
+                </div>
+
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                  <h3 className="text-lg font-semibold text-white">File Uploads</h3>
+                  <p className="mt-1 text-sm text-slate-300">
+                    {aiUsage
+                      ? `${aiUsage.fileUploadsUsed} of ${aiUsage.fileUploadsLimit} used today`
+                      : "Upload data unavailable"}
+                  </p>
+                  <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                    <div
+                      className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all"
+                      style={{ width: `${uploadPercent}%` }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400">
+                    {aiUsage ? `${aiUsage.fileUploadsRemaining} uploads remaining` : "No active quota"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur sm:p-7">
+                <h3 className="text-xl font-semibold text-white">Edit Profile</h3>
+                <p className="mt-1 text-sm text-slate-300">
+                  Update your name, username, email, and avatar URL.
+                </p>
+
+                <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="name">
+                        Full Name
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="username">
+                        Username
+                      </label>
+                      <input
+                        id="username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        placeholder="Username"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="email">
+                        Email
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="avatar">
+                        Avatar URL
+                      </label>
+                      <input
+                        id="avatar"
+                        name="avatar"
+                        value={formData.avatar}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-cyan-400/25 bg-cyan-400/5 p-4">
+                    <p className="text-xs text-cyan-100">
+                      Session auth uses secure httpOnly cookies with token rotation. Your account changes are applied immediately.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs text-slate-400">Need billing changes? Use the pricing page to switch plans.</p>
+                    <button
+                      type="submit"
+                      disabled={updateLoading}
+                      className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:from-cyan-600 hover:to-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {updateLoading ? "Saving..." : "Save Changes"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
 };
 
 export default Profile;

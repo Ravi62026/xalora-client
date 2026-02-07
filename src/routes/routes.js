@@ -1,7 +1,10 @@
 const ApiRoutes = {
     auth: {
         login: "/api/v1/users/login",
+        googleLogin: "/api/v1/users/google-login",
         register: "/api/v1/users/register",
+        forgotPassword: "/api/v1/users/forgot-password",
+        resetPassword: "/api/v1/users/reset-password",
         logout: "/api/v1/users/logout",
     },
     email: {
@@ -12,8 +15,6 @@ const ApiRoutes = {
     user: {
         getUser: "/api/v1/users/user",
         updateUser: "/api/v1/users/user",
-        getAllUsers: "/api/v1/users/admin/users",
-        updateUserRole: (userId) => `/api/v1/users/admin/users/${userId}/role`,
         refreshToken: "/api/v1/users/refresh-token",
         checkAuth: "/api/v1/users/check-auth",
     },

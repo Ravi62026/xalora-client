@@ -1,14 +1,14 @@
 import React from "react";
 import Navbar from "./Navbar";
 
-const Layout = ({ children, showNavbar = true }) => {
+const Layout = ({ children, showNavbar = true, showFooter = true }) => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex flex-col">
             {showNavbar && <Navbar />}
             <main className={`flex-grow ${showNavbar ? "" : "pt-0"}`}>
                 {children}
             </main>
-            <footer className="bg-gradient-to-br from-black via-gray-900 to-slate-900 text-white relative overflow-hidden">
+            {showFooter && <footer className="bg-gradient-to-br from-black via-gray-900 to-slate-900 text-white relative overflow-hidden">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                     <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -213,7 +213,7 @@ const Layout = ({ children, showNavbar = true }) => {
                         </div>
                     </div>
                 </div>
-            </footer>
+            </footer>}
         </div>
     );
 };

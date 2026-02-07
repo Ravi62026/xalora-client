@@ -1,6 +1,7 @@
 // Export all pages
 export { default as Home } from "./Home";
 export { default as Login } from "./Login";
+export { default as ForgotPassword } from "./ForgotPassword";
 export { default as Signup } from "./Signup";
 export { default as EmailVerification } from "./EmailVerification";
 export { default as Profile } from "./Profile";
@@ -9,7 +10,6 @@ export { default as CreateProblem } from "./CreateProblem";
 export { default as EditProblem } from "./EditProblem";
 export { default as Problems } from "./Problems";
 export { default as MyProblems } from "./MyProblems";
-export { default as AdminUsers } from "./AdminUsers";
 export { default as Problem } from "./Problem";
 export { default as Quiz } from "./Quiz";
 export { default as TakeQuiz } from "./TakeQuiz";

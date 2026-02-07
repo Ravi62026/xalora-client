@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Home,
   Login,
+  ForgotPassword,
   Signup,
   EmailVerification,
   Profile,
@@ -12,7 +13,6 @@ import {
   EditProblem,
   Problems,
   MyProblems,
-  AdminUsers,
   Problem,
   Quiz,
   TakeQuiz,
@@ -72,6 +72,8 @@ import {
 } from "./pages";
 import DebugUserInfo from "./components/DebugUserInfo";
 import { initializeAuth } from "./store/slices/userSlice";
+import SplashCursor from "./components/SplashCursor";
+import CustomCursor from "./components/CustomCursor";
 
 // Component to show page-specific loading messages
 const LoadingMessage = () => {
@@ -148,10 +150,13 @@ const AppContent = () => {
 
   return (
     <>
+      <SplashCursor />
+      <CustomCursor />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/profile" element={<Profile />} />
@@ -160,7 +165,6 @@ const AppContent = () => {
         <Route path="/edit-problem/:id" element={<EditProblem />} />
         <Route path="/problems" element={<Problems />} />
         <Route path="/my-problems" element={<MyProblems />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/problems/:id" element={<Problem />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/:id" element={<TakeQuiz />} />

@@ -33,71 +33,70 @@ const Navbar = () => {
         setIsProfileMenuOpen(false);
     };
 
+    const avatarInitial = (user?.name || user?.username || "U").charAt(0).toUpperCase();
+
     return (
         <nav className="bg-gradient-to-r from-gray-900 via-slate-900 to-black backdrop-blur-lg shadow-2xl border-b border-emerald-500/20 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-20">
+                <div className="flex justify-between items-center h-24">
                     {/* Logo/Brand */}
                     <div className="flex items-center">
                         <Link
                             to="/"
-                            className="flex items-center space-x-4 hover:scale-105 transition-all duration-300 group"
+                            className="flex items-center hover:scale-105 transition-all duration-300 group"
                             onClick={closeMobileMenu}
                         >
                             <div className="relative">
                                 <img
                                     src="/logo_xalora.png"
                                     alt="Xalora Logo"
-                                    className="w-12 h-12 object-contain drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
+                                    className="w-28 h-20 object-contain max-w-none drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/30 to-teal-400/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-400 group-hover:from-white group-hover:via-emerald-100 group-hover:to-teal-100 transition-all duration-300">
-                                XALORA
-                            </span>
                         </Link>
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden md:flex items-center space-x-2">
+                    <div className="hidden lg:flex items-center gap-3">
                         <Link
                             to="/"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Home</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         <Link
                             to="/problems"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Problems</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         <Link
                             to="/quiz"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Quiz</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         <Link
                             to="/internships"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Internships</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         <Link
                             to="/resume-ai"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">Resume AI</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                         <Link
                             to="/ai-interview/setup"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                         >
                             <span className="relative z-10">🎥 AI Interview</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -106,7 +105,7 @@ const Navbar = () => {
                         {isAuthenticated && (
                             <Link
                                 to="/dashboard"
-                                className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                             >
                                 <span className="relative z-10">Dashboard</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -129,7 +128,7 @@ const Navbar = () => {
                                     const userProfile = encodeURIComponent(JSON.stringify(minimalUserInfo));
                                     window.open(`${xaloraUrl}?user=${userProfile}`, '_blank');
                                 }}
-                                className="relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden"
+                                className="relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden"
                             >
                                 <span className="relative z-10 flex items-center space-x-2">
                                     <span>🤖</span>
@@ -138,47 +137,41 @@ const Navbar = () => {
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </button>
                         )}
-                        {isAuthenticated && user?.role === "admin" && (
-                            <Link
-                                to="/admin/users"
-                                className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                            >
-                                <span className="relative z-10">Manage Users</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
-                        )}
                     </div>
 
                     {/* Desktop User Actions */}
-                    <div className="hidden md:flex items-center space-x-4">
+                    <div className="hidden lg:flex items-center space-x-2 shrink-0">
                         {isAuthenticated ? (
                             <div className="relative">
                                 <button
                                     onClick={toggleProfileMenu}
-                                    className="flex items-center space-x-3 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 px-3 py-2 rounded-xl transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 focus:outline-none"
+                                    className="flex items-center space-x-2 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 px-2.5 py-2 rounded-xl transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 focus:outline-none max-w-[220px]"
                                 >
                                     <div className="relative">
-                                        <img
-                                            src={
-                                                user?.avatar ||
-                                                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                            }
-                                            alt={user?.name || "User"}
-                                            className="w-10 h-10 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
-                                        />
+                                        {user?.avatar ? (
+                                            <img
+                                                src={user.avatar}
+                                                alt={user?.name || "User"}
+                                                className="w-10 h-10 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
+                                            />
+                                        ) : (
+                                            <div className="w-10 h-10 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300 bg-emerald-600/40 text-white flex items-center justify-center font-semibold">
+                                                {avatarInitial}
+                                            </div>
+                                        )}
                                         <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-gray-900 rounded-full"></div>
                                     </div>
-                                    <div className="hidden lg:block">
-                                        <div className="text-emerald-100 text-sm font-semibold group-hover:text-white transition-colors duration-300">
+                                    <div className="hidden lg:block min-w-0">
+                                        <div className="text-emerald-100 text-sm font-semibold group-hover:text-white transition-colors duration-300 truncate max-w-[120px]">
                                             {user?.name || user?.username}
                                         </div>
-                                        <div className="flex items-center space-x-2">
-                                            <div className="text-emerald-200 text-xs group-hover:text-emerald-100 transition-colors duration-300">
-                                                {user?.role === "admin" ? "Admin" : user?.role === "setter" ? "Problem Setter" : "User"}
+                                        <div className="hidden xl:flex items-center space-x-2">
+                                            <div className="text-emerald-200 text-xs group-hover:text-emerald-100 transition-colors duration-300 whitespace-nowrap">
+                                                {user?.role === "setter" ? "Problem Setter" : "User"}
                                             </div>
                                             {/* Display JBP Coins if available */}
                                             {user && typeof user.jbpCoins === 'number' && (
-                                                <div className="flex items-center text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full">
+                                                <div className="hidden 2xl:flex items-center text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full whitespace-nowrap">
                                                     <span className="mr-1">🪙</span>
                                                     {user.jbpCoins}
                                                 </div>
@@ -239,7 +232,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile menu button */}
-                    <div className="md:hidden">
+                    <div className="lg:hidden">
                         <button
                             onClick={toggleMobileMenu}
                             className="relative text-emerald-100 hover:text-white p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group border border-transparent hover:border-emerald-500/30"
@@ -280,7 +273,7 @@ const Navbar = () => {
 
                 {/* Mobile menu */}
                 {isMobileMenuOpen && (
-                    <div className="md:hidden pb-6 animate-in slide-in-from-top-2 duration-300">
+                    <div className="lg:hidden pb-6 animate-in slide-in-from-top-2 duration-300">
                         <div className="px-2 pt-4 pb-3 space-y-2 sm:px-3 border-t border-emerald-700/30 bg-gradient-to-b from-gray-900/50 to-slate-900/50 backdrop-blur-sm">
                             {/* Mobile Navigation Links */}
                             <Link
@@ -366,16 +359,6 @@ const Navbar = () => {
                                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </button>
                             )}
-                            {isAuthenticated && user?.role === "admin" && (
-                                <Link
-                                    to="/admin/users"
-                                    className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <span className="relative z-10">👥 Manage Users</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                            )}
 
                             {/* Mobile User Actions */}
                             <div className="pt-6 pb-3 border-t border-emerald-700/30 mt-4">
@@ -387,14 +370,17 @@ const Navbar = () => {
                                                 className="flex items-center space-x-4 px-4 py-4 rounded-xl text-base font-medium text-emerald-100 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 w-full text-left focus:outline-none"
                                             >
                                                 <div className="relative">
-                                                    <img
-                                                        src={
-                                                            user?.avatar ||
-                                                            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                        }
-                                                        alt={user?.name || "User"}
-                                                        className="w-12 h-12 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
-                                                    />
+                                                    {user?.avatar ? (
+                                                        <img
+                                                            src={user.avatar}
+                                                            alt={user?.name || "User"}
+                                                            className="w-12 h-12 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-12 h-12 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300 bg-emerald-600/40 text-white flex items-center justify-center font-semibold">
+                                                            {avatarInitial}
+                                                        </div>
+                                                    )}
                                                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-gray-900 rounded-full"></div>
                                                 </div>
                                                 <div className="flex-1">
@@ -403,7 +389,7 @@ const Navbar = () => {
                                                     </div>
                                                     <div className="flex items-center justify-between">
                                                         <div className="text-sm text-emerald-200 group-hover:text-emerald-100 transition-colors duration-300">
-                                                            {user?.role === "admin" ? "👑 Admin" : user?.role === "setter" ? "🔧 Problem Setter" : "👤 User"}
+                                                            {user?.role === "setter" ? "🔧 Problem Setter" : "👤 User"}
                                                         </div>
                                                         {/* Display JBP Coins if available */}
                                                         {user && typeof user.jbpCoins === 'number' && (

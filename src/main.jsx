@@ -11,10 +11,14 @@ document.title = "Xalora - One Stop Platform For Engineer";
 // Make store globally available for axios interceptors
 window.__REDUX_STORE__ = store;
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID"}>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </GoogleOAuthProvider>
     </StrictMode>
 );

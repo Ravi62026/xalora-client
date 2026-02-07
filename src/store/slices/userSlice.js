@@ -2,325 +2,279 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
 import { debugCookies } from "../../utils/cookieDebug";
 
-// Add a timestamp to track the last auth check
 let lastAuthCheck = 0;
-const AUTH_CHECK_INTERVAL = 5000; // 5 seconds minimum between auth checks
+const AUTH_CHECK_INTERVAL = 5000;
+
+const persistUser = () => {};
+const clearPersistedUser = () => {};
 
 export const initializeAuth = createAsyncThunk(
-    "user/initializeAuth",
-    async (_, { getState }) => {
-        try {
-            const now = Date.now();
-            
-            // Check if we're already authenticated to avoid unnecessary requests
-            const { user } = getState().user;
-            if (user && user.email) {
-                // Check if we've made a recent auth check
-                if (now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
-                    // console.log("🔄 REDUX: Skipping auth check, too soon since last check");
-                    return user;
-                }  
-            }
-            
-            // Update the last auth check timestamp
-            lastAuthCheck = now;
-            
-            // console.log("🔄 REDUX: Initializing authentication...");
-// console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
-            debugCookies();
-            
-            // First, try to get user from server (with current tokens)
-            const response = await authService.getUser();
-            if (response.success && response.data) {
-                // console.log("✅ REDUX: User authenticated via cookies:", response.data.email);
-                // Update localStorage
-                localStorage.setItem('hireveu_user', JSON.stringify(response.data));
-                return response.data;
-            }
-            // console.log("❌ REDUX: No user data in response");
-            // Clear localStorage if server auth failed
-            localStorage.removeItem('hireveu_user');
-            return null;
-        } catch (error) {
-            // console.log("❌ REDUX: Cookie auth failed, checking localStorage...", error.response?.status);
-// console.log("🍪 REDUX-COOKIES: Current document cookies:", document.cookie);
-            debugCookies();
-            
-            // If it's a 401 error, try to refresh token first
-            if (error.response?.status === 401) {
-                // console.log("🚪 REDUX: 401 error - attempting token refresh");
-                try {
-                    // Try to refresh the token
-                    const refreshResponse = await authService.refreshToken();
-                    if (refreshResponse.success) {
-                        // console.log("✅ REDUX: Token refreshed successfully, retrying user fetch");
-                        // If refresh successful, try to get user again
-                        const retryResponse = await authService.getUser();
-                        if (retryResponse.success && retryResponse.data) {
-                            // console.log("✅ REDUX: User authenticated after token refresh:", retryResponse.data.email);
-                            // Update localStorage
-                            localStorage.setItem('hireveu_user', JSON.stringify(retryResponse.data));
-                            return retryResponse.data;
-                        }
-                    }
-                } catch (refreshError) {
-                    // console.log("❌ REDUX: Token refresh failed:", refreshError.response?.data?.message);
-                }
-                
-                // If refresh failed or still can't get user, clear localStorage and logout
-                // console.log("🚪 REDUX: Clearing localStorage and logging out");
-                localStorage.removeItem('hireveu_user');
-                return null;
-            }
-            
-            // For other errors, try localStorage as fallback
-            try {
-                const storedUser = localStorage.getItem('hireveu_user');
-                if (storedUser) {
-                    const userData = JSON.parse(storedUser);
-                    // console.log("✅ REDUX: User restored from localStorage:", userData.email);
-                    // Verify with server that the user is still valid
-                    try {
-                        const verifyResponse = await authService.getUser();
-                        if (verifyResponse.success && verifyResponse.data) {
-                            // console.log("✅ REDUX: User verified with server:", verifyResponse.data.email);
-                            return verifyResponse.data;
-                        }
-                    } catch (verifyError) {
-                        // console.log("❌ REDUX: User verification failed:", verifyError.response?.status);
-                        // If verification fails, clear localStorage
-                        localStorage.removeItem('hireveu_user');
-                    }
-                    return userData;
-                }
-            } catch (localStorageError) {
-                // console.log("❌ REDUX: localStorage also failed");
-            }
-            
-            // Clear localStorage if no valid data found
-            localStorage.removeItem('hireveu_user');
-            return null; // Not an error, just not authenticated
-        }
+  "user/initializeAuth",
+  async (_, { getState }) => {
+    const now = Date.now();
+    const { user } = getState().user;
+
+    if (user?.email && now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
+      return user;
     }
+
+    lastAuthCheck = now;
+    debugCookies();
+
+    try {
+      const response = await authService.getUser();
+      if (response.success && response.data) {
+        persistUser(response.data);
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        try {
+          const refreshResponse = await authService.refreshToken();
+          if (refreshResponse.success) {
+            const retryResponse = await authService.getUser();
+            if (retryResponse.success && retryResponse.data) {
+              persistUser(retryResponse.data);
+              return retryResponse.data;
+            }
+          }
+        } catch (refreshError) {
+          // Ignore and fall through to unauthenticated state.
+        }
+      }
+    }
+
+    clearPersistedUser();
+    return null;
+  }
 );
 
 export const loginUser = createAsyncThunk(
-    "user/loginUser",
-    async ({ email, password }, { rejectWithValue }) => {
-        try {
-            const response = await authService.login(email, password);
+  "user/loginUser",
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await authService.login(email, password);
 
-            if (response.success) {
-                // Store the access token in localStorage
-                if (response.data.accessToken) {
-                    localStorage.setItem('accessToken', response.data.accessToken);
-                }
-                // Store user data in localStorage for persistence
-                localStorage.setItem('hireveu_user', JSON.stringify(response.data.user));
-                return response.data;
-            }
-            return rejectWithValue(response.message || "Login failed");
-        } catch (error) {
-            // console.log("Login error:", error);
-            // Provide more specific error messages
-            if (error.response?.status === 400) {
-                return rejectWithValue(
-                    error.response.data?.message || "Invalid email or password. Please try again."
-                );
-            } else if (error.response?.status === 401) {
-                return rejectWithValue(
-                    error.response.data?.message || "Authentication failed. Please try again."
-                );
-            } else if (error.code === 'ERR_NETWORK') {
-                return rejectWithValue(
-                    "Network error. Please check your connection and try again."
-                );
-            }
-            
-            return rejectWithValue(
-                error.response?.data?.message || "Login failed. Please try again."
-            );
-        }
+      if (response.success) {
+        persistUser(response.data?.user);
+        return response.data;
+      }
+
+      return rejectWithValue(response.message || "Login failed");
+    } catch (error) {
+      if (error.response?.status === 403 && error.response?.data?.data?.requiresVerification) {
+        return rejectWithValue({
+          ...error.response.data.data,
+          message: error.response.data?.message || "Email verification required",
+        });
+      }
+
+      if (error.response?.status === 400) {
+        return rejectWithValue(
+          error.response.data?.message || "Invalid email or password. Please try again."
+        );
+      }
+
+      if (error.response?.status === 401) {
+        return rejectWithValue(
+          error.response.data?.message || "Authentication failed. Please try again."
+        );
+      }
+
+      if (error.code === "ERR_NETWORK") {
+        return rejectWithValue(
+          "Network error. Please check your connection and try again."
+        );
+      }
+
+      return rejectWithValue(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
     }
+  }
+);
+
+export const googleLoginUser = createAsyncThunk(
+  "user/googleLoginUser",
+  async (tokenId, { rejectWithValue }) => {
+    try {
+      const response = await authService.googleLogin(tokenId);
+
+      if (response.success) {
+        persistUser(response.data?.user);
+        return response.data;
+      }
+
+      return rejectWithValue(response.message || "Google Login failed");
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Google Login failed. Please try again."
+      );
+    }
+  }
 );
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
-    try {
-        await authService.logout();
-        return null;
-    } catch (error) {
-        // Even if API call fails, we still want to clear local state
-        return null;
-    }
+  try {
+    await authService.logout();
+  } catch (error) {
+    // Local state is cleared regardless of API errors.
+  }
+  return null;
 });
 
-// Initialize state from localStorage
-const getInitialState = () => {
-    try {
-        const token = localStorage.getItem('accessToken');
-        const userData = localStorage.getItem('hireveu_user');
-
-        if (token && userData) {
-            const user = JSON.parse(userData);
-            return {
-                isAuthenticated: true,
-                user,
-                loading: false,
-                error: null,
-                isInitializing: false,
-            };
-        }
-    } catch (error) {
-        // Clear corrupted data
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('hireveu_user');
-    }
-
-    return {
-        isAuthenticated: false,
-        user: null,
-        loading: false,
-        error: null,
-        isInitializing: true,
-    };
+const initialState = {
+  isAuthenticated: false,
+  user: null,
+  loading: false,
+  error: null,
+  isInitializing: true,
 };
 
-const initialState = getInitialState();
-
 const userSlice = createSlice({
-    name: "user",
-    initialState,
-    reducers: {
-        loginStart: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        loginSuccess: (state, action) => {
-            state.loading = false;
-            state.isAuthenticated = true;
-            state.user = action.payload;
-            state.error = null;
-            state.isInitializing = false;
-        },
-        loginFailure: (state, action) => {
-            state.loading = false;
-            state.isAuthenticated = false;
-            state.user = null;
-            state.error = action.payload;
-            state.isInitializing = false;
-        },
-        logout: (state) => {
-            state.isAuthenticated = false;
-            state.user = null;
-            state.error = null;
-            state.loading = false;
-        },
-        clearError: (state) => {
-            state.error = null;
-        },
-        setUser: (state, action) => {
-            // console.log("🔄 REDUX: Setting user data:", action.payload);
-            state.user = action.payload;
-            state.isAuthenticated = true;
-            state.isInitializing = false;
-        },
-        initializeComplete: (state) => {
-            state.isInitializing = false;
-        },
-        forceLogout: (state) => {
-            state.isAuthenticated = false;
-            state.user = null;
-            state.error = null;
-            state.loading = false;
-            state.isInitializing = false;
-            // Clear localStorage
-            localStorage.removeItem('hireveu_user');
-        },
+  name: "user",
+  initialState,
+  reducers: {
+    loginStart: (state) => {
+      state.loading = true;
+      state.error = null;
     },
-    extraReducers: (builder) => {
-        builder
-            // Initialize auth
-            .addCase(initializeAuth.pending, (state) => {
-                state.isInitializing = true;
-            })
-            .addCase(initializeAuth.fulfilled, (state, action) => {
-                state.isInitializing = false;
-                if (action.payload) {
-                    state.isAuthenticated = true;
-                    state.user = action.payload;
-                } else {
-                    state.isAuthenticated = false;
-                    state.user = null;
-                }
-            })
-            .addCase(initializeAuth.rejected, (state) => {
-                state.isInitializing = false;
-                state.isAuthenticated = false;
-                state.user = null;
-            })
-            // Login user
-            .addCase(loginUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.isAuthenticated = true;
-                state.user = action.payload;
-                state.error = null;
-                state.isInitializing = false;
-                // Store user data in localStorage as backup
-                localStorage.setItem('hireveu_user', JSON.stringify(action.payload));
-            })
-            .addCase(loginUser.rejected, (state, action) => {
-                state.loading = false;
-                state.isAuthenticated = false;
-                state.user = null;
-                state.error = action.payload;
-                state.isInitializing = false;
-            })
-            // Logout user
-            .addCase(logoutUser.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(logoutUser.fulfilled, (state) => {
-                state.loading = false;
-                state.isAuthenticated = false;
-                state.user = null;
-                state.error = null;
-                // Clear localStorage
-                localStorage.removeItem('hireveu_user');
-                localStorage.removeItem('accessToken');
-            })
-            .addCase('user/forceLogout', (state) => {
-                state.loading = false;
-                state.isAuthenticated = false;
-                state.user = null;
-                state.error = null;
-                // Clear localStorage on forced logout
-                localStorage.removeItem('hireveu_user');
-                localStorage.removeItem('accessToken');
-            })
-            .addCase(logoutUser.rejected, (state) => {
-                state.loading = false;
-                state.isAuthenticated = false;
-                state.user = null;
-                state.error = null;
-                // Clear localStorage even if API call fails
-                localStorage.removeItem('hireveu_user');
-            });
+    loginSuccess: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = true;
+      state.user = action.payload;
+      state.error = null;
+      state.isInitializing = false;
+      persistUser(action.payload);
     },
+    loginFailure: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.error = action.payload;
+      state.isInitializing = false;
+      clearPersistedUser();
+    },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.error = null;
+      state.loading = false;
+      clearPersistedUser();
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+      state.isInitializing = false;
+      persistUser(action.payload);
+    },
+    initializeComplete: (state) => {
+      state.isInitializing = false;
+    },
+    forceLogout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.error = null;
+      state.loading = false;
+      state.isInitializing = false;
+      clearPersistedUser();
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initializeAuth.pending, (state) => {
+        state.isInitializing = true;
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.isInitializing = false;
+        if (action.payload) {
+          state.isAuthenticated = true;
+          state.user = action.payload;
+        } else {
+          state.isAuthenticated = false;
+          state.user = null;
+        }
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        state.isInitializing = false;
+        state.isAuthenticated = false;
+        state.user = null;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = null;
+        state.isInitializing = false;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        if (action.payload?.requiresVerification) {
+          state.error = null;
+        } else {
+          state.error =
+            typeof action.payload === "string"
+              ? action.payload
+              : action.payload?.message || "Login failed. Please try again.";
+        }
+        state.isInitializing = false;
+      })
+      .addCase(googleLoginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleLoginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = null;
+        state.isInitializing = false;
+      })
+      .addCase(googleLoginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.error = action.payload;
+        state.isInitializing = false;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.error = null;
+        clearPersistedUser();
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.error = null;
+        clearPersistedUser();
+      });
+  },
 });
 
 export const {
-    loginStart,
-    loginSuccess,
-    loginFailure,
-    logout,
-    clearError,
-    setUser,
-    initializeComplete,
-    forceLogout,
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  clearError,
+  setUser,
+  initializeComplete,
+  forceLogout,
 } = userSlice.actions;
 
 export default userSlice.reducer;

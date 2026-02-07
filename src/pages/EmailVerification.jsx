@@ -48,8 +48,6 @@ const EmailVerification = () => {
             if (response.ok) {
                 setVerified(true);
                 setMessage('Email verified successfully! You can now log in.');
-                // Store user data in localStorage for future use
-                localStorage.setItem('hireveu_user', JSON.stringify(data.data.user));
             } else {
                 setMessage(data.message || 'Verification failed. Please try again.');
             }

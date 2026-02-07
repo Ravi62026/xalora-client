@@ -27,12 +27,6 @@ const subscriptionService = {
             return false;
         }
         
-        // Admins have access to all features
-        if (subscription.user?.role === "admin") {
-            console.log("User is admin, granting access to all features");
-            return true;
-        }
-        
         const hasAccess = subscription.features[feature] === true;
         console.log("Feature access result:", hasAccess);
         return hasAccess;
