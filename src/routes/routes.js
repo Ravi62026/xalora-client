@@ -92,6 +92,7 @@ const ApiRoutes = {
         question: "/api/v1/interview/question",
         answer: "/api/v1/interview/answer",
         followupAnswer: "/api/v1/interview/followup-answer",
+        completeCodingQuestion: "/api/v1/interview/complete-coding-question",
         report: "/api/v1/interview/report",
         status: (sessionId) => `/api/v1/interview/status/${sessionId}`,
         history: "/api/v1/interview/history",
@@ -102,7 +103,34 @@ const ApiRoutes = {
         myInterviews: "/api/v1/interview/my-interviews",
         details: (sessionId) => `/api/v1/interview/details/${sessionId}`,
         delete: (sessionId) => `/api/v1/interview/${sessionId}`,
-    }
+    },
+    organization: {
+        validateSetupToken: (token) => `/api/v1/organizations/setup/validate/${token}`,
+        createWithToken: (token) => `/api/v1/organizations/setup/${token}`,
+        create: "/api/v1/organizations/create",
+        get: (orgId) => `/api/v1/organizations/${orgId}`,
+        update: (orgId) => `/api/v1/organizations/${orgId}`,
+        stats: (orgId) => `/api/v1/organizations/${orgId}/stats`,
+        invite: (orgId) => `/api/v1/organizations/${orgId}/invite`,
+        invites: (orgId) => `/api/v1/organizations/${orgId}/invites`,
+        revokeInvite: (orgId, inviteId) => `/api/v1/organizations/${orgId}/invite/${inviteId}`,
+        validateInvite: (token) => `/api/v1/organizations/invite/validate/${token}`,
+        acceptInvite: (token) => `/api/v1/organizations/invite/accept/${token}`,
+        members: (orgId) => `/api/v1/organizations/${orgId}/members`,
+        memberDetails: (orgId, memberId) => `/api/v1/organizations/${orgId}/members/${memberId}`,
+        memberStatus: (orgId, memberId) => `/api/v1/organizations/${orgId}/members/${memberId}/status`,
+        removeMember: (orgId, memberId) => `/api/v1/organizations/${orgId}/members/${memberId}`,
+        membersAnalytics: (orgId) => `/api/v1/organizations/${orgId}/members/analytics`,
+        memberAnalytics: (orgId, memberId) => `/api/v1/organizations/${orgId}/members/${memberId}/analytics`,
+        memberInterviewReportDownload: (orgId, memberId, sessionId) => `/api/v1/organizations/${orgId}/members/${memberId}/interview-report/${sessionId}/download`,
+        team: (orgId) => `/api/v1/organizations/${orgId}/team`,
+        updateTeamMember: (orgId, userId) => `/api/v1/organizations/${orgId}/team/${userId}`,
+        removeTeamMember: (orgId, userId) => `/api/v1/organizations/${orgId}/team/${userId}`,
+    },
+    jobs: {
+        searchByRole: "/api/v1/ai/jobs/search/role",
+        searchByCompany: "/api/v1/ai/jobs/search/company",
+    },
 };
 
 export default ApiRoutes;

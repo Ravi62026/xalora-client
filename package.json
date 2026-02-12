@@ -13,6 +13,8 @@
     "vercel-build": "vite build"
   },
   "dependencies": {
+    "@react-three/drei": "^9.111.3",
+    "@react-three/fiber": "^8.17.6",
     "@langchain/google-vertexai": "^0.2.18",
     "@monaco-editor/react": "^4.7.0",
     "@react-oauth/google": "^0.13.4",
@@ -36,6 +38,8 @@
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.0",
     "socket.io-client": "^4.7.5",
+    "three": "^0.167.1",
+    "three-stdlib": "^2.34.0",
     "tailwindcss": "^4.1.10"
   },
   "devDependencies": {

@@ -1,11 +1,20 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Mic, MicOff, Video, VideoOff, PhoneOff, MessageSquare,
-  Send, Loader2, ChevronRight, CheckCircle, AlertCircle,
-  Clock, Volume2, VolumeX, RefreshCw, Sparkles
+  Mic,
+  MicOff,
+  Video,
+  VideoOff,
+  PhoneOff,
+  Send,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Volume2,
+  RefreshCw
 } from 'lucide-react';
 import { Layout } from '../../components';
+import InterviewerAvatar from '../../components/AIInterview/InterviewerAvatar';
 import interviewService from '../../services/interviewService';
 import ReactMarkdown from 'react-markdown';
 
@@ -13,7 +22,7 @@ import ReactMarkdown from 'react-markdown';
 const ROUND_CONFIG = {
   1: { type: 'formal_qa', name: 'Formal Q&A', color: 'blue', maxQuestions: 10 },
   2: { type: 'technical', name: 'Technical', color: 'purple', maxQuestions: 15 },
-  3: { type: 'coding', name: 'Coding Challenge', color: 'emerald', maxQuestions: 2 },
+  3: { type: 'coding', name: 'Coding Challenge', color: 'emerald', maxQuestions: 3 },
   4: { type: 'system_design', name: 'System Design', color: 'orange', maxQuestions: 2 },
   5: { type: 'behavioral', name: 'HR', color: 'pink', maxQuestions: 3 },
 };
@@ -44,6 +53,8 @@ const InterviewRound = () => {
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [lastScore, setLastScore] = useState(null);
+  const [streamedText, setStreamedText] = useState('');
+  const streamTimerRef = useRef(null);
 
   // Timer state
   const [duration, setDuration] = useState(0);
@@ -109,6 +120,14 @@ const InterviewRound = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isComplete && stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+      setIsVideoOn(false);
+    }
+  }, [isComplete, stream]);
+
   // Duration timer
   useEffect(() => {
     const interval = setInterval(() => {
@@ -159,13 +178,33 @@ const InterviewRound = () => {
     setFeedback(null);
 
     try {
-      const response = await interviewService.getQuestion(sessionId, roundConfig.type, roundConfig.maxQuestions);
+      const response = await interviewService.getQuestion(
+        sessionId,
+        roundConfig.type,
+        roundConfig.maxQuestions,
+        sessionData?.codingDifficulty
+      );
 
       if (response.success) {
+        if (roundConfig.type === 'coding' && response.data?.problemId) {
+          if (!response.data?.reuseExisting) {
+            if (response.data?.questionNumber) {
+              setQuestionNumber(response.data.questionNumber);
+            } else {
+              setQuestionNumber(prev => prev + 1);
+            }
+          }
+          navigate(`/problem/${response.data.problemId}/${sessionId}`);
+          return;
+        }
         setCurrentQuestion(response.data.question);
         setCurrentFollowup(null);
         setIsFollowup(false);
-        setQuestionNumber(prev => prev + 1);
+        if (response.data?.questionNumber) {
+          setQuestionNumber(response.data.questionNumber);
+        } else {
+          setQuestionNumber(prev => prev + 1);
+        }
         setAnswer('');
 
         // Speak the question using TTS
@@ -204,8 +243,7 @@ const InterviewRound = () => {
         response = await interviewService.submitFollowupAnswer(
           sessionId,
           roundConfig.type,
-          currentQuestion.id || currentQuestion._id,
-          currentFollowup.id || currentFollowup._id,
+          currentFollowup?.text || currentFollowup,
           answer.trim(),
           timeRemaining
         );
@@ -274,6 +312,29 @@ const InterviewRound = () => {
   };
 
   // Text to speech
+  const pickMaleEnglishIndiaVoice = () => {
+    const voices = speechSynthesis.getVoices() || [];
+    if (!voices.length) return null;
+
+    const isMaleName = (name = "") =>
+      /male|man|guy|david|mark|alex|daniel|ravi|amit|arjun|raj|vikram|sidd/i.test(name);
+
+    // Prefer en-IN male voices
+    const enInMale = voices.find(v => v.lang === 'en-IN' && isMaleName(v.name));
+    if (enInMale) return enInMale;
+
+    // Fallback: any en-IN voice
+    const enInAny = voices.find(v => v.lang === 'en-IN');
+    if (enInAny) return enInAny;
+
+    // Fallback: any English male voice
+    const enMale = voices.find(v => /^en/i.test(v.lang) && isMaleName(v.name));
+    if (enMale) return enMale;
+
+    // Final fallback: any English voice
+    return voices.find(v => /^en/i.test(v.lang)) || voices[0] || null;
+  };
+
   const speakQuestion = async (text) => {
     // Validate text
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
@@ -281,33 +342,68 @@ const InterviewRound = () => {
       return;
     }
 
+    if (!('speechSynthesis' in window)) {
+      console.warn('TTS: speechSynthesis not supported');
+      return;
+    }
+
     setIsSpeaking(true);
     try {
-      const audioBlob = await interviewService.textToSpeech(text);
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-IN';
 
-      audio.onended = () => {
-        setIsSpeaking(false);
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      audio.onerror = () => {
-        setIsSpeaking(false);
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      await audio.play();
-    } catch (error) {
-      console.error('TTS error:', error);
-      setIsSpeaking(false);
-      // Fallback to browser TTS
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onend = () => setIsSpeaking(false);
-        speechSynthesis.speak(utterance);
+      const chosenVoice = pickMaleEnglishIndiaVoice();
+      if (chosenVoice) {
+        utterance.voice = chosenVoice;
+      } else {
+        // Handle async voice loading
+        speechSynthesis.onvoiceschanged = () => {
+          const voice = pickMaleEnglishIndiaVoice();
+          if (voice) {
+            utterance.voice = voice;
+          }
+          speechSynthesis.speak(utterance);
+        };
       }
+
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      const estimatedDurationMs = estimateTtsDurationMs(text);
+      speechSynthesis.speak(utterance);
+      startTextStream(text, estimatedDurationMs);
+    } catch (error) {
+      console.error('Browser TTS error:', error);
+      setIsSpeaking(false);
     }
+  };
+
+  const estimateTtsDurationMs = (text) => {
+    const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+    const wordsPerSecond = 2.6; // ~156 wpm
+    const estimated = Math.round((words / wordsPerSecond) * 1000);
+    return Math.max(1500, Math.min(12000, estimated));
+  };
+
+  const startTextStream = (text, durationMs = null) => {
+    if (streamTimerRef.current) {
+      clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
+    }
+    const cleanText = (text || '').toString();
+    setStreamedText('');
+    let index = 0;
+    const speedMs = durationMs
+      ? Math.max(12, Math.round(durationMs / Math.max(1, cleanText.length)))
+      : 32;
+    streamTimerRef.current = setInterval(() => {
+      index += 1;
+      setStreamedText(cleanText.slice(0, index));
+      if (index >= cleanText.length) {
+        clearInterval(streamTimerRef.current);
+        streamTimerRef.current = null;
+      }
+    }, speedMs);
   };
 
   // Speech recognition
@@ -378,7 +474,7 @@ const InterviewRound = () => {
     }
   };
 
-  // End call / Complete round
+  // End call / Complete round (force end interview)
   const handleEndCall = async () => {
     // Stop media
     if (stream) {
@@ -391,13 +487,8 @@ const InterviewRound = () => {
       console.error('Error completing round:', e);
     }
 
-    // Navigate to next round or report
-    if (roundNum < 5 && !isSpecificMode) {
-      const nextRoundType = ROUND_CONFIG[roundNum + 1].type;
-      navigate(`/ai-interview/${sessionId}/round/${nextRoundType}`);
-    } else {
-      navigate(`/ai-interview/${sessionId}/report`);
-    }
+    // Always end interview and go to report
+    navigate(`/ai-interview/${sessionId}/report`);
   };
 
   // Skip current question (for testing)
@@ -440,379 +531,296 @@ const InterviewRound = () => {
     }
   }, [isComplete, isSpecificMode]);
 
-  // Get color classes
-  const getColorClasses = (color) => ({
-    bg: `bg-${color}-500`,
-    bgLight: `bg-${color}-500/20`,
-    text: `text-${color}-400`,
-    border: `border-${color}-500`,
-  });
+  // Color mapping removed in favor of static palette for immersive UI
+  const displayQuestion = isFollowup ? currentFollowup?.text : currentQuestion?.text;
+  const subtitleText = displayQuestion || (isLoading ? loadingMessage : 'Waiting for question...');
+  const interviewStatus = isSpeaking
+    ? 'Speaking'
+    : isLoading
+      ? 'Evaluating'
+      : isListening
+        ? 'Listening'
+        : 'Ready';
+  const statusClasses = isSpeaking
+    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+    : isLoading
+      ? 'border-amber-500/40 bg-amber-500/10 text-amber-200'
+      : isListening
+        ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-200'
+        : 'border-slate-500/40 bg-slate-500/10 text-slate-200';
 
-  const colors = getColorClasses(roundConfig.color);
+  useEffect(() => {
+    if (displayQuestion) {
+      startTextStream(displayQuestion);
+    }
+    return () => {
+      if (streamTimerRef.current) {
+        clearInterval(streamTimerRef.current);
+        streamTimerRef.current = null;
+      }
+    };
+  }, [displayQuestion]);
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black">
-        {/* Header */}
-        <div className="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 px-4 sm:px-6 py-3 sm:py-4">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
-              <div className={`px-2 sm:px-3 py-1 rounded-full ${colors.bgLight} ${colors.text} font-bold text-xs sm:text-sm`}>
-                {isSpecificMode ? 'Specific Round' : `Round ${roundNum}/5`}
-              </div>
-              <div className="flex-1 sm:flex-initial">
-                <h2 className="text-base sm:text-xl font-bold text-white truncate">{roundConfig.name}</h2>
-                <p className="text-xs sm:text-sm text-gray-400">
-                  Question {questionNumber} of ~{roundConfig.maxQuestions}
-                </p>
+    <Layout showNavbar={false} showFooter={false}>
+      <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100">
+        <header className="border-b border-slate-800/70 bg-slate-950/70 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+            <div className="flex items-center gap-4">
+              <img src="/logo_xalora.png" alt="Xalora" className="h-8 w-auto" />
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-emerald-200/80">AI Interview</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-lg font-semibold text-white">{roundConfig.name}</p>
+                  <span className="rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-xs text-slate-200">
+                    {isSpecificMode ? 'Specific Round' : `Round ${roundNum}/5`}
+                  </span>
+                  <span className="text-xs text-slate-400">Q{questionNumber} / ~{roundConfig.maxQuestions}</span>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end">
-              {/* Timer */}
-              <div className="text-left sm:text-right">
-                <p className="text-xs text-gray-400">Duration</p>
-                <p className="text-lg sm:text-2xl font-bold text-cyan-400 font-mono">{formatTime(duration)}</p>
+            <div className="flex items-center gap-3">
+              <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${statusClasses}`}>
+                {interviewStatus}
+              </span>
+              <div className="rounded-xl border border-slate-700/60 bg-slate-900/70 px-3 py-2">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Duration</p>
+                <p className="text-lg font-semibold text-cyan-200">{formatTime(duration)}</p>
               </div>
-
-              {/* Skip Buttons (Testing) - Hidden on mobile */}
-              <div className="hidden md:flex items-center gap-2">
-                <button
-                  onClick={handleSkipQuestion}
-                  disabled={isLoading || isComplete}
-                  className="px-3 py-1.5 bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-600/50 text-yellow-400 text-xs rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Skip to next question"
-                >
-                  Skip Question
-                </button>
-                <button
-                  onClick={handleSkipRound}
-                  disabled={isLoading || isComplete}
-                  className="px-3 py-1.5 bg-orange-600/20 hover:bg-orange-600/30 border border-orange-600/50 text-orange-400 text-xs rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Skip entire round"
-                >
-                  Skip Round
-                </button>
-              </div>
-
-              {/* Score indicator */}
-              {lastScore !== null && (
-                <div className={`px-3 sm:px-4 py-2 rounded-lg text-center ${lastScore >= 80 ? 'bg-green-500/20 text-green-400' :
-                  lastScore >= 60 ? 'bg-yellow-500/20 text-yellow-400' :
-                    'bg-red-500/20 text-red-400'
-                  }`}>
-                  <p className="text-xs opacity-70">Last Score</p>
-                  <p className="text-base sm:text-lg font-bold">{lastScore}/100</p>
-                </div>
-              )}
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <main className="mx-auto w-full max-w-6xl space-y-6 px-4 pb-10 pt-6 sm:px-6">
           {isComplete ? (
-            /* Round Complete Screen */
-            <div className="text-center py-12 sm:py-16 px-4">
-              <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-green-500/20 mb-6">
-                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-green-400" />
+            <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/10 px-6 py-10 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/20">
+                <CheckCircle className="h-10 w-10 text-emerald-300" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                {isSpecificMode
-                  ? 'Generating Your Report... 📊'
-                  : `Round ${roundNum} Complete! 🎉`
-                }
+              <h2 className="mt-6 text-2xl font-semibold text-white">
+                {isSpecificMode ? 'Generating Your Report' : `Round ${roundNum} Complete`}
               </h2>
-              <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-md mx-auto">
+              <p className="mt-3 text-sm text-emerald-100/70">
                 {isSpecificMode
-                  ? "Great job! We're analyzing your performance and preparing your personalized report. One moment..."
-                  : `Great job! You've completed the ${roundConfig.name} round. ${roundNum < 5
-                    ? `Ready for the ${ROUND_CONFIG[roundNum + 1]?.name} round?`
-                    : 'You have completed all interview rounds!'
-                  }`
-                }
+                  ? "We're analyzing your responses and preparing your report."
+                  : `Great job. Ready for ${ROUND_CONFIG[roundNum + 1]?.name}?`}
               </p>
               {!isSpecificMode && (
                 <button
                   onClick={handleNextRound}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-bold text-base sm:text-lg shadow-lg transition-all transform hover:scale-105"
+                  className="mt-6 rounded-full bg-emerald-400 px-6 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
                 >
-                  {roundNum < 5 ? (
-                    <>
-                      Continue to {ROUND_CONFIG[roundNum + 1]?.name} <ChevronRight className="inline w-5 h-5 ml-2" />
-                    </>
-                  ) : (
-                    <>
-                      View Your Report <Sparkles className="inline w-5 h-5 ml-2" />
-                    </>
-                  )}
+                  Continue
                 </button>
               )}
               {isSpecificMode && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-sm text-blue-400">Please wait, redirecting...</p>
+                <div className="mt-6 flex items-center justify-center gap-2 text-sm text-emerald-200">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
+                  Redirecting...
                 </div>
               )}
             </div>
           ) : (
-            /* Interview Interface */
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-              {/* Left Column - Video & Controls */}
-              <div className="lg:col-span-1 space-y-4">
-                {/* Video Preview */}
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-3 sm:p-4">
-                  <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden mb-4">
-                    {stream && isVideoOn ? (
-                      <video
-                        ref={videoRef}
-                        autoPlay
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center text-gray-500">
-                          <VideoOff className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 opacity-50" />
-                          <p className="text-sm">Camera off</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Recording indicator */}
-                    <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-1.5 sm:gap-2 bg-red-600 px-2 sm:px-3 py-1 rounded-full">
-                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
-                      <span className="text-white text-xs font-bold">REC</span>
-                    </div>
+            <>
+              <section className="relative overflow-hidden rounded-[32px] border border-slate-800/80 bg-slate-950/70 shadow-2xl shadow-black/40">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,68,76,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(10,18,38,0.8),_transparent_60%)]" />
+                <div className="relative h-[52vh] min-h-[360px]">
+                  <div className="absolute left-16 top-1/2 -translate-y-1/2">
+                    <InterviewerAvatar isSpeaking={isSpeaking} mood={interviewStatus} />
                   </div>
 
-                  {/* Controls */}
-                  <div className="flex items-center justify-center gap-2 sm:gap-3">
+                  <div className="absolute left-6 top-6 flex flex-wrap items-center gap-2">
+                    <span className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
+                      {isFollowup ? 'Follow-up' : `Question ${questionNumber}`}
+                    </span>
+                    {isSpeaking && (
+                      <span className="flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-200">
+                        <Volume2 className="h-3 w-3 animate-pulse" />
+                        Speaking
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="absolute right-10 top-8 w-[30%] max-w-[360px] rounded-2xl border border-slate-700/60 bg-slate-950/85 px-4 py-4 shadow-lg shadow-black/40">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Interviewer</p>
+                      <span className={`text-[10px] ${isSpeaking ? 'text-emerald-300' : 'text-slate-500'}`}>
+                        {isSpeaking ? 'Speaking' : 'Idle'}
+                      </span>
+                    </div>
+                    <div className="mt-2 max-h-40 overflow-y-auto text-xs text-slate-200 leading-relaxed">
+                      {streamedText || (displayQuestion ? '' : 'Waiting for question...')}
+                      {isSpeaking && <span className="ml-1 inline-block h-3 w-[2px] animate-pulse bg-emerald-300 align-middle" />}
+                    </div>
+                    <button
+                      onClick={() => speakQuestion(displayQuestion)}
+                      disabled={isSpeaking || !displayQuestion}
+                      className="mt-3 inline-flex items-center gap-2 text-[11px] text-slate-400 transition hover:text-white disabled:opacity-50"
+                    >
+                      <RefreshCw className={`h-3 w-3 ${isSpeaking ? 'animate-spin' : ''}`} />
+                      {isSpeaking ? 'Speaking...' : 'Repeat'}
+                    </button>
+                  </div>
+
+                  <div className="absolute bottom-6 right-6">
+                    <div className={`relative h-28 w-28 rounded-full border ${isListening ? 'border-emerald-400/80' : 'border-slate-700/70'} bg-slate-900/80 shadow-lg`}>
+                      {stream && isVideoOn ? (
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          muted
+                          playsInline
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-slate-400">
+                          <VideoOff className="h-6 w-6" />
+                        </div>
+                      )}
+                      {isListening && (
+                        <span className="absolute -bottom-1 right-2 rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-semibold text-slate-950">
+                          LIVE
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+                <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-slate-200">Your Answer</p>
                     <button
                       onClick={toggleMic}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${isListening
-                        ? 'bg-green-500 animate-pulse'
-                        : isMicOn
-                          ? 'bg-gray-600 hover:bg-gray-500'
-                          : 'bg-red-500'
-                        }`}
+                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${isListening ? 'bg-emerald-400 text-slate-950' : 'bg-slate-800 text-slate-200 hover:bg-slate-700'}`}
                     >
-                      {isListening ? (
-                        <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      ) : isMicOn ? (
-                        <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      ) : (
-                        <MicOff className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      )}
+                      {isListening ? <Mic className="h-3 w-3" /> : <MicOff className="h-3 w-3" />}
+                      {isListening ? 'Listening' : 'Voice'}
                     </button>
-
-                    <button
-                      onClick={toggleVideo}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all ${isVideoOn ? 'bg-gray-600 hover:bg-gray-500' : 'bg-red-500'
-                        }`}
-                    >
-                      {isVideoOn ? (
-                        <Video className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      ) : (
-                        <VideoOff className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      )}
-                    </button>
-
-                    <button
-                      onClick={handleEndCall}
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center transition-all"
-                    >
-                      <PhoneOff className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                    </button>
-                  </div>
-
-                  {isListening && (
-                    <p className="text-center text-green-400 text-xs sm:text-sm mt-3 animate-pulse">
-                      🎤 Listening... Speak now
-                    </p>
-                  )}
-                </div>
-
-                {/* AI Interviewer Status */}
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-3 sm:p-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center ${isSpeaking ? 'animate-pulse' : ''
-                      }`}>
-                      {isSpeaking ? (
-                        <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                      ) : (
-                        <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white text-sm sm:text-base">AI Interviewer</p>
-                      <p className="text-xs sm:text-sm text-gray-400">
-                        {isSpeaking ? 'Speaking...' : isLoading ? 'Thinking...' : 'Listening'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column - Question & Answer */}
-              <div className="lg:col-span-2 space-y-4">
-                {/* Question Card */}
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-4 sm:p-6">
-                  <div className="flex flex-wrap items-start gap-2 sm:gap-4 mb-4">
-                    <div className={`px-2 sm:px-3 py-1 rounded-full ${colors.bgLight} ${colors.text} text-xs sm:text-sm font-medium`}>
-                      {isFollowup ? 'Follow-up Question' : `Question ${questionNumber}`}
-                    </div>
-                    {isSpeaking && (
-                      <div className="flex items-center gap-2 text-purple-400 text-xs sm:text-sm">
-                        <Volume2 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                        Reading aloud...
-                      </div>
-                    )}
-                  </div>
-
-                  {isLoading && !currentQuestion ? (
-                    <div className="flex items-center gap-3 text-gray-400 text-sm sm:text-base">
-                      <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
-                      {loadingMessage}
-                    </div>
-                  ) : (
-                    <div className="text-base sm:text-lg text-white leading-relaxed prose prose-invert max-w-none">
-                      <ReactMarkdown
-                        components={{
-                          h1: ({ node, ...props }) => <h1 className="text-xl sm:text-2xl font-bold text-white mb-4" {...props} />,
-                          h2: ({ node, ...props }) => <h2 className="text-lg sm:text-xl font-semibold text-gray-200 mt-6 mb-3" {...props} />,
-                          p: ({ node, ...props }) => <p className="text-gray-300 mb-3 text-sm sm:text-base" {...props} />,
-                          code: ({ node, inline, ...props }) =>
-                            inline
-                              ? <code className="bg-gray-700 px-2 py-1 rounded text-xs sm:text-sm text-cyan-300" {...props} />
-                              : <code className="block bg-gray-800 p-3 sm:p-4 rounded-lg text-xs sm:text-sm text-gray-200 overflow-x-auto" {...props} />,
-                          pre: ({ node, ...props }) => <pre className="bg-gray-800 p-3 sm:p-4 rounded-lg overflow-x-auto mb-4" {...props} />,
-                          ul: ({ node, ...props }) => <ul className="list-disc list-inside text-gray-300 mb-3 text-sm sm:text-base" {...props} />,
-                          li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                          strong: ({ node, ...props }) => <strong className="text-white font-semibold" {...props} />,
-                        }}
-                      >
-                        {isFollowup && currentFollowup
-                          ? currentFollowup.text
-                          : currentQuestion?.text || 'Loading question...'}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-
-                  {/* Repeat question button */}
-                  {(currentQuestion || currentFollowup) && !isLoading && (
-                    <button
-                      onClick={() => speakQuestion(isFollowup ? currentFollowup?.text : currentQuestion?.text)}
-                      disabled={isSpeaking}
-                      className="mt-4 flex items-center gap-2 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors disabled:opacity-50"
-                    >
-                      <RefreshCw className={`w-3 h-3 sm:w-4 sm:h-4 ${isSpeaking ? 'animate-spin' : ''}`} />
-                      {isSpeaking ? 'Speaking...' : 'Repeat question'}
-                    </button>
-                  )}
-                </div>
-
-                {/* Feedback Card */}
-                {feedback && (
-                  <div className={`p-3 sm:p-4 rounded-xl border ${lastScore >= 80
-                    ? 'bg-green-500/10 border-green-500/30'
-                    : lastScore >= 60
-                      ? 'bg-yellow-500/10 border-yellow-500/30'
-                      : 'bg-orange-500/10 border-orange-500/30'
-                    }`}>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${lastScore >= 80 ? 'text-green-400' : lastScore >= 60 ? 'text-yellow-400' : 'text-orange-400'
-                        }`} />
-                      <div>
-                        <p className="text-xs sm:text-sm text-gray-300">{feedback}</p>
-                        {isFollowup && (
-                          <p className="text-xs text-gray-500 mt-1">Follow-up answered. Moving to next question...</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Error Message */}
-                {error && (
-                  <div className="p-3 sm:p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3">
-                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                    <p className="text-red-400 text-xs sm:text-sm">{error}</p>
-                  </div>
-                )}
-
-                {/* Answer Input */}
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-4 sm:p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <label className="text-xs sm:text-sm font-medium text-gray-300">Your Answer</label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={toggleMic}
-                        className={`flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm transition-all ${isListening
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                          }`}
-                      >
-                        <Mic className="w-3 h-3 sm:w-4 sm:h-4" />
-                        {isListening ? 'Stop' : 'Voice'}
-                      </button>
-                    </div>
                   </div>
 
                   <textarea
                     ref={textareaRef}
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
-                    placeholder="Type your answer here or use voice input..."
-                    className="w-full h-32 sm:h-40 px-3 sm:px-4 py-2 sm:py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none transition-colors resize-none text-sm sm:text-base"
+                    placeholder="Respond in your own words. Voice input stays on top."
+                    className="mt-4 h-36 w-full resize-none rounded-2xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
                     disabled={isLoading}
                   />
 
-                  <div className="flex items-center justify-between mt-4">
-                    <p className="text-xs sm:text-sm text-gray-500">
-                      {answer.split(/\s+/).filter(Boolean).length} words
-                    </p>
-
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-xs text-slate-500">{answer.split(/\s+/).filter(Boolean).length} words</p>
                     <button
                       onClick={handleSubmitAnswer}
                       disabled={!answer.trim() || isLoading}
-                      className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                      className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
                     >
                       {isLoading ? (
                         <>
-                          <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                          <Loader2 className="h-4 w-4 animate-spin" />
                           Analyzing...
                         </>
                       ) : (
                         <>
-                          <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-                          Submit Answer
+                          <Send className="h-4 w-4" />
+                          Submit
                         </>
                       )}
                     </button>
                   </div>
+
+                  {feedback && (
+                    <div className="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-xs text-emerald-100/90">
+                      <div className="flex items-start gap-2">
+                        <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-300" />
+                        <div>
+                          <p>{feedback}</p>
+                          {isFollowup && <p className="mt-1 text-emerald-200/70">Follow-up answered. Moving on.</p>}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="mt-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-200">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="h-4 w-4" />
+                        <p>{error}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Progress */}
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-400">Round Progress</span>
-                    <span className="text-sm text-gray-400">
-                      {questionNumber} / ~{roundConfig.maxQuestions} questions
-                    </span>
+                <div className="space-y-4">
+                  <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Progress</p>
+                    <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                      <div
+                        className="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-sky-400 transition-all duration-500"
+                        style={{ width: `${Math.min(100, (questionNumber / roundConfig.maxQuestions) * 100)}%` }}
+                      />
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
+                      <span>Question {questionNumber}</span>
+                      <span>~{roundConfig.maxQuestions} total</span>
+                    </div>
                   </div>
-                  <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-gradient-to-r from-${roundConfig.color}-500 to-${roundConfig.color}-400 transition-all duration-500`}
-                      style={{ width: `${(questionNumber / roundConfig.maxQuestions) * 100}%` }}
-                    />
+
+                  {lastScore !== null && (
+                    <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
+                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Last Score</p>
+                      <p className="mt-3 text-3xl font-semibold text-emerald-300">{lastScore}/100</p>
+                      <p className="mt-1 text-xs text-slate-400">AI evaluation snapshot</p>
+                    </div>
+                  )}
+
+                  <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5 space-y-3">
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Controls</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={toggleVideo}
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 px-3 py-1.5 text-xs text-slate-200 transition hover:border-slate-500"
+                      >
+                        {isVideoOn ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
+                        {isVideoOn ? 'Camera On' : 'Camera Off'}
+                      </button>
+                      <button
+                        onClick={handleSkipQuestion}
+                        disabled={isLoading || isComplete}
+                        className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 px-3 py-1.5 text-xs text-amber-200 transition hover:border-amber-300 disabled:opacity-40"
+                      >
+                        Skip Question
+                      </button>
+                      <button
+                        onClick={handleSkipRound}
+                        disabled={isLoading || isComplete}
+                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/40 px-3 py-1.5 text-xs text-orange-200 transition hover:border-orange-300 disabled:opacity-40"
+                      >
+                        Skip Round
+                      </button>
+                      <button
+                        onClick={handleEndCall}
+                        className="inline-flex items-center gap-2 rounded-full border border-red-400/40 px-3 py-1.5 text-xs text-red-200 transition hover:border-red-300"
+                      >
+                        <PhoneOff className="h-3 w-3" />
+                        End Interview
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Question Transcript</p>
+                    <div className="mt-3 max-h-40 overflow-y-auto text-xs text-slate-300">
+                      <ReactMarkdown>{displayQuestion || 'Waiting for question...'}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </section>
+            </>
           )}
-        </div>
+        </main>
       </div>
     </Layout>
   );

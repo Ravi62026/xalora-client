@@ -91,6 +91,15 @@ const Login = () => {
             // Store user data temporarily for verification page
             localStorage.setItem('pending_verification_user', JSON.stringify(result.payload.user));
             navigate("/verify-email");
+        } else if (result.payload?.requiresOrgSetup) {
+            console.log("🏢 LOGIN: Organization setup required");
+            // Redirect to org setup with token if available
+            if (result.payload?.setupToken) {
+                navigate(`/org/setup/${result.payload.setupToken}`);
+            } else {
+                // Token exists but not returned (already generated before)
+                alert("Organization setup required. Please check your email for the setup link or contact support.");
+            }
         } else {
             console.log("❌ LOGIN: Failed with error:", result.payload);
         }

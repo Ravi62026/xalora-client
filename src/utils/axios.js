@@ -61,7 +61,9 @@ const redirectToLoginIfNeeded = () => {
     PUBLIC_PATHS.has(currentPath) ||
     currentPath.startsWith("/problems/") ||
     currentPath.startsWith("/quiz/") ||
-    currentPath.startsWith("/internships/");
+    currentPath.startsWith("/internships/") ||
+    currentPath.startsWith("/org/join/") ||
+    currentPath.startsWith("/org/setup/");
 
   if (!isPublicPath && currentPath !== "/login" && currentPath !== "/signup") {
     window.location.href = "/login";
@@ -82,6 +84,11 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+const getCsrfToken = () => {
+  const match = document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]*)/);
+  return match?.[1] ? decodeURIComponent(match[1]) : "";
+};
+
 axiosInstance.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
@@ -90,6 +97,12 @@ axiosInstance.interceptors.request.use(
       config.headers["Content-Type"] = "application/json";
     }
     config.headers.Accept = "application/json";
+
+    // Attach CSRF token for cookie-based auth
+    const csrfToken = getCsrfToken();
+    if (csrfToken) {
+      config.headers["x-xsrf-token"] = csrfToken;
+    }
 
     return config;
   },
@@ -125,6 +138,11 @@ axiosInstance.interceptors.response.use(
           timeout: 120000,
           withCredentials: true,
         });
+
+        const csrfToken = getCsrfToken();
+        if (csrfToken) {
+          refreshClient.defaults.headers.common["x-xsrf-token"] = csrfToken;
+        }
 
         await refreshClient.post(
           "/api/v1/users/refresh-token",

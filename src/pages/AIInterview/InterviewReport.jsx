@@ -89,7 +89,11 @@ const InterviewReport = () => {
   };
 
   const getHiringBadge = (hiringRecommendation) => {
-    const decision = hiringRecommendation?.decision?.toLowerCase() || '';
+    const decisionRaw = hiringRecommendation?.decision || '';
+    const decision = decisionRaw.toLowerCase().replace(/[_-]+/g, ' ').trim();
+    if (decision.includes('no hire') || decision.includes('not hire')) {
+      return { color: 'red', icon: XCircle, text: 'No Hire' };
+    }
     if (decision.includes('strong hire') || decision.includes('strongly recommend')) {
       return { color: 'green', icon: CheckCircle, text: 'Strong Hire' };
     }
@@ -107,149 +111,218 @@ const InterviewReport = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    let yPos = 20;
+    const margin = 12;
+    const contentWidth = pageWidth - margin * 2;
+    let yPos = 18;
 
-    // Helper to add new page if needed
+    const today = new Date().toLocaleDateString();
+    const hiringBadge = getHiringBadge(reportData.hiringRecommendation);
+    const roundList = reportData.rounds || reportData.roundPerformance || [];
+    const improvements = reportData.improvementsNeeded || reportData.weaknesses || [];
+
     const checkPageBreak = (requiredSpace = 20) => {
       if (yPos + requiredSpace > pageHeight - 20) {
         doc.addPage();
-        yPos = 20;
+        drawPageFrame();
+        yPos = 18;
         return true;
       }
       return false;
     };
 
-    // Title
-    doc.setFontSize(24);
-    doc.setTextColor(59, 130, 246); // Blue
-    doc.text('Interview Report', pageWidth / 2, yPos, { align: 'center' });
-    yPos += 15;
+    const drawPageFrame = () => {
+      doc.setFillColor(248, 250, 252);
+      doc.rect(0, 0, pageWidth, pageHeight, 'F');
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.6);
+      doc.roundedRect(8, 8, pageWidth - 16, pageHeight - 16, 4, 4);
+    };
 
-    // Candidate Info
+    const sectionTitle = (title, color = [37, 99, 235]) => {
+      checkPageBreak(12);
+      doc.setFontSize(12);
+      doc.setTextColor(...color);
+      doc.text(title, margin, yPos);
+      yPos += 6;
+    };
+
+    const card = (height, x = margin, width = contentWidth) => {
+      checkPageBreak(height + 8);
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(x, yPos, width, height, 3, 3, 'FD');
+    };
+
+    drawPageFrame();
+
+    // Header
+    doc.setFillColor(15, 23, 42);
+    doc.roundedRect(margin, yPos, contentWidth, 22, 3, 3, 'F');
+    doc.setFontSize(13);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, 'bold');
+    doc.text('XALORA', margin + 8, yPos + 14);
+    doc.setFontSize(9);
+    doc.setTextColor(203, 213, 225);
+    doc.text('AI Interview Report', pageWidth - margin - 8, yPos + 14, { align: 'right' });
+    // Simple logo mark
+    doc.setDrawColor(99, 102, 241);
+    doc.setFillColor(99, 102, 241);
+    doc.circle(pageWidth - margin - 60, yPos + 11, 3, 'F');
+    doc.setFillColor(16, 185, 129);
+    doc.circle(pageWidth - margin - 50, yPos + 11, 3, 'F');
+    // Watermark
+    doc.setTextColor(230, 235, 241);
+    doc.setFontSize(40);
+    doc.text('XALORA', pageWidth / 2, pageHeight / 2, { align: 'center', angle: 30 });
+    yPos += 30;
+
+    // Candidate summary card
+    card(36);
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Candidate Summary', margin + 8, yPos + 11);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Name: ${displayCandidateName || 'N/A'}`, margin + 8, yPos + 21);
+    doc.text(`Position: ${displayPosition || 'N/A'}`, margin + 8, yPos + 29);
+    doc.text(`Date: ${today}`, pageWidth - margin - 8, yPos + 21, { align: 'right' });
+    yPos += 44;
+
+    // Score and Decision row
+    checkPageBreak(34);
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(margin, yPos, contentWidth, 30, 3, 3, 'FD');
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(71, 85, 105);
+    doc.text('Overall Score', margin + 8, yPos + 11);
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(16, 185, 129);
+    doc.text(`${reportData.overallScore || 0}/100`, margin + 8, yPos + 23);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(71, 85, 105);
+    doc.text('Decision', pageWidth - margin - 60, yPos + 11);
+    doc.setFont(undefined, 'bold');
     doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Candidate: ${sessionData?.candidateInfo?.name || 'N/A'}`, 20, yPos);
-    yPos += 8;
-    doc.text(`Position: ${sessionData?.position || 'N/A'}`, 20, yPos);
-    yPos += 8;
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, yPos);
-    yPos += 15;
+    doc.setTextColor(
+      hiringBadge.color === 'green' ? 16 : hiringBadge.color === 'blue' ? 37 : hiringBadge.color === 'yellow' ? 234 : 239,
+      hiringBadge.color === 'green' ? 185 : hiringBadge.color === 'blue' ? 99 : hiringBadge.color === 'yellow' ? 179 : 68,
+      hiringBadge.color === 'green' ? 129 : hiringBadge.color === 'blue' ? 235 : hiringBadge.color === 'yellow' ? 8 : 68
+    );
+    doc.text(hiringBadge.text, pageWidth - margin - 8, yPos + 23, { align: 'right' });
+    yPos += 40;
 
-    // Overall Score
-    checkPageBreak(30);
-    doc.setFontSize(16);
-    doc.setTextColor(59, 130, 246);
-    doc.text('Overall Score', 20, yPos);
-    yPos += 10;
-    doc.setFontSize(32);
-    doc.setTextColor(34, 197, 94); // Green
-    doc.text(`${reportData.overallScore}/100`, pageWidth / 2, yPos, { align: 'center' });
-    yPos += 15;
+    // Hiring recommendation
+    sectionTitle('Hiring Recommendation');
+    card(36);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(51, 65, 85);
+    const hiringReason = reportData.hiringRecommendation?.reason || reportData.hiringRecommendation?.reasoning || 'No recommendation notes available.';
+    const reasonLines = doc.splitTextToSize(hiringReason, contentWidth - 16);
+    doc.text(reasonLines, margin + 8, yPos + 12);
+    yPos += 44;
 
-    // Hiring Recommendation
-    checkPageBreak(30);
-    doc.setFontSize(16);
-    doc.setTextColor(59, 130, 246);
-    doc.text('Hiring Recommendation', 20, yPos);
-    yPos += 10;
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    const hiringBadge = getHiringBadge(reportData.hiringRecommendation);
-    doc.text(`Decision: ${hiringBadge.text}`, 20, yPos);
-    yPos += 8;
-    if (reportData.hiringRecommendation?.reason) {
-      const reasonLines = doc.splitTextToSize(reportData.hiringRecommendation.reason, pageWidth - 40);
-      doc.setFontSize(11);
-      doc.text(reasonLines, 20, yPos);
-      yPos += reasonLines.length * 6 + 10;
-    }
-
-    // Round-wise Performance
-    checkPageBreak(40);
-    doc.setFontSize(16);
-    doc.setTextColor(59, 130, 246);
-    doc.text('Round-wise Performance', 20, yPos);
-    yPos += 12;
-
-    if (reportData.roundPerformance && reportData.roundPerformance.length > 0) {
-      reportData.roundPerformance.forEach((round) => {
-        checkPageBreak(25);
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${round.roundName}: ${round.score}/100`, 25, yPos);
-        yPos += 8;
+    // Round-wise performance
+    sectionTitle('Round-wise Performance');
+    if (roundList.length > 0) {
+      roundList.forEach((round) => {
+        card(16);
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(30, 41, 59);
+        const label = round.roundName || round.roundType || 'Round';
+        doc.text(label, margin + 8, yPos + 11);
+        doc.setTextColor(71, 85, 105);
+        doc.text(`${round.score || 0}/100`, pageWidth - margin - 8, yPos + 11, { align: 'right' });
+        yPos += 22;
       });
+    } else {
+      card(16);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139);
+      doc.text('No round data available.', margin + 8, yPos + 11);
+      yPos += 22;
     }
-    yPos += 10;
 
-    // Strengths
-    checkPageBreak(40);
-    doc.setFontSize(16);
-    doc.setTextColor(34, 197, 94); // Green
-    doc.text('Strengths', 20, yPos);
-    yPos += 10;
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
+    // Two-column: Strengths and Areas for Improvement
+    sectionTitle('Strengths and Improvements');
+    const columnGap = 6;
+    const columnWidth = (contentWidth - columnGap) / 2;
+    card(38, margin, columnWidth);
+    card(38, margin + columnWidth + columnGap, columnWidth);
+
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(16, 185, 129);
+    doc.text('Strengths', margin + 6, yPos + 10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(30, 41, 59);
     if (reportData.strengths && reportData.strengths.length > 0) {
-      reportData.strengths.forEach((strength, index) => {
-        checkPageBreak(10);
-        const lines = doc.splitTextToSize(`${index + 1}. ${strength}`, pageWidth - 40);
-        doc.text(lines, 25, yPos);
-        yPos += lines.length * 6 + 2;
+      reportData.strengths.slice(0, 4).forEach((strength, index) => {
+        const line = `${index + 1}. ${strength}`;
+        const lines = doc.splitTextToSize(line, columnWidth - 12);
+        doc.text(lines, margin + 6, yPos + 18 + index * 6);
       });
+    } else {
+      doc.text('No strengths recorded.', margin + 6, yPos + 20);
     }
-    yPos += 10;
 
-    // Weaknesses
-    checkPageBreak(40);
-    doc.setFontSize(16);
-    doc.setTextColor(239, 68, 68); // Red
-    doc.text('Areas for Improvement', 20, yPos);
-    yPos += 10;
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    if (reportData.weaknesses && reportData.weaknesses.length > 0) {
-      reportData.weaknesses.forEach((weakness, index) => {
-        checkPageBreak(10);
-        const lines = doc.splitTextToSize(`${index + 1}. ${weakness}`, pageWidth - 40);
-        doc.text(lines, 25, yPos);
-        yPos += lines.length * 6 + 2;
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(239, 68, 68);
+    doc.text('Improvements', margin + columnWidth + columnGap + 6, yPos + 10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(30, 41, 59);
+    if (improvements.length > 0) {
+      improvements.slice(0, 4).forEach((weakness, index) => {
+        const line = `${index + 1}. ${weakness}`;
+        const lines = doc.splitTextToSize(line, columnWidth - 12);
+        doc.text(lines, margin + columnWidth + columnGap + 6, yPos + 18 + index * 6);
       });
+    } else {
+      doc.text('No improvement areas recorded.', margin + columnWidth + columnGap + 6, yPos + 20);
     }
-    yPos += 10;
+    yPos += 46;
 
     // Recommendations
+    sectionTitle('Recommendations');
+    card(32);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(30, 41, 59);
     if (reportData.recommendations && reportData.recommendations.length > 0) {
-      checkPageBreak(40);
-      doc.setFontSize(16);
-      doc.setTextColor(59, 130, 246);
-      doc.text('Recommendations', 20, yPos);
-      yPos += 10;
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      reportData.recommendations.forEach((rec, index) => {
-        checkPageBreak(10);
-        const lines = doc.splitTextToSize(`${index + 1}. ${rec}`, pageWidth - 40);
-        doc.text(lines, 25, yPos);
-        yPos += lines.length * 6 + 2;
+      reportData.recommendations.slice(0, 6).forEach((rec, index) => {
+        const line = `${index + 1}. ${rec}`;
+        const lines = doc.splitTextToSize(line, contentWidth - 16);
+        doc.text(lines, margin + 8, yPos + 10 + index * 6);
       });
+    } else {
+      doc.text('No recommendations available.', margin + 8, yPos + 12);
     }
+    yPos += 40;
 
     // Footer
     const totalPages = doc.internal.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
-      doc.setFontSize(10);
-      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
       doc.text(
-        `Page ${i} of ${totalPages} | Generated by XALORA AI Interview`,
+        `Page ${i} of ${totalPages} | Generated by Xalora AI Interview`,
         pageWidth / 2,
         pageHeight - 10,
         { align: 'center' }
       );
     }
 
-    // Save PDF
     const fileName = `Interview_Report_${sessionData?.candidateInfo?.name || 'Candidate'}_${new Date().toISOString().split('T')[0]}.pdf`;
     doc.save(fileName);
   };
@@ -376,6 +449,10 @@ const InterviewReport = () => {
 
   const hiringBadge = getHiringBadge(reportData.hiringRecommendation);
   const HiringIcon = hiringBadge.icon;
+  const displayCandidateName =
+    reportData?.candidateInfo?.name || sessionData?.candidateInfo?.name || 'Candidate';
+  const displayPosition =
+    reportData?.position || sessionData?.position || 'Position';
 
   return (
     <Layout>
@@ -389,11 +466,11 @@ const InterviewReport = () => {
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-slate-400 text-sm sm:text-base">
                   <span className="flex items-center gap-1">
                     <User className="w-4 h-4 flex-shrink-0" />
-                    <span className="truncate">{sessionData?.candidateInfo?.name || 'Candidate'}</span>
+                    <span className="truncate">{displayCandidateName}</span>
                   </span>
                   <span className="flex items-center gap-1">
                     <Briefcase className="w-4 h-4 flex-shrink-0" />
-                    <span className="truncate">{sessionData?.position || 'Position'}</span>
+                    <span className="truncate">{displayPosition}</span>
                   </span>
                 </div>
               </div>

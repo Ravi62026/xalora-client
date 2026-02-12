@@ -11,6 +11,7 @@ import * as compilerService from "../services/compilerService";
 import aiService from "../services/aiService";
 import subscriptionService from "../services/subscriptionService";
 import socketService from "../services/socketService";
+import interviewService from "../services/interviewService";
 import {
   getVerdictColor,
   getVerdictIcon,
@@ -21,7 +22,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const Problem = () => {
-  const { id } = useParams();
+  const { id, interviewSessionId } = useParams();
   const navigate = useNavigate();
   const { loading, error, execute } = useApiCall();
   const [problem, setProblem] = useState(null);
@@ -43,6 +44,7 @@ const Problem = () => {
   const [reviewResult, setReviewResult] = useState(null);
   const [editorTheme, setEditorTheme] = useState("vs-dark");
   const [errorMarkers, setErrorMarkers] = useState([]); // New state for error markers
+  const [interviewSubmitting, setInterviewSubmitting] = useState(false);
 
 
   // Import useSelector to access Redux state
@@ -565,6 +567,11 @@ public class Solution {
         }
         setRightActiveTab("result");
 
+        if (interviewSessionId && submissionData?.verdict === "Accepted") {
+          await handleInterviewCompletion(submissionData.verdict);
+          return;
+        }
+
         console.log("🔄 SUBMIT - Refreshing submissions list...");
         // Refresh submissions after successful submission
         const submissionsResponse = await problemService.getProblemSubmissions(
@@ -743,6 +750,29 @@ public class Solution {
       setActiveExecutionAction(null);
       console.log("🏁 SUBMIT - Submission completed");
     }
+  };
+
+  const handleInterviewCompletion = async (verdict) => {
+    if (!interviewSessionId || !id) return;
+    try {
+      setInterviewSubmitting(true);
+      const response = await interviewService.completeCodingQuestion(interviewSessionId, id, verdict);
+      const nextRound = response?.data?.nextRound;
+      const roundComplete = response?.data?.roundComplete;
+      if (roundComplete && nextRound) {
+        navigate(`/ai-interview/${interviewSessionId}/round/${nextRound}`);
+      } else {
+        navigate(`/ai-interview/${interviewSessionId}/round/coding`);
+      }
+    } catch (e) {
+      console.error("Failed to update interview coding progress:", e);
+    } finally {
+      setInterviewSubmitting(false);
+    }
+  };
+
+  const handleInterviewSkip = async () => {
+    await handleInterviewCompletion("Skipped");
   };
 
   const handleViewCode = (submission) => {
@@ -937,7 +967,7 @@ public class Solution {
 
   return (
     <Layout showNavbar={false} showFooter={false}>
-      <div className="h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black overflow-y-auto">
         <div className="h-16 border-b border-white/10 bg-slate-950/90 backdrop-blur">
           <div className="mx-auto flex h-full max-w-[1800px] items-center justify-between px-3 sm:px-5">
             <Link
@@ -957,8 +987,35 @@ public class Solution {
           </div>
         </div>
 
-        <div className="h-[calc(100vh-4rem)] w-full p-2 sm:p-3">
-          <div className="grid h-full grid-cols-1 gap-3 lg:grid-cols-2">
+        {interviewSessionId && (
+          <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-5 py-3">
+            <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <p className="text-emerald-200 text-sm font-semibold">Interview Coding Mode</p>
+                <p className="text-emerald-200/70 text-xs">Solve the problem and continue the interview flow.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={handleInterviewSkip}
+                  disabled={interviewSubmitting || executing}
+                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-emerald-500/60 text-emerald-100 bg-emerald-500/10 hover:bg-emerald-500/20 transition disabled:opacity-50"
+                >
+                  Skip Question
+                </button>
+                <button
+                  onClick={() => handleInterviewCompletion(executionResult?.verdict || "Submitted")}
+                  disabled={interviewSubmitting || executing || !executionResult?.verdict || executionResult.verdict === "Processing"}
+                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-slate-500/60 text-slate-100 bg-slate-600/20 hover:bg-slate-600/30 transition disabled:opacity-50"
+                >
+                  Next Question
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="min-h-[calc(100vh-4rem)] w-full p-2 sm:p-3">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             {/* Left Column - Problem Description */}
             <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="border-b border-slate-200 p-4 sm:p-5">

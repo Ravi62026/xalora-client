@@ -7,6 +7,7 @@ import authService from "../services/authService";
 import subscriptionService from "../services/subscriptionService";
 import problemService from "../services/problemService";
 import quizService from "../services/quizService";
+import organizationService from "../services/organizationService";
 import { setUser } from "../store/slices/userSlice";
 
 const PLAN_META = {
@@ -74,9 +75,20 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, execute } = useApiCall();
+  const getOrgDashboardRoute = () => {
+    if (!user?.organization?.orgId) return "/dashboard";
+    if (user?.organization?.role === "super_admin") return "/org/dashboard";
+    if (user?.userType === "org_team") return "/org/teamdashboard";
+    return "/org/student/dashboard";
+  };
+  const orgDetails = user?.organization;
+  const isOrgMember = Boolean(orgDetails?.orgId);
+  const isSuperAdminOrg = orgDetails?.role === "super_admin";
+  const upgradeDisabled = isOrgMember && !isSuperAdminOrg;
 
   const [subscription, setSubscription] = useState(null);
   const [aiUsage, setAiUsage] = useState(null);
+  const [orgProfile, setOrgProfile] = useState(null);
   const [stats, setStats] = useState({
     problemsSolved: 0,
     quizzesTaken: 0,
@@ -91,6 +103,9 @@ const Profile = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Check if user is organization member (only if they have actual orgId)
+  const isOrgUser = !!user?.organization?.orgId;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -135,7 +150,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchSubscriptionAndUsage = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated || isOrgMember) return;
 
       try {
         const [subRes, usageRes] = await Promise.all([
@@ -151,11 +166,11 @@ const Profile = () => {
     };
 
     fetchSubscriptionAndUsage();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isOrgMember, navigate]);
 
   useEffect(() => {
     const fetchStats = async () => {
-      if (!isAuthenticated || !user) return;
+      if (!isAuthenticated || !user || isOrgMember) return;
       try {
         const [problemsRes, quizzesRes] = await Promise.all([
           problemService.getAllProblems({ limit: 1000 }),
@@ -181,7 +196,25 @@ const Profile = () => {
     };
 
     fetchStats();
-  }, [isAuthenticated, navigate, user]);
+  }, [isAuthenticated, isOrgMember, navigate, user]);
+
+  useEffect(() => {
+    const fetchOrgProfile = async () => {
+      if (!isOrgMember || !orgDetails?.orgId) {
+        setOrgProfile(null);
+        return;
+      }
+
+      try {
+        const response = await organizationService.get(orgDetails.orgId);
+        setOrgProfile(response?.data?.organization || response?.organization || null);
+      } catch (err) {
+        setOrgProfile(null);
+      }
+    };
+
+    fetchOrgProfile();
+  }, [isOrgMember, orgDetails?.orgId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -232,6 +265,10 @@ const Profile = () => {
     const planId = subscription?.planId || "spark";
     return PLAN_META[planId] || PLAN_META.spark;
   }, [subscription]);
+
+  const orgName = orgProfile?.name || orgDetails?.name || "Your Organization";
+  const orgType = orgProfile?.type || orgDetails?.type || "N/A";
+  const orgRole = (orgDetails?.role || "member").replace("_", " ");
 
   const usagePercent = useMemo(() => {
     if (!aiUsage?.requestsLimit) return 0;
@@ -286,13 +323,38 @@ const Profile = () => {
                 <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Account Center</p>
                 <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Profile and Settings</h1>
                 <p className="mt-2 max-w-2xl text-sm text-slate-300 sm:text-base">
-                  Manage your personal details, review your plan, and track daily AI usage in one place.
+                  {isOrgMember
+                    ? "Manage your personal and organization-linked account details in one place."
+                    : "Manage your personal details, review your plan, and track daily AI usage in one place."}
                 </p>
+                {isOrgMember && (
+                  <p className="mt-1 text-xs text-emerald-200">
+                    You belong to{" "}
+                    <span className="font-semibold text-white">{orgName}</span> as{" "}
+                    <span className="font-semibold text-white">{orgRole}</span>{" "}
+                    so billing is handled by your organization’s super admin.
+                  </p>
+                )}
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link
                   to="/pricing"
-                  className="inline-flex items-center rounded-xl border border-cyan-300/35 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-400/20"
+                  onClick={(event) => {
+                    if (upgradeDisabled) {
+                      event.preventDefault();
+                    }
+                  }}
+                  className={`inline-flex items-center rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                    upgradeDisabled
+                      ? "border-cyan-300/15 bg-white/5 text-slate-400 cursor-not-allowed"
+                      : "border-cyan-300/35 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/20"
+                  }`}
+                  aria-disabled={upgradeDisabled}
+                  title={
+                    upgradeDisabled
+                      ? "Billing is managed at the organization level by the super admin."
+                      : "Upgrade Plan"
+                  }
                 >
                   Upgrade Plan
                 </Link>
@@ -349,72 +411,125 @@ const Profile = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 xl:grid-cols-1">
-                  {statCards.map((card) => (
-                    <div key={card.label} className="rounded-2xl border border-white/10 bg-slate-900/50 p-4">
-                      <p className="text-xs uppercase tracking-wide text-slate-400">{card.label}</p>
-                      <p className="mt-1 text-2xl font-bold text-white">{card.value}</p>
-                      <p className="mt-1 text-xs text-slate-500">{card.hint}</p>
-                    </div>
-                  ))}
-                </div>
+                {!isOrgMember && (
+                  <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 xl:grid-cols-1">
+                    {statCards.map((card) => (
+                      <div key={card.label} className="rounded-2xl border border-white/10 bg-slate-900/50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-slate-400">{card.label}</p>
+                        <p className="mt-1 text-2xl font-bold text-white">{card.value}</p>
+                        <p className="mt-1 text-xs text-slate-500">{card.hint}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur">
-                <div className={`bg-gradient-to-r ${currentPlan.tone} p-5`}>
-                  <p className="text-xs uppercase tracking-wide text-white/75">Current Plan</p>
-                  <h3 className="mt-1 text-xl font-semibold text-white">{currentPlan.name}</h3>
-                  {subscription?.endDate && (
-                    <p className={`mt-1 text-xs ${currentPlan.accent}`}>
-                      Valid until {new Date(subscription.endDate).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2 p-5 text-sm text-slate-200">
-                  {currentPlan.features.map((item) => (
-                    <p key={item}>- {item}</p>
-                  ))}
-                </div>
+                {isOrgUser ? (
+                  // Organization Plan Card
+                  <>
+                    <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-5">
+                      <p className="text-xs uppercase tracking-wide text-white/75">Organization Plan</p>
+                      <h3 className="mt-1 text-xl font-semibold text-white">{orgName}</h3>
+                      <p className="mt-1 text-xs text-emerald-100">
+                        Role: <span className="font-semibold capitalize">{orgRole}</span>
+                      </p>
+                    </div>
+                    <div className="space-y-2 p-5 text-sm text-slate-200">
+                      <p>- Organization management dashboard access</p>
+                      <p>- Collaborative learning environment</p>
+                      <p>- Team performance tracking</p>
+                      <p>- Custom learning paths</p>
+                    </div>
+                  </>
+                ) : (
+                  // Individual Plan Card
+                  <>
+                    <div className={`bg-gradient-to-r ${currentPlan.tone} p-5`}>
+                      <p className="text-xs uppercase tracking-wide text-white/75">Current Plan</p>
+                      <h3 className="mt-1 text-xl font-semibold text-white">{currentPlan.name}</h3>
+                      {subscription?.endDate && (
+                        <p className={`mt-1 text-xs ${currentPlan.accent}`}>
+                          Valid until {new Date(subscription.endDate).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2 p-5 text-sm text-slate-200">
+                      {currentPlan.features.map((item) => (
+                        <p key={item}>- {item}</p>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </aside>
 
             <main className="space-y-6 xl:col-span-8">
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                  <h3 className="text-lg font-semibold text-white">AI Requests</h3>
-                  <p className="mt-1 text-sm text-slate-300">
-                    {aiUsage
-                      ? `${aiUsage.requestsUsed} of ${aiUsage.requestsLimit} used today`
-                      : "Usage data unavailable"}
-                  </p>
-                  <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
-                    <div
-                      className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
-                      style={{ width: `${usagePercent}%` }}
-                    />
-                  </div>
-                  <p className="mt-2 text-xs text-slate-400">
-                    {aiUsage ? `${aiUsage.requestsRemaining} requests remaining` : "No active quota"}
-                  </p>
-                </div>
+                {!isOrgUser && (
+                  <>
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                      <h3 className="text-lg font-semibold text-white">AI Requests</h3>
+                      <p className="mt-1 text-sm text-slate-300">
+                        {aiUsage
+                          ? `${aiUsage.requestsUsed} of ${aiUsage.requestsLimit} used today`
+                          : "Usage data unavailable"}
+                      </p>
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                        <div
+                          className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                          style={{ width: `${usagePercent}%` }}
+                        />
+                      </div>
+                      <p className="mt-2 text-xs text-slate-400">
+                        {aiUsage ? `${aiUsage.requestsRemaining} requests remaining` : "No active quota"}
+                      </p>
+                    </div>
 
-                <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                  <h3 className="text-lg font-semibold text-white">File Uploads</h3>
-                  <p className="mt-1 text-sm text-slate-300">
-                    {aiUsage
-                      ? `${aiUsage.fileUploadsUsed} of ${aiUsage.fileUploadsLimit} used today`
-                      : "Upload data unavailable"}
-                  </p>
-                  <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
-                    <div
-                      className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all"
-                      style={{ width: `${uploadPercent}%` }}
-                    />
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                      <h3 className="text-lg font-semibold text-white">File Uploads</h3>
+                      <p className="mt-1 text-sm text-slate-300">
+                        {aiUsage
+                          ? `${aiUsage.fileUploadsUsed} of ${aiUsage.fileUploadsLimit} used today`
+                          : "Upload data unavailable"}
+                      </p>
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                        <div
+                          className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all"
+                          style={{ width: `${uploadPercent}%` }}
+                        />
+                      </div>
+                      <p className="mt-2 text-xs text-slate-400">
+                        {aiUsage ? `${aiUsage.fileUploadsRemaining} uploads remaining` : "No active quota"}
+                      </p>
+                    </div>
+                  </>
+                )}
+                {isOrgUser && (
+                  <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur lg:col-span-2">
+                    <h3 className="text-lg font-semibold text-white">Organization Info</h3>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <p className="text-xs text-slate-400">Organization Name</p>
+                        <p className="text-sm font-medium text-white">{orgName}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-400">Your Role</p>
+                        <p className="text-sm font-medium text-white capitalize">{orgRole}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-400">Organization Type</p>
+                        <p className="text-sm font-medium text-white capitalize">{orgType}</p>
+                      </div>
+                      <Link
+                        to={getOrgDashboardRoute()}
+                        className="mt-4 inline-flex items-center rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-medium text-white hover:from-emerald-700 hover:to-teal-700 transition-all"
+                      >
+                        Go to Organization Dashboard →
+                      </Link>
+                    </div>
                   </div>
-                  <p className="mt-2 text-xs text-slate-400">
-                    {aiUsage ? `${aiUsage.fileUploadsRemaining} uploads remaining` : "No active quota"}
-                  </p>
-                </div>
+                )}
               </div>
 
               <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur sm:p-7">

@@ -7,6 +7,7 @@ import {
   BarChart3,
   Bot,
   BriefcaseBusiness,
+  Building2,
   CalendarClock,
   ClipboardCheck,
   Code2,
@@ -140,6 +141,12 @@ const DashboardMetric = ({ title, value, hint, icon: Icon, iconClass }) => (
 
 const Dashboard = () => {
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const getOrgDashboardRoute = () => {
+    if (!user?.organization?.orgId) return "/dashboard";
+    if (user?.organization?.role === "super_admin") return "/org/dashboard";
+    if (user?.userType === "org_team") return "/org/teamdashboard";
+    return "/org/student/dashboard";
+  };
 
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -394,6 +401,31 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Organization banner for org members */}
+          {isAuthenticated && user?.organization?.orgId && (
+            <div className="mb-5 rounded-xl border border-emerald-400/20 bg-gradient-to-r from-emerald-500/10 via-transparent to-teal-500/10 p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-white font-medium">
+                    Organization Member
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {user.organization.role?.replace("_", " ")} &middot; {user.organization.department || "No department"}
+                  </p>
+                </div>
+              </div>
+              <Link
+                to={getOrgDashboardRoute()}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600/20 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-medium hover:bg-emerald-600/30 transition-colors"
+              >
+                Org Dashboard <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          )}
 
           {error && (
             <div className="mb-5 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">

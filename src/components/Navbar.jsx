@@ -5,7 +5,6 @@ import { logoutUser } from "../store/slices/userSlice";
 
 const Navbar = () => {
     const { isAuthenticated, user } = useSelector((state) => state.user);
-    // console.log("🔍 NAVBAR: User state:", { isAuthenticated, user });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,6 +33,15 @@ const Navbar = () => {
     };
 
     const avatarInitial = (user?.name || user?.username || "U").charAt(0).toUpperCase();
+    const isOrgTeam = user?.userType === "org_team";
+
+    // Determine dashboard route based on user organization
+    const getDashboardRoute = () => {
+        if (!user?.organization?.orgId && !user?.organization?._id) return "/dashboard";
+        if (user?.organization?.role === "super_admin") return "/org/dashboard";
+        if (user?.userType === "org_team") return "/org/teamdashboard";
+        return "/org/student/dashboard";
+    };
 
     return (
         <nav className="bg-gradient-to-r from-gray-900 via-slate-900 to-black backdrop-blur-lg shadow-2xl border-b border-emerald-500/20 sticky top-0 z-50">
@@ -66,52 +74,56 @@ const Navbar = () => {
                             <span className="relative z-10">Home</span>
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
-                        <Link
-                            to="/problems"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">Problems</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
-                        <Link
-                            to="/quiz"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">Quiz</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
-                        <Link
-                            to="/internships"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">Internships</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
-                        <Link
-                            to="/resume-ai"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">Resume AI</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
-                        <Link
-                            to="/ai-interview/setup"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">🎥 AI Interview</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
+                        {!isOrgTeam && (
+                            <>
+                                <Link
+                                    to="/problems"
+                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                >
+                                    <span className="relative z-10">Problems</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </Link>
+                                <Link
+                                    to="/quiz"
+                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                >
+                                    <span className="relative z-10">Quiz</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </Link>
+                                <Link
+                                    to="/internships"
+                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                >
+                                    <span className="relative z-10">Internships</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </Link>
+                                <Link
+                                    to="/resume-ai"
+                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                >
+                                    <span className="relative z-10">Resume AI</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </Link>
+                                <Link
+                                    to="/ai-interview/setup"
+                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                >
+                                    <span className="relative z-10">🎥 AI Interview</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </Link>
+                            </>
+                        )}
                         {/* Dashboard button - only shown when user is authenticated */}
                         {isAuthenticated && (
                             <Link
-                                to="/dashboard"
+                                to={getDashboardRoute()}
                                 className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                             >
                                 <span className="relative z-10">Dashboard</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </Link>
                         )}
-                        {isAuthenticated && (
+                        {isAuthenticated && !isOrgTeam && (
                             <button
                                 onClick={() => {
                                     const xaloraUrl = import.meta.env.VITE_XALORA_AI_URL;
@@ -284,50 +296,54 @@ const Navbar = () => {
                                 <span className="relative z-10">🏠 Home</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </Link>
-                            <Link
-                                to="/problems"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">💻 Problems</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
-                            <Link
-                                to="/quiz"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">🧠 Quiz</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
-                            <Link
-                                to="/internships"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">💼 Internships</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
-                            <Link
-                                to="/resume-ai"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">🤖 Resume AI</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
-                            <Link
-                                to="/ai-interview/setup"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">🎥 AI Interview</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </Link>
+                            {!isOrgTeam && (
+                                <>
+                                    <Link
+                                        to="/problems"
+                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        <span className="relative z-10">💻 Problems</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </Link>
+                                    <Link
+                                        to="/quiz"
+                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        <span className="relative z-10">🧠 Quiz</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </Link>
+                                    <Link
+                                        to="/internships"
+                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        <span className="relative z-10">💼 Internships</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </Link>
+                                    <Link
+                                        to="/resume-ai"
+                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        <span className="relative z-10">🤖 Resume AI</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </Link>
+                                    <Link
+                                        to="/ai-interview/setup"
+                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        <span className="relative z-10">🎥 AI Interview</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </Link>
+                                </>
+                            )}
                             {/* Dashboard button for mobile - only shown when user is authenticated */}
                             {isAuthenticated && (
                                 <Link
-                                    to="/dashboard"
+                                    to={getDashboardRoute()}
                                     className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
                                     onClick={closeMobileMenu}
                                 >
@@ -335,7 +351,7 @@ const Navbar = () => {
                                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </Link>
                             )}
-                            {isAuthenticated && (
+                            {isAuthenticated && !isOrgTeam && (
                                 <button
                                     onClick={() => {
                                         const xaloraUrl = import.meta.env.VITE_XALORA_AI_URL;

@@ -122,7 +122,7 @@ const WaitingRoom = () => {
   const roundInfo = [
     { name: 'Formal Q&A', duration: '8-10 min', color: 'blue', questions: '3-5' },
     { name: 'Technical', duration: '10-15 min', color: 'purple', questions: '3-5' },
-    { name: 'Coding Challenge', duration: '15-20 min', color: 'emerald', questions: '1-2' },
+    { name: 'Coding Challenge', duration: '15-20 min', color: 'emerald', questions: '3' },
     { name: 'System Design', duration: '10-15 min', color: 'orange', questions: '1-2' },
     { name: 'HR', duration: '5-8 min', color: 'pink', questions: '3-4' },
   ];

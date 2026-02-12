@@ -3,6 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components";
 import { Button } from "../components/ui/Button";
+import HomeJobGenie from "../components/HomeJobGenie";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -393,6 +394,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Job Genie Section */}
+      <HomeJobGenie />
 
       {/* Testimonials Section */}
       <section className="py-24 bg-gradient-to-br from-gray-900 via-slate-900 to-black text-white">

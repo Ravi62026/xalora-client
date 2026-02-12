@@ -1,9 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
+
+const JobGenieBanner = () => {
+    const [dismissed, setDismissed] = useState(() => {
+        try { return sessionStorage.getItem("jobGenieBannerDismissed") === "true"; } catch { return false; }
+    });
+
+    if (dismissed) return null;
+
+    const handleDismiss = () => {
+        setDismissed(true);
+        try { sessionStorage.setItem("jobGenieBannerDismissed", "true"); } catch {}
+    };
+
+    return (
+        <div className="relative bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white">
+            <Link
+                to="/job-genie"
+                className="block px-4 py-2 text-center text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+                <span className="inline-flex items-center gap-2">
+                    <span className="bg-white/20 text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">New</span>
+                    Job Genie - Search jobs by role or company
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </span>
+            </Link>
+            <button
+                onClick={(e) => { e.preventDefault(); handleDismiss(); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-1"
+                aria-label="Dismiss"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+    );
+};
 
 const Layout = ({ children, showNavbar = true, showFooter = true }) => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex flex-col">
+            {showNavbar && <JobGenieBanner />}
             {showNavbar && <Navbar />}
             <main className={`flex-grow ${showNavbar ? "" : "pt-0"}`}>
                 {children}

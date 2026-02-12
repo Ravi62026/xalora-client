@@ -74,5 +74,8 @@ export default defineConfig(({ mode }) => {
 
     // Environment variables
     envPrefix: 'VITE_',
+    // Include 3D model binary assets so imports like `import m from './a.glb'`
+    // resolve to a URL instead of attempting JS parsing.
+    assetsInclude: ["**/*.glb", "**/*.gltf"],
   }
 });

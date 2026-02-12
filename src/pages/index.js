@@ -66,3 +66,12 @@ export { default as WaitingRoom } from "./AIInterview/WaitingRoom";
 export { default as InterviewRound } from "./AIInterview/InterviewRound";
 export { default as InterviewReport } from "./AIInterview/InterviewReport";
 export { default as MyInterviews } from "./AIInterview/MyInterviews";
+
+// Job Genie
+export { default as JobGenie } from "./JobGenie";
+
+// Organization
+export { default as OrganizationSetup } from "./Organization/OrganizationSetup";
+export { default as OrgAdminDashboard } from "./Organization/OrgAdminDashboard";
+export { default as OrgMemberAnalytics } from "./Organization/OrgMemberAnalytics";
+export { default as AcceptInvite } from "./Organization/AcceptInvite";

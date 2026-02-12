@@ -68,12 +68,23 @@ import {
   WaitingRoom,
   InterviewRound,
   InterviewReport,
-  MyInterviews
+  MyInterviews,
+  JobGenie,
+  OrganizationSetup,
+  OrgAdminDashboard,
+  OrgMemberAnalytics,
+  AcceptInvite,
 } from "./pages";
 import DebugUserInfo from "./components/DebugUserInfo";
 import { initializeAuth } from "./store/slices/userSlice";
 import SplashCursor from "./components/SplashCursor";
 import CustomCursor from "./components/CustomCursor";
+// Phase 1: Legal & Compliance Components
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import CookiePolicy from "./pages/Legal/CookiePolicy";
+import AcceptableUsePolicy from "./pages/Legal/AcceptableUsePolicy";
+import CookieConsentBanner from "./components/Cookie/CookieConsentBanner";
 
 // Component to show page-specific loading messages
 const LoadingMessage = () => {
@@ -115,6 +126,7 @@ const LoadingMessage = () => {
 
 const AppContent = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { isInitializing, user } = useSelector((state) => state.user);
 
   // Use a ref to track if we've already initialized
@@ -148,10 +160,48 @@ const AppContent = () => {
     return <LoadingMessage />;
   }
 
+  const getOrgDashboardRoute = (currentUser) => {
+    if (!currentUser?.organization?.orgId) return "/dashboard";
+    if (currentUser?.organization?.role === "super_admin") return "/org/dashboard";
+    if (currentUser?.userType === "org_team") return "/org/teamdashboard";
+    return "/org/student/dashboard";
+  };
+
+  const isOrgTeam = user?.userType === "org_team";
+  // const showHomeCursorEffects = location.pathname === "/";
+  if (isOrgTeam) {
+    const allowedOrgPaths = [
+      "/org/dashboard",
+      "/org/teamdashboard",
+      "/org/student/dashboard",
+      "/org/members",
+      "/profile",
+      "/payment-history",
+    ];
+    const isAllowed =
+      allowedOrgPaths.some((p) => location.pathname.startsWith(p)) ||
+      location.pathname === "/" ||
+      location.pathname.startsWith("/org/setup/") ||
+      location.pathname.startsWith("/org/join/") ||
+      location.pathname.startsWith("/privacy") ||
+      location.pathname.startsWith("/terms") ||
+      location.pathname.startsWith("/cookies") ||
+      location.pathname.startsWith("/acceptable-use") ||
+      location.pathname.startsWith("/login") ||
+      location.pathname.startsWith("/signup");
+
+    if (!isAllowed) {
+      return <Navigate to={getOrgDashboardRoute(user)} replace />;
+    }
+  }
+
   return (
     <>
       <SplashCursor />
       <CustomCursor />
+      {/* {showHomeCursorEffects && <SplashCursor />} */}
+      {/* {showHomeCursorEffects && <CustomCursor />} */}
+      <CookieConsentBanner />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -166,6 +216,8 @@ const AppContent = () => {
         <Route path="/problems" element={<Problems />} />
         <Route path="/my-problems" element={<MyProblems />} />
         <Route path="/problems/:id" element={<Problem />} />
+        <Route path="/problems/:id/:interviewSessionId" element={<Problem />} />
+        <Route path="/problem/:id/:interviewSessionId" element={<Problem />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/:id" element={<TakeQuiz />} />
         <Route path="/quiz/analytics" element={<QuizAnalytics />} />
@@ -221,7 +273,16 @@ const AppContent = () => {
         <Route path="/status" element={<Status />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/job-genie" element={<JobGenie />} />
         <Route path="/subscription-debug" element={<SubscriptionDebug />} />
+
+        {/* Organization Routes */}
+        <Route path="/org/setup/:token" element={<OrganizationSetup />} />
+        <Route path="/org/dashboard" element={<OrgAdminDashboard />} />
+        <Route path="/org/teamdashboard" element={<OrgAdminDashboard />} />
+        <Route path="/org/student/dashboard" element={<OrgAdminDashboard />} />
+        <Route path="/org/members" element={<OrgMemberAnalytics />} />
+        <Route path="/org/join/:token" element={<AcceptInvite />} />
 
         {/* AI Interview Routes */}
         <Route path="/ai-interview/setup" element={<InterviewSetup />} />
@@ -236,6 +297,15 @@ const AppContent = () => {
         <Route path="/ai-interview/waiting-room" element={<Navigate to="/ai-interview/setup" replace />} />
         <Route path="/ai-interview/round/:roundType" element={<Navigate to="/ai-interview/setup" replace />} />
         <Route path="/ai-interview/report" element={<Navigate to="/ai-interview/setup" replace />} />
+
+        {/* Phase 1: Legal & Compliance Routes */}
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/cookies" element={<CookiePolicy />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
+        <Route path="/acceptable-use" element={<AcceptableUsePolicy />} />
       </Routes>
       {/* Debug component - remove in production */}
       {/* <DebugUserInfo /> */}

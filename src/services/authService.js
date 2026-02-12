@@ -17,12 +17,13 @@ const authService = {
     return response.data;
   },
 
-  register: async (email, password, name, username) => {
+  register: async (email, password, name, username, accountType = "individual") => {
     const response = await axiosInstance.post(ApiRoutes.auth.register, {
       name,
       username,
       email,
       password,
+      accountType,
     });
     return response.data;
   },

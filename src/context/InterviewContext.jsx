@@ -526,28 +526,21 @@ export function InterviewProvider({ children }) {
 
     // Text to speech
     const speakText = useCallback(async (text) => {
+        if (!text || !('speechSynthesis' in window)) {
+            return { success: false, error: "Browser TTS not supported" };
+        }
+
         try {
             dispatch({ type: ActionTypes.SET_SPEAKING, payload: true });
-
-            const audioBlob = await interviewService.textToSpeech(text);
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-
-            audio.onended = () => {
-                dispatch({ type: ActionTypes.SET_SPEAKING, payload: false });
-                URL.revokeObjectURL(audioUrl);
-            };
-
-            audio.onerror = () => {
-                dispatch({ type: ActionTypes.SET_SPEAKING, payload: false });
-                URL.revokeObjectURL(audioUrl);
-            };
-
-            await audio.play();
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = () => dispatch({ type: ActionTypes.SET_SPEAKING, payload: false });
+            utterance.onerror = () => dispatch({ type: ActionTypes.SET_SPEAKING, payload: false });
+            speechSynthesis.speak(utterance);
             return { success: true };
         } catch (error) {
             dispatch({ type: ActionTypes.SET_SPEAKING, payload: false });
-            console.error('TTS Error:', error);
+            console.error('Browser TTS Error:', error);
             return { success: false, error: error.message };
         }
     }, []);

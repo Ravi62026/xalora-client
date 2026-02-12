@@ -317,7 +317,8 @@ const InterviewSetup = () => {
     companyType: 'startup',
     interviewMode: 'full',
     specificRound: '',
-    jobDescription: ''
+    jobDescription: '',
+    codingDifficulty: 'auto'
   });
   const [resumeFile, setResumeFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -378,6 +379,7 @@ const InterviewSetup = () => {
       submitData.append('position', formData.position);
       submitData.append('companyType', formData.companyType);
       submitData.append('interviewMode', formData.interviewMode);
+      submitData.append('codingDifficulty', formData.codingDifficulty);
       if (formData.specificRound) {
         submitData.append('specificRound', formData.specificRound);
       }
@@ -399,7 +401,8 @@ const InterviewSetup = () => {
           position: formData.position,
           companyType: formData.companyType,
           interviewMode: formData.interviewMode,
-          specificRound: formData.specificRound
+          specificRound: formData.specificRound,
+          codingDifficulty: formData.codingDifficulty
         }));
 
         setLoadingMessage('Success! Redirecting to waiting room...');
@@ -595,6 +598,27 @@ const InterviewSetup = () => {
                       <option value="startup" className="bg-slate-900">🚀 Startup (Speed & Innovation)</option>
                       <option value="service_based" className="bg-slate-900">🏢 Service Based (Practical & Core)</option>
                       <option value="product_based" className="bg-slate-900">💎 Product Based (Deep Tech & DSA)</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="group">
+                  <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
+                    Coding Difficulty
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.codingDifficulty}
+                      onChange={(e) => setFormData({ ...formData, codingDifficulty: e.target.value })}
+                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
+                      disabled={isLoading}
+                    >
+                      <option value="auto" className="bg-slate-900">Auto (Company Type)</option>
+                      <option value="easy" className="bg-slate-900">Easy</option>
+                      <option value="medium" className="bg-slate-900">Medium</option>
+                      <option value="hard" className="bg-slate-900">Hard</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>

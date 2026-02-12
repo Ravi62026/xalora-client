@@ -70,16 +70,17 @@ const interviewService = {
      * @param {string} roundType - The type of interview round
      * @param {number} maxQuestions - Maximum questions for this round (optional)
      */
-    getQuestion: async (sessionId, roundType, maxQuestions) => {
+    getQuestion: async (sessionId, roundType, maxQuestions, codingDifficulty) => {
         const method = "getQuestion";
         log.info(method, `Fetching question for round: ${roundType}`);
-        log.request(method, ApiRoutes.interview.question, { sessionId, roundType, maxQuestions });
+        log.request(method, ApiRoutes.interview.question, { sessionId, roundType, maxQuestions, codingDifficulty });
 
         try {
             const response = await axiosInstance.post(ApiRoutes.interview.question, {
                 sessionId,
                 roundType,
                 maxQuestions,
+                codingDifficulty,
             });
 
             const questionData = response.data?.data;
@@ -157,14 +158,13 @@ const interviewService = {
      * @param {string} answer - The candidate's answer
      * @param {number} timeRemaining - Time remaining in the round (seconds)
      */
-    submitFollowupAnswer: async (sessionId, roundType, questionId, followupId, answer, timeRemaining = 300) => {
+    submitFollowupAnswer: async (sessionId, roundType, followupQuestion, answer, timeRemaining = 300) => {
         const method = "submitFollowupAnswer";
         log.info(method, `Submitting follow-up answer for ${roundType}`);
         log.request(method, ApiRoutes.interview.followupAnswer, {
             sessionId,
             roundType,
-            questionId,
-            followupId,
+            followupQuestion,
             answerLength: answer?.length,
             timeRemaining
         });
@@ -173,8 +173,7 @@ const interviewService = {
             const response = await axiosInstance.post(ApiRoutes.interview.followupAnswer, {
                 sessionId,
                 roundType,
-                questionId,
-                followupId,
+                followupQuestion,
                 answer,
                 timeRemaining,
             });
@@ -372,6 +371,35 @@ const interviewService = {
             return response.data;
         } catch (error) {
             log.error(method, "Failed to complete round", {
+                status: error.response?.status,
+                message: error.response?.data?.message || error.message
+            });
+            throw error;
+        }
+    },
+
+    /**
+     * Complete a coding question (problem page)
+     * @param {string} sessionId
+     * @param {string} problemId
+     * @param {string} verdict
+     */
+    completeCodingQuestion: async (sessionId, problemId, verdict = "Submitted") => {
+        const method = "completeCodingQuestion";
+        log.info(method, "Completing coding question");
+        log.request(method, ApiRoutes.interview.completeCodingQuestion, { sessionId, problemId, verdict });
+
+        try {
+            const response = await axiosInstance.post(ApiRoutes.interview.completeCodingQuestion, {
+                sessionId,
+                problemId,
+                verdict
+            });
+            log.success(method, "Coding question completed", response.data?.data);
+            log.response(method, response.data);
+            return response.data;
+        } catch (error) {
+            log.error(method, "Failed to complete coding question", {
                 status: error.response?.status,
                 message: error.response?.data?.message || error.message
             });

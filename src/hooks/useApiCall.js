@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 
 const useApiCall = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");``
+    const [error, setError] = useState("");
 
     const execute = useCallback(async (apiFunction, onSuccess, onError) => {
         setLoading(true);
