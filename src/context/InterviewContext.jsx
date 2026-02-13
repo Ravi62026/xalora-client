@@ -6,7 +6,7 @@ const initialState = {
     // Session
     sessionId: null,
     status: 'idle', // idle, loading, active, completed, error
-    error: null,
+    error: null, 
 
     // Candidate info
     candidateInfo: null,

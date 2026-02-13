@@ -1,22 +1,7 @@
 import axios from "axios";
 
-const isVercel =
-  window.location.hostname.includes("vercel") ||
-  window.location.hostname.includes("xalora-client");
-const isCustomDomain = window.location.hostname.includes("xalora.one");
-
-let baseURL = import.meta.env.VITE_API_URL || "";
-
-if (!baseURL && (isVercel || isCustomDomain || import.meta.env.MODE === "production")) {
-  if (isCustomDomain) {
-    baseURL = "https://hireveu-server-758139154845.asia-south1.run.app";
-  } else {
-    baseURL = "";
-  }
-} else if (!baseURL) {
-  baseURL = "http://localhost:8000";
-}
-
+// Simple: Use environment variables, fallback to localhost in dev
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const compilerURL = import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
 
 const AUTH_EXCLUDED_ENDPOINTS = [
@@ -49,7 +34,23 @@ const PUBLIC_PATHS = new Set([
 let isRefreshing = false;
 let refreshSubscribers = [];
 
+// ── Token Helpers ──────────────────────────────────────────────────────
+export const setTokens = (accessToken, refreshToken) => {
+  if (accessToken) localStorage.setItem("accessToken", accessToken);
+  if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
+};
+
+export const getAccessToken = () => localStorage.getItem("accessToken");
+export const getRefreshToken = () => localStorage.getItem("refreshToken");
+
+export const clearTokens = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+};
+
+// ── Auth State Helpers ─────────────────────────────────────────────────
 const clearAuthState = () => {
+  clearTokens();
   if (window.__REDUX_STORE__) {
     window.__REDUX_STORE__.dispatch({ type: "user/forceLogout" });
   }
@@ -70,25 +71,21 @@ const redirectToLoginIfNeeded = () => {
   }
 };
 
-const notifyRefreshSuccess = () => {
-  refreshSubscribers.forEach((subscriber) => subscriber.resolve());
+const notifyRefreshSuccess = (newAccessToken) => {
+  refreshSubscribers.forEach((subscriber) => subscriber.resolve(newAccessToken));
 };
 
 const notifyRefreshFailure = (error) => {
   refreshSubscribers.forEach((subscriber) => subscriber.reject(error));
 };
 
+// ── Axios Instance ─────────────────────────────────────────────────────
 const axiosInstance = axios.create({
   baseURL,
   timeout: 120000,
-  withCredentials: true,
 });
 
-const getCsrfToken = () => {
-  const match = document.cookie.match(/(?:^|; )XSRF-TOKEN=([^;]*)/);
-  return match?.[1] ? decodeURIComponent(match[1]) : "";
-};
-
+// Request interceptor: Attach Authorization header
 axiosInstance.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
@@ -98,10 +95,10 @@ axiosInstance.interceptors.request.use(
     }
     config.headers.Accept = "application/json";
 
-    // Attach CSRF token for cookie-based auth
-    const csrfToken = getCsrfToken();
-    if (csrfToken) {
-      config.headers["x-xsrf-token"] = csrfToken;
+    // Attach access token from localStorage
+    const token = getAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -109,6 +106,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Response interceptor: Handle 401 and auto-refresh
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -123,7 +121,10 @@ axiosInstance.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           refreshSubscribers.push({
-            resolve: () => resolve(axiosInstance(originalRequest)),
+            resolve: (newToken) => {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              resolve(axiosInstance(originalRequest));
+            },
             reject,
           });
         });
@@ -133,23 +134,24 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshClient = axios.create({
-          baseURL,
-          timeout: 120000,
-          withCredentials: true,
-        });
-
-        const csrfToken = getCsrfToken();
-        if (csrfToken) {
-          refreshClient.defaults.headers.common["x-xsrf-token"] = csrfToken;
+        const refreshToken = getRefreshToken();
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
         }
 
-        await refreshClient.post(
-          "/api/v1/users/refresh-token",
-          {}
+        const refreshResponse = await axios.post(
+          `${baseURL}/api/v1/users/refresh-token`,
+          { refreshToken },
+          { timeout: 120000 }
         );
 
-        notifyRefreshSuccess();
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          refreshResponse.data.data;
+
+        setTokens(newAccessToken, newRefreshToken);
+
+        notifyRefreshSuccess(newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         notifyRefreshFailure(refreshError);

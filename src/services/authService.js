@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/axios";
+import axiosInstance, { setTokens, clearTokens } from "../utils/axios";
 import ApiRoutes from "../routes/routes";
 
 const authService = {
@@ -7,6 +7,10 @@ const authService = {
       email,
       password,
     });
+    // Store tokens from response
+    if (response.data?.data?.accessToken) {
+      setTokens(response.data.data.accessToken, response.data.data.refreshToken);
+    }
     return response.data;
   },
 
@@ -14,6 +18,10 @@ const authService = {
     const response = await axiosInstance.post(ApiRoutes.auth.googleLogin, {
       tokenId,
     });
+    // Store tokens from response
+    if (response.data?.data?.accessToken) {
+      setTokens(response.data.data.accessToken, response.data.data.refreshToken);
+    }
     return response.data;
   },
 
@@ -29,8 +37,13 @@ const authService = {
   },
 
   logout: async () => {
-    const response = await axiosInstance.post(ApiRoutes.auth.logout);
-    return response.data;
+    try {
+      const response = await axiosInstance.post(ApiRoutes.auth.logout);
+      return response.data;
+    } finally {
+      // Always clear tokens, even if API call fails
+      clearTokens();
+    }
   },
 
   getUser: async () => {

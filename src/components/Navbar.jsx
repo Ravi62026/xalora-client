@@ -194,33 +194,46 @@ const Navbar = () => {
 
                                 {/* Profile Dropdown Menu */}
                                 {isProfileMenuOpen && (
-                                    <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                                        <Link
-                                            to="/profile"
-                                            className="block px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200"
+                                    <>
+                                        <div
+                                            className="fixed inset-0 z-40"
                                             onClick={closeProfileMenu}
-                                        >
-                                            Profile
-                                        </Link>
-                                        {/* Display JBP Coins in dropdown if available */}
-                                        {user && typeof user.jbpCoins === 'number' && (
-                                            <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
-                                                <div className="flex items-center justify-between">
-                                                    <span>JBP Coins:</span>
-                                                    <span className="font-semibold flex items-center">
-                                                        <span className="mr-1">🪙</span>
-                                                        {user.jbpCoins}
-                                                    </span>
+                                        ></div>
+                                        <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                            <Link
+                                                to="/profile"
+                                                className="block px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    closeProfileMenu();
+                                                }}
+                                            >
+                                                Profile
+                                            </Link>
+                                            {/* Display JBP Coins in dropdown if available */}
+                                            {user && typeof user.jbpCoins === 'number' && (
+                                                <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
+                                                    <div className="flex items-center justify-between">
+                                                        <span>JBP Coins:</span>
+                                                        <span className="font-semibold flex items-center">
+                                                            <span className="mr-1">🪙</span>
+                                                            {user.jbpCoins}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
-                                        <button
-                                            onClick={handleLogout}
-                                            className="block w-full text-left px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200"
-                                        >
-                                            Logout
-                                        </button>
-                                    </div>
+                                            )}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleLogout();
+                                                    closeProfileMenu();
+                                                }}
+                                                className="block w-full text-left px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                         ) : (
@@ -380,7 +393,7 @@ const Navbar = () => {
                             <div className="pt-6 pb-3 border-t border-emerald-700/30 mt-4">
                                 {isAuthenticated ? (
                                     <div className="space-y-4">
-                                        <div className="relative">
+                                        <div className="relative z-50">
                                             <button
                                                 onClick={toggleProfileMenu}
                                                 className="flex items-center space-x-4 px-4 py-4 rounded-xl text-base font-medium text-emerald-100 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 w-full text-left focus:outline-none"
@@ -420,39 +433,47 @@ const Navbar = () => {
 
                                             {/* Mobile Profile Dropdown Menu */}
                                             {isProfileMenuOpen && (
-                                                <div className="mt-2 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 animate-in fade-in slide-in-from-top-2 duration-200">
-                                                    <Link
-                                                        to="/profile"
-                                                        className="block px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200"
-                                                        onClick={() => {
-                                                            closeProfileMenu();
-                                                            closeMobileMenu();
-                                                        }}
-                                                    >
-                                                        Profile
-                                                    </Link>
-                                                    {/* Display JBP Coins in dropdown if available */}
-                                                    {user && typeof user.jbpCoins === 'number' && (
-                                                        <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
-                                                            <div className="flex items-center justify-between">
-                                                                <span>JBP Coins:</span>
-                                                                <span className="font-semibold flex items-center">
-                                                                    <span className="mr-1">🪙</span>
-                                                                    {user.jbpCoins}
-                                                                </span>
+                                                <>
+                                                    <div
+                                                        className="fixed inset-0 z-40"
+                                                        onClick={closeProfileMenu}
+                                                    ></div>
+                                                    <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                                                        <Link
+                                                            to="/profile"
+                                                            className="block px-4 py-3 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200 cursor-pointer"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                closeProfileMenu();
+                                                                closeMobileMenu();
+                                                            }}
+                                                        >
+                                                            Profile
+                                                        </Link>
+                                                        {/* Display JBP Coins in dropdown if available */}
+                                                        {user && typeof user.jbpCoins === 'number' && (
+                                                            <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span>JBP Coins:</span>
+                                                                    <span className="font-semibold flex items-center">
+                                                                        <span className="mr-1">🪙</span>
+                                                                        {user.jbpCoins}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                    <button
-                                                        onClick={() => {
-                                                            handleLogout();
-                                                            closeMobileMenu();
-                                                        }}
-                                                        className="block w-full text-left px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200"
-                                                    >
-                                                        Logout
-                                                    </button>
-                                                </div>
+                                                        )}
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleLogout();
+                                                                closeProfileMenu();
+                                                            }}
+                                                            className="block w-full text-left px-4 py-3 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200 cursor-pointer"
+                                                        >
+                                                            Logout
+                                                        </button>
+                                                    </div>
+                                                </>
                                             )}
                                         </div>
                                     </div>
@@ -481,13 +502,6 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-            {/* Close profile menu when clicking outside */}
-            {isProfileMenuOpen && (
-                <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setIsProfileMenuOpen(false)}
-                ></div>
-            )}
         </nav>
     );
 };

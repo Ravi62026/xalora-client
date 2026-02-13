@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
-import { debugCookies } from "../../utils/cookieDebug";
+import { clearTokens, getAccessToken } from "../../utils/axios";
 
 let lastAuthCheck = 0;
 const AUTH_CHECK_INTERVAL = 5000;
-
-const persistUser = () => {};
-const clearPersistedUser = () => {};
 
 export const initializeAuth = createAsyncThunk(
   "user/initializeAuth",
@@ -14,17 +11,21 @@ export const initializeAuth = createAsyncThunk(
     const now = Date.now();
     const { user } = getState().user;
 
+    // If user is already loaded and we checked recently, skip
     if (user?.email && now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
       return user;
     }
 
     lastAuthCheck = now;
-    debugCookies();
+
+    // No token = not authenticated
+    if (!getAccessToken()) {
+      return null;
+    }
 
     try {
       const response = await authService.getUser();
       if (response.success && response.data) {
-        persistUser(response.data);
         return response.data;
       }
     } catch (error) {
@@ -34,7 +35,6 @@ export const initializeAuth = createAsyncThunk(
           if (refreshResponse.success) {
             const retryResponse = await authService.getUser();
             if (retryResponse.success && retryResponse.data) {
-              persistUser(retryResponse.data);
               return retryResponse.data;
             }
           }
@@ -44,7 +44,7 @@ export const initializeAuth = createAsyncThunk(
       }
     }
 
-    clearPersistedUser();
+    clearTokens();
     return null;
   }
 );
@@ -56,7 +56,6 @@ export const loginUser = createAsyncThunk(
       const response = await authService.login(email, password);
 
       if (response.success) {
-        persistUser(response.data?.user);
         return response.data;
       }
 
@@ -101,7 +100,6 @@ export const googleLoginUser = createAsyncThunk(
       const response = await authService.googleLogin(tokenId);
 
       if (response.success) {
-        persistUser(response.data?.user);
         return response.data;
       }
 
@@ -118,7 +116,7 @@ export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
   try {
     await authService.logout();
   } catch (error) {
-    // Local state is cleared regardless of API errors.
+    // authService.logout() already clears tokens in its finally block
   }
   return null;
 });
@@ -145,7 +143,6 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.error = null;
       state.isInitializing = false;
-      persistUser(action.payload);
     },
     loginFailure: (state, action) => {
       state.loading = false;
@@ -153,14 +150,14 @@ const userSlice = createSlice({
       state.user = null;
       state.error = action.payload;
       state.isInitializing = false;
-      clearPersistedUser();
+      clearTokens();
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
       state.error = null;
       state.loading = false;
-      clearPersistedUser();
+      clearTokens();
     },
     clearError: (state) => {
       state.error = null;
@@ -169,7 +166,6 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
       state.isInitializing = false;
-      persistUser(action.payload);
     },
     initializeComplete: (state) => {
       state.isInitializing = false;
@@ -180,7 +176,7 @@ const userSlice = createSlice({
       state.error = null;
       state.loading = false;
       state.isInitializing = false;
-      clearPersistedUser();
+      clearTokens();
     },
   },
   extraReducers: (builder) => {
@@ -254,14 +250,12 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = null;
-        clearPersistedUser();
       })
       .addCase(logoutUser.rejected, (state) => {
         state.loading = false;
         state.isAuthenticated = false;
         state.user = null;
         state.error = null;
-        clearPersistedUser();
       });
   },
 });

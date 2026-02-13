@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/axios";
+import axiosInstance, { setTokens } from "../utils/axios";
 import ApiRoutes from "../routes/routes";
 
 const organizationService = {
@@ -62,6 +62,10 @@ const organizationService = {
   // Public
   acceptInvite: async (token, data) => {
     const response = await axiosInstance.post(ApiRoutes.organization.acceptInvite(token), data);
+    // Store tokens from response (backend now returns them in body)
+    if (response.data?.data?.accessToken) {
+      setTokens(response.data.data.accessToken, response.data.data.refreshToken);
+    }
     return response.data;
   },
 
