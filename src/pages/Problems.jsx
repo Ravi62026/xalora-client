@@ -218,9 +218,8 @@ const Problems = () => {
             </div>
 
             <div
-              className={`grid grid-cols-1 gap-3 md:grid-cols-2 ${
-                isAuthenticated ? "xl:grid-cols-8" : "xl:grid-cols-7"
-              }`}
+              className={`grid grid-cols-1 gap-3 md:grid-cols-2 ${isAuthenticated ? "xl:grid-cols-8" : "xl:grid-cols-7"
+                }`}
             >
               <div className="xl:col-span-2">
                 <label className="mb-1 block text-xs text-slate-300">Search</label>
@@ -398,21 +397,20 @@ const Problems = () => {
 
                       <div className="text-right">
                         <p
-                          className={`text-sm font-semibold ${
-                            isSolved
+                          className={`text-sm font-semibold ${isSolved
                               ? "text-cyan-300"
                               : problem?.userStatus === "Attempted"
-                              ? "text-amber-300"
-                              : "text-slate-400"
-                          }`}
+                                ? "text-amber-300"
+                                : "text-slate-400"
+                            }`}
                         >
                           {isSolved
                             ? "Solved"
                             : problem?.userStatus === "Attempted"
-                            ? "Attempted"
-                            : isAuthenticated
-                            ? "Unsolved"
-                            : "Login to track"}
+                              ? "Attempted"
+                              : isAuthenticated
+                                ? "Unsolved"
+                                : "Login to track"}
                         </p>
                         <p className="mt-1 text-xs text-slate-500 group-hover:text-slate-300">
                           Open problem
@@ -451,11 +449,10 @@ const Problems = () => {
                 <button
                   key={pageNum}
                   onClick={() => setPagination((prev) => ({ ...prev, currentPage: pageNum }))}
-                  className={`rounded-lg border px-3 py-2 text-sm transition ${
-                    pageNum === pagination.currentPage
+                  className={`rounded-lg border px-3 py-2 text-sm transition ${pageNum === pagination.currentPage
                       ? "border-cyan-400/60 bg-cyan-500/20 text-cyan-100"
                       : "border-white/15 bg-white/5 text-white hover:bg-white/10"
-                  }`}
+                    }`}
                 >
                   {pageNum}
                 </button>
