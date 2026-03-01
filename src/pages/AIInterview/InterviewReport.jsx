@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Download, Home, RotateCcw, TrendingUp, TrendingDown, Award, MessageCircle, Code, Zap, Loader2, AlertCircle, Share2, CheckCircle, XCircle, User, Briefcase, Clock, Calendar } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Download, Home, RotateCcw, TrendingUp, TrendingDown, Award, MessageCircle, Code, Zap, Loader2, AlertCircle, Share2, CheckCircle, XCircle, User, Briefcase, Clock, Calendar, Shield, ShieldAlert, Monitor, Eye } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
 import jsPDF from 'jspdf';
@@ -16,8 +16,12 @@ const InterviewReport = () => {
   const [sessionData, setSessionData] = useState(null);
   const [activeRound, setActiveRound] = useState(0); // For round tabs
 
-  // Fetch report on mount
+  // Fetch report on mount (with guard to prevent duplicate calls)
+  const reportFetchedRef = useRef(false);
   useEffect(() => {
+    if (reportFetchedRef.current) return; // Prevent duplicate calls from StrictMode/re-renders
+    reportFetchedRef.current = true;
+
     const fetchReport = async () => {
       // Use sessionId from URL
       const savedData = localStorage.getItem('interviewSessionData');
@@ -308,6 +312,41 @@ const InterviewReport = () => {
       doc.text('No recommendations available.', margin + 8, yPos + 12);
     }
     yPos += 40;
+
+    // Proctoring / Interview Integrity
+    if (reportData.proctoring) {
+      sectionTitle('Interview Integrity', reportData.proctoring.terminatedForCheating ? [239, 68, 68] : [16, 185, 129]);
+      card(42);
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 41, 59);
+      doc.text('Integrity Score:', margin + 8, yPos + 11);
+      doc.setTextColor(
+        reportData.proctoring.integrityScore >= 80 ? 16 : reportData.proctoring.integrityScore >= 50 ? 234 : 239,
+        reportData.proctoring.integrityScore >= 80 ? 185 : reportData.proctoring.integrityScore >= 50 ? 179 : 68,
+        reportData.proctoring.integrityScore >= 80 ? 129 : reportData.proctoring.integrityScore >= 50 ? 8 : 68
+      );
+      doc.text(`${reportData.proctoring.integrityScore}/100`, margin + 52, yPos + 11);
+
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(71, 85, 105);
+      doc.text(`Tab Switches: ${reportData.proctoring.tabSwitchCount}`, margin + 8, yPos + 21);
+      doc.text(`Warnings: ${reportData.proctoring.warningsIssued}/3`, margin + 60, yPos + 21);
+      doc.text(`Screen Share: ${reportData.proctoring.screenShareUsed ? 'Yes' : 'No'}`, margin + 100, yPos + 21);
+
+      if (reportData.proctoring.terminatedForCheating) {
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(239, 68, 68);
+        doc.text('⚠ Interview was terminated due to repeated suspicious activity.', margin + 8, yPos + 33);
+      } else if (reportData.proctoring.tabSwitchCount === 0) {
+        doc.setTextColor(16, 185, 129);
+        doc.text('✓ No suspicious activity detected.', margin + 8, yPos + 33);
+      } else {
+        doc.setTextColor(234, 179, 8);
+        doc.text(`⚠ ${reportData.proctoring.tabSwitchCount} tab switch(es) detected during the interview.`, margin + 8, yPos + 33);
+      }
+      yPos += 50;
+    }
 
     // Footer
     const totalPages = doc.internal.getNumberOfPages();
@@ -664,6 +703,124 @@ const InterviewReport = () => {
             <div className="bg-slate-800/50 rounded-2xl p-8 mb-8 border border-slate-700">
               <h2 className="text-2xl font-bold text-white mb-6">Overall Analysis</h2>
               <RoundAnalysis analysis={reportData.overallAnalysis} />
+            </div>
+          )}
+
+          {/* Proctoring / Interview Integrity */}
+          {reportData.proctoring && (
+            <div className={`rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 border ${
+              reportData.proctoring.terminatedForCheating
+                ? 'bg-gradient-to-br from-red-900/40 to-orange-900/30 border-red-600/40'
+                : reportData.proctoring.tabSwitchCount > 0
+                  ? 'bg-gradient-to-br from-yellow-900/30 to-orange-900/20 border-yellow-600/30'
+                  : 'bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border-emerald-600/30'
+            }`}>
+              <div className="flex items-center gap-3 mb-6">
+                {reportData.proctoring.terminatedForCheating ? (
+                  <ShieldAlert className="w-6 h-6 text-red-400" />
+                ) : reportData.proctoring.tabSwitchCount > 0 ? (
+                  <ShieldAlert className="w-6 h-6 text-yellow-400" />
+                ) : (
+                  <Shield className="w-6 h-6 text-emerald-400" />
+                )}
+                <h2 className={`text-xl sm:text-2xl font-bold ${
+                  reportData.proctoring.terminatedForCheating ? 'text-red-400' :
+                  reportData.proctoring.tabSwitchCount > 0 ? 'text-yellow-400' : 'text-emerald-400'
+                }`}>
+                  Interview Integrity
+                </h2>
+                {reportData.proctoring.terminatedForCheating && (
+                  <span className="ml-auto rounded-full bg-red-500/20 border border-red-500/40 px-3 py-1 text-xs font-semibold text-red-300">
+                    TERMINATED
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                {/* Integrity Score */}
+                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Integrity Score</p>
+                  <p className={`mt-2 text-3xl font-bold ${
+                    reportData.proctoring.integrityScore >= 80 ? 'text-emerald-400' :
+                    reportData.proctoring.integrityScore >= 50 ? 'text-yellow-400' : 'text-red-400'
+                  }`}>
+                    {reportData.proctoring.integrityScore}/100
+                  </p>
+                </div>
+
+                {/* Tab Switches */}
+                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Tab Switches</p>
+                  <p className={`mt-2 text-3xl font-bold ${reportData.proctoring.tabSwitchCount > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                    {reportData.proctoring.tabSwitchCount}
+                  </p>
+                </div>
+
+                {/* Warnings */}
+                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Warnings Issued</p>
+                  <p className={`mt-2 text-3xl font-bold ${reportData.proctoring.warningsIssued > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                    {reportData.proctoring.warningsIssued}/3
+                  </p>
+                </div>
+
+                {/* Screen Share */}
+                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Screen Share</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Monitor className={`h-5 w-5 ${reportData.proctoring.screenShareUsed ? 'text-emerald-400' : 'text-slate-500'}`} />
+                    <span className={`text-sm font-medium ${reportData.proctoring.screenShareUsed ? 'text-emerald-300' : 'text-slate-500'}`}>
+                      {reportData.proctoring.screenShareUsed ? 'Used' : 'Not Used'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Violation Timeline */}
+              {reportData.proctoring.violations && reportData.proctoring.violations.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                    <Eye className="w-4 h-4" />
+                    Violation Timeline
+                  </h3>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {reportData.proctoring.violations.map((v, idx) => (
+                      <div key={idx} className="flex items-center gap-3 rounded-lg bg-slate-800/40 px-4 py-2 border border-slate-700/30">
+                        <span className="flex-shrink-0 h-2 w-2 rounded-full bg-red-400"></span>
+                        <span className="text-xs text-slate-400 font-mono">
+                          {new Date(v.timestamp).toLocaleTimeString()}
+                        </span>
+                        <span className="text-xs text-slate-300 capitalize">
+                          {v.type?.replace(/_/g, ' ')}
+                        </span>
+                        {v.details && (
+                          <span className="text-xs text-slate-500 truncate ml-auto">{v.details}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Clean record message */}
+              {reportData.proctoring.tabSwitchCount === 0 && !reportData.proctoring.terminatedForCheating && (
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-3">
+                  <Shield className="h-5 w-5 text-emerald-400" />
+                  <p className="text-sm text-emerald-200">
+                    No suspicious activity detected. Candidate maintained interview integrity throughout the session.
+                  </p>
+                </div>
+              )}
+
+              {/* Terminated message */}
+              {reportData.proctoring.terminatedForCheating && (
+                <div className="mt-4 flex items-center gap-3 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
+                  <ShieldAlert className="h-5 w-5 text-red-400" />
+                  <p className="text-sm text-red-200">
+                    Interview was automatically terminated due to repeated tab switching ({reportData.proctoring.warningsIssued} warnings exceeded the limit). Results may not accurately reflect candidate ability.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

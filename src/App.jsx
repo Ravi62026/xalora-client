@@ -77,8 +77,7 @@ import {
 } from "./pages";
 import DebugUserInfo from "./components/DebugUserInfo";
 import { initializeAuth } from "./store/slices/userSlice";
-import SplashCursor from "./components/SplashCursor";
-import CustomCursor from "./components/CustomCursor";
+
 // Phase 1: Legal & Compliance Components
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
@@ -197,10 +196,6 @@ const AppContent = () => {
 
   return (
     <>
-      <SplashCursor />
-      <CustomCursor />
-      {/* {showHomeCursorEffects && <SplashCursor />} */}
-      {/* {showHomeCursorEffects && <CustomCursor />} */}
       <CookieConsentBanner />
       <Routes>
         <Route path="/" element={<Home />} />

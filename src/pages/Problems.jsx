@@ -78,6 +78,7 @@ const Problems = () => {
           ...(filters.company !== "all" && { company: filters.company }),
           ...(filters.search && { search: filters.search }),
           ...(filters.tags && { tags: filters.tags }),
+          ...(isAuthenticated && filters.solvedStatus !== "all" && { status: filters.solvedStatus === "solved" ? "Solved" : "unsolved" }),
         };
 
         const response = await problemService.getAllProblems(params);
@@ -138,6 +139,7 @@ const Problems = () => {
     filters.company,
     filters.difficulty,
     filters.search,
+    filters.solvedStatus,
     filters.tags,
     isAuthenticated,
     pagination.currentPage,
@@ -159,14 +161,8 @@ const Problems = () => {
     [rawProblems]
   );
 
-  const problems = useMemo(() => {
-    if (!isAuthenticated || filters.solvedStatus === "all") return rawProblems;
-
-    return rawProblems.filter((problem) => {
-      const solved = problem?.userStatus === "Solved" || solvedLocalSet.has(problem?._id);
-      return filters.solvedStatus === "solved" ? solved : !solved;
-    });
-  }, [filters.solvedStatus, isAuthenticated, rawProblems, solvedLocalSet]);
+  // Status filtering is now handled server-side, so just pass through
+  const problems = rawProblems;
 
   const summaryText = useMemo(() => {
     const total = pagination.totalProblems || 0;
@@ -354,8 +350,8 @@ const Problems = () => {
           ) : (
             <div className="space-y-3">
               {problems.map((problem, index) => {
-                const isSolved =
-                  problem?.userStatus === "Solved" || solvedLocalSet.has(problem?._id);
+                const isSolved = isAuthenticated &&
+                  (problem?.userStatus === "Solved" || solvedLocalSet.has(problem?._id));
 
                 return (
                   <Link

@@ -493,7 +493,7 @@ const Home = () => {
               <p className="text-gray-400">
                 Free forever • No credit card required
               </p>
-              
+
             </div>
           </motion.div>
         </div>

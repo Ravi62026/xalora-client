@@ -1,20 +1,45 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Camera, Mic, Volume2, CheckCircle, XCircle, AlertCircle, User, Briefcase, Sparkles, Clock, FileText, ArrowLeft } from 'lucide-react';
+import { Camera, Mic, Volume2, CheckCircle, XCircle, AlertCircle, User, Briefcase, Sparkles, Clock, FileText, ArrowLeft, Monitor, Shield } from 'lucide-react';
 import { Layout } from '../../components';
+import interviewService from '../../services/interviewService';
 
 const WaitingRoom = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();  // Get sessionId from URL
   const [permissions, setPermissions] = useState({
-    camera: 'checking',
-    microphone: 'checking',
+    camera: 'pending',
+    microphone: 'pending',
     speaker: 'granted' // Assume speaker works if audio context is available
   });
   const [stream, setStream] = useState(null);
+  const [_screenShareStream, setScreenShareStream] = useState(null);
   const [sessionData, setSessionData] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [isStarting, setIsStarting] = useState(false);
+  const [hasRequestedPermissions, setHasRequestedPermissions] = useState(false);
+  const [screenShareStatus, setScreenShareStatus] = useState('pending'); // pending | granted | denied
+  const [screenShareError, setScreenShareError] = useState('');
+
+  // Check if session is already completed — redirect to report
+  useEffect(() => {
+    const checkSession = async () => {
+      if (!sessionId) return;
+      try {
+        const response = await interviewService.getSessionStatus(sessionId);
+        if (response?.data?.status === 'completed' || response?.data?.hasReport) {
+          console.log('[WaitingRoom] Session already completed, redirecting to report');
+          navigate(`/ai-interview/${sessionId}/report`, { replace: true });
+        }
+      } catch (err) {
+        if (err.response?.status === 404) {
+          navigate('/dashboard', { replace: true });
+        }
+      }
+    };
+    checkSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId]);
 
   // Load session data from localStorage
   useEffect(() => {
@@ -33,15 +58,18 @@ const WaitingRoom = () => {
   }, [navigate]);
 
   useEffect(() => {
-    checkPermissions();
     return () => {
+      // Cleanup camera stream when unmounting (screen share stream is kept alive for InterviewRound)
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
+  }, [stream]);
 
-  const checkPermissions = async () => {
+  const requestPermissions = async () => {
+    setHasRequestedPermissions(true);
+    setPermissions({ camera: 'checking', microphone: 'checking', speaker: 'granted' });
+
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -74,10 +102,74 @@ const WaitingRoom = () => {
     }
   };
 
+  const requestScreenShare = async () => {
+    try {
+      setScreenShareError('');
+      const displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          cursor: 'always',
+          displaySurface: 'monitor'
+        },
+        audio: false,
+        preferCurrentTab: false,
+        selfBrowserSurface: 'exclude',
+        systemAudio: 'exclude',
+        surfaceSwitching: 'exclude',
+        monitorTypeSurfaces: 'include'
+      });
+
+      // Check if user selected entire screen (monitor)
+      const videoTrack = displayStream.getVideoTracks()[0];
+      const settings = videoTrack.getSettings();
+      if (settings.displaySurface && settings.displaySurface !== 'monitor') {
+        displayStream.getTracks().forEach(track => track.stop());
+        setScreenShareError('Please share your entire screen, not a specific window or tab.');
+        setScreenShareStatus('denied');
+        return;
+      }
+
+      setScreenShareStream(displayStream);
+      setScreenShareStatus('granted');
+      setScreenShareError('');
+
+      // Enter fullscreen mode for proctoring
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        }
+      } catch (fsErr) {
+        console.warn('Fullscreen request failed:', fsErr);
+      }
+
+      // Store in window so InterviewRound can pick it up
+      window.__interviewScreenShare = displayStream;
+
+      // Listen for user stopping screen share
+      videoTrack.onended = () => {
+        setScreenShareStream(null);
+        setScreenShareStatus('denied');
+        setScreenShareError('Screen share was stopped. Please share again before starting.');
+        window.__interviewScreenShare = null;
+      };
+    } catch (error) {
+      console.error('Screen share error:', error);
+      if (error.name === 'NotAllowedError') {
+        setScreenShareError('Screen share was cancelled. Please try again.');
+      } else {
+        setScreenShareError('Failed to start screen share. Please try again.');
+      }
+      setScreenShareStatus('denied');
+    }
+  };
+
   const startInterview = () => {
     // Microphone is required, camera is optional
     if (permissions.microphone !== 'granted') {
       alert('Microphone access is required for the interview.');
+      return;
+    }
+    if (screenShareStatus !== 'granted') {
+      alert('Screen sharing is required for the interview.');
       return;
     }
 
@@ -106,9 +198,10 @@ const WaitingRoom = () => {
   };
 
   const getStatusBadge = (status) => {
-    if (status === 'granted') return <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded">Ready</span>;
-    if (status === 'denied') return <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded">Denied</span>;
-    return <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">Checking...</span>;
+    if (status === 'granted') return <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded border border-green-500/20">Ready</span>;
+    if (status === 'denied') return <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded border border-red-500/20">Blocked</span>;
+    if (status === 'pending') return <span className="text-xs px-2 py-0.5 bg-gray-500/20 text-gray-400 rounded border border-gray-500/20">Action Required</span>;
+    return <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/20">Checking...</span>;
   };
 
   const ROUND_CONFIG_MAP = {
@@ -116,7 +209,10 @@ const WaitingRoom = () => {
     'technical': 'Technical',
     'coding': 'Coding Challenge',
     'system_design': 'System Design',
-    'hr': 'HR'
+    'hr': 'HR',
+    'behavioral': 'HR',
+    'resume_deep_dive': 'Resume Deep Dive',
+    'jd_based': 'JD Based'
   };
 
   const roundInfo = [
@@ -125,6 +221,8 @@ const WaitingRoom = () => {
     { name: 'Coding Challenge', duration: '15-20 min', color: 'emerald', questions: '3' },
     { name: 'System Design', duration: '10-15 min', color: 'orange', questions: '1-2' },
     { name: 'HR', duration: '5-8 min', color: 'pink', questions: '3-4' },
+    { name: 'Resume Deep Dive', duration: '10-12 min', color: 'cyan', questions: '5-7' },
+    { name: 'JD Based', duration: '10-12 min', color: 'amber', questions: '5-7' },
   ];
 
   return (
@@ -159,8 +257,51 @@ const WaitingRoom = () => {
                 <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
                 Camera Preview
               </h2>
-              <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden">
-                {stream && permissions.camera === 'granted' ? (
+              <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-inner border border-gray-700/50">
+                {!hasRequestedPermissions ? (
+                  // Initial Professional Prompt Before Requesting Use
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 px-6 text-center z-10">
+                    <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 border border-blue-500/20">
+                      <Camera className="w-8 h-8 text-blue-400" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Equipment Check</h3>
+                    <p className="text-sm text-gray-400 mb-6 max-w-sm leading-relaxed">
+                      We need access to your camera and microphone to conduct the AI interview. Your privacy is protected.
+                    </p>
+                    <button
+                      onClick={requestPermissions}
+                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 flex items-center gap-2 transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Allow Access
+                    </button>
+                  </div>
+                ) : permissions.camera === 'checking' ? (
+                  // Checking State (waiting for browser prompt)
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                    <div className="w-10 h-10 border-3 border-blue-500/30 border-t-blue-500 border-r-blue-500 rounded-full animate-spin mb-4"></div>
+                    <p className="text-gray-300 font-medium">Waiting for permission...</p>
+                    <p className="text-xs text-gray-500 mt-2">Please click 'Allow' in your browser popup.</p>
+                  </div>
+                ) : permissions.camera === 'denied' && permissions.microphone === 'denied' ? (
+                  // Completely Blocked State
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 px-6 text-center z-10">
+                    <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4 border border-red-500/20">
+                      <XCircle className="w-8 h-8 text-red-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Access Blocked</h3>
+                    <p className="text-sm text-gray-400 mb-6 max-w-sm line-clamp-3">
+                      Your browser is blocking access. Please click the lock icon <span className="inline-block align-middle mx-1">🔒</span> in the left of your URL bar to allow camera and microphone, then refresh.
+                    </p>
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-6 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-xl transition-all"
+                    >
+                      I've allowed it, refresh page
+                    </button>
+                  </div>
+                ) : stream && permissions.camera === 'granted' ? (
+                  // Success stream
                   <video
                     autoPlay
                     muted
@@ -168,14 +309,26 @@ const WaitingRoom = () => {
                     ref={(video) => {
                       if (video && stream) video.srcObject = stream;
                     }}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transform scale-x-[-1]" // Mirrored for better UX
                   />
                 ) : (
+                  // Audio-only or gracefully degraded state
                   <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
                     <div className="text-center text-gray-400 px-4">
-                      <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 opacity-50" />
-                      <p className="text-sm sm:text-base">{permissions.camera === 'denied' ? 'Camera access denied' : 'Requesting camera access...'}</p>
-                      <p className="text-xs sm:text-sm text-gray-500 mt-2">(Camera is optional)</p>
+                      {permissions.microphone === 'granted' ? (
+                        <>
+                          <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mb-4 mx-auto border border-yellow-500/20">
+                            <Mic className="w-8 h-8 text-yellow-500" />
+                          </div>
+                          <p className="text-white font-medium text-base">Audio Only Mode</p>
+                          <p className="text-sm text-gray-400 mt-2">Camera access is denied or unavailable.</p>
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 opacity-30" />
+                          <p className="text-sm sm:text-base text-gray-500">Camera off</p>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
@@ -220,6 +373,36 @@ const WaitingRoom = () => {
                   </div>
                   {getStatusIcon(permissions.speaker)}
                 </div>
+
+                {/* Screen Share */}
+                <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                    <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Screen Share</span>
+                    {getStatusBadge(screenShareStatus)}
+                    {screenShareStatus !== 'granted' && (
+                      <span className="text-xs text-red-400 hidden sm:inline">(Required)</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {screenShareStatus !== 'granted' && permissions.microphone === 'granted' && (
+                      <button
+                        onClick={requestScreenShare}
+                        className="px-3 py-1 text-xs font-medium rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white transition-colors flex items-center gap-1"
+                      >
+                        <Monitor className="w-3 h-3" />
+                        Share
+                      </button>
+                    )}
+                    {getStatusIcon(screenShareStatus)}
+                  </div>
+                </div>
+                {screenShareError && (
+                  <p className="text-xs text-red-400 px-3 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                    {screenShareError}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -254,7 +437,9 @@ const WaitingRoom = () => {
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <label className="text-xs text-gray-500">Estimated Duration</label>
-                      <p className="text-white font-semibold text-sm sm:text-base">45-60 minutes</p>
+                      <p className="text-white font-semibold text-sm sm:text-base">
+                        {sessionData?.interviewMode === 'full' ? '60-90 minutes' : sessionData?.interviewMode === 'specific' ? '10-15 minutes' : '30-45 minutes'}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -330,7 +515,7 @@ const WaitingRoom = () => {
               {/* Start Button */}
               <button
                 onClick={startInterview}
-                disabled={permissions.microphone !== 'granted' || isStarting}
+                disabled={permissions.microphone !== 'granted' || screenShareStatus !== 'granted' || isStarting}
                 className="w-full py-3 sm:py-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl shadow-red-500/30 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {isStarting ? (
@@ -343,6 +528,12 @@ const WaitingRoom = () => {
               {permissions.microphone !== 'granted' && (
                 <p className="text-center text-red-400 text-xs sm:text-sm px-4">
                   Please grant microphone access to start the interview
+                </p>
+              )}
+              {permissions.microphone === 'granted' && screenShareStatus !== 'granted' && (
+                <p className="text-center text-cyan-400 text-xs sm:text-sm px-4 flex items-center justify-center gap-1">
+                  <Shield className="w-3 h-3" />
+                  Please share your entire screen to start the interview
                 </p>
               )}
             </div>

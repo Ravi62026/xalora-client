@@ -1,41 +1,123 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../store/slices/userSlice";
+
+const ChevronDown = ({ className = "" }) => (
+    <svg className={`w-4 h-4 ${className}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+);
+
+// Dropdown component with click-outside handling
+const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div ref={dropdownRef} className="relative flex items-center h-full">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`flex items-center gap-1.5 text-base font-medium transition-colors duration-200 ${isActive ? "text-emerald-400" : "text-gray-300 hover:text-emerald-400"}`}
+            >
+                {label}
+                <ChevronDown className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-16 left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-black/60 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {items.map((item, index) => {
+                        if (item.action) {
+                            return (
+                                <button
+                                    key={`dropdown-action-${index}`}
+                                    onClick={() => {
+                                        item.action();
+                                        setIsOpen(false);
+                                        closeMobileMenu?.();
+                                    }}
+                                    className="flex items-center gap-3 px-4 py-2.5 w-full text-left text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                >
+                                    <span className="text-xl">{item.icon}</span>
+                                    <div>
+                                        <div className="font-medium">{item.label}</div>
+                                        {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                    </div>
+                                </button>
+                            );
+                        }
+
+                        return (
+                            <Link
+                                key={item.to}
+                                to={item.to}
+                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    closeMobileMenu?.();
+                                }}
+                            >
+                                <span className="text-xl">{item.icon}</span>
+                                <div>
+                                    <div className="font-medium">{item.label}</div>
+                                    {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                </div>
+                            </Link>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const Navbar = () => {
     const { isAuthenticated, user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+    const profileRef = useRef(null);
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+        setIsProfileMenuOpen(false);
+    }, [location.pathname]);
+
+    // Click outside for profile dropdown
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (profileRef.current && !profileRef.current.contains(e.target)) {
+                setIsProfileMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleLogout = async () => {
         await dispatch(logoutUser());
         navigate("/");
         setIsMobileMenuOpen(false);
-    };
-
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
-
-    const closeMobileMenu = () => {
-        setIsMobileMenuOpen(false);
-    };
-
-    const toggleProfileMenu = () => {
-        setIsProfileMenuOpen(!isProfileMenuOpen);
-    };
-
-    const closeProfileMenu = () => {
         setIsProfileMenuOpen(false);
     };
 
+    const closeMobileMenu = () => setIsMobileMenuOpen(false);
     const avatarInitial = (user?.name || user?.username || "U").charAt(0).toUpperCase();
     const isOrgTeam = user?.userType === "org_team";
 
-    // Determine dashboard route based on user organization
     const getDashboardRoute = () => {
         if (!user?.organization?.orgId && !user?.organization?._id) return "/dashboard";
         if (user?.organization?.role === "super_admin") return "/org/dashboard";
@@ -43,461 +125,320 @@ const Navbar = () => {
         return "/org/student/dashboard";
     };
 
-    return (
-        <nav className="bg-gradient-to-r from-gray-900 via-slate-900 to-black backdrop-blur-lg shadow-2xl border-b border-emerald-500/20 sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-24">
-                    {/* Logo/Brand */}
-                    <div className="flex items-center">
-                        <Link
-                            to="/"
-                            className="flex items-center hover:scale-105 transition-all duration-300 group"
-                            onClick={closeMobileMenu}
-                        >
-                            <div className="relative">
-                                <img
-                                    src="/logo_xalora.png"
-                                    alt="Xalora Logo"
-                                    className="w-28 h-20 object-contain max-w-none drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/30 to-teal-400/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </div>
-                        </Link>
-                    </div>
+    // Check if path is active
+    const isActive = (path) => {
+        if (path === "/") return location.pathname === "/";
+        return location.pathname.startsWith(path);
+    };
 
-                    {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center gap-3">
-                        <Link
-                            to="/"
-                            className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <span className="relative z-10">Home</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </Link>
+    const isDropdownActive = (items) => {
+        return items.some(item => item.to && location.pathname.startsWith(item.to));
+    };
+
+    const navLinkClass = (path) =>
+        `flex items-center text-base font-medium h-full transition-colors duration-200 ${isActive(path)
+            ? "text-emerald-400"
+            : "text-gray-300 hover:text-emerald-400"
+        }`;
+
+    // Navigation groups
+    const practiceItems = [
+        { to: "/problems", icon: "💻", label: "Problems", desc: "DSA problem bank" },
+        { to: "/quiz", icon: "🧠", label: "Quizzes", desc: "Test your knowledge" },
+        { to: "/internships", icon: "💼", label: "Internships", desc: "Real-world projects" },
+    ];
+
+    const aiToolsItems = [
+        { to: "/resume-ai", icon: "📄", label: "Resume AI", desc: "ATS-ready resume analysis" },
+        { to: "/ai-interview/setup", icon: "🎥", label: "AI Interview", desc: "Mock interview practice" },
+        { to: "/job-genie", icon: "🔮", label: "Job Genie", desc: "AI job search" },
+        {
+            action: () => {
+                if (!user) return;
+                const xaloraUrl = import.meta.env.VITE_XALORA_AI_URL;
+                const minimalUserInfo = {
+                    _id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role,
+                };
+                const userProfile = encodeURIComponent(JSON.stringify(minimalUserInfo));
+                window.open(`${xaloraUrl}?user=${userProfile}`, "_blank");
+            },
+            icon: "🤖",
+            label: "AI Assistant",
+            desc: "Personal AI Mentor"
+        }
+    ];
+
+    const learnItems = [
+        { to: "/algorithms", icon: "⚡", label: "Algorithms", desc: "Sorting, searching & more" },
+        { to: "/data-structures", icon: "🏗️", label: "Data Structures", desc: "Arrays, trees, graphs" },
+        { to: "/system-design", icon: "🏛️", label: "System Design", desc: "Architecture patterns" },
+        { to: "/roadmap", icon: "🗺️", label: "Roadmaps", desc: "Learning paths" },
+    ];
+
+    return (
+        <nav className="bg-gradient-to-r from-gray-900 via-slate-900 to-black backdrop-blur-lg shadow-2xl border border-emerald-500/20 sticky top-4 z-50 mx-auto w-[95%] md:w-[90%] max-w-6xl rounded-2xl">
+            <div className="px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                    {/* Logo */}
+                    <Link to="/" className="flex items-center shrink-0" onClick={closeMobileMenu}>
+                        <img
+                            src="/logo_xalora.png"
+                            alt="Xalora"
+                            className="h-10 w-auto object-contain"
+                        />
+                    </Link>
+
+                    {/* Desktop Nav */}
+                    <div className="hidden lg:flex items-center h-full gap-8">
+                        <Link to="/" className={navLinkClass("/")}>Home</Link>
+
                         {!isOrgTeam && (
                             <>
-                                <Link
-                                    to="/problems"
-                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                >
-                                    <span className="relative z-10">Problems</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                                <Link
-                                    to="/quiz"
-                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                >
-                                    <span className="relative z-10">Quiz</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                                <Link
-                                    to="/internships"
-                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                >
-                                    <span className="relative z-10">Internships</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                                <Link
-                                    to="/resume-ai"
-                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                >
-                                    <span className="relative z-10">Resume AI</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                                <Link
-                                    to="/ai-interview/setup"
-                                    className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                >
-                                    <span className="relative z-10">🎥 AI Interview</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
+                                <NavDropdown label="Practice" items={practiceItems} isActive={isDropdownActive(practiceItems)} />
+                                <NavDropdown label="AI Tools" items={aiToolsItems} isActive={isDropdownActive(aiToolsItems)} />
+                                <NavDropdown label="Learn" items={learnItems} isActive={isDropdownActive(learnItems)} />
                             </>
                         )}
-                        {/* Dashboard button - only shown when user is authenticated */}
+
                         {isAuthenticated && (
-                            <Link
-                                to={getDashboardRoute()}
-                                className="relative text-emerald-100 hover:text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                            >
-                                <span className="relative z-10">Dashboard</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <Link to={getDashboardRoute()} className={navLinkClass("/dashboard")}>
+                                Dashboard
                             </Link>
-                        )}
-                        {isAuthenticated && !isOrgTeam && (
-                            <button
-                                onClick={() => {
-                                    const xaloraUrl = import.meta.env.VITE_XALORA_AI_URL;
-                                    // Get token from cookies properly - the main app uses cookies for auth
-                                    // We'll pass a flag to indicate the user is authenticated
-                                    // The AI assistant will handle authentication via cookies
-                                    const minimalUserInfo = {
-                                        _id: user._id,
-                                        name: user.name,
-                                        username: user.username,
-                                        email: user.email,
-                                        role: user.role
-                                    };
-                                    const userProfile = encodeURIComponent(JSON.stringify(minimalUserInfo));
-                                    window.open(`${xaloraUrl}?user=${userProfile}`, '_blank');
-                                }}
-                                className="relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden"
-                            >
-                                <span className="relative z-10 flex items-center space-x-2">
-                                    <span>🤖</span>
-                                    <span>AI Assistant</span>
-                                </span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            </button>
                         )}
                     </div>
 
-                    {/* Desktop User Actions */}
-                    <div className="hidden lg:flex items-center space-x-2 shrink-0">
+                    {/* Desktop Actions */}
+                    <div className="hidden lg:flex items-center gap-4">
                         {isAuthenticated ? (
-                            <div className="relative">
+                            <div ref={profileRef} className="relative mt-2">
                                 <button
-                                    onClick={toggleProfileMenu}
-                                    className="flex items-center space-x-2 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 px-2.5 py-2 rounded-xl transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 focus:outline-none max-w-[220px]"
+                                    onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                                    className="flex items-center gap-2.5 pl-2.5 pr-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all duration-200"
                                 >
-                                    <div className="relative">
-                                        {user?.avatar ? (
-                                            <img
-                                                src={user.avatar}
-                                                alt={user?.name || "User"}
-                                                className="w-10 h-10 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
-                                            />
-                                        ) : (
-                                            <div className="w-10 h-10 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300 bg-emerald-600/40 text-white flex items-center justify-center font-semibold">
-                                                {avatarInitial}
-                                            </div>
-                                        )}
-                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-gray-900 rounded-full"></div>
-                                    </div>
-                                    <div className="hidden lg:block min-w-0">
-                                        <div className="text-emerald-100 text-sm font-semibold group-hover:text-white transition-colors duration-300 truncate max-w-[120px]">
+                                    {user?.avatar ? (
+                                        <img
+                                            src={user.avatar}
+                                            alt={user?.name || "User"}
+                                            className="w-8 h-8 rounded-full ring-2 ring-emerald-500/30"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full ring-2 ring-emerald-500/30 bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-sm font-semibold">
+                                            {avatarInitial}
+                                        </div>
+                                    )}
+                                    <div className="text-left hidden xl:block">
+                                        <div className="text-sm font-medium text-white max-w-[120px] truncate">
                                             {user?.name || user?.username}
                                         </div>
-                                        <div className="hidden xl:flex items-center space-x-2">
-                                            <div className="text-emerald-200 text-xs group-hover:text-emerald-100 transition-colors duration-300 whitespace-nowrap">
-                                                {user?.role === "setter" ? "Problem Setter" : "User"}
-                                            </div>
-                                            {/* Display JBP Coins if available */}
-                                            {user && typeof user.jbpCoins === 'number' && (
-                                                <div className="hidden 2xl:flex items-center text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full whitespace-nowrap">
-                                                    <span className="mr-1">🪙</span>
-                                                    {user.jbpCoins}
-                                                </div>
-                                            )}
+                                        <div className="text-xs text-emerald-400">
+                                            {user?.role === "setter" ? "Problem Setter" : "User"}
                                         </div>
                                     </div>
+                                    <ChevronDown className={`text-gray-400 transition-transform duration-200 ${isProfileMenuOpen ? "rotate-180" : ""}`} />
                                 </button>
 
-                                {/* Profile Dropdown Menu */}
                                 {isProfileMenuOpen && (
-                                    <>
-                                        <div
-                                            className="fixed inset-0 z-40"
-                                            onClick={closeProfileMenu}
-                                        ></div>
-                                        <div className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <Link
-                                                to="/profile"
-                                                className="block px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    closeProfileMenu();
-                                                }}
-                                            >
-                                                Profile
-                                            </Link>
-                                            {/* Display JBP Coins in dropdown if available */}
-                                            {user && typeof user.jbpCoins === 'number' && (
-                                                <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
-                                                    <div className="flex items-center justify-between">
-                                                        <span>JBP Coins:</span>
-                                                        <span className="font-semibold flex items-center">
-                                                            <span className="mr-1">🪙</span>
-                                                            {user.jbpCoins}
-                                                        </span>
-                                                    </div>
+                                    <div className="absolute right-0 mt-3 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-black/40 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        {/* User info header */}
+                                        <div className="px-4 py-3 border-b border-emerald-500/20">
+                                            <div className="text-sm font-medium text-white truncate">{user?.name || user?.username}</div>
+                                            <div className="text-xs text-gray-400 truncate">{user?.email}</div>
+                                            {user && typeof user.jbpCoins === "number" && (
+                                                <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md w-fit">
+                                                    <span>🪙</span>
+                                                    <span className="font-medium">{user.jbpCoins} JBP Coins</span>
                                                 </div>
                                             )}
+                                        </div>
+
+                                        <Link
+                                            to="/profile"
+                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        >
+                                            <span>👤</span> Profile
+                                        </Link>
+                                        <Link
+                                            to={getDashboardRoute()}
+                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        >
+                                            <span>📊</span> Dashboard
+                                        </Link>
+                                        <Link
+                                            to="/pricing"
+                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        >
+                                            <span>💎</span> Subscription
+                                        </Link>
+
+                                        <div className="border-t border-emerald-500/20 mt-1.5 pt-1.5">
                                             <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleLogout();
-                                                    closeProfileMenu();
-                                                }}
-                                                className="block w-full text-left px-4 py-2 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200"
+                                                onClick={handleLogout}
+                                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors duration-150"
                                             >
-                                                Logout
+                                                <span>🚪</span> Sign out
                                             </button>
                                         </div>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         ) : (
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center gap-3">
                                 <Link
                                     to="/login"
-                                    className="relative text-emerald-100 hover:text-white px-5 py-2.5 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
+                                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200"
                                 >
-                                    <span className="relative z-10">Login</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    Log in
                                 </Link>
                                 <Link
                                     to="/signup"
-                                    className="relative bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-2.5 rounded-xl text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden"
+                                    className="text-sm font-medium text-white px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 transition-all duration-200 shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)]"
                                 >
-                                    <span className="relative z-10">Sign Up</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 to-teal-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    Sign up
                                 </Link>
                             </div>
                         )}
                     </div>
 
                     {/* Mobile menu button */}
-                    <div className="lg:hidden">
-                        <button
-                            onClick={toggleMobileMenu}
-                            className="relative text-emerald-100 hover:text-white p-3 rounded-xl hover:bg-white/10 transition-all duration-300 group border border-transparent hover:border-emerald-500/30"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            {isMobileMenuOpen ? (
-                                <svg
-                                    className="w-6 h-6 relative z-10 transform group-hover:scale-110 transition-transform duration-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            ) : (
-                                <svg
-                                    className="w-6 h-6 relative z-10 transform group-hover:scale-110 transition-transform duration-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white transition-colors duration-200"
+                    >
+                        {isMobileMenuOpen ? (
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        ) : (
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        )}
+                    </button>
                 </div>
 
-                {/* Mobile menu */}
+                {/* Mobile Menu */}
                 {isMobileMenuOpen && (
-                    <div className="lg:hidden pb-6 animate-in slide-in-from-top-2 duration-300">
-                        <div className="px-2 pt-4 pb-3 space-y-2 sm:px-3 border-t border-emerald-700/30 bg-gradient-to-b from-gray-900/50 to-slate-900/50 backdrop-blur-sm">
-                            {/* Mobile Navigation Links */}
-                            <Link
-                                to="/"
-                                className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                onClick={closeMobileMenu}
-                            >
-                                <span className="relative z-10">🏠 Home</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="lg:hidden pb-6 border-t border-emerald-500/20 animate-in slide-in-from-top-2 duration-200">
+                        <div className="pt-4 space-y-1">
+                            <Link to="/" className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                Home
                             </Link>
+
                             {!isOrgTeam && (
                                 <>
-                                    <Link
-                                        to="/problems"
-                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        <span className="relative z-10">💻 Problems</span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </Link>
-                                    <Link
-                                        to="/quiz"
-                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        <span className="relative z-10">🧠 Quiz</span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </Link>
-                                    <Link
-                                        to="/internships"
-                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        <span className="relative z-10">💼 Internships</span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </Link>
-                                    <Link
-                                        to="/resume-ai"
-                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        <span className="relative z-10">🤖 Resume AI</span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </Link>
-                                    <Link
-                                        to="/ai-interview/setup"
-                                        className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        <span className="relative z-10">🎥 AI Interview</span>
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    {/* Practice Section */}
+                                    <div className="pt-4 pb-2 px-4">
+                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Practice</div>
+                                    </div>
+                                    {practiceItems.map((item) => (
+                                        <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                            <span className="text-xl">{item.icon}</span> {item.label}
+                                        </Link>
+                                    ))}
+
+                                    {/* AI Tools Section */}
+                                    <div className="pt-4 pb-2 px-4">
+                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">AI Tools</div>
+                                    </div>
+                                    {aiToolsItems.map((item, index) => {
+                                        if (item.action) {
+                                            return (
+                                                <button key={`mob-action-${index}`} onClick={() => { item.action(); closeMobileMenu(); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
+                                                    <span className="text-xl">{item.icon}</span> <span className="text-left w-full">{item.label}</span>
+                                                </button>
+                                            );
+                                        }
+                                        return (
+                                            <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                                <span className="text-xl">{item.icon}</span> {item.label}
+                                            </Link>
+                                        );
+                                    })}
+
+                                    {/* Learn Section */}
+                                    <div className="pt-4 pb-2 px-4">
+                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Learn</div>
+                                    </div>
+                                    {learnItems.map((item) => (
+                                        <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                            <span className="text-xl">{item.icon}</span> {item.label}
+                                        </Link>
+                                    ))}
+                                </>
+                            )}
+
+                            {isAuthenticated && (
+                                <>
+                                    <div className="pt-4 pb-2 px-4">
+                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Personal</div>
+                                    </div>
+                                    <Link to={getDashboardRoute()} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                        <span className="text-xl">📊</span> Dashboard
                                     </Link>
                                 </>
                             )}
-                            {/* Dashboard button for mobile - only shown when user is authenticated */}
-                            {isAuthenticated && (
-                                <Link
-                                    to={getDashboardRoute()}
-                                    className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30"
-                                    onClick={closeMobileMenu}
-                                >
-                                    <span className="relative z-10">📊 Dashboard</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </Link>
-                            )}
-                            {isAuthenticated && !isOrgTeam && (
-                                <button
-                                    onClick={() => {
-                                        const xaloraUrl = import.meta.env.VITE_XALORA_AI_URL;
-                                        // Get token from cookies properly - the main app uses cookies for auth
-                                        // We'll pass a flag to indicate the user is authenticated
-                                        // The AI assistant will handle authentication via cookies
-                                        const minimalUserInfo = {
-                                            _id: user._id,
-                                            name: user.name,
-                                            username: user.username,
-                                            email: user.email,
-                                            role: user.role
-                                        };
-                                        const userProfile = encodeURIComponent(JSON.stringify(minimalUserInfo));
-                                        window.open(`${xaloraUrl}?user=${userProfile}`, '_blank');
-                                        closeMobileMenu();
-                                    }}
-                                    className="relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden w-full text-left"
-                                >
-                                    <span className="relative z-10">🤖 AI Assistant</span>
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </button>
-                            )}
+                        </div>
 
-                            {/* Mobile User Actions */}
-                            <div className="pt-6 pb-3 border-t border-emerald-700/30 mt-4">
-                                {isAuthenticated ? (
-                                    <div className="space-y-4">
-                                        <div className="relative z-50">
-                                            <button
-                                                onClick={toggleProfileMenu}
-                                                className="flex items-center space-x-4 px-4 py-4 rounded-xl text-base font-medium text-emerald-100 hover:bg-gradient-to-r hover:from-emerald-800/30 hover:to-teal-800/30 transition-all duration-300 group border border-emerald-700/30 hover:border-emerald-500/50 w-full text-left focus:outline-none"
-                                            >
-                                                <div className="relative">
-                                                    {user?.avatar ? (
-                                                        <img
-                                                            src={user.avatar}
-                                                            alt={user?.name || "User"}
-                                                            className="w-12 h-12 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-12 h-12 rounded-full border-2 border-emerald-400 group-hover:border-white transition-colors duration-300 bg-emerald-600/40 text-white flex items-center justify-center font-semibold">
-                                                            {avatarInitial}
-                                                        </div>
-                                                    )}
-                                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-gray-900 rounded-full"></div>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-white font-semibold group-hover:text-white transition-colors duration-300">
-                                                        {user?.name || user?.username}
-                                                    </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <div className="text-sm text-emerald-200 group-hover:text-emerald-100 transition-colors duration-300">
-                                                            {user?.role === "setter" ? "🔧 Problem Setter" : "👤 User"}
-                                                        </div>
-                                                        {/* Display JBP Coins if available */}
-                                                        {user && typeof user.jbpCoins === 'number' && (
-                                                            <div className="flex items-center text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full">
-                                                                <span className="mr-1">🪙</span>
-                                                                {user.jbpCoins}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </button>
-
-                                            {/* Mobile Profile Dropdown Menu */}
-                                            {isProfileMenuOpen && (
-                                                <>
-                                                    <div
-                                                        className="fixed inset-0 z-40"
-                                                        onClick={closeProfileMenu}
-                                                    ></div>
-                                                    <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 rounded-xl shadow-lg py-1 border border-emerald-500/30 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
-                                                        <Link
-                                                            to="/profile"
-                                                            className="block px-4 py-3 text-sm text-emerald-100 hover:bg-gradient-to-r from-emerald-700/50 to-teal-700/50 hover:text-white transition-all duration-200 cursor-pointer"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                closeProfileMenu();
-                                                                closeMobileMenu();
-                                                            }}
-                                                        >
-                                                            Profile
-                                                        </Link>
-                                                        {/* Display JBP Coins in dropdown if available */}
-                                                        {user && typeof user.jbpCoins === 'number' && (
-                                                            <div className="px-4 py-2 text-sm text-amber-300 border-b border-gray-700">
-                                                                <div className="flex items-center justify-between">
-                                                                    <span>JBP Coins:</span>
-                                                                    <span className="font-semibold flex items-center">
-                                                                        <span className="mr-1">🪙</span>
-                                                                        {user.jbpCoins}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleLogout();
-                                                                closeProfileMenu();
-                                                            }}
-                                                            className="block w-full text-left px-4 py-3 text-sm text-emerald-100 hover:bg-gradient-to-r from-red-700/50 to-rose-700/50 hover:text-white transition-all duration-200 cursor-pointer"
-                                                        >
-                                                            Logout
-                                                        </button>
-                                                    </div>
-                                                </>
-                                            )}
+                        {/* Mobile User Section */}
+                        <div className="border-t border-emerald-500/20 mt-4 pt-4">
+                            {isAuthenticated ? (
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg bg-emerald-500/5 mx-2 border border-emerald-500/10">
+                                        {user?.avatar ? (
+                                            <img src={user.avatar} alt={user?.name || "User"} className="w-10 h-10 rounded-full ring-2 ring-emerald-500/50" />
+                                        ) : (
+                                            <div className="w-10 h-10 rounded-full ring-2 ring-emerald-500/50 bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-lg font-semibold">
+                                                {avatarInitial}
+                                            </div>
+                                        )}
+                                        <div>
+                                            <div className="text-sm font-medium text-white">{user?.name || user?.username}</div>
+                                            <div className="text-xs text-gray-400">{user?.email}</div>
                                         </div>
+                                        {user && typeof user.jbpCoins === "number" && (
+                                            <div className="ml-auto flex items-center gap-1 text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1.5 rounded-lg">
+                                                <span>🪙</span> {user.jbpCoins}
+                                            </div>
+                                        )}
                                     </div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        <Link
-                                            to="/login"
-                                            className="relative text-emerald-100 hover:text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 hover:bg-white/10 group border border-transparent hover:border-emerald-500/30 text-center"
-                                            onClick={closeMobileMenu}
-                                        >
-                                            <span className="relative z-10">🔑 Login</span>
-                                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                        </Link>
-                                        <Link
-                                            to="/signup"
-                                            className="relative bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group overflow-hidden text-center"
-                                            onClick={closeMobileMenu}
-                                        >
-                                            <span className="relative z-10">✨ Sign Up</span>
-                                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 to-teal-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
+                                    <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                        <span className="text-xl">👤</span> Profile
+                                    </Link>
+                                    <Link to="/pricing" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                        <span className="text-xl">💎</span> Subscription
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-3 w-full mt-2 px-4 py-3 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-150"
+                                    >
+                                        <span className="text-xl">🚪</span> Sign out
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-3 px-4 mt-2">
+                                    <Link
+                                        to="/login"
+                                        className="text-center text-sm font-medium text-gray-300 hover:text-white px-4 py-3 rounded-xl border border-white/10 hover:bg-white/[0.06] transition-all duration-200"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Log in
+                                    </Link>
+                                    <Link
+                                        to="/signup"
+                                        className="text-center text-sm font-medium text-white px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition-all duration-200 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Sign up
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

@@ -326,6 +326,12 @@ const InterviewSetup = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [showPreviewJD, setShowPreviewJD] = useState(false);
 
+  // Derived helpers — which specific round is selected
+  const isResumeDeepDive = formData.interviewMode === 'specific' && formData.specificRound === 'resume_deep_dive';
+  const isJDBased = formData.interviewMode === 'specific' && formData.specificRound === 'jd_based';
+  // Simplified form: show only what's needed for these rounds
+  const isSimplifiedForm = isResumeDeepDive || isJDBased;
+
   // Update position when role selection changes
   useEffect(() => {
     if (formData.selectedRole && formData.selectedRole !== 'other') {
@@ -339,7 +345,18 @@ const InterviewSetup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.age || !formData.position || !resumeFile) {
+    // Simplified form validation
+    if (isResumeDeepDive) {
+      if (!formData.name || !resumeFile) {
+        setError('Please enter your name and upload your resume');
+        return;
+      }
+    } else if (isJDBased) {
+      if (!formData.name || !formData.jobDescription.trim()) {
+        setError('Please enter your name and paste the job description');
+        return;
+      }
+    } else if (!formData.name || !formData.age || !formData.position || !resumeFile) {
       setError('Please fill all required fields and upload your resume');
       return;
     }
@@ -371,20 +388,35 @@ const InterviewSetup = () => {
 
       // Create FormData for file upload
       const submitData = new FormData();
-      submitData.append('resumeFile', resumeFile);
       submitData.append('candidateName', formData.name);
-      submitData.append('candidateAge', formData.age);
-      submitData.append('candidateGender', formData.gender);
-      submitData.append('candidateExperience', formData.experience);
-      submitData.append('position', formData.position);
-      submitData.append('companyType', formData.companyType);
       submitData.append('interviewMode', formData.interviewMode);
       submitData.append('codingDifficulty', formData.codingDifficulty);
-      if (formData.specificRound) {
-        submitData.append('specificRound', formData.specificRound);
-      }
-      if (finalJD) {
-        submitData.append('jobDescription', finalJD);
+      if (formData.specificRound) submitData.append('specificRound', formData.specificRound);
+
+      // Simplified mode: only pass what's needed
+      if (isResumeDeepDive) {
+        submitData.append('resumeFile', resumeFile);
+        // Provide minimal defaults so backend doesn't error
+        submitData.append('candidateAge', '25');
+        submitData.append('position', 'Not specified');
+        submitData.append('companyType', 'startup');
+      } else if (isJDBased) {
+        // JD-based needs JD + a dummy resume (backend requires a file)
+        const dummyBlob = new Blob(['Resume not provided for JD-based round'], { type: 'application/pdf' });
+        submitData.append('resumeFile', dummyBlob, 'placeholder.pdf');
+        submitData.append('jobDescription', formData.jobDescription);
+        submitData.append('candidateAge', '25');
+        submitData.append('position', 'Not specified');
+        submitData.append('companyType', 'startup');
+      } else {
+        // Full form — all fields
+        if (resumeFile) submitData.append('resumeFile', resumeFile);
+        submitData.append('candidateAge', formData.age);
+        submitData.append('candidateGender', formData.gender);
+        submitData.append('candidateExperience', formData.experience);
+        submitData.append('position', formData.position);
+        submitData.append('companyType', formData.companyType);
+        if (finalJD) submitData.append('jobDescription', finalJD);
       }
 
       setLoadingMessage('Analyzing your resume with AI...');
@@ -463,269 +495,11 @@ const InterviewSetup = () => {
           {/* Main Form Card */}
           <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl p-4 sm:p-6 space-y-6 sm:space-y-8">
 
-            {/* 1. Personal Information */}
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
-                <h2 className="text-base sm:text-lg font-semibold text-white">Personal Information</h2>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Full Name <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
-                    placeholder="John Doe"
-                    disabled={isLoading}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Age <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min="18"
-                    max="100"
-                    value={formData.age}
-                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
-                    placeholder="25"
-                    disabled={isLoading}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Gender
-                  </label>
-                  <select
-                    value={formData.gender}
-                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-colors"
-                    disabled={isLoading}
-                  >
-                    <option value="" className="bg-gray-800">Select (Optional)</option>
-                    <option value="male" className="bg-gray-800">Male</option>
-                    <option value="female" className="bg-gray-800">Female</option>
-                    <option value="other" className="bg-gray-800">Other</option>
-                    <option value="prefer_not_to_say" className="bg-gray-800">Prefer not to say</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Years of Experience <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.experience}
-                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
-                    placeholder="3 years"
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* 2. Job Details */}
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Briefcase className="w-5 h-5 text-purple-400" />
-                <h2 className="text-lg font-semibold text-white">Job Details</h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="group">
-                  <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
-                    Position <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <select
-                      required
-                      value={formData.selectedRole}
-                      onChange={(e) => setFormData({ ...formData, selectedRole: e.target.value, customPosition: '' })}
-                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
-                      disabled={isLoading}
-                    >
-                      <option value="" className="bg-slate-900">Select Role...</option>
-                      {PREDEFINED_ROLES.map(role => (
-                        <option key={role.value} value={role.value} className="bg-slate-900">{role.label}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                    </div>
-                  </div>
-                </div>
-
-                {formData.selectedRole === 'other' && (
-                  <div className="md:col-span-2 animate-fade-in-up">
-                    <label className="block text-sm font-medium text-slate-400 mb-2">
-                      Specify Position <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.customPosition}
-                      onChange={(e) => setFormData({ ...formData, customPosition: e.target.value })}
-                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-600 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all outline-none"
-                      placeholder="e.g. Cloud Solutions Architect"
-                      disabled={isLoading}
-                    />
-                  </div>
-                )}
-
-                <div className="group">
-                  <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
-                    Target Company Type <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <select
-                      required
-                      value={formData.companyType}
-                      onChange={(e) => setFormData({ ...formData, companyType: e.target.value })}
-                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
-                      disabled={isLoading}
-                    >
-                      <option value="startup" className="bg-slate-900">🚀 Startup (Speed & Innovation)</option>
-                      <option value="service_based" className="bg-slate-900">🏢 Service Based (Practical & Core)</option>
-                      <option value="product_based" className="bg-slate-900">💎 Product Based (Deep Tech & DSA)</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="group">
-                  <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
-                    Coding Difficulty
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={formData.codingDifficulty}
-                      onChange={(e) => setFormData({ ...formData, codingDifficulty: e.target.value })}
-                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
-                      disabled={isLoading}
-                    >
-                      <option value="auto" className="bg-slate-900">Auto (Company Type)</option>
-                      <option value="easy" className="bg-slate-900">Easy</option>
-                      <option value="medium" className="bg-slate-900">Medium</option>
-                      <option value="hard" className="bg-slate-900">Hard</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <div className="flex justify-between items-end mb-3">
-                  <label className="block text-sm font-medium text-slate-400">
-                    Job Description {formData.selectedRole && formData.selectedRole !== 'other' ? '(Predefined active)' : '(Optional)'}
-                  </label>
-                  {formData.selectedRole && formData.selectedRole !== 'other' && (
-                    <button
-                      type="button"
-                      onClick={() => setShowPreviewJD(!showPreviewJD)}
-                      className="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 hover:border-cyan-500/50 transition-all flex items-center gap-2"
-                    >
-                      {showPreviewJD ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                      {showPreviewJD ? 'Hide Standard JD' : 'View Standard JD'}
-                    </button>
-                  )}
-                </div>
-
-                {showPreviewJD && formData.selectedRole && formData.selectedRole !== 'other' && (
-                  <div className="mb-4 p-5 bg-slate-900/80 rounded-xl border border-slate-700 text-sm animate-in fade-in zoom-in-95 duration-200 shadow-inner">
-                    <h4 className="text-cyan-400 font-semibold mb-3 flex items-center gap-2 text-xs uppercase tracking-wider">
-                      <FileText className="w-4 h-4" />
-                      Standard JD for {PREDEFINED_ROLES.find(r => r.value === formData.selectedRole)?.label}
-                    </h4>
-                    <div className="whitespace-pre-wrap font-mono text-xs text-slate-300 opacity-90 leading-relaxed pl-2 border-l-2 border-slate-700">
-                      {PREDEFINED_JDS[formData.selectedRole]}
-                    </div>
-                  </div>
-                )}
-
-                <textarea
-                  value={formData.jobDescription}
-                  onChange={(e) => setFormData({ ...formData, jobDescription: e.target.value })}
-                  className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-600 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none min-h-[120px] resize-y"
-                  placeholder={formData.selectedRole && formData.selectedRole !== 'other'
-                    ? "Add any specific requirements on top of standard JD (optional)..."
-                    : "Paste the job description here..."}
-                  disabled={isLoading}
-                />
-                {formData.selectedRole && formData.selectedRole !== 'other' && (
-                  <p className="text-xs text-emerald-400 mt-3 flex items-center gap-1.5 px-1">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Standard JD is active. Text above will be appended.
-                  </p>
-                )}
-              </div>
-            </section>
-
-            {/* 3. Resume Upload */}
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <FileText className="w-5 h-5 text-cyan-400" />
-                <h2 className="text-lg font-semibold text-white">Resume Upload</h2>
-              </div>
-
-              <div className="group relative">
-                <div className={`absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 ${resumeFile ? 'opacity-50' : ''}`} />
-                <div className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer bg-slate-900/80 backdrop-blur-sm ${resumeFile ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 group-hover:border-cyan-500/50'
-                  } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    id="resume-upload"
-                    disabled={isLoading}
-                  />
-                  <label htmlFor="resume-upload" className={`cursor-pointer w-full h-full block ${isLoading ? 'cursor-not-allowed' : ''}`}>
-                    <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center transition-all duration-300 ${resumeFile ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500 group-hover:scale-110 group-hover:text-cyan-400 group-hover:bg-cyan-500/10'}`}>
-                      <Upload className="w-10 h-10" />
-                    </div>
-                    {resumeFile ? (
-                      <div>
-                        <p className="text-emerald-400 font-bold text-lg mb-1">
-                          {resumeFile.name}
-                        </p>
-                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-medium border border-emerald-500/20">
-                          ✓ Ready for Analysis
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <p className="text-slate-200 font-semibold text-lg">
-                          Upload your Resume
-                        </p>
-                        <p className="text-slate-500 text-sm">
-                          Drag & drop or click to browse (PDF only, Max 10MB)
-                        </p>
-                      </div>
-                    )}
-                  </label>
-                </div>
-              </div>
-            </section>
-
-            {/* 4. Interview Mode */}
+            {/* 1. Interview Mode — Choose First */}
             <section className="space-y-4">
               <div className="flex items-center gap-2 mb-4">
                 <Building className="w-5 h-5 text-emerald-400" />
-                <h2 className="text-lg font-semibold text-white">Interview Mode</h2>
+                <h2 className="text-lg font-semibold text-white">Choose Interview Mode</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -751,9 +525,9 @@ const InterviewSetup = () => {
                       {formData.interviewMode === 'full' && <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />}
                     </div>
                     <h3 className={`text-lg font-bold mb-2 ${formData.interviewMode === 'full' ? 'text-white' : 'text-slate-300'}`}>Full Interview</h3>
-                    <p className="text-sm text-slate-500 mb-4 leading-relaxed">Complete simulation of a real interview process with all 5 rounds.</p>
+                    <p className="text-sm text-slate-500 mb-4 leading-relaxed">Complete simulation with all 7 rounds — including Resume Deep Dive and JD-based rounds.</p>
                     <div className="flex flex-wrap gap-2">
-                      {['Formal', 'DSA', 'Sys Design', 'HR'].map(tag => (
+                      {['Formal', 'DSA', 'Sys Design', 'HR', 'Resume', 'JD'].map(tag => (
                         <span key={tag} className="text-[10px] uppercase font-bold px-2 py-1 rounded bg-slate-900 border border-slate-700 text-slate-400">{tag}</span>
                       ))}
                     </div>
@@ -831,11 +605,13 @@ const InterviewSetup = () => {
                       disabled={isLoading}
                     >
                       <option value="" className="bg-slate-900">Choose a round...</option>
-                      <option value="formal_qa" className="bg-slate-900">🎯 Formal Q&A - Intro & Basics</option>
+                      <option value="formal_qa" className="bg-slate-900">🎯 Formal Q&A - Intro &amp; Basics</option>
                       <option value="technical" className="bg-slate-900">💻 Technical - Deep Dive</option>
-                      <option value="coding" className="bg-slate-900">⚡ Coding - Algorithms & DSA</option>
+                      <option value="coding" className="bg-slate-900">⚡ Coding - Algorithms &amp; DSA</option>
                       <option value="system_design" className="bg-slate-900">🏗️ System Design - Architecture</option>
-                      <option value="hr" className="bg-slate-900">🤝 HR - Culture & Fit</option>
+                      <option value="behavioral" className="bg-slate-900">🤝 HR - Culture &amp; Fit</option>
+                      <option value="resume_deep_dive" className="bg-slate-900">📄 Resume Deep Dive - Your Experience</option>
+                      <option value="jd_based" className="bg-slate-900">📋 JD Based - Role Requirements</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-500">
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
@@ -845,7 +621,376 @@ const InterviewSetup = () => {
               )}
             </section>
 
-            {/* 5. Submit Action */}
+            {/* Divider */}
+            <div className="border-t border-slate-700/50" />
+
+            {/* ── SIMPLIFIED FORM for resume_deep_dive & jd_based ── */}
+            {isSimplifiedForm && (
+              <section className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                {/* Round badge */}
+                <div className={`flex items-center gap-3 p-4 rounded-2xl border ${isResumeDeepDive
+                  ? 'bg-cyan-500/10 border-cyan-500/30'
+                  : 'bg-amber-500/10 border-amber-500/30'
+                  }`}>
+                  <div className={`text-2xl`}>{isResumeDeepDive ? '📄' : '📋'}</div>
+                  <div>
+                    <p className={`text-sm font-bold ${isResumeDeepDive ? 'text-cyan-300' : 'text-amber-300'}`}>
+                      {isResumeDeepDive ? 'Resume Deep Dive Mode' : 'JD Based Mode'}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      {isResumeDeepDive
+                        ? 'AI will ask targeted questions based on your actual resume content — projects, skills, and experience.'
+                        : 'AI will ask questions based on the job description — verifying if you meet the requirements.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Name field — always needed */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Full Name <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
+                    placeholder="John Doe"
+                    disabled={isLoading}
+                  />
+                </div>
+
+                {/* Resume Upload — only for resume_deep_dive */}
+                {isResumeDeepDive && (
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Resume (PDF) <span className="text-red-400">*</span>
+                    </label>
+                    <div className="group relative">
+                      <div className={`absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 ${resumeFile ? 'opacity-50' : ''}`} />
+                      <div className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer bg-slate-900/80 backdrop-blur-sm ${resumeFile ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 group-hover:border-cyan-500/50'
+                        } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        <input
+                          type="file" accept=".pdf"
+                          onChange={handleFileChange}
+                          className="hidden" id="resume-upload-simplified"
+                          disabled={isLoading}
+                        />
+                        <label htmlFor="resume-upload-simplified" className={`cursor-pointer w-full h-full block ${isLoading ? 'cursor-not-allowed' : ''}`}>
+                          <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center transition-all duration-300 ${resumeFile ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500 group-hover:scale-110 group-hover:text-cyan-400 group-hover:bg-cyan-500/10'
+                            }`}>
+                            <Upload className="w-7 h-7" />
+                          </div>
+                          {resumeFile ? (
+                            <>
+                              <p className="text-emerald-400 font-semibold text-sm">{resumeFile.name}</p>
+                              <p className="text-slate-500 text-xs mt-1">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB · Click to change</p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-slate-300 font-semibold text-sm mb-1">Click to upload your resume</p>
+                              <p className="text-slate-500 text-xs">PDF only · Max 10MB</p>
+                            </>
+                          )}
+                        </label>
+                      </div>
+                    </div>
+                    <p className="text-xs text-cyan-400/70 flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3" />
+                      AI will analyze your resume and ask 6 deep questions about your actual projects & experience.
+                    </p>
+                  </div>
+                )}
+
+                {/* JD Textarea — only for jd_based */}
+                {isJDBased && (
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Job Description <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      required
+                      value={formData.jobDescription}
+                      onChange={(e) => setFormData({ ...formData, jobDescription: e.target.value })}
+                      className="w-full px-5 py-4 bg-slate-900/50 border border-amber-500/30 rounded-xl text-white placeholder-slate-600 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 focus:bg-slate-900 transition-all outline-none min-h-[200px] resize-y"
+                      placeholder="Paste the job description here...&#10;&#10;e.g. Role: Backend Engineer&#10;Requirements: 3+ years Node.js, AWS, REST APIs..."
+                      disabled={isLoading}
+                    />
+                    <p className="text-xs text-amber-400/70 flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3" />
+                      AI will ask 6 targeted questions verifying you meet the JD requirements.
+                    </p>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* ── FULL FORM ── (hidden when simplified mode is active) */}
+
+            {/* 1. Personal Information */}
+            {!isSimplifiedForm && (
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                  <h2 className="text-base sm:text-lg font-semibold text-white">Personal Information</h2>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Full Name <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="John Doe"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Age <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="18"
+                      max="100"
+                      value={formData.age}
+                      onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                      className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="25"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Gender</label>
+                    <select
+                      value={formData.gender}
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                      className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-colors"
+                      disabled={isLoading}
+                    >
+                      <option value="" className="bg-gray-800">Select (Optional)</option>
+                      <option value="male" className="bg-gray-800">Male</option>
+                      <option value="female" className="bg-gray-800">Female</option>
+                      <option value="other" className="bg-gray-800">Other</option>
+                      <option value="prefer_not_to_say" className="bg-gray-800">Prefer not to say</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Years of Experience <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.experience}
+                      onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                      className="w-full px-4 py-3 bg-gray-700/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
+                      placeholder="3 years"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+              </section>
+            )}
+            {/* 2. Job Details */}
+            {!isSimplifiedForm && (
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <Briefcase className="w-5 h-5 text-purple-400" />
+                  <h2 className="text-lg font-semibold text-white">Job Details</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="group">
+                    <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
+                      Position <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        required
+                        value={formData.selectedRole}
+                        onChange={(e) => setFormData({ ...formData, selectedRole: e.target.value, customPosition: '' })}
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="" className="bg-slate-900">Select Role...</option>
+                        {PREDEFINED_ROLES.map(role => (
+                          <option key={role.value} value={role.value} className="bg-slate-900">{role.label}</option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {formData.selectedRole === 'other' && (
+                    <div className="md:col-span-2 animate-fade-in-up">
+                      <label className="block text-sm font-medium text-slate-400 mb-2">
+                        Specify Position <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.customPosition}
+                        onChange={(e) => setFormData({ ...formData, customPosition: e.target.value })}
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-600 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all outline-none"
+                        placeholder="e.g. Cloud Solutions Architect"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  )}
+
+                  <div className="group">
+                    <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
+                      Target Company Type <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        required
+                        value={formData.companyType}
+                        onChange={(e) => setFormData({ ...formData, companyType: e.target.value })}
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="startup" className="bg-slate-900">🚀 Startup (Speed & Innovation)</option>
+                        <option value="service_based" className="bg-slate-900">🏢 Service Based (Practical & Core)</option>
+                        <option value="product_based" className="bg-slate-900">💎 Product Based (Deep Tech & DSA)</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="group">
+                    <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
+                      Coding Difficulty
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.codingDifficulty}
+                        onChange={(e) => setFormData({ ...formData, codingDifficulty: e.target.value })}
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white appearance-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none cursor-pointer"
+                        disabled={isLoading}
+                      >
+                        <option value="auto" className="bg-slate-900">Auto (Company Type)</option>
+                        <option value="easy" className="bg-slate-900">Easy</option>
+                        <option value="medium" className="bg-slate-900">Medium</option>
+                        <option value="hard" className="bg-slate-900">Hard</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <div className="flex justify-between items-end mb-3">
+                    <label className="block text-sm font-medium text-slate-400">
+                      Job Description {formData.selectedRole && formData.selectedRole !== 'other' ? '(Predefined active)' : '(Optional)'}
+                    </label>
+                    {formData.selectedRole && formData.selectedRole !== 'other' && (
+                      <button
+                        type="button"
+                        onClick={() => setShowPreviewJD(!showPreviewJD)}
+                        className="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 hover:border-cyan-500/50 transition-all flex items-center gap-2"
+                      >
+                        {showPreviewJD ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                        {showPreviewJD ? 'Hide Standard JD' : 'View Standard JD'}
+                      </button>
+                    )}
+                  </div>
+
+                  {showPreviewJD && formData.selectedRole && formData.selectedRole !== 'other' && (
+                    <div className="mb-4 p-5 bg-slate-900/80 rounded-xl border border-slate-700 text-sm animate-in fade-in zoom-in-95 duration-200 shadow-inner">
+                      <h4 className="text-cyan-400 font-semibold mb-3 flex items-center gap-2 text-xs uppercase tracking-wider">
+                        <FileText className="w-4 h-4" />
+                        Standard JD for {PREDEFINED_ROLES.find(r => r.value === formData.selectedRole)?.label}
+                      </h4>
+                      <div className="whitespace-pre-wrap font-mono text-xs text-slate-300 opacity-90 leading-relaxed pl-2 border-l-2 border-slate-700">
+                        {PREDEFINED_JDS[formData.selectedRole]}
+                      </div>
+                    </div>
+                  )}
+
+                  <textarea
+                    value={formData.jobDescription}
+                    onChange={(e) => setFormData({ ...formData, jobDescription: e.target.value })}
+                    className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-600 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:bg-slate-900 transition-all outline-none min-h-[120px] resize-y"
+                    placeholder={formData.selectedRole && formData.selectedRole !== 'other'
+                      ? "Add any specific requirements on top of standard JD (optional)..."
+                      : "Paste the job description here..."}
+                    disabled={isLoading}
+                  />
+                  {formData.selectedRole && formData.selectedRole !== 'other' && (
+                    <p className="text-xs text-emerald-400 mt-3 flex items-center gap-1.5 px-1">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Standard JD is active. Text above will be appended.
+                    </p>
+                  )}
+                </div>
+              </section>
+
+            )} {/* end !isSimplifiedForm job section */}
+
+            {/* 3. Resume Upload */}
+            {!isSimplifiedForm && (
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileText className="w-5 h-5 text-cyan-400" />
+                  <h2 className="text-lg font-semibold text-white">Resume Upload</h2>
+                </div>
+
+                <div className="group relative">
+                  <div className={`absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 ${resumeFile ? 'opacity-50' : ''}`} />
+                  <div className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer bg-slate-900/80 backdrop-blur-sm ${resumeFile ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 group-hover:border-cyan-500/50'
+                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                      id="resume-upload"
+                      disabled={isLoading}
+                    />
+                    <label htmlFor="resume-upload" className={`cursor-pointer w-full h-full block ${isLoading ? 'cursor-not-allowed' : ''}`}>
+                      <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center transition-all duration-300 ${resumeFile ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500 group-hover:scale-110 group-hover:text-cyan-400 group-hover:bg-cyan-500/10'}`}>
+                        <Upload className="w-10 h-10" />
+                      </div>
+                      {resumeFile ? (
+                        <div>
+                          <p className="text-emerald-400 font-bold text-lg mb-1">
+                            {resumeFile.name}
+                          </p>
+                          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-medium border border-emerald-500/20">
+                            ✓ Ready for Analysis
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-slate-200 font-semibold text-lg">
+                            Upload your Resume
+                          </p>
+                          <p className="text-slate-500 text-sm">
+                            Drag & drop or click to browse (PDF only, Max 10MB)
+                          </p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+              </section>
+            )} {/* end !isSimplifiedForm resume section */}
+
+            {/* Submit Action */}
             <div className="pt-6">
               <button
                 type="submit"
@@ -876,7 +1021,7 @@ const InterviewSetup = () => {
           </form>
         </div>
       </div>
-    </Layout>
+    </Layout >
   );
 };
 

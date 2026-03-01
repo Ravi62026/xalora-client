@@ -6,7 +6,7 @@ const initialState = {
     // Session
     sessionId: null,
     status: 'idle', // idle, loading, active, completed, error
-    error: null, 
+    error: null,
 
     // Candidate info
     candidateInfo: null,
@@ -214,13 +214,15 @@ function interviewReducer(state, action) {
 const InterviewContext = createContext(null);
 
 // Round order for navigation
-const ROUND_ORDER = ['formal_qa', 'technical', 'coding', 'system_design', 'hr'];
+const ROUND_ORDER = ['formal_qa', 'technical', 'coding', 'system_design', 'hr', 'resume_deep_dive', 'jd_based'];
 const ROUND_DISPLAY_NAMES = {
     formal_qa: 'Formal Q&A',
     technical: 'Technical',
     coding: 'Coding Challenge',
     system_design: 'System Design',
     hr: 'HR',
+    resume_deep_dive: 'Resume Deep Dive',
+    jd_based: 'JD Based',
 };
 
 // Provider component

@@ -100,6 +100,8 @@ const ApiRoutes = {
         tts: "/api/v1/interview/tts",
         stt: "/api/v1/interview/stt",
         completeRound: "/api/v1/interview/complete-round",
+        reportViolation: "/api/v1/interview/report-violation",
+        updateScreenShare: "/api/v1/interview/update-screen-share",
         myInterviews: "/api/v1/interview/my-interviews",
         details: (sessionId) => `/api/v1/interview/details/${sessionId}`,
         delete: (sessionId) => `/api/v1/interview/${sessionId}`,

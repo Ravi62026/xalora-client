@@ -488,6 +488,33 @@ const interviewService = {
             throw error;
         }
     },
+    /**
+     * Report proctoring violation
+     * @param {string} sessionId - The interview session ID
+     * @param {string} violationType - tab_switch | screen_share_stopped | copy_paste | window_blur
+     * @param {string} details - Optional details about the violation
+     */
+    reportViolation: async (sessionId, violationType, details = '') => {
+        const method = "reportViolation";
+        log.info(method, `Reporting violation: ${violationType}`);
+        log.request(method, ApiRoutes.interview.reportViolation, { sessionId, violationType });
+
+        try {
+            const response = await axiosInstance.post(ApiRoutes.interview.reportViolation, {
+                sessionId,
+                violationType,
+                details,
+            });
+            log.success(method, "Violation reported", response.data?.data);
+            return response.data;
+        } catch (error) {
+            log.error(method, "Failed to report violation", {
+                status: error.response?.status,
+                message: error.response?.data?.message || error.message
+            });
+            throw error;
+        }
+    },
 };
 
 export default interviewService;

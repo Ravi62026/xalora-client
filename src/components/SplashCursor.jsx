@@ -1084,14 +1084,6 @@ const SplashCursor = ({
       return hash;
     }
 
-    const handleMouseDown = (e) => {
-      let pointer = pointers[0];
-      let posX = scaleByPixelRatio(e.clientX);
-      let posY = scaleByPixelRatio(e.clientY);
-      updatePointerDownData(pointer, -1, posX, posY);
-      clickSplat(pointer);
-    };
-
     const handleFirstMouseMove = (e) => {
       let pointer = pointers[0];
       let posX = scaleByPixelRatio(e.clientX);
@@ -1148,7 +1140,6 @@ const SplashCursor = ({
       }
     };
 
-    window.addEventListener("mousedown", handleMouseDown);
     document.body.addEventListener("mousemove", handleFirstMouseMove);
     window.addEventListener("mousemove", handleMouseMove);
     document.body.addEventListener("touchstart", handleFirstTouchStart);
@@ -1159,7 +1150,6 @@ const SplashCursor = ({
     updateFrame();
 
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
       document.body.removeEventListener("mousemove", handleFirstMouseMove);
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.removeEventListener("touchstart", handleFirstTouchStart);

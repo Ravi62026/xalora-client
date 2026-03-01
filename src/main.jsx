@@ -8,6 +8,15 @@ import App from "./App.jsx";
 // Set the document title
 document.title = "Xalora - One Stop Platform For Engineer";
 
+// Log active environment URLs on app load
+console.log(
+    `%c[Xalora ENV] ${import.meta.env.MODE}`,
+    "color: #7c3aed; font-weight: bold; font-size: 12px"
+);
+console.log("  VITE_API_URL       =", import.meta.env.VITE_API_URL);
+console.log("  VITE_COMPILER_URL  =", import.meta.env.VITE_COMPILER_URL);
+console.log("  VITE_XALORA_AI_URL =", import.meta.env.VITE_XALORA_AI_URL);
+
 // Make store globally available for axios interceptors
 window.__REDUX_STORE__ = store;
 
