@@ -314,79 +314,61 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 title: "AI-Powered Learning",
                 description: "Personalized learning paths with 50+ LLMs to guide your journey",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                )
+                icon: "🧠",
+                color: "text-blue-400"
               },
               {
                 title: "DSA Mastery",
                 description: "500+ handpicked problems with detailed solutions and explanations",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                )
+                icon: "📦",
+                color: "text-purple-400"
               },
               {
                 title: "Resume AI Builder",
                 description: "ATS-optimized resumes with AI-powered suggestions and improvements",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                )
+                icon: "📄",
+                color: "text-cyan-400"
               },
               {
                 title: "Interview Simulator",
                 description: "Realistic mock interviews with AI feedback and performance analysis",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                  </svg>
-                )
+                icon: "💬",
+                color: "text-emerald-400"
               },
               {
                 title: "Coding Playground",
                 description: "Multi-language support with real-time execution and debugging",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                )
+                icon: "💻",
+                color: "text-pink-400"
               },
               {
                 title: "Progress Tracking",
                 description: "Detailed analytics and insights to track your learning journey",
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                )
+                icon: "📊",
+                color: "text-yellow-400"
               }
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 transition-all duration-300 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/20"
-                initial={{ opacity: 0, y: 50 }}
+                className="bg-white/5 backdrop-blur-xs border border-white/10 rounded-xl p-7 transition-all duration-300 hover:border-white/20 hover:bg-white/8 hover:shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                whileHover={{ y: -5, scale: 1.02 }}
                 viewport={{ once: true }}
               >
-                <div className="mb-6">
+                <div className={`text-4xl mb-4 ${feature.color}`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">
+                <h3 className="text-lg font-semibold text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-gray-400 text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
