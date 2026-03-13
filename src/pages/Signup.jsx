@@ -314,7 +314,7 @@ const Signup = () => {
                                 </div>
                                 <p className="text-xs text-gray-500 mt-3">
                                     {accountType === "organization"
-                                        ? "✓ Create your account, then set up your organization with departments and invite team members"
+                                        ? "✓ Create your account, then set up your organization, define academic structure, and import students"
                                         : "✓ Create your account and start solving problems immediately"}
                                 </p>
                             </div>

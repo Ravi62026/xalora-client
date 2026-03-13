@@ -41,7 +41,10 @@ export default function AcceptInvite() {
     if (!currentUser?.organization?.orgId) return "/dashboard";
     if (currentUser?.organization?.role === "super_admin") return "/org/dashboard";
     if (currentUser?.userType === "org_team") return "/org/teamdashboard";
-    return "/org/student/dashboard";
+    return currentUser?.organization?.degreeTypeValue ||
+      currentUser?.organization?.programValue
+      ? "/org/student/dashboard"
+      : "/dashboard";
   };
 
   // ── Validate invite token on mount ──────────────────────────────────
@@ -191,7 +194,19 @@ export default function AcceptInvite() {
             <p className="text-gray-400 mt-1 text-sm">
               You've been invited as{" "}
               <span className="text-emerald-300 font-medium">{invite?.role}</span>
-              {invite?.department && (
+              {invite?.degreeType && (
+                <>
+                  {" "}
+                  in <span className="text-white">{invite.degreeType}</span>
+                </>
+              )}
+              {invite?.program && (
+                <>
+                  {" "}
+                  • <span className="text-white">{invite.program}</span>
+                </>
+              )}
+              {!invite?.degreeType && invite?.department && (
                 <> in <span className="text-white">{invite.department}</span></>
               )}
             </p>

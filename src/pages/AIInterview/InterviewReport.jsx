@@ -234,27 +234,267 @@ const InterviewReport = () => {
     doc.text(reasonLines, margin + 8, yPos + 12);
     yPos += 44;
 
-    // Round-wise performance
-    sectionTitle('Round-wise Performance');
+    // ═══ DETAILED ROUND PERFORMANCE WITH Q&A ═══
     if (roundList.length > 0) {
-      roundList.forEach((round) => {
-        card(16);
-        doc.setFont(undefined, 'normal');
-        doc.setFontSize(10);
-        doc.setTextColor(30, 41, 59);
-        const label = round.roundName || round.roundType || 'Round';
-        doc.text(label, margin + 8, yPos + 11);
-        doc.setTextColor(71, 85, 105);
-        doc.text(`${round.score || 0}/100`, pageWidth - margin - 8, yPos + 11, { align: 'right' });
+      roundList.forEach((round, roundIdx) => {
+        // Round Header
+        checkPageBreak(22);
+        doc.setFillColor(30, 41, 59);
+        doc.roundedRect(margin, yPos, contentWidth, 16, 2, 2, 'F');
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(255, 255, 255);
+        doc.text(`${round.roundName || round.roundType || 'Round'}`, margin + 8, yPos + 11);
+        doc.setFontSize(9);
+        doc.setTextColor(203, 213, 225);
+        doc.text(`Score: ${round.score || 0}/100   |   ${round.questionsAnswered || 0}/${round.questionsAsked || 0} answered`, pageWidth - margin - 8, yPos + 11, { align: 'right' });
         yPos += 22;
+
+        // Q&A Details
+        const qaList = round.qaDetails || [];
+        if (qaList.length === 0) {
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(100, 116, 139);
+          doc.text('No Q&A data recorded for this round.', margin + 8, yPos);
+          yPos += 8;
+        }
+
+        qaList.forEach((qa, qIdx) => {
+          // Calculate average score from valid dimensions
+          const dimScores = [
+            qa.evaluation?.clarity,
+            qa.evaluation?.completeness,
+            qa.evaluation?.relevance,
+            qa.evaluation?.depth,
+            qa.evaluation?.coherence,
+          ].filter(s => s > 0);
+          const avgScore = dimScores.length > 0
+            ? Math.round(dimScores.reduce((a, b) => a + b, 0) / dimScores.length)
+            : 0;
+          const quality = (qa.evaluation?.overallQuality || 'N/A');
+          const qualityLabel = quality.charAt(0).toUpperCase() + quality.slice(1);
+
+          // Question header line with badge
+          checkPageBreak(30);
+          doc.setFont(undefined, 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(99, 102, 241);
+          doc.text(`Q${qIdx + 1}`, margin + 4, yPos);
+          // Quality color
+          const qColors = { excellent: [16, 185, 129], good: [59, 130, 246], fair: [234, 179, 8], poor: [239, 68, 68], incomplete: [148, 163, 184] };
+          const qc = qColors[quality] || qColors.fair;
+          doc.setTextColor(...qc);
+          doc.text(`[${qualityLabel}]`, margin + 14, yPos);
+          doc.setTextColor(71, 85, 105);
+          doc.text(`${avgScore}/100`, margin + 50, yPos);
+          yPos += 6;
+
+          // Question text
+          doc.setFont(undefined, 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(30, 41, 59);
+          const qTextLines = doc.splitTextToSize(`Q: ${qa.question || 'No question'}`, contentWidth - 12);
+          doc.text(qTextLines, margin + 4, yPos);
+          yPos += qTextLines.length * 4 + 2;
+
+          // Answer text
+          checkPageBreak(15);
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(51, 65, 85);
+          const ansText = qa.answer || 'No answer provided';
+          const truncAns = ansText.length > 600 ? ansText.substring(0, 600) + '...' : ansText;
+          const aTextLines = doc.splitTextToSize(`A: ${truncAns}`, contentWidth - 12);
+          doc.text(aTextLines, margin + 4, yPos);
+          yPos += aTextLines.length * 4 + 2;
+
+          // Scores row
+          checkPageBreak(8);
+          doc.setFontSize(7.5);
+          doc.setTextColor(100, 116, 139);
+          const scoreRow = `Clarity: ${qa.evaluation?.clarity || 0}  |  Completeness: ${qa.evaluation?.completeness || 0}  |  Relevance: ${qa.evaluation?.relevance || 0}  |  Depth: ${qa.evaluation?.depth || 0}  |  Coherence: ${qa.evaluation?.coherence || 0}`;
+          doc.text(scoreRow, margin + 4, yPos);
+          yPos += 5;
+
+          // Feedback
+          if (qa.evaluation?.feedback) {
+            checkPageBreak(10);
+            doc.setFontSize(8);
+            doc.setFont(undefined, 'italic');
+            doc.setTextColor(37, 99, 235);
+            const fbLines = doc.splitTextToSize(`Feedback: ${qa.evaluation.feedback}`, contentWidth - 12);
+            doc.text(fbLines, margin + 4, yPos);
+            yPos += fbLines.length * 3.5 + 2;
+            doc.setFont(undefined, 'normal');
+          }
+
+          // Follow-ups
+          if (qa.followups && qa.followups.length > 0) {
+            qa.followups.forEach((fu, fuIdx) => {
+              checkPageBreak(20);
+              // Purple left indicator
+              doc.setFillColor(147, 51, 234);
+              doc.rect(margin + 8, yPos - 1, 1.5, 4, 'F');
+              doc.setFont(undefined, 'bold');
+              doc.setFontSize(8);
+              doc.setTextColor(147, 51, 234);
+              doc.text(`Follow-up ${fuIdx + 1}`, margin + 12, yPos + 2);
+              if (fu.evaluation?.overallQuality) {
+                const fuQC = qColors[fu.evaluation.overallQuality] || qColors.fair;
+                doc.setTextColor(...fuQC);
+                doc.text(`[${fu.evaluation.overallQuality}]`, margin + 40, yPos + 2);
+              }
+              yPos += 6;
+
+              // Follow-up question
+              doc.setFont(undefined, 'normal');
+              doc.setFontSize(8);
+              doc.setTextColor(71, 85, 105);
+              const fuQLines = doc.splitTextToSize(`Q: ${fu.question || ''}`, contentWidth - 22);
+              doc.text(fuQLines, margin + 12, yPos);
+              yPos += fuQLines.length * 3.5 + 1;
+
+              // Follow-up answer
+              checkPageBreak(10);
+              doc.setTextColor(51, 65, 85);
+              const fuAnsText = fu.answer || 'No answer';
+              const truncFuAns = fuAnsText.length > 400 ? fuAnsText.substring(0, 400) + '...' : fuAnsText;
+              const fuALines = doc.splitTextToSize(`A: ${truncFuAns}`, contentWidth - 22);
+              doc.text(fuALines, margin + 12, yPos);
+              yPos += fuALines.length * 3.5 + 1;
+
+              // Follow-up feedback
+              if (fu.evaluation?.feedback) {
+                checkPageBreak(8);
+                doc.setFont(undefined, 'italic');
+                doc.setTextColor(37, 99, 235);
+                doc.setFontSize(7.5);
+                const fuFbLines = doc.splitTextToSize(`Feedback: ${fu.evaluation.feedback}`, contentWidth - 22);
+                doc.text(fuFbLines, margin + 12, yPos);
+                yPos += fuFbLines.length * 3.5 + 1;
+                doc.setFont(undefined, 'normal');
+              }
+            });
+          }
+
+          // Separator line between questions
+          yPos += 2;
+          doc.setDrawColor(226, 232, 240);
+          doc.setLineWidth(0.2);
+          doc.line(margin + 4, yPos, pageWidth - margin - 4, yPos);
+          yPos += 4;
+        });
+
+        // Round Analysis
+        if (round.roundAnalysis) {
+          const ra = round.roundAnalysis;
+          const hasContent = (ra.strengths?.length > 0) || (ra.weaknesses?.length > 0) || (ra.recommendations?.length > 0);
+          if (hasContent) {
+            checkPageBreak(16);
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(30, 41, 59);
+            doc.text('Round Analysis', margin + 4, yPos);
+            yPos += 6;
+
+            const renderList = (items, label, color) => {
+              if (!items || items.length === 0) return;
+              checkPageBreak(10);
+              doc.setFont(undefined, 'bold');
+              doc.setFontSize(8);
+              doc.setTextColor(...color);
+              doc.text(`${label}:`, margin + 6, yPos);
+              yPos += 4;
+              doc.setFont(undefined, 'normal');
+              doc.setTextColor(51, 65, 85);
+              items.forEach((item) => {
+                checkPageBreak(6);
+                const lines = doc.splitTextToSize(`• ${item}`, contentWidth - 20);
+                doc.text(lines, margin + 10, yPos);
+                yPos += lines.length * 3.5 + 1;
+              });
+              yPos += 2;
+            };
+
+            renderList(ra.strengths, 'Strengths', [16, 185, 129]);
+            renderList(ra.weaknesses, 'Areas for Improvement', [239, 68, 68]);
+            renderList(ra.recommendations, 'Recommendations', [37, 99, 235]);
+          }
+        }
+
+        yPos += 4;
       });
     } else {
+      sectionTitle('Round-wise Performance');
       card(16);
       doc.setFont(undefined, 'normal');
       doc.setFontSize(10);
       doc.setTextColor(100, 116, 139);
       doc.text('No round data available.', margin + 8, yPos + 11);
       yPos += 22;
+    }
+
+    // ═══ OVERALL ANALYSIS ═══
+    if (reportData.overallAnalysis) {
+      const oa = reportData.overallAnalysis;
+      const hasOA = (oa.strengths?.length > 0) || (oa.weaknesses?.length > 0) || (oa.recommendations?.length > 0);
+      if (hasOA) {
+        sectionTitle('Overall Analysis', [99, 102, 241]);
+
+        const renderOAList = (items, label, color) => {
+          if (!items || items.length === 0) return;
+          checkPageBreak(10);
+          doc.setFont(undefined, 'bold');
+          doc.setFontSize(9);
+          doc.setTextColor(...color);
+          doc.text(label, margin + 4, yPos);
+          yPos += 5;
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(51, 65, 85);
+          items.forEach((item) => {
+            checkPageBreak(6);
+            const lines = doc.splitTextToSize(`• ${item}`, contentWidth - 16);
+            doc.text(lines, margin + 8, yPos);
+            yPos += lines.length * 4 + 1;
+          });
+          yPos += 3;
+        };
+
+        renderOAList(oa.strengths, 'Strengths', [16, 185, 129]);
+        renderOAList(oa.weaknesses, 'Areas for Improvement', [239, 68, 68]);
+        renderOAList(oa.recommendations, 'Recommendations', [37, 99, 235]);
+      }
+    }
+
+    // ═══ SKILL ASSESSMENT ═══
+    if (reportData.skillAssessment && reportData.skillAssessment.length > 0) {
+      sectionTitle('Skill Assessment');
+      reportData.skillAssessment.forEach((skill) => {
+        checkPageBreak(10);
+        doc.setFont(undefined, 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(30, 41, 59);
+        doc.text(skill.skill || 'Unknown', margin + 8, yPos);
+        // Level badge
+        const levelColors = { expert: [16, 185, 129], advanced: [59, 130, 246], intermediate: [234, 179, 8], beginner: [239, 68, 68] };
+        const lc = levelColors[skill.level] || [100, 116, 139];
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...lc);
+        doc.text(`${(skill.level || 'N/A').toUpperCase()}`, margin + 70, yPos);
+        doc.setTextColor(71, 85, 105);
+        doc.text(`Confidence: ${skill.confidence || 0}%`, pageWidth - margin - 8, yPos, { align: 'right' });
+        // Confidence bar
+        yPos += 3;
+        doc.setFillColor(226, 232, 240);
+        doc.roundedRect(margin + 8, yPos, contentWidth - 16, 2, 1, 1, 'F');
+        doc.setFillColor(...lc);
+        doc.roundedRect(margin + 8, yPos, Math.max(2, (contentWidth - 16) * ((skill.confidence || 0) / 100)), 2, 1, 1, 'F');
+        yPos += 6;
+      });
+      yPos += 4;
     }
 
     // Two-column: Strengths and Areas for Improvement

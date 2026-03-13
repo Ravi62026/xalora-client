@@ -107,6 +107,20 @@ const Navbar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if (!isMobileMenuOpen) {
+            document.body.style.overflow = "";
+            return;
+        }
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [isMobileMenuOpen]);
+
     const handleLogout = async () => {
         await dispatch(logoutUser());
         navigate("/");
@@ -122,7 +136,9 @@ const Navbar = () => {
         if (!user?.organization?.orgId && !user?.organization?._id) return "/dashboard";
         if (user?.organization?.role === "super_admin") return "/org/dashboard";
         if (user?.userType === "org_team") return "/org/teamdashboard";
-        return "/org/student/dashboard";
+        return user?.organization?.degreeTypeValue || user?.organization?.programValue
+            ? "/org/student/dashboard"
+            : "/dashboard";
     };
 
     // Check if path is active
@@ -325,8 +341,35 @@ const Navbar = () => {
 
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
-                    <div className="lg:hidden pb-6 border-t border-emerald-500/20 animate-in slide-in-from-top-2 duration-200">
-                        <div className="pt-4 space-y-1">
+                    <div
+                        className="lg:hidden fixed inset-0 z-[90] bg-black/60 backdrop-blur-[2px]"
+                        onClick={closeMobileMenu}
+                    >
+                        <div
+                            className="h-[100dvh] w-[86vw] max-w-sm overflow-y-auto border-r border-emerald-500/25 bg-gradient-to-b from-gray-950 via-slate-950 to-black shadow-[0_0_40px_rgba(0,0,0,0.65)] animate-in slide-in-from-left duration-200"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            <div className="min-h-full">
+                                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-emerald-500/20 bg-gray-950/95 px-5 py-4 backdrop-blur-xl">
+                                    <Link to="/" className="flex items-center shrink-0" onClick={closeMobileMenu}>
+                                        <img
+                                            src="/logo_xalora.png"
+                                            alt="Xalora"
+                                            className="h-10 w-auto object-contain"
+                                        />
+                                    </Link>
+                                    <button
+                                        onClick={closeMobileMenu}
+                                        className="rounded-lg p-2 text-gray-400 hover:text-white transition-colors duration-200"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div className="px-4 pb-6 pt-4">
+                        <div className="space-y-1">
                             <Link to="/" className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
                                 Home
                             </Link>
@@ -439,6 +482,9 @@ const Navbar = () => {
                                     </Link>
                                 </div>
                             )}
+                        </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

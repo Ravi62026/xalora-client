@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, User, Briefcase, Building, FileText, Loader2, AlertCircle, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Upload, User, Briefcase, Building, FileText, Loader2, AlertCircle, Sparkles, Eye, EyeOff, CheckCircle2, Circle } from 'lucide-react';
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
 import { useSelector } from 'react-redux';
@@ -326,6 +326,15 @@ const InterviewSetup = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [showPreviewJD, setShowPreviewJD] = useState(false);
 
+  // Progress tracking
+  const [progressSteps, setProgressSteps] = useState([
+    { id: 1, label: 'Uploading Resume', status: 'pending' },
+    { id: 2, label: 'Parsing PDF Content', status: 'pending' },
+    { id: 3, label: 'Analyzing with AI', status: 'pending' },
+    { id: 4, label: 'Generating Questions', status: 'pending' },
+    { id: 5, label: 'Finalizing Setup', status: 'pending' },
+  ]);
+
   // Derived helpers — which specific round is selected
   const isResumeDeepDive = formData.interviewMode === 'specific' && formData.specificRound === 'resume_deep_dive';
   const isJDBased = formData.interviewMode === 'specific' && formData.specificRound === 'jd_based';
@@ -370,6 +379,11 @@ const InterviewSetup = () => {
     setIsLoading(true);
     setError(null);
     setLoadingMessage('Uploading your resume...');
+    setProgressSteps(prev =>
+      prev.map((step, idx) =>
+        idx === 0 ? { ...step, status: 'active' } : step
+      )
+    );
 
     try {
       // Logic to merge JDs
@@ -419,11 +433,55 @@ const InterviewSetup = () => {
         if (finalJD) submitData.append('jobDescription', finalJD);
       }
 
+      // Mark step 1 as done, start step 2
+      setProgressSteps(prev =>
+        prev.map((step, idx) => {
+          if (idx === 0) return { ...step, status: 'done' };
+          if (idx === 1) return { ...step, status: 'active' };
+          return step;
+        })
+      );
+
+      // Simulate parsing delay (usually happens server-side, but this gives feedback)
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Mark step 2 as done, start step 3
+      setProgressSteps(prev =>
+        prev.map((step, idx) => {
+          if (idx === 1) return { ...step, status: 'done' };
+          if (idx === 2) return { ...step, status: 'active' };
+          return step;
+        })
+      );
       setLoadingMessage('Analyzing your resume with AI...');
 
+      // Mark step 3 as active (API call happening)
       const response = await interviewService.startInterview(submitData);
 
       if (response.success) {
+        // Mark step 4 as active
+        setProgressSteps(prev =>
+          prev.map((step, idx) => {
+            if (idx === 2) return { ...step, status: 'done' };
+            if (idx === 3) return { ...step, status: 'active' };
+            return step;
+          })
+        );
+        setLoadingMessage('Generating personalized questions...');
+
+        // Simulate question generation
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // Mark step 4 as done, step 5 as active
+        setProgressSteps(prev =>
+          prev.map((step, idx) => {
+            if (idx === 3) return { ...step, status: 'done' };
+            if (idx === 4) return { ...step, status: 'active' };
+            return step;
+          })
+        );
+        setLoadingMessage('Finalizing your interview setup...');
+
         // Store session ID in localStorage
         localStorage.setItem('interviewSessionId', response.data.sessionId);
         localStorage.setItem('interviewSessionData', JSON.stringify({
@@ -437,6 +495,10 @@ const InterviewSetup = () => {
           codingDifficulty: formData.codingDifficulty
         }));
 
+        // Mark all done
+        setProgressSteps(prev =>
+          prev.map(step => ({ ...step, status: 'done' }))
+        );
         setLoadingMessage('Success! Redirecting to waiting room...');
 
         // Navigate to waiting room
@@ -483,6 +545,67 @@ const InterviewSetup = () => {
             </div>
             <p className="text-slate-400 text-xs sm:text-sm">Configure your interview session below</p>
           </div>
+
+          {/* Loading Progress Tracker */}
+          {isLoading && (
+            <div className="mb-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 rounded-2xl p-6">
+              <h3 className="text-sm font-semibold text-slate-300 mb-6 flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin text-purple-400" />
+                Setting Up Your Interview
+              </h3>
+              <div className="space-y-3">
+                {progressSteps.map((step, idx) => (
+                  <div key={step.id} className="flex items-start gap-4">
+                    <div className="flex flex-col items-center pt-1">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                        step.status === 'done'
+                          ? 'bg-emerald-500/20 text-emerald-400'
+                          : step.status === 'active'
+                            ? 'bg-purple-500/20 text-purple-400 animate-pulse'
+                            : 'bg-slate-700/50 text-slate-500'
+                      }`}>
+                        {step.status === 'done' ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : step.status === 'active' ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Circle className="w-4 h-4" />
+                        )}
+                      </div>
+                      {idx < progressSteps.length - 1 && (
+                        <div className={`w-0.5 h-8 mt-1 ${
+                          step.status === 'done'
+                            ? 'bg-emerald-500/40'
+                            : step.status === 'active'
+                              ? 'bg-purple-500/40'
+                              : 'bg-slate-700/30'
+                        }`} />
+                      )}
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <p className={`text-sm font-medium transition-colors ${
+                        step.status === 'done'
+                          ? 'text-emerald-300'
+                          : step.status === 'active'
+                            ? 'text-purple-300'
+                            : 'text-slate-500'
+                      }`}>
+                        {step.label}
+                      </p>
+                      {step.status === 'active' && (
+                        <p className="text-xs text-slate-400 mt-1 animate-pulse">In progress...</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-700/50">
+                <p className="text-xs text-slate-400 text-center">
+                  ⏱️ This usually takes 1-2 minutes. Grab some coffee! ☕
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Error Banner */}
           {error && (

@@ -84,6 +84,16 @@ const MyInterviews = () => {
         navigate(`/ai-interview/${sessionId}/report`);
     };
 
+    const ROUND_ORDER = ['formal_qa', 'technical', 'coding', 'system_design', 'behavioral'];
+
+    const getNextRound = (interview) => {
+        if (interview.interviewMode === 'specific') {
+            return interview.specificRound || 'formal_qa';
+        }
+        const completed = interview.completedRounds || [];
+        return ROUND_ORDER.find(r => !completed.includes(r)) || 'formal_qa';
+    };
+
     if (isLoading) {
         return (
             <Layout>
@@ -199,7 +209,7 @@ const MyInterviews = () => {
                                         </button>
                                     ) : (
                                         <button
-                                            onClick={() => navigate(`/ai-interview/${interview.sessionId}/round/${interview.completedRounds?.[interview.completedRounds.length - 1] || 'formal_qa'}`)}
+                                            onClick={() => navigate(`/ai-interview/${interview.sessionId}/round/${getNextRound(interview)}`)}
                                             className="w-full px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-medium transition-colors text-sm sm:text-base"
                                         >
                                             Continue Interview

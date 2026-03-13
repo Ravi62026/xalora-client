@@ -346,8 +346,20 @@ const interviewService = {
     },
 
     /**
+     * Abandon interview (user force-ended mid-session)
+     */
+    abandonInterview: async (sessionId) => {
+        try {
+            const response = await axiosInstance.post(`/api/v1/interview/${sessionId}/abandon`);
+            return response.data;
+        } catch (e) {
+            console.error('[InterviewService] abandonInterview failed:', e);
+        }
+    },
+
+    /**
      * Complete a round and move to the next
-     * @param {string} sessionId - The interview session ID  
+     * @param {string} sessionId - The interview session ID
      * @param {string} roundType - The round type being completed
      */
     completeRound: async (sessionId, roundType) => {

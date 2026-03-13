@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Simple: Use environment variables, fallback to localhost in dev
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const compilerURL = import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
 
 const AUTH_EXCLUDED_ENDPOINTS = [
@@ -83,6 +83,7 @@ const notifyRefreshFailure = (error) => {
 const axiosInstance = axios.create({
   baseURL,
   timeout: 120000,
+  withCredentials: true,
 });
 
 // Request interceptor: Attach Authorization header
@@ -142,7 +143,7 @@ axiosInstance.interceptors.response.use(
         const refreshResponse = await axios.post(
           `${baseURL}/api/v1/users/refresh-token`,
           { refreshToken },
-          { timeout: 120000 }
+          { timeout: 120000, withCredentials: true }
         );
 
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } =

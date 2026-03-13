@@ -41,6 +41,15 @@ const WaitingRoom = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
+  // Navigate when countdown reaches 0
+  useEffect(() => {
+    if (countdown === 0 && isStarting) {
+      const firstRound = sessionData?.specificRound || 'formal_qa';
+      navigate(`/ai-interview/${sessionId}/round/${firstRound}`);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
+
   // Load session data from localStorage
   useEffect(() => {
     const savedData = localStorage.getItem('interviewSessionData');
@@ -181,9 +190,6 @@ const WaitingRoom = () => {
       setCountdown(prev => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
-          // Navigate to first round with sessionId and roundType
-          const firstRound = sessionData?.specificRound || 'formal_qa';
-          navigate(`/ai-interview/${sessionId}/round/${firstRound}`);
           return 0;
         }
         return prev - 1;

@@ -128,6 +128,11 @@ const ApiRoutes = {
         team: (orgId) => `/api/v1/organizations/${orgId}/team`,
         updateTeamMember: (orgId, userId) => `/api/v1/organizations/${orgId}/team/${userId}`,
         removeTeamMember: (orgId, userId) => `/api/v1/organizations/${orgId}/team/${userId}`,
+        collegeFilterOptions: (orgId) => `/api/v1/organizations/${orgId}/college/filter-options`,
+        collegeStudentTemplate: (orgId) => `/api/v1/organizations/${orgId}/college/student-template`,
+        collegeImportMembers: (orgId) => `/api/v1/organizations/${orgId}/college/members/import`,
+        collegeLeaderboard: (orgId) => `/api/v1/organizations/${orgId}/college/leaderboard`,
+        collegeMyRank: (orgId) => `/api/v1/organizations/${orgId}/college/me/rank`,
     },
     jobs: {
         searchByRole: "/api/v1/ai/jobs/search/role",

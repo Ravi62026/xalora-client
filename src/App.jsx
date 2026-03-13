@@ -73,6 +73,7 @@ import {
   OrganizationSetup,
   OrgAdminDashboard,
   OrgMemberAnalytics,
+  CollegeStudentDashboard,
   AcceptInvite,
 } from "./pages";
 import DebugUserInfo from "./components/DebugUserInfo";
@@ -163,7 +164,10 @@ const AppContent = () => {
     if (!currentUser?.organization?.orgId) return "/dashboard";
     if (currentUser?.organization?.role === "super_admin") return "/org/dashboard";
     if (currentUser?.userType === "org_team") return "/org/teamdashboard";
-    return "/org/student/dashboard";
+    return currentUser?.organization?.degreeTypeValue ||
+      currentUser?.organization?.programValue
+      ? "/org/student/dashboard"
+      : "/dashboard";
   };
 
   const isOrgTeam = user?.userType === "org_team";
@@ -275,7 +279,7 @@ const AppContent = () => {
         <Route path="/org/setup/:token" element={<OrganizationSetup />} />
         <Route path="/org/dashboard" element={<OrgAdminDashboard />} />
         <Route path="/org/teamdashboard" element={<OrgAdminDashboard />} />
-        <Route path="/org/student/dashboard" element={<OrgAdminDashboard />} />
+        <Route path="/org/student/dashboard" element={<CollegeStudentDashboard />} />
         <Route path="/org/members" element={<OrgMemberAnalytics />} />
         <Route path="/org/join/:token" element={<AcceptInvite />} />
 

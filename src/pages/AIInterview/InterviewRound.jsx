@@ -9,28 +9,31 @@ import {
   Loader2,
   CheckCircle,
   AlertCircle,
-  Volume2,
+  Volume2, VolumeX,
   RefreshCw,
   Monitor,
   MonitorOff,
   ShieldAlert,
-  Shield
+  Shield,
+  Eye,
+  EyeOff,
+  Users
 } from 'lucide-react';
 import { Layout } from '../../components';
-// InterviewerAvatar removed - candidate video shown directly
 import interviewService from '../../services/interviewService';
+import useFaceProctoring from '../../hooks/useFaceProctoring';
 import ReactMarkdown from 'react-markdown';
 import Editor from '@monaco-editor/react';
 
 // Round configuration
 const ROUND_CONFIG = {
-  1: { type: 'formal_qa', name: 'Formal Q&A', color: 'blue', maxQuestions: 10 },
-  2: { type: 'technical', name: 'Technical', color: 'purple', maxQuestions: 15 },
-  3: { type: 'coding', name: 'Coding Challenge', color: 'emerald', maxQuestions: 3 },
+  1: { type: 'formal_qa', name: 'Formal Q&A', color: 'blue', maxQuestions: 7 },
+  2: { type: 'technical', name: 'Technical', color: 'purple', maxQuestions: 8 },
+  3: { type: 'coding', name: 'Coding Challenge', color: 'emerald', maxQuestions: 2, noFollowup: true },
   4: { type: 'system_design', name: 'System Design', color: 'orange', maxQuestions: 2 },
   5: { type: 'behavioral', name: 'HR', color: 'pink', maxQuestions: 3 },
-  6: { type: 'resume_deep_dive', name: 'Resume Deep Dive', color: 'cyan', maxQuestions: 6 },
-  7: { type: 'jd_based', name: 'JD Based', color: 'amber', maxQuestions: 6 },
+  6: { type: 'resume_deep_dive', name: 'Resume Deep Dive', color: 'cyan', maxQuestions: 5 },
+  7: { type: 'jd_based', name: 'JD Based', color: 'amber', maxQuestions: 5 },
 };
 
 const InterviewRound = () => {
@@ -48,6 +51,8 @@ const InterviewRound = () => {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentFollowup, setCurrentFollowup] = useState(null);
   const [isFollowup, setIsFollowup] = useState(false);
+  const [followupIndexForCurrentQ, setFollowupIndexForCurrentQ] = useState(0);
+  const [totalFollowupsAnswered, setTotalFollowupsAnswered] = useState(0);
   const [answer, setAnswer] = useState('');
   const [questionNumber, setQuestionNumber] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
@@ -72,6 +77,7 @@ const InterviewRound = () => {
   const [stream, setStream] = useState(null);
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const currentAudioRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
 
   // Proctoring state
@@ -103,8 +109,50 @@ const InterviewRound = () => {
   const silenceNudgeTimerRef = useRef(null);
   const answerRef = useRef('');
   const hasSentNudgeRef = useRef(false);
+  const pendingSkipRef = useRef(false);
+  const pendingAfterSpeakRef = useRef(null);
   const isSpecificMode = sessionData?.interviewMode === 'specific';
   const [sessionChecked, setSessionChecked] = useState(false);
+  const faceViolationCountRef = useRef(0);
+
+  // ── Immersive UI state ──────────────────────────────────────
+  const [streamedText, setStreamedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [questionVisible, setQuestionVisible] = useState(true);
+  const [questionKey, setQuestionKey] = useState(0);
+  const [interimTranscript, setInterimTranscript] = useState(''); // Live STT preview
+
+  // ── Face Proctoring (MediaPipe) ─────────────────────────────
+  const handleFaceViolation = (type, details) => {
+    if (isComplete) return;
+
+    const newCount = faceViolationCountRef.current + 1;
+    faceViolationCountRef.current = newCount;
+
+    reportViolationToBackend(type, details);
+
+    if (newCount >= maxWarnings) {
+      setWarningType(type);
+      setWarningMessage(`Your interview has been terminated — ${type.replace(/_/g, ' ')} detected ${newCount} times.`);
+      setShowWarningModal(true);
+      setTimeout(() => handleEndCall(true), 3000);
+    } else {
+      const msgs = {
+        face_not_detected: `Your face is not visible! Please face the camera. Warning ${newCount}/${maxWarnings}`,
+        multiple_faces: `Multiple faces detected! Only the candidate should be visible. Warning ${newCount}/${maxWarnings}`,
+        looking_away: `Please look at the screen during the interview. Warning ${newCount}/${maxWarnings}`,
+      };
+      setWarningType(type);
+      setWarningMessage(msgs[type] || `Face proctoring warning ${newCount}/${maxWarnings}`);
+      setShowWarningModal(true);
+    }
+  };
+
+  const { faceStatus, isReady: faceDetectionReady } = useFaceProctoring(
+    videoRef,
+    !isComplete && isVideoOn && !showScreenSharePrompt,
+    handleFaceViolation
+  );
 
   // Check if session is already completed on mount — redirect if so
   useEffect(() => {
@@ -268,6 +316,16 @@ const InterviewRound = () => {
   }, [paramSessionId]);
 
   useEffect(() => {
+    if (isComplete) {
+      // Stop any playing TTS audio immediately
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause();
+        currentAudioRef.current = null;
+      }
+      speechSynthesis.cancel(); // Stop browser fallback TTS too
+      setIsSpeaking(false);
+      pendingAfterSpeakRef.current = null;
+    }
     if (isComplete && stream) {
       stream.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -481,11 +539,24 @@ const InterviewRound = () => {
     };
   }, [screenShareStream]);
 
-  // Duration timer
+  // Duration timer + time warnings
+  const timeWarningGivenRef = useRef(false);
   useEffect(() => {
     const interval = setInterval(() => {
       setDuration(prev => prev + 1);
-      setTimeRemaining(prev => Math.max(0, prev - 1));
+      setTimeRemaining(prev => {
+        const newTime = Math.max(0, prev - 1);
+        // Warn at 2 minutes remaining (once)
+        if (newTime === 120 && !timeWarningGivenRef.current && !isComplete) {
+          timeWarningGivenRef.current = true;
+          speakQuestion("Just a heads up — you have about 2 minutes remaining in this round.");
+        }
+        // Auto-complete at 0
+        if (newTime === 0 && !isComplete) {
+          setIsComplete(true);
+        }
+        return newTime;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -506,7 +577,9 @@ const InterviewRound = () => {
     if (paramSessionId && isScreenSharing && sessionChecked) {
       const timer = setTimeout(() => {
         hasInitialized.current = true;
-        fetchQuestion();
+        // Speak round introduction, then fetch first question when TTS finishes
+        pendingAfterSpeakRef.current = () => fetchQuestion();
+        speakQuestion(getRoundIntroMessage());
       }, 100); // Small delay to ensure state is reset
 
       return () => clearTimeout(timer);
@@ -561,6 +634,7 @@ const InterviewRound = () => {
         setCurrentQuestion(response.data.question);
         setCurrentFollowup(null);
         setIsFollowup(false);
+        setFollowupIndexForCurrentQ(0);
         if (response.data?.questionNumber) {
           setQuestionNumber(response.data.questionNumber);
         } else {
@@ -637,6 +711,11 @@ const InterviewRound = () => {
         const { evaluation, action, nextAction, followupQuestion, feedback: apiFeedback } = response.data;
         const finalAction = action || nextAction;
 
+        // Track follow-up exchanges
+        if (isFollowup) {
+          setTotalFollowupsAnswered(prev => prev + 1);
+        }
+
         // Show feedback
         if (evaluation) {
           setLastScore(evaluation.overallScore);
@@ -647,9 +726,13 @@ const InterviewRound = () => {
 
         setAnswer('');
 
-        // Handle next action
+        // Handle next action (with natural pacing)
+        const isFollowupAction = finalAction === 'followup' && followupQuestion && !roundConfig.noFollowup;
+        // Follow-ups get a longer pause (AI "thinking"), next question shorter
+        const paceDelay = isFollowupAction ? 3500 : 2000;
+
         setTimeout(() => {
-          if (finalAction === 'followup' && followupQuestion) {
+          if (isFollowupAction) {
             // Normalize followup structure (backend sends string, we need object)
             const normalizedFollowup = typeof followupQuestion === 'string'
               ? { text: followupQuestion }
@@ -657,6 +740,7 @@ const InterviewRound = () => {
 
             setCurrentFollowup(normalizedFollowup);
             setIsFollowup(true);
+            setFollowupIndexForCurrentQ(prev => prev + 1);
             speakQuestion(normalizedFollowup.text || followupQuestion);
           } else if (finalAction === 'next_question' || response.data.roundComplete === false) {
             if (questionNumber >= roundConfig.maxQuestions || response.data.roundComplete === true) {
@@ -675,7 +759,7 @@ const InterviewRound = () => {
               fetchQuestion();
             }
           }
-        }, 2000); // Show feedback for 2 seconds
+        }, paceDelay); // Natural pacing: 3.5s for follow-up (AI "thinking"), 2s for next question
       } else {
         throw new Error(response.message || 'Failed to submit answer');
       }
@@ -711,12 +795,27 @@ const InterviewRound = () => {
     return voices.find(v => /^en/i.test(v.lang)) || voices[0] || null;
   };
 
+  const stripCodeForTTS = (text) => {
+    // Remove fenced code blocks (```...```) and replace with a spoken hint
+    let cleaned = text.replace(/```[\s\S]*?```/g, '(refer to the code shown on screen)');
+    // Remove inline code (`...`)
+    cleaned = cleaned.replace(/`[^`]+`/g, (match) => {
+      const inner = match.slice(1, -1).trim();
+      // If it's a short identifier/keyword, say it naturally; otherwise skip it
+      return inner.length <= 20 ? inner : '(code snippet)';
+    });
+    return cleaned.trim();
+  };
+
   const speakQuestion = async (text) => {
     // Validate text
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
       console.warn('TTS: No valid text provided');
       return;
     }
+
+    // Strip code blocks so TTS doesn't read raw syntax
+    text = stripCodeForTTS(text);
 
     setIsSpeaking(true);
     try {
@@ -749,21 +848,52 @@ const InterviewRound = () => {
       const audioBlob = base64ToBlob(data.audio, 'audio/mp3');
       const audioUrl = URL.createObjectURL(audioBlob);
 
+      // Stop any currently playing audio before starting new one
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause();
+        currentAudioRef.current = null;
+      }
+
       const audio = new Audio(audioUrl);
-      audio.onended = () => setIsSpeaking(false);
+      currentAudioRef.current = audio;
+      audio.playbackRate = 1.2;
+      audio.onended = () => {
+        currentAudioRef.current = null;
+        setIsSpeaking(false);
+        if (pendingAfterSpeakRef.current) {
+          const cb = pendingAfterSpeakRef.current;
+          pendingAfterSpeakRef.current = null;
+          cb();
+        }
+      };
       audio.onerror = (err) => {
         console.error('Audio playback error:', err);
+        currentAudioRef.current = null;
         setIsSpeaking(false);
+        if (pendingAfterSpeakRef.current) {
+          const cb = pendingAfterSpeakRef.current;
+          pendingAfterSpeakRef.current = null;
+          cb();
+        }
       };
 
-      // Estimate duration and start text stream
-      const estimatedDurationMs = estimateTtsDurationMs(text);
+      // Use actual audio duration for synced text streaming
+      const fallbackDurationMs = estimateTtsDurationMs(text) / 1.2;
+      audio.onloadedmetadata = () => {
+        // audio.duration is in seconds, adjust for playbackRate
+        const actualDurationMs = (audio.duration * 1000) / audio.playbackRate;
+        startTextStream(text, actualDurationMs || fallbackDurationMs);
+      };
       audio.play().catch(err => {
         console.error('Failed to play audio:', err);
+        currentAudioRef.current = null;
         setIsSpeaking(false);
       });
 
-      startTextStream(text, estimatedDurationMs);
+      // Fallback: if metadata doesn't fire quickly, start with estimate
+      setTimeout(() => {
+        if (!streamTimerRef.current) startTextStream(text, fallbackDurationMs);
+      }, 300);
     } catch (error) {
       console.error('AWS Polly TTS error:', error);
       setIsSpeaking(false);
@@ -790,14 +920,30 @@ const InterviewRound = () => {
         utterance.voice = chosenVoice;
       }
 
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        if (pendingAfterSpeakRef.current) {
+          const cb = pendingAfterSpeakRef.current;
+          pendingAfterSpeakRef.current = null;
+          cb();
+        }
+      };
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        if (pendingAfterSpeakRef.current) {
+          const cb = pendingAfterSpeakRef.current;
+          pendingAfterSpeakRef.current = null;
+          cb();
+        }
+      };
       const estimatedDurationMs = estimateTtsDurationMs(text);
       speechSynthesis.speak(utterance);
       startTextStream(text, estimatedDurationMs);
     } catch (error) {
       console.error('Browser TTS fallback error:', error);
       setIsSpeaking(false);
+      // Both TTS options failed — still show the text
+      startTextStream(text);
     }
   };
 
@@ -830,17 +976,63 @@ const InterviewRound = () => {
       streamTimerRef.current = null;
     }
     const cleanText = (text || '').toString();
+    setStreamedText('');
+    setIsTyping(true);
     let index = 0;
     const speedMs = durationMs
       ? Math.max(12, Math.round(durationMs / Math.max(1, cleanText.length)))
       : 32;
     streamTimerRef.current = setInterval(() => {
       index += 1;
+      setStreamedText(cleanText.slice(0, index));
       if (index >= cleanText.length) {
         clearInterval(streamTimerRef.current);
         streamTimerRef.current = null;
+        setIsTyping(false);
       }
     }, speedMs);
+  };
+
+  // ── Round Introduction Message ──────────────────────────────
+  const getRoundIntroMessage = () => {
+    const n = roundConfig.maxQuestions;
+    const intros = {
+      formal_qa: `Welcome! Let's start with the Formal Q&A round. I'll ask you around ${n} questions to understand your background and approach. Ready? Let's begin.`,
+      technical: `Great, let's move on to the Technical round. I have about ${n} questions covering your technical skills. Feel free to use the code editor if a question involves coding.`,
+      coding: `Alright, time for the Coding Challenge. You'll get ${n} problem${n > 1 ? 's' : ''} to solve. Take a moment to understand each problem before diving into the code.`,
+      system_design: `Now let's talk System Design. I have ${n} scenario${n > 1 ? 's' : ''} for you. Think about scalability, trade-offs, and how you'd build things in production.`,
+      behavioral: `Let's do the HR round now. I have ${n} behavioral questions for you. Try to use the STAR method — Situation, Task, Action, and Result — for structured answers.`,
+      resume_deep_dive: `Let's dive deeper into your resume. I have about ${n} questions based on your experience and projects. Be ready to walk me through the details.`,
+      jd_based: `This round focuses on the job description. I'll ask around ${n} questions related to the role you're applying for. Let's see how you match up.`,
+    };
+    return intros[roundConfig.type] || `Let's start this round. I have about ${n} questions for you. Ready? Let's begin.`;
+  };
+
+  // ── Stop AI Speaking (Interrupt TTS) ──────────────────────────
+  const stopAISpeaking = () => {
+    // Stop AWS Polly audio
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    // Stop browser TTS fallback
+    speechSynthesis.cancel();
+    // Stop text streaming — show full text instantly
+    if (streamTimerRef.current) {
+      clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
+    }
+    setIsTyping(false);
+    setIsSpeaking(false);
+    // Show full question text immediately (if a question is loaded)
+    const fullText = isFollowup ? currentFollowup?.text : currentQuestion?.text;
+    if (fullText) setStreamedText(fullText);
+    // Fire any pending callback (e.g., fetch first question after interrupting round intro)
+    if (pendingAfterSpeakRef.current) {
+      const cb = pendingAfterSpeakRef.current;
+      pendingAfterSpeakRef.current = null;
+      cb();
+    }
   };
 
   // ── Deepgram STT (Speech-to-Text) ──────────────────────────
@@ -869,6 +1061,100 @@ const InterviewRound = () => {
       expiresAt: Date.now() + (data.expiresIn ? data.expiresIn * 1000 - 5000 : 55000),
     };
     return data.key;
+  };
+
+  // ── Voice Command Detection (conversational interaction) ────────
+  const detectVoiceCommand = (text) => {
+    const lower = text.toLowerCase().replace(/[?.!,]/g, '').trim();
+
+    // Short utterances only — real answers are usually longer
+    if (lower.split(' ').length > 12) return null;
+
+    // Repeat / say again
+    if (/\b(repeat|say (it |that )?again|one more time|phir se|dubara|dobara)\b/.test(lower)) return 'repeat';
+
+    // Didn't understand / clarify
+    if (/\b(didn.?t understand|not clear|can you (explain|clarify)|what do you mean|samajh nahi|samajh nhi|kya matlab)\b/.test(lower)) return 'clarify';
+
+    // Skip / next question
+    if (/\b(skip (this|the) question|next question|move on|agle question)\b/.test(lower)) return 'skip';
+
+    // Need more time / thinking
+    if (/\b(give me (a )?(moment|minute|second)|let me think|sochne do|ek minute|hold on|wait)\b/.test(lower)) return 'thinking';
+
+    // Interrupt AI / stop speaking
+    if (/^(stop|I understand|got it|bas|okay got it|okay I understand)$/.test(lower)) return 'interrupt';
+
+    // Yes (to nudge "is the question clear?")
+    if (/^(yes|yeah|haan|ha|okay|ok)$/.test(lower)) return 'acknowledge';
+
+    return null;
+  };
+
+  const handleVoiceCommand = (command) => {
+    const displayQuestion = isFollowup ? currentFollowup?.text : currentQuestion?.text;
+
+    switch (command) {
+      case 'repeat':
+        if (displayQuestion) {
+          speakQuestion(displayQuestion);
+        }
+        break;
+
+      case 'clarify': {
+        const clarifyMsg = "Let me rephrase the question for you. " + (displayQuestion || '');
+        speakQuestion(clarifyMsg);
+        break;
+      }
+
+      case 'skip':
+        // Ask for confirmation before skipping
+        speakQuestion("Are you sure you want to skip? Say 'yes' to confirm, or continue with your answer.");
+        // Set a flag so next "yes/acknowledge" actually triggers the skip
+        pendingSkipRef.current = true;
+        break;
+
+      case 'thinking': {
+        const thinkingResponses = [
+          "Sure, take your time. I'm here when you're ready.",
+          "No problem. Think it through and start when you're ready.",
+          "Of course. Take a moment to gather your thoughts.",
+        ];
+        const msg = thinkingResponses[Math.floor(Math.random() * thinkingResponses.length)];
+        speakQuestion(msg);
+        // Reset the nudge timer so it doesn't fire while they're thinking
+        hasSentNudgeRef.current = false;
+        if (silenceNudgeTimerRef.current) clearTimeout(silenceNudgeTimerRef.current);
+        silenceNudgeTimerRef.current = setTimeout(() => {
+          if (!answerRef.current?.trim() && !hasSentNudgeRef.current) {
+            hasSentNudgeRef.current = true;
+            speakQuestion("Whenever you're ready, go ahead.");
+          }
+        }, 15000); // Give extra 15s after "let me think"
+        break;
+      }
+
+      case 'interrupt':
+        stopAISpeaking();
+        break;
+
+      case 'acknowledge':
+        // Check if this is confirming a skip
+        if (pendingSkipRef.current) {
+          pendingSkipRef.current = false;
+          if (!answerRef.current?.trim()) {
+            setAnswer('I would like to skip this question.');
+          }
+          handleSubmitAnswer();
+        } else {
+          // They said "yes/ok" to a nudge — just reset nudge
+          hasSentNudgeRef.current = true;
+        }
+        break;
+
+      default:
+        break;
+    }
   };
 
   const startListening = async () => {
@@ -943,15 +1229,28 @@ const InterviewRound = () => {
         try {
           const data = JSON.parse(event.data);
           const transcript = data.channel?.alternatives?.[0]?.transcript;
-          if (transcript && transcript.trim()) {
-            if (data.is_final) {
-              console.log('[Deepgram] Final:', transcript.trim());
-              // Final result — append to answer
+          if (!transcript || !transcript.trim()) return;
+
+          if (data.is_final) {
+            const text = transcript.trim();
+            setInterimTranscript(''); // Clear interim on final
+            console.log('[Deepgram] Final:', text);
+
+            // Check if this is a conversational command (not an answer)
+            const command = detectVoiceCommand(text);
+            if (command) {
+              console.log('[Voice Command] Detected:', command);
+              handleVoiceCommand(command);
+            } else {
+              // Actual answer content — append to textarea
               setAnswer(prev => {
                 const trimmed = prev.trim();
-                return trimmed ? trimmed + ' ' + transcript.trim() : transcript.trim();
+                return trimmed ? trimmed + ' ' + text : text;
               });
             }
+          } else {
+            // Interim result — show live preview
+            setInterimTranscript(transcript.trim());
           }
         } catch (e) {
           // Not JSON, ignore
@@ -1015,6 +1314,7 @@ const InterviewRound = () => {
       recognitionRef.current = null;
     }
     setIsListening(false);
+    setInterimTranscript('');
   };
 
   // Fallback: Browser Web Speech API (Chrome only)
@@ -1038,10 +1338,17 @@ const InterviewRound = () => {
         }
       }
       if (finalTranscript.trim()) {
-        setAnswer(prev => {
-          const trimmed = prev.trim();
-          return trimmed ? trimmed + ' ' + finalTranscript.trim() : finalTranscript.trim();
-        });
+        const text = finalTranscript.trim();
+        const command = detectVoiceCommand(text);
+        if (command) {
+          console.log('[Voice Command] Detected (browser STT):', command);
+          handleVoiceCommand(command);
+        } else {
+          setAnswer(prev => {
+            const trimmed = prev.trim();
+            return trimmed ? trimmed + ' ' + text : text;
+          });
+        }
       }
     };
     recognition.onerror = (e) => {
@@ -1109,12 +1416,11 @@ const InterviewRound = () => {
     }
 
     try {
-      await interviewService.completeRound(paramSessionId, roundConfig.type);
+      await interviewService.abandonInterview(paramSessionId);
     } catch (e) {
-      console.error('Error completing round:', e);
+      console.error('Error abandoning interview:', e);
     }
 
-    // Always end interview and go to report
     navigate(`/ai-interview/${paramSessionId}/report`);
   };
 
@@ -1174,11 +1480,13 @@ const InterviewRound = () => {
   // Auto-start mic when TTS finishes speaking + start 10s silence nudge timer
   useEffect(() => {
     if (!isSpeaking && currentQuestion && !isComplete && !isLoading && mediaReady) {
-      // TTS just finished (or was never speaking) — auto-start mic
-      if (!isListening) {
-        console.log('[STT] Auto-starting mic after TTS finished');
-        startListening();
-      }
+      // TTS just finished — wait 600ms before starting mic (prevents audio bleed)
+      const micDelay = setTimeout(() => {
+        if (!isListening) {
+          console.log('[STT] Auto-starting mic after TTS finished (600ms delay)');
+          startListening();
+        }
+      }, 600);
 
       // Reset nudge flag and start 10s silence timer
       hasSentNudgeRef.current = false;
@@ -1201,6 +1509,7 @@ const InterviewRound = () => {
       }, 10000);
 
       return () => {
+        clearTimeout(micDelay);
         if (silenceNudgeTimerRef.current) {
           clearTimeout(silenceNudgeTimerRef.current);
           silenceNudgeTimerRef.current = null;
@@ -1229,7 +1538,10 @@ const InterviewRound = () => {
 
   useEffect(() => {
     if (displayQuestion) {
-      startTextStream(displayQuestion);
+      // Entrance animation only — streaming is handled by speakQuestion()
+      setQuestionVisible(false);
+      setQuestionKey(k => k + 1);
+      requestAnimationFrame(() => requestAnimationFrame(() => setQuestionVisible(true)));
     }
     return () => {
       if (streamTimerRef.current) {
@@ -1241,6 +1553,12 @@ const InterviewRound = () => {
 
   return (
     <Layout showNavbar={false} showFooter={false}>
+      <style>{`
+        @keyframes soundWave {
+          from { transform: scaleY(0.3); opacity: 0.6; }
+          to   { transform: scaleY(1);   opacity: 1;   }
+        }
+      `}</style>
       <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100">
         <header className="border-b border-slate-800/70 bg-slate-950/70 backdrop-blur">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
@@ -1253,7 +1571,9 @@ const InterviewRound = () => {
                   <span className="rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-xs text-slate-200">
                     {isSpecificMode ? 'Specific Round' : `Round ${roundNum}/7`}
                   </span>
-                  <span className="text-xs text-slate-400">Q{questionNumber} / ~{roundConfig.maxQuestions}</span>
+                  <span className="text-xs text-slate-400">
+                    Q{questionNumber}{totalFollowupsAnswered > 0 ? ` · ${totalFollowupsAnswered} follow-up${totalFollowupsAnswered > 1 ? 's' : ''}` : ''} / ~{roundConfig.maxQuestions}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1323,6 +1643,16 @@ const InterviewRound = () => {
                           <span className="text-xs">Camera Off</span>
                         </div>
                       )}
+                      {/* Face proctoring overlay */}
+                      {faceStatus !== 'ok' && (
+                        <div className="absolute inset-0 border-2 border-red-500/60 rounded-2xl pointer-events-none z-10">
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded-full text-[10px] font-medium flex items-center gap-1.5">
+                            {faceStatus === 'no_face' && <><EyeOff className="w-3 h-3" /> Face not detected</>}
+                            {faceStatus === 'multiple' && <><Users className="w-3 h-3" /> Multiple faces</>}
+                            {faceStatus === 'looking_away' && <><EyeOff className="w-3 h-3" /> Look at the screen</>}
+                          </div>
+                        </div>
+                      )}
                       {/* Status badges on video */}
                       <div className="absolute top-3 left-3 flex flex-wrap items-center gap-2">
                         {isListening && (
@@ -1337,6 +1667,11 @@ const InterviewRound = () => {
                             Speaking
                           </span>
                         )}
+                        {faceDetectionReady && faceStatus === 'ok' && (
+                          <span className="flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
+                            <Eye className="w-3 h-3" /> Proctored
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1346,46 +1681,106 @@ const InterviewRound = () => {
                     {/* Question badge */}
                     <div className="flex items-center gap-2">
                       <span className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
-                        {isFollowup ? 'Follow-up' : `Question ${questionNumber}`}
+                        {isFollowup ? `Q${questionNumber} · Follow-up ${followupIndexForCurrentQ}` : `Question ${questionNumber}`}
                       </span>
                     </div>
 
-                    {/* Question content - fits content */}
-                    <div className="rounded-2xl border border-slate-700/60 bg-slate-950/85 px-5 py-4 shadow-lg shadow-black/40">
+                    {/* Question content - with entrance animation */}
+                    <div
+                      key={questionKey}
+                      style={{
+                        transition: 'opacity 0.45s ease, transform 0.45s ease',
+                        opacity: questionVisible ? 1 : 0,
+                        transform: questionVisible ? 'translateY(0)' : 'translateY(10px)',
+                      }}
+                      className="rounded-2xl border border-slate-700/60 bg-slate-950/85 px-5 py-4 shadow-lg shadow-black/40"
+                    >
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Question</p>
-                        {isFollowup && <span className="text-[10px] text-amber-300 font-medium">Follow-up</span>}
+                        <div className="flex items-center gap-3">
+                          {/* Sound wave bars while AI is speaking */}
+                          {isSpeaking && (
+                            <>
+                              <div className="flex items-end gap-[2px] h-4">
+                                {[0.4, 0.7, 1, 0.6, 0.9, 0.5, 0.8].map((h, i) => (
+                                  <div
+                                    key={i}
+                                    className="w-[3px] rounded-full bg-emerald-400/80"
+                                    style={{
+                                      height: `${Math.round(h * 14)}px`,
+                                      animation: `soundWave 0.7s ease-in-out ${i * 0.08}s infinite alternate`,
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                              <button
+                                onClick={stopAISpeaking}
+                                className="flex items-center gap-1 rounded-full bg-slate-700/80 hover:bg-red-500/30 border border-slate-600/50 hover:border-red-500/40 px-2 py-0.5 text-[10px] text-slate-300 hover:text-red-300 transition-colors"
+                                title="Stop AI speaking"
+                              >
+                                <VolumeX className="w-3 h-3" />
+                                Stop
+                              </button>
+                            </>
+                          )}
+                          {isFollowup && <span className="text-[10px] text-amber-300 font-medium">Follow-up</span>}
+                        </div>
                       </div>
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown
-                          components={{
-                            p: ({children, ...props}) => {
-                              // Check if children contain block elements (pre, div) to avoid <pre> inside <p>
-                              const hasBlock = Array.isArray(children)
-                                ? children.some(c => c?.type === 'pre' || c?.type === 'div' || (typeof c === 'object' && c?.props?.className?.includes?.('bg-slate-800')))
-                                : false;
-                              if (hasBlock) return <div className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</div>;
-                              return <p className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</p>;
-                            },
-                            code: ({inline, className, children, ...props}) => {
-                              const isInline = inline || !className;
-                              return isInline
-                                ? <code className="bg-slate-800 px-1.5 py-0.5 rounded text-xs text-cyan-300 font-mono" {...props}>{children}</code>
-                                : <pre className="bg-slate-800/60 border border-slate-700 rounded-lg px-3 py-2 mb-2 overflow-x-auto"><code className="text-xs text-cyan-100 font-mono" {...props}>{children}</code></pre>;
-                            },
-                            pre: ({children}) => <>{children}</>,
-                            li: ({...props}) => <li className="text-sm text-slate-200 ml-4 mb-1" {...props} />,
-                            ul: ({...props}) => <ul className="list-disc mb-2" {...props} />,
-                            ol: ({...props}) => <ol className="list-decimal mb-2" {...props} />,
-                            blockquote: ({...props}) => <blockquote className="border-l-2 border-slate-600 pl-3 italic text-slate-300 text-sm mb-2" {...props} />,
-                            h1: ({...props}) => <h1 className="text-base font-bold text-white mb-2" {...props} />,
-                            h2: ({...props}) => <h2 className="text-sm font-bold text-slate-100 mb-2" {...props} />,
-                            h3: ({...props}) => <h3 className="text-sm font-semibold text-slate-200 mb-1" {...props} />,
-                          }}
-                        >
-                          {displayQuestion || 'Waiting for question...'}
-                        </ReactMarkdown>
-                      </div>
+
+                      {/* Thinking dots when waiting for question */}
+                      {isLoading && !streamedText ? (
+                        <div className="flex items-center gap-2 py-3">
+                          <span className="text-xs text-slate-500">AI is thinking</span>
+                          <div className="flex items-center gap-1 ml-1">
+                            {[0, 1, 2].map(i => (
+                              <span
+                                key={i}
+                                className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce"
+                                style={{ animationDelay: `${i * 150}ms` }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="prose prose-invert prose-sm max-w-none">
+                          {isTyping ? (
+                            /* Typewriter mode — plain text with blinking cursor */
+                            <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">
+                              {streamedText}
+                              <span className="inline-block w-0.5 h-[1em] bg-emerald-400 ml-0.5 align-middle animate-pulse" />
+                            </p>
+                          ) : (
+                            /* Done streaming — render full markdown */
+                            <ReactMarkdown
+                              components={{
+                                p: ({children, ...props}) => {
+                                  const hasBlock = Array.isArray(children)
+                                    ? children.some(c => c?.type === 'pre' || c?.type === 'div' || (typeof c === 'object' && c?.props?.className?.includes?.('bg-slate-800')))
+                                    : false;
+                                  if (hasBlock) return <div className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</div>;
+                                  return <p className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</p>;
+                                },
+                                code: ({inline, className, children, ...props}) => {
+                                  const isInline = inline || !className;
+                                  return isInline
+                                    ? <code className="bg-slate-800 px-1.5 py-0.5 rounded text-xs text-cyan-300 font-mono" {...props}>{children}</code>
+                                    : <pre className="bg-slate-800/60 border border-slate-700 rounded-lg px-3 py-2 mb-2 overflow-x-auto"><code className="text-xs text-cyan-100 font-mono" {...props}>{children}</code></pre>;
+                                },
+                                pre: ({children}) => <>{children}</>,
+                                li: ({...props}) => <li className="text-sm text-slate-200 ml-4 mb-1" {...props} />,
+                                ul: ({...props}) => <ul className="list-disc mb-2" {...props} />,
+                                ol: ({...props}) => <ol className="list-decimal mb-2" {...props} />,
+                                blockquote: ({...props}) => <blockquote className="border-l-2 border-slate-600 pl-3 italic text-slate-300 text-sm mb-2" {...props} />,
+                                h1: ({...props}) => <h1 className="text-base font-bold text-white mb-2" {...props} />,
+                                h2: ({...props}) => <h2 className="text-sm font-bold text-slate-100 mb-2" {...props} />,
+                                h3: ({...props}) => <h3 className="text-sm font-semibold text-slate-200 mb-1" {...props} />,
+                              }}
+                            >
+                              {displayQuestion || streamedText || 'Waiting for question...'}
+                            </ReactMarkdown>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1414,10 +1809,12 @@ const InterviewRound = () => {
                         </select>
                       )}
                       <div
-                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${isListening ? 'bg-emerald-400/90 text-slate-950' : isSpeaking ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-800 text-slate-400'}`}
+                        onClick={isSpeaking ? stopAISpeaking : undefined}
+                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${isListening ? 'bg-emerald-400/90 text-slate-950' : isSpeaking ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30' : 'bg-slate-800 text-slate-400'}`}
+                        title={isSpeaking ? 'Click to stop AI and start speaking' : ''}
                       >
-                        <Mic className={`h-3 w-3 ${isListening ? 'animate-pulse' : ''}`} />
-                        {isListening ? 'Listening...' : isSpeaking ? 'AI Speaking' : 'Mic Ready'}
+                        {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Mic className={`h-3 w-3 ${isListening ? 'animate-pulse' : ''}`} />}
+                        {isListening ? 'Listening...' : isSpeaking ? 'Tap to interrupt' : 'Mic Ready'}
                       </div>
                     </div>
                   </div>
@@ -1473,6 +1870,13 @@ const InterviewRound = () => {
                       className="mt-4 h-36 w-full resize-none rounded-2xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
                       disabled={isLoading}
                     />
+                  )}
+
+                  {/* Live transcript preview */}
+                  {interimTranscript && isListening && (
+                    <p className="mt-2 text-sm text-slate-400 italic animate-pulse">
+                      {interimTranscript}...
+                    </p>
                   )}
 
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
@@ -1531,8 +1935,10 @@ const InterviewRound = () => {
                       />
                     </div>
                     <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
-                      <span>Question {questionNumber}</span>
-                      <span>~{roundConfig.maxQuestions} total</span>
+                      <span>
+                        Q{questionNumber}{isFollowup ? ` · Follow-up ${followupIndexForCurrentQ}` : ''}
+                      </span>
+                      <span>~{roundConfig.maxQuestions} questions</span>
                     </div>
                   </div>
 
@@ -1568,13 +1974,15 @@ const InterviewRound = () => {
                       >
                         Skip Question
                       </button>
-                      <button
-                        onClick={handleSkipRound}
-                        disabled={isLoading || isComplete}
-                        className="inline-flex items-center gap-2 rounded-full border border-orange-400/40 px-3 py-1.5 text-xs text-orange-200 transition hover:border-orange-300 disabled:opacity-40"
-                      >
-                        Skip Round
-                      </button>
+                      {!isSpecificMode && (
+                        <button
+                          onClick={handleSkipRound}
+                          disabled={isLoading || isComplete}
+                          className="inline-flex items-center gap-2 rounded-full border border-orange-400/40 px-3 py-1.5 text-xs text-orange-200 transition hover:border-orange-300 disabled:opacity-40"
+                        >
+                          Skip Round
+                        </button>
+                      )}
                       <button
                         onClick={handleEndCall}
                         className="inline-flex items-center gap-2 rounded-full border border-red-400/40 px-3 py-1.5 text-xs text-red-200 transition hover:border-red-300"
@@ -1729,6 +2137,29 @@ const InterviewRound = () => {
                 )}
                 <span className={`font-medium ${isScreenSharing && screenShareStopCount === 0 ? 'text-emerald-300' : isScreenSharing ? 'text-orange-300' : 'text-slate-500'}`}>
                   {isScreenSharing ? (screenShareStopCount === 0 ? 'Share: OK' : `Share: ${screenShareStopCount}/${maxWarnings}`) : 'Not Sharing'}
+                </span>
+              </div>
+
+              <div className="h-4 w-px bg-slate-700" />
+
+              {/* Face Detection Status */}
+              <div className="flex items-center gap-1.5">
+                {!faceDetectionReady ? (
+                  <Eye className="h-4 w-4 text-slate-500" />
+                ) : faceStatus === 'ok' ? (
+                  <Eye className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <EyeOff className="h-4 w-4 text-red-400 animate-pulse" />
+                )}
+                <span className={`font-medium ${
+                  !faceDetectionReady ? 'text-slate-500' :
+                  faceStatus === 'ok' ? 'text-emerald-300' : 'text-red-300'
+                }`}>
+                  {!faceDetectionReady ? 'Face: Loading' :
+                   faceStatus === 'ok' ? 'Face: OK' :
+                   faceStatus === 'no_face' ? 'Face: Not Found' :
+                   faceStatus === 'multiple' ? 'Face: Multiple' :
+                   'Face: Away'}
                 </span>
               </div>
             </div>

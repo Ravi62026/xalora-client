@@ -79,7 +79,9 @@ const Profile = () => {
     if (!user?.organization?.orgId) return "/dashboard";
     if (user?.organization?.role === "super_admin") return "/org/dashboard";
     if (user?.userType === "org_team") return "/org/teamdashboard";
-    return "/org/student/dashboard";
+    return user?.organization?.degreeTypeValue || user?.organization?.programValue
+      ? "/org/student/dashboard"
+      : "/dashboard";
   };
   const orgDetails = user?.organization;
   const isOrgMember = Boolean(orgDetails?.orgId);

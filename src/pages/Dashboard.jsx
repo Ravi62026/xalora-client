@@ -583,7 +583,12 @@ const OrganizationBanner = ({ user, onNavigateOrgDashboard }) => {
             {user?.organization?.orgName || "Organization Member"}
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            {user.organization.role?.replace("_", " ")} {user.organization.department && `• ${user.organization.department}`}
+            {user.organization.role?.replace("_", " ")}{" "}
+            {user.organization.programLabel
+              ? `• ${user.organization.programLabel}`
+              : user.organization.department
+              ? `• ${user.organization.department}`
+              : ""}
           </p>
         </div>
       </div>
@@ -635,7 +640,9 @@ const Dashboard = () => {
     if (!user?.organization?.orgId) return "/dashboard";
     if (user?.organization?.role === "super_admin") return "/org/dashboard";
     if (user?.userType === "org_team") return "/org/teamdashboard";
-    return "/org/student/dashboard";
+    return user?.organization?.degreeTypeValue || user?.organization?.programValue
+      ? "/org/student/dashboard"
+      : "/dashboard";
   };
 
   const fetchDashboardData = useCallback(
@@ -668,7 +675,10 @@ const Dashboard = () => {
             ? subscriptionService.getCurrentSubscription().catch(() => null)
             : Promise.resolve(null),
           isAuthenticated ? subscriptionService.getAIUsageInfo().catch(() => null) : Promise.resolve(null),
-          isAuthenticated ? interviewService.getMyInterviews().catch(() => null) : Promise.resolve(null),
+          isAuthenticated ? interviewService.getMyInterviews().catch((err) => {
+            console.warn("[Dashboard] getMyInterviews failed:", err?.response?.status, err?.response?.data?.message || err?.message);
+            return null;
+          }) : Promise.resolve(null),
         ]);
 
         const toArray = (res) => {
@@ -934,7 +944,7 @@ const Dashboard = () => {
               <MetricCard
                 title="AI Interviews"
                 value={metrics.interviewsDone}
-                hint="Completed mock sessions"
+                hint="Total mock sessions (all statuses)"
                 icon={Bot}
                 iconColor="fuchsia"
                 to="/my-interviews"

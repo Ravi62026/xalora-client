@@ -28,13 +28,16 @@ export const QACard = ({ qa, index }) => {
     const badge = getQualityBadge(qa.evaluation?.overallQuality);
     const BadgeIcon = badge.icon;
 
-    const avgScore = Math.round((
-        (qa.evaluation?.clarity || 0) +
-        (qa.evaluation?.completeness || 0) +
-        (qa.evaluation?.relevance || 0) +
-        (qa.evaluation?.depth || 0) +
-        (qa.evaluation?.coherence || 0)
-    ) / 5);
+    const validScores = [
+        qa.evaluation?.clarity,
+        qa.evaluation?.completeness,
+        qa.evaluation?.relevance,
+        qa.evaluation?.depth,
+        qa.evaluation?.coherence
+    ].filter(s => s > 0);
+    const avgScore = validScores.length > 0
+        ? Math.round(validScores.reduce((a, b) => a + b, 0) / validScores.length)
+        : 0;
 
     return (
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-4">
@@ -43,9 +46,21 @@ export const QACard = ({ qa, index }) => {
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                         <span className="text-sm font-semibold text-slate-400">Q{index + 1}</span>
-                        <div className={`flex items-center gap-1 px-3 py-1 rounded-full bg-${badge.color}-500/20 border border-${badge.color}-500/30`}>
-                            <BadgeIcon className={`w-4 h-4 text-${badge.color}-400`} />
-                            <span className={`text-xs font-semibold text-${badge.color}-400`}>{badge.text}</span>
+                        <div
+                            className="flex items-center gap-1 px-3 py-1 rounded-full border"
+                            style={{
+                                backgroundColor: `${badge.color === 'green' ? '#10b981' : badge.color === 'blue' ? '#3b82f6' : badge.color === 'yellow' ? '#eab308' : '#ef4444'}20`,
+                                borderColor: `${badge.color === 'green' ? '#10b981' : badge.color === 'blue' ? '#3b82f6' : badge.color === 'yellow' ? '#eab308' : '#ef4444'}4d`,
+                            }}
+                        >
+                            <BadgeIcon
+                                className="w-4 h-4"
+                                style={{ color: badge.color === 'green' ? '#4ade80' : badge.color === 'blue' ? '#60a5fa' : badge.color === 'yellow' ? '#facc15' : '#f87171' }}
+                            />
+                            <span
+                                className="text-xs font-semibold"
+                                style={{ color: badge.color === 'green' ? '#4ade80' : badge.color === 'blue' ? '#60a5fa' : badge.color === 'yellow' ? '#facc15' : '#f87171' }}
+                            >{badge.text}</span>
                         </div>
                         <span className={`text-sm font-bold ${getScoreColor(avgScore)}`}>
                             {avgScore}/100

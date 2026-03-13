@@ -1,10 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
-import { Video, VideoOff } from 'lucide-react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Video, VideoOff, Eye, EyeOff, Users, AlertTriangle } from 'lucide-react';
 
-const CandidateVideo = ({ timeRemaining }) => {
+const FACE_STATUS_CONFIG = {
+  ok: null,
+  no_face: { icon: EyeOff, label: "Face not detected", color: "text-red-400" },
+  multiple: { icon: Users, label: "Multiple faces", color: "text-orange-400" },
+  looking_away: { icon: AlertTriangle, label: "Look at the screen", color: "text-yellow-400" },
+};
+
+const CandidateVideo = forwardRef(({ timeRemaining, faceStatus = "ok" }, ref) => {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
   const [isVideoOn, setIsVideoOn] = useState(true);
+
+  // Expose video element to parent via ref
+  useImperativeHandle(ref, () => ({
+    getVideoElement: () => videoRef.current,
+  }));
 
   useEffect(() => {
     startVideo();
@@ -42,13 +54,24 @@ const CandidateVideo = ({ timeRemaining }) => {
     return 'bg-green-500';
   };
 
+  const statusConfig = FACE_STATUS_CONFIG[faceStatus];
+  const StatusIcon = statusConfig?.icon;
+
   return (
     <div className="bg-white rounded-2xl shadow-xl p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800">Your Video</h3>
-        <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 ${getRecordingIndicatorColor()} rounded-full animate-pulse`}></div>
-          <span className="text-sm text-gray-600">Recording</span>
+        <div className="flex items-center gap-3">
+          {statusConfig && (
+            <div className={`flex items-center gap-1.5 ${statusConfig.color}`}>
+              <StatusIcon className="w-4 h-4" />
+              <span className="text-xs font-medium">{statusConfig.label}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2">
+            <div className={`w-3 h-3 ${getRecordingIndicatorColor()} rounded-full animate-pulse`}></div>
+            <span className="text-sm text-gray-600">Recording</span>
+          </div>
         </div>
       </div>
 
@@ -71,6 +94,22 @@ const CandidateVideo = ({ timeRemaining }) => {
           </div>
         )}
 
+        {/* Face status overlay */}
+        {faceStatus !== "ok" && statusConfig && (
+          <div className="absolute inset-0 border-2 border-red-500/60 rounded-xl pointer-events-none">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5">
+              <StatusIcon className="w-3.5 h-3.5" />
+              {statusConfig.label}
+            </div>
+          </div>
+        )}
+
+        {/* Proctoring active indicator */}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 px-2 py-1 rounded-full">
+          <Eye className="w-3 h-3 text-emerald-400" />
+          <span className="text-[10px] text-emerald-300 font-medium">Proctored</span>
+        </div>
+
         {/* Overlay Controls */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
           <button
@@ -85,25 +124,10 @@ const CandidateVideo = ({ timeRemaining }) => {
           </button>
         </div>
       </div>
-
-      {/* Confidence Meter */}
-      <div className="mt-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Confidence Level</span>
-          <span className="text-sm font-bold text-indigo-600">85%</span>
-        </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
-            style={{ width: '85%' }}
-          ></div>
-        </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Based on speech clarity and pace
-        </p>
-      </div>
     </div>
   );
-};
+});
+
+CandidateVideo.displayName = "CandidateVideo";
 
 export default CandidateVideo;

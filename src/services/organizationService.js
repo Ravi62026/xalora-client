@@ -43,6 +43,54 @@ const organizationService = {
     return response.data;
   },
 
+  getCollegeFilterOptions: async (orgId) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeFilterOptions(orgId)
+    );
+    return response.data;
+  },
+
+  downloadStudentTemplate: async (orgId) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeStudentTemplate(orgId),
+      { responseType: "blob" }
+    );
+    return response;
+  },
+
+  importCollegeMembers: async (orgId, file, mode = "validate") => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axiosInstance.post(
+      `${ApiRoutes.organization.collegeImportMembers(orgId)}?mode=${mode}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  },
+
+  getCollegeLeaderboard: async (orgId, params = {}) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeLeaderboard(orgId),
+      { params }
+    );
+    return response.data;
+  },
+
+  getCollegeMyRank: async (orgId, params = {}) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeMyRank(orgId),
+      { params }
+    );
+    return response.data;
+  },
+
   getInvites: async (orgId, params = {}) => {
     const response = await axiosInstance.get(ApiRoutes.organization.invites(orgId), { params });
     return response.data;
@@ -66,6 +114,28 @@ const organizationService = {
     if (response.data?.data?.accessToken) {
       setTokens(response.data.data.accessToken, response.data.data.refreshToken);
     }
+    return response.data;
+  },
+
+  // ─── Company ─────────────────────────────────────────────────────────────
+
+  downloadCandidateTemplate: async (orgId) => {
+    const response = await axiosInstance.get(
+      `/organizations/${orgId}/company/candidate-template`,
+      { responseType: "blob" }
+    );
+    return response;
+  },
+
+  importCompanyCandidates: async (orgId, file, mode = "validate") => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axiosInstance.post(
+      `/organizations/${orgId}/company/candidates/import?mode=${mode}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
     return response.data;
   },
 

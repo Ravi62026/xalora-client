@@ -68,6 +68,13 @@ export const loginUser = createAsyncThunk(
         });
       }
 
+      if (error.response?.status === 403 && error.response?.data?.data?.requiresOrgSetup) {
+        return rejectWithValue({
+          ...error.response.data.data,
+          message: error.response.data?.data?.message || "Organization setup required. Check your email for the setup link.",
+        });
+      }
+
       if (error.response?.status === 400) {
         return rejectWithValue(
           error.response.data?.message || "Invalid email or password. Please try again."
@@ -214,7 +221,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = false;
         state.user = null;
-        if (action.payload?.requiresVerification) {
+        if (action.payload?.requiresVerification || action.payload?.requiresOrgSetup) {
           state.error = null;
         } else {
           state.error =

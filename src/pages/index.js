@@ -74,4 +74,5 @@ export { default as JobGenie } from "./JobGenie";
 export { default as OrganizationSetup } from "./Organization/OrganizationSetup";
 export { default as OrgAdminDashboard } from "./Organization/OrgAdminDashboard";
 export { default as OrgMemberAnalytics } from "./Organization/OrgMemberAnalytics";
+export { default as CollegeStudentDashboard } from "./Organization/CollegeStudentDashboard";
 export { default as AcceptInvite } from "./Organization/AcceptInvite";
