@@ -1158,6 +1158,8 @@ const InterviewRound = () => {
   };
 
   const startListening = async () => {
+    console.log('[🎤 STT Start]', { isSpeaking, tabHidden: document.hidden });
+    
     try {
       // 1. Get audio-only stream for MediaRecorder
       let audioStream;
@@ -1165,21 +1167,33 @@ const InterviewRound = () => {
         const audioTracks = stream.getAudioTracks();
         if (audioTracks.length > 0) {
           audioStream = new MediaStream(audioTracks);
-          console.log('[STT] Using existing audio tracks:', audioTracks.length, 'enabled:', audioTracks[0]?.enabled);
+          console.log('[STT] Using existing audio tracks:', {
+            count: audioTracks.length,
+            enabled: audioTracks[0]?.enabled,
+            state: audioTracks[0]?.readyState,
+            label: audioTracks[0]?.label
+          });
+        } else {
+          console.warn('[STT] No audio tracks in main stream, creating new');
         }
+      } else {
+        console.warn('[STT] No main stream available, creating new');
       }
+      
       if (!audioStream) {
         audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        console.log('[STT] Created new audio stream');
+        const tracks = audioStream.getAudioTracks();
+        console.log('[STT] Created new audio stream:', { tracks: tracks.length });
       }
 
       // 2. Get Deepgram temporary token
       let token;
       try {
+        console.log('[STT] Fetching Deepgram token...');
         token = await getDeepgramToken();
-        console.log('[STT] Got token, length:', token?.length);
+        console.log('[✅ STT] Got token, length:', token?.length);
       } catch (tokenErr) {
-        console.error('[STT] Token fetch failed:', tokenErr.message);
+        console.error('[❌ STT] Token fetch failed:', tokenErr.message);
         fallbackBrowserSTT();
         return;
       }
@@ -1187,14 +1201,14 @@ const InterviewRound = () => {
       // 3. Open WebSocket to Deepgram
       const dgUrl = `wss://api.deepgram.com/v1/listen?model=nova-2&language=en-IN&smart_format=true&punctuate=true&interim_results=true&endpointing=300`;
 
-      console.log('[Deepgram] Connecting to WebSocket...');
+      console.log('[🌐 WebSocket] Connecting to Deepgram...');
       const ws = new WebSocket(dgUrl, ['token', token]);
       recognitionRef.current = ws;
 
       // Set a connection timeout — if no open within 5s, fallback
       const connectTimeout = setTimeout(() => {
         if (ws.readyState !== WebSocket.OPEN) {
-          console.warn('[Deepgram] Connection timeout, falling back to browser STT');
+          console.warn('[⏱️ STT] Connection timeout (5s), falling back to browser STT');
           ws.close();
           fallbackBrowserSTT();
         }
@@ -1202,7 +1216,7 @@ const InterviewRound = () => {
 
       ws.onopen = () => {
         clearTimeout(connectTimeout);
-        console.log('[Deepgram] Connected successfully');
+        console.log('[✅ WebSocket] Connected to Deepgram successfully');
         setIsListening(true);
 
         // 4. Stream audio via MediaRecorder (audio-only stream)
@@ -1216,53 +1230,76 @@ const InterviewRound = () => {
         const mediaRecorder = new MediaRecorder(audioStream, recorderOptions);
         mediaRecorderRef.current = mediaRecorder;
 
+        let totalAudioBytes = 0;
+        let chunkCount = 0;
+        
         mediaRecorder.ondataavailable = (event) => {
+          chunkCount++;
+          const chunkSize = event.data.size;
+          totalAudioBytes += chunkSize;
+          
+          console.log(`[Audio Chunk] #${chunkCount} - Size: ${chunkSize}B, Total: ${totalAudioBytes}B, WS State: ${ws.readyState}`);
+          
           if (event.data.size > 0 && ws.readyState === WebSocket.OPEN) {
             ws.send(event.data);
+            console.log(`[Audio Sent] Chunk sent to Deepgram (${chunkSize} bytes)`);
+          } else if (ws.readyState !== WebSocket.OPEN) {
+            console.warn(`[Audio Drop] WebSocket not open (state: ${ws.readyState}), dropping chunk`);
           }
         };
 
+        console.log('[Deepgram] Starting MediaRecorder with timeslice 250ms');
         mediaRecorder.start(250); // Send audio chunks every 250ms
+        console.log('[Deepgram] MediaRecorder started');
       };
 
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
           const transcript = data.channel?.alternatives?.[0]?.transcript;
-          if (!transcript || !transcript.trim()) return;
+          
+          if (!transcript || !transcript.trim()) {
+            console.log('[Deepgram] Empty transcript:', { isFinal: data.is_final, data });
+            return;
+          }
 
           if (data.is_final) {
             const text = transcript.trim();
             setInterimTranscript(''); // Clear interim on final
-            console.log('[Deepgram] Final:', text);
+            console.log('[✅ Final Transcript]', { text, confidence: data.channel?.alternatives?.[0]?.confidence });
 
             // Check if this is a conversational command (not an answer)
             const command = detectVoiceCommand(text);
             if (command) {
-              console.log('[Voice Command] Detected:', command);
+              console.log('[🎙️ Voice Command]', { command, text });
               handleVoiceCommand(command);
             } else {
               // Actual answer content — append to textarea
+              console.log('[📝 Answer Appended]', { newText: text });
               setAnswer(prev => {
                 const trimmed = prev.trim();
-                return trimmed ? trimmed + ' ' + text : text;
+                const updated = trimmed ? trimmed + ' ' + text : text;
+                console.log('[Answer State Update]', { before: trimmed, added: text, after: updated });
+                return updated;
               });
             }
           } else {
             // Interim result — show live preview
+            console.log('[🔴 Interim]', transcript.trim());
             setInterimTranscript(transcript.trim());
           }
         } catch (e) {
-          // Not JSON, ignore
+          console.error('[❌ WebSocket Message Parse Error]', e, 'Raw:', event.data);
         }
       };
 
       ws.onerror = (event) => {
         clearTimeout(connectTimeout);
-        console.error('[Deepgram] WebSocket error:', event);
+        console.error('[❌ Deepgram WebSocket Error]', event);
         setIsListening(false);
         // Stop any recorder that may have started
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+          console.log('[Stopping recorder due to WebSocket error]');
           mediaRecorderRef.current.stop();
           mediaRecorderRef.current = null;
         }
@@ -1272,43 +1309,59 @@ const InterviewRound = () => {
 
       ws.onclose = (event) => {
         clearTimeout(connectTimeout);
-        console.log('[Deepgram] Disconnected:', event.code, event.reason);
+        console.log('[Deepgram WebSocket Closed]', { code: event.code, reason: event.reason });
         setIsListening(false);
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
           mediaRecorderRef.current.stop();
         }
       };
     } catch (error) {
-      console.error('[Deepgram] Setup error:', error);
+      console.error('[❌ STT Setup Error]', error);
       // Fallback to browser Web Speech API
       fallbackBrowserSTT();
     }
   };
 
   const stopListening = () => {
+    console.log('[🛑 STT Stop] Stopping voice recording...');
+    
     // Stop MediaRecorder (only used with Deepgram WebSocket)
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      console.log('[Stopping MediaRecorder]', { state: mediaRecorderRef.current.state });
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current = null;
     }
 
     if (recognitionRef.current) {
+      console.log('[Closing speech recognition]', { type: recognitionRef.current._isBrowserSTT ? 'Browser' : 'Deepgram' });
       // Check if it's a browser SpeechRecognition object vs Deepgram WebSocket
       if (recognitionRef.current._isBrowserSTT) {
         // Browser Web Speech API — use stop(), not close()
-        try { recognitionRef.current.stop(); } catch { /* ignore */ }
+        try { 
+          recognitionRef.current.stop(); 
+          console.log('[Browser STT stopped]');
+        } catch (e) { 
+          console.error('[Browser STT stop error]', e);
+        }
       } else {
         // Deepgram WebSocket — close gracefully
         if (recognitionRef.current.readyState === WebSocket.OPEN) {
+          console.log('[Closing Deepgram WebSocket]');
           recognitionRef.current.send(new Uint8Array(0));
           const wsRef = recognitionRef.current;
           setTimeout(() => {
             if (wsRef?.readyState === WebSocket.OPEN) {
               wsRef.close();
+              console.log('[Deepgram WebSocket closed]');
             }
           }, 500);
         } else {
-          try { recognitionRef.current.close(); } catch { /* ignore */ }
+          try { 
+            recognitionRef.current.close();
+            console.log('[Deepgram WebSocket closed (already closed)]');
+          } catch (e) { 
+            console.error('[Deepgram close error]', e);
+          }
         }
       }
       recognitionRef.current = null;
@@ -1319,31 +1372,45 @@ const InterviewRound = () => {
 
   // Fallback: Browser Web Speech API (Chrome only)
   const fallbackBrowserSTT = () => {
+    console.warn('[⚠️ STT Fallback] Using browser Web Speech API...');
+    
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.error('[❌ STT] Web Speech API not supported');
       setError('Speech recognition not supported');
       return;
     }
-    console.warn('[STT] Falling back to browser Web Speech API');
+    
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = false; // Only final results to avoid duplication
     recognition.lang = 'en-IN';
 
+    console.log('[Browser STT] Starting...');
+    
     recognition.onresult = (event) => {
+      console.log('[Browser STT] Result event:', { resultIndex: event.resultIndex, resultsLength: event.results.length });
       let finalTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
+        const isFinal = event.results[i].isFinal;
+        const transcript = event.results[i][0].transcript;
+        const confidence = event.results[i][0].confidence;
+        console.log(`[Browser STT] Result ${i}:`, { isFinal, transcript, confidence });
+        
+        if (isFinal) {
+          finalTranscript += transcript;
         }
       }
+      
       if (finalTranscript.trim()) {
         const text = finalTranscript.trim();
+        console.log('[✅ Browser STT Final]', text);
         const command = detectVoiceCommand(text);
         if (command) {
-          console.log('[Voice Command] Detected (browser STT):', command);
+          console.log('[🎙️ Voice Command] Detected (browser STT):', command);
           handleVoiceCommand(command);
         } else {
+          console.log('[📝 Browser Answer Appended]', text);
           setAnswer(prev => {
             const trimmed = prev.trim();
             return trimmed ? trimmed + ' ' + text : text;
@@ -1351,15 +1418,25 @@ const InterviewRound = () => {
         }
       }
     };
+    
     recognition.onerror = (e) => {
-      console.error('[STT Browser] Error:', e.error);
+      console.error('[❌ Browser STT Error]', { error: e.error });
       setIsListening(false);
     };
-    recognition.onend = () => setIsListening(false);
+    
+    recognition.onend = () => {
+      console.log('[Browser STT] Ended');
+      setIsListening(false);
+    };
+    
+    recognition.onstart = () => {
+      console.log('[✅ Browser STT] Started successfully');
+      setIsListening(true);
+    };
+    
     recognitionRef.current = recognition;
     recognition._isBrowserSTT = true; // Tag so stopListening() knows the type
     recognition.start();
-    setIsListening(true);
   };
 
   // Toggle video
