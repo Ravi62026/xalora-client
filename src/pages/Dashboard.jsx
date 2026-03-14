@@ -655,8 +655,84 @@ const Dashboard = () => {
       setError("");
 
       try {
+        const withTimeout = (promise, ms = 6000) =>
+          Promise.race([
+            promise,
+            new Promise((resolve) => setTimeout(() => resolve(null), ms)),
+          ]);
+
+        const toArray = (res) => {
+          if (Array.isArray(res?.data?.data)) return res.data.data;
+          if (Array.isArray(res?.data?.problems)) return res.data.problems;
+          if (Array.isArray(res?.data?.interviews)) return res.data.interviews;
+          if (Array.isArray(res?.interviews)) return res.interviews;
+          if (Array.isArray(res?.data)) return res.data;
+          if (Array.isArray(res)) return res;
+          return [];
+        };
+
+        const buildLast7Days = () => {
+          const days = [];
+          const today = new Date();
+          for (let i = 6; i >= 0; i -= 1) {
+            const d = new Date(today);
+            d.setHours(0, 0, 0, 0);
+            d.setDate(today.getDate() - i);
+            days.push({
+              key: d.toDateString(),
+              label: dayFormatter.format(d),
+              value: 0,
+            });
+          }
+          return days;
+        };
+
+        const bumpDay = (days, dateValue) => {
+          if (!dateValue) return;
+          const d = new Date(dateValue);
+          if (Number.isNaN(d.getTime())) return;
+          const key = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toDateString();
+          const entry = days.find((e) => e.key === key);
+          if (entry) entry.value += 1;
+        };
+
         const solvedFromStorage = JSON.parse(localStorage.getItem("solvedProblems") || "[]");
         const solvedProblemIds = new Set(Array.isArray(solvedFromStorage) ? solvedFromStorage : []);
+
+        const problemStatsRes = await withTimeout(problemService.getProblemStats().catch(() => null), 4000);
+        const problemStats = problemStatsRes?.data || problemStatsRes;
+
+        if (problemStats) {
+          setMetrics((prev) => ({
+            ...prev,
+            totalProblems: Number(problemStats.totalProblems) || 0,
+            solvedProblems: Number(problemStats.solvedProblems) || 0,
+            attemptedProblems: Number(problemStats.attemptedProblems) || 0,
+          }));
+
+          const weeklyFromStats = buildLast7Days();
+          (problemStats.weeklySolved || []).forEach((entry) => {
+            if (!entry?.date) return;
+            bumpDay(weeklyFromStats, entry.date);
+          });
+          setWeeklyActivity(weeklyFromStats);
+
+          const statsRecent = (problemStats.recentSolved || []).map((item) => {
+            const atValue = item?.solvedAt ? new Date(item.solvedAt).getTime() : 0;
+            return {
+              type: "problem",
+              title: item?.title || "Solved a problem",
+              at: item?.solvedAt ? dateFormatter.format(new Date(item.solvedAt)) : "Unknown",
+              atValue,
+              meta: item?.difficulty || "DSA",
+            };
+          });
+          setRecentActivity(statsRecent.slice(0, 8));
+        }
+
+        if (!background) {
+          setIsLoading(false);
+        }
 
         const [
           problemsRes,
@@ -665,38 +741,43 @@ const Dashboard = () => {
           subscriptionRes,
           aiUsageRes,
           interviewsRes,
-        ] = await Promise.all([
-          problemService.getAllProblems({ limit: 500 }).catch(() => null),
-          isAuthenticated ? quizService.getUserSubmissions().catch(() => null) : Promise.resolve(null),
+        ] = await Promise.allSettled([
+          withTimeout(problemService.getAllProblems({ limit: 120, page: 1, sortBy: "updatedAt", sortOrder: "desc" }).catch(() => null), 7000),
           isAuthenticated
-            ? axios.get(ApiRoutes.internships.getEnrolled).catch(() => null)
+            ? withTimeout(quizService.getUserSubmissions().catch(() => null), 7000)
             : Promise.resolve(null),
           isAuthenticated
-            ? subscriptionService.getCurrentSubscription().catch(() => null)
+            ? withTimeout(axios.get(ApiRoutes.internships.getEnrolled).catch(() => null), 7000)
             : Promise.resolve(null),
-          isAuthenticated ? subscriptionService.getAIUsageInfo().catch(() => null) : Promise.resolve(null),
-          isAuthenticated ? interviewService.getMyInterviews().catch((err) => {
-            console.warn("[Dashboard] getMyInterviews failed:", err?.response?.status, err?.response?.data?.message || err?.message);
-            return null;
-          }) : Promise.resolve(null),
+          isAuthenticated
+            ? withTimeout(subscriptionService.getCurrentSubscription().catch(() => null), 5000)
+            : Promise.resolve(null),
+          isAuthenticated
+            ? withTimeout(subscriptionService.getAIUsageInfo().catch(() => null), 5000)
+            : Promise.resolve(null),
+          isAuthenticated
+            ? withTimeout(
+                interviewService.getMyInterviews().catch((err) => {
+                  console.warn("[Dashboard] getMyInterviews failed:", err?.response?.status, err?.response?.data?.message || err?.message);
+                  return null;
+                }),
+                7000
+              )
+            : Promise.resolve(null),
         ]);
 
-        const toArray = (res) => {
-          if (Array.isArray(res?.data?.data)) return res.data.data;
-          if (Array.isArray(res?.data?.problems)) return res.data.problems;
-          if (Array.isArray(res?.data)) return res.data;
-          if (Array.isArray(res)) return res;
-          return [];
-        };
+        const getSettledValue = (result) => (result?.status === "fulfilled" ? result.value : null);
 
-        const problems = toArray(problemsRes);
-        const quizzes = Array.isArray(quizRes?.data?.submissions) ? quizRes.data.submissions : toArray(quizRes);
-        const internships = Array.isArray(internshipRes?.data?.enrollments)
-          ? internshipRes.data.enrollments
-          : toArray(internshipRes);
-        const interviews = Array.isArray(interviewsRes?.data?.interviews)
-          ? interviewsRes.data.interviews
-          : toArray(interviewsRes);
+        const problems = toArray(getSettledValue(problemsRes));
+        const quizPayload = getSettledValue(quizRes);
+        const quizzes = Array.isArray(quizPayload?.data?.submissions)
+          ? quizPayload.data.submissions
+          : toArray(quizPayload);
+        const internshipPayload = getSettledValue(internshipRes);
+        const internships = Array.isArray(internshipPayload?.data?.enrollments)
+          ? internshipPayload.data.enrollments
+          : toArray(internshipPayload);
+        const interviews = toArray(getSettledValue(interviewsRes));
 
         const solvedProblems = problems.filter(
           (p) => p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id))
@@ -711,100 +792,93 @@ const Dashboard = () => {
             ? Math.round(quizzes.reduce((sum, q) => sum + (Number(q?.score) || 0), 0) / quizzes.length)
             : 0;
 
-        setMetrics({
-          totalProblems: problems.length,
-          solvedProblems,
-          attemptedProblems,
+        setMetrics((prev) => ({
+          ...prev,
+          totalProblems:
+            Number(problemStats?.totalProblems) || Number(prev.totalProblems) || problems.length,
+          solvedProblems:
+            Number(problemStats?.solvedProblems) || solvedProblems,
+          attemptedProblems:
+            Number(problemStats?.attemptedProblems) || attemptedProblems,
           quizzesTaken: quizzes.length,
           averageQuizScore: avgScore,
           internshipsEnrolled: internships.length,
           interviewsDone: interviews.length,
+        }));
+
+        const subscriptionPayload = getSettledValue(subscriptionRes);
+        if (subscriptionPayload?.data) {
+          setPlanInfo(subscriptionPayload.data);
+        }
+
+        const aiUsagePayload = getSettledValue(aiUsageRes);
+        if (aiUsagePayload) {
+          setAiUsage(aiUsagePayload);
+        }
+
+        const last7Days = buildLast7Days();
+
+        (problemStats?.weeklySolved || []).forEach((entry) => {
+          if (!entry?.date) return;
+          bumpDay(last7Days, entry.date);
         });
-
-        // Log DSA progress
-        const completionPercent = problems.length > 0 
-          ? Math.round((solvedProblems / problems.length) * 100) 
-          : 0;
-        console.log(
-          `%c📊 DSA Progress%c\n${solvedProblems} / ${problems.length} problems solved (${completionPercent}%)\n${attemptedProblems} attempts in progress`,
-          "color: #00d9ff; font-weight: bold; font-size: 14px;",
-          "color: #94a3b8; font-size: 12px;"
-        );
-
-        if (subscriptionRes?.data) {
-          setPlanInfo(subscriptionRes.data);
-        }
-
-        if (aiUsageRes) {
-          setAiUsage(aiUsageRes);
-        }
-
-        // Calculate weekly activity
-        const last7Days = [];
-        const today = new Date();
-        for (let i = 6; i >= 0; i -= 1) {
-          const d = new Date(today);
-          d.setHours(0, 0, 0, 0);
-          d.setDate(today.getDate() - i);
-          last7Days.push({
-            key: d.toDateString(),
-            label: dayFormatter.format(d),
-            value: 0,
-          });
-        }
-
-        const bumpDay = (dateValue) => {
-          if (!dateValue) return;
-          const d = new Date(dateValue);
-          if (Number.isNaN(d.getTime())) return;
-          const key = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toDateString();
-          const entry = last7Days.find((e) => e.key === key);
-          if (entry) entry.value += 1;
-        };
 
         problems.forEach((p) => {
           if (p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id))) {
-            bumpDay(p?.solvedAt || p?.updatedAt || p?.createdAt);
+            bumpDay(last7Days, p?.solvedAt || p?.updatedAt || p?.createdAt);
           }
         });
 
-        quizzes.forEach((q) => bumpDay(q?.submittedAt || q?.createdAt));
-        interviews.forEach((i) => bumpDay(i?.completedAt || i?.updatedAt || i?.createdAt));
+        quizzes.forEach((q) => bumpDay(last7Days, q?.submittedAt || q?.createdAt));
+        interviews.forEach((i) => bumpDay(last7Days, i?.completedAt || i?.updatedAt || i?.createdAt));
 
         setWeeklyActivity(last7Days);
 
-        // Build recent activity
-        const safeFormat = (dateValue) => {
-          if (!dateValue) return "Unknown";
+        const safeAt = (dateValue) => {
+          if (!dateValue) return { at: "Unknown", atValue: 0 };
           const d = new Date(dateValue);
-          return Number.isNaN(d.getTime()) ? "Unknown" : dateFormatter.format(d);
+          if (Number.isNaN(d.getTime())) return { at: "Unknown", atValue: 0 };
+          return { at: dateFormatter.format(d), atValue: d.getTime() };
         };
 
         const activities = [
           ...problems
             .filter((p) => p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id)))
-            .map((p) => ({
-              type: "problem",
-              title: p?.title || "Solved a problem",
-              at: safeFormat(p?.solvedAt || p?.updatedAt || p?.createdAt),
-              meta: p?.difficulty || "DSA",
-            })),
-          ...quizzes.map((q) => ({
-            type: "quiz",
-            title: q?.quizId?.title || q?.quiz?.title || q?.quizTitle || "Quiz submitted",
-            at: safeFormat(q?.submittedAt || q?.createdAt),
-            meta:
-              q?.score === undefined || q?.score === null ? "Score unavailable" : `Score ${q.score}%`,
-          })),
-          ...interviews.map((i) => ({
-            type: "interview",
-            title: i?.candidateInfo?.position || "AI Interview session",
-            at: safeFormat(i?.completedAt || i?.updatedAt || i?.createdAt),
-            meta: i?.status || "Interview",
-          })),
+            .map((p) => {
+              const { at, atValue } = safeAt(p?.solvedAt || p?.updatedAt || p?.createdAt);
+              return {
+                type: "problem",
+                title: p?.title || "Solved a problem",
+                at,
+                atValue,
+                meta: p?.difficulty || "DSA",
+              };
+            }),
+          ...quizzes.map((q) => {
+            const { at, atValue } = safeAt(q?.submittedAt || q?.createdAt);
+            return {
+              type: "quiz",
+              title: q?.quizId?.title || q?.quiz?.title || q?.quizTitle || "Quiz submitted",
+              at,
+              atValue,
+              meta:
+                q?.score === undefined || q?.score === null ? "Score unavailable" : `Score ${q.score}%`,
+            };
+          }),
+          ...interviews.map((i) => {
+            const { at, atValue } = safeAt(i?.completedAt || i?.updatedAt || i?.createdAt);
+            return {
+              type: "interview",
+              title: i?.candidateInfo?.position || "AI Interview session",
+              at,
+              atValue,
+              meta: i?.status || "Interview",
+            };
+          }),
         ]
-          .sort((a, b) => new Date(b.at) - new Date(a.at))
-          .slice(0, 8);
+          .sort((a, b) => b.atValue - a.atValue)
+          .slice(0, 8)
+          .map(({ atValue, ...rest }) => rest);
 
         setRecentActivity(activities);
       } catch (err) {

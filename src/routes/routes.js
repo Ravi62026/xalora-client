@@ -21,6 +21,7 @@ const ApiRoutes = {
     problems: {
         create: "/api/v1/problems",
         getAll: "/api/v1/problems",
+        getStats: "/api/v1/problems/stats",
         getMy: "/api/v1/problems/my-problems",
         getById: (id) => `/api/v1/problems/${id}`,
         update: (id) => `/api/v1/problems/${id}`,

@@ -14,6 +14,11 @@ const problemService = {
         return response.data;
     },
 
+    getProblemStats: async () => {
+        const response = await axios.get(ApiRoutes.problems.getStats);
+        return response.data;
+    },
+
     getMyProblems: async () => {
         const response = await axios.get(ApiRoutes.problems.getMy);
         return response.data;

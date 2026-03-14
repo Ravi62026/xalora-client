@@ -312,10 +312,27 @@ const WaitingRoom = () => {
                     autoPlay
                     muted
                     playsInline
-                    ref={(video) => {
-                      if (video && stream) video.srcObject = stream;
+                    ref={(videoElement) => {
+                      if (videoElement && stream) {
+                        // Proper srcObject assignment to avoid stale stream issues
+                        if (videoElement.srcObject !== stream) {
+                          videoElement.srcObject = stream;
+                        }
+                      }
                     }}
                     className="w-full h-full object-cover transform scale-x-[-1]" // Mirrored for better UX
+                    onLoadedMetadata={() => {
+                      // Ensure video plays when metadata is loaded
+                      console.log('[WaitingRoom] Video stream loaded and ready');
+                    }}
+                    onError={(e) => {
+                      // Log video errors for debugging
+                      console.error('[WaitingRoom] Video error:', e, { 
+                        videoWidth: e.target?.videoWidth, 
+                        readyState: e.target?.readyState, 
+                        srcObject: !!e.target?.srcObject 
+                      });
+                    }}
                   />
                 ) : (
                   // Audio-only or gracefully degraded state

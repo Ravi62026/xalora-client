@@ -99,7 +99,23 @@ export default function useFaceProctoring(videoRef, enabled = true, onViolation 
       const video = videoRef?.current;
       const landmarker = landmarkerRef.current;
 
-      if (!video || !landmarker || video.readyState < 2 || video.videoWidth === 0) return;
+      if (!video || !landmarker) return;
+
+      // Check if video is actually ready and has a valid stream
+      if (video.readyState < 2) {
+        // Video not ready - reset sustained violation state
+        sustainedRef.current = { type: null, since: null };
+        setFaceStatus("not_ready");
+        return;
+      }
+
+      // Video exists but has no dimensions (stream not connected or empty)
+      if (video.videoWidth === 0 || video.videoHeight === 0) {
+        // No valid video dimensions yet - not a violation, just not ready
+        sustainedRef.current = { type: null, since: null };
+        setFaceStatus("not_ready");
+        return;
+      }
 
       try {
         const result = landmarker.detectForVideo(video, performance.now());
@@ -134,6 +150,8 @@ export default function useFaceProctoring(videoRef, enabled = true, onViolation 
         setFaceStatus("ok");
       } catch {
         // Silently handle — video might not be ready
+        sustainedRef.current = { type: null, since: null };
+        setFaceStatus("not_ready");
       }
     };
 
