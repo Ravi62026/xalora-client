@@ -215,9 +215,22 @@ const InterviewRound = () => {
   useEffect(() => {
     const initMedia = async () => {
       try {
-        console.log('[📹 Interview Media Init] Requesting camera + mic...');
+        console.log('[📹 Interview Media Init] Requesting camera + mic...', {
+          isSecureContext: window.isSecureContext,
+          protocol: window.location.protocol,
+          hostname: window.location.hostname
+        });
+        
+        // Check if getUserMedia is available
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error('MediaDevices not available - check HTTPS/permissions');
+        }
+
         const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
           audio: true
         });
         const videoTracks = mediaStream.getVideoTracks();
@@ -232,8 +245,28 @@ const InterviewRound = () => {
         streamRef.current = mediaStream;
         setMediaReady(true);
       } catch (error) {
-        console.error('[❌ Interview Media Error]', error);
-        // Try audio only
+        console.error('[❌ Interview Media Error]', {
+          name: error.name,
+          message: error.message,
+          code: error.code,
+          stack: error.stack
+        });
+        
+        // More specific error messages
+        let errorMsg = 'Unable to access camera. ';
+        if (error.name === 'NotAllowedError') {
+          errorMsg = '❌ Camera permission denied. Please allow camera access in browser settings.';
+        } else if (error.name === 'NotFoundError') {
+          errorMsg = '❌ Camera device not found. Check hardware.';
+        } else if (error.name === 'SecurityError') {
+          errorMsg = '❌ Secure context required (HTTPS). This site must use HTTPS for camera access.';
+        } else if (error.name === 'NotReadableError') {
+          errorMsg = '❌ Camera in use by another application.';
+        }
+        
+        console.warn('[Interview] Error details:', errorMsg);
+        
+        // Try audio only fallback
         try {
           console.log('[Fallback] Requesting audio-only...');
           const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -241,9 +274,10 @@ const InterviewRound = () => {
           setStream(audioStream);
           streamRef.current = audioStream;
           setMediaReady(true);
+          setError('⚠️ Camera unavailable - using audio only mode');
         } catch (e) {
-          console.error('[Audio fallback failed]', e);
-          setError('Please enable microphone access to continue');
+          console.error('[Audio fallback failed]', e.name, e.message);
+          setError(errorMsg + ' Fallback also failed.');
         }
       }
     };
