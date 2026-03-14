@@ -155,6 +155,22 @@ const subscriptionService = {
         }
     },
 
+    // Get Interview usage information
+    getInterviewUsageInfo: async () => {
+        try {
+            console.log("=== SUBSCRIPTION SERVICE: getInterviewUsageInfo ===");
+            const response = await axios.get(ApiRoutes.subscription.interviewUsage);
+            console.log("Interview usage info response:", response.data.data);
+            return response.data.data;
+        } catch (error) {
+            console.error("Error fetching interview usage info:", error);
+            // Return default values if there's an error
+            const defaultUsage = { interviewsUsed: 0, interviewsLimit: 0, interviewsRemaining: 0 };
+            console.log("Returning default interview usage info:", defaultUsage);
+            return defaultUsage;
+        }
+    },
+
     // ============ RECURRING SUBSCRIPTION METHODS ============
 
     // Get Razorpay key

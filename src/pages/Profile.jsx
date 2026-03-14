@@ -90,6 +90,7 @@ const Profile = () => {
 
   const [subscription, setSubscription] = useState(null);
   const [aiUsage, setAiUsage] = useState(null);
+  const [interviewUsage, setInterviewUsage] = useState(null);
   const [orgProfile, setOrgProfile] = useState(null);
   const [stats, setStats] = useState({
     problemsSolved: 0,
@@ -155,13 +156,15 @@ const Profile = () => {
       if (!isAuthenticated || isOrgMember) return;
 
       try {
-        const [subRes, usageRes] = await Promise.all([
+        const [subRes, usageRes, interviewRes] = await Promise.all([
           subscriptionService.getCurrentSubscription(),
           subscriptionService.getAIUsageInfo(),
+          subscriptionService.getInterviewUsageInfo(),
         ]);
 
         setSubscription(subRes?.data || null);
         setAiUsage(usageRes || null);
+        setInterviewUsage(interviewRes || null);
       } catch (err) {
         if (err?.response?.status === 401) navigate("/login");
       }
@@ -283,6 +286,12 @@ const Profile = () => {
     const raw = (aiUsage.fileUploadsUsed / aiUsage.fileUploadsLimit) * 100;
     return Math.max(0, Math.min(100, raw));
   }, [aiUsage]);
+
+  const interviewPercent = useMemo(() => {
+    if (!interviewUsage?.interviewsLimit) return 0;
+    const raw = (interviewUsage.interviewsUsed / interviewUsage.interviewsLimit) * 100;
+    return Math.max(0, Math.min(100, raw));
+  }, [interviewUsage]);
 
   const statCards = useMemo(
     () => [
@@ -467,7 +476,7 @@ const Profile = () => {
             </aside>
 
             <main className="space-y-6 xl:col-span-8">
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 {!isOrgUser && (
                   <>
                     <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
@@ -503,6 +512,24 @@ const Profile = () => {
                       </div>
                       <p className="mt-2 text-xs text-slate-400">
                         {aiUsage ? `${aiUsage.fileUploadsRemaining} uploads remaining` : "No active quota"}
+                      </p>
+                    </div>
+
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                      <h3 className="text-lg font-semibold text-white">🎤 AI Interviews</h3>
+                      <p className="mt-1 text-sm text-slate-300">
+                        {interviewUsage
+                          ? `${interviewUsage.interviewsUsed} of ${interviewUsage.interviewsLimit} used this month`
+                          : "Interview data unavailable"}
+                      </p>
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                        <div
+                          className="h-3 rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500 transition-all"
+                          style={{ width: `${interviewPercent}%` }}
+                        />
+                      </div>
+                      <p className="mt-2 text-xs text-slate-400">
+                        {interviewUsage ? `${interviewUsage.interviewsRemaining} interviews remaining` : "No active quota"}
                       </p>
                     </div>
                   </>

@@ -86,7 +86,8 @@ const ApiRoutes = {
         plans: "/api/v1/subscription/plans",
         upgrade: "/api/v1/subscription/upgrade",
         cancel: "/api/v1/subscription/cancel",
-        aiUsage: "/api/v1/subscription/ai-usage"
+        aiUsage: "/api/v1/subscription/ai-usage",
+        interviewUsage: "/api/v1/subscription/interview-usage"
     },
     interview: {
         start: "/api/v1/interview/start",
