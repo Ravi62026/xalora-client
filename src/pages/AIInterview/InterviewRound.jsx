@@ -17,7 +17,8 @@ import {
   Shield,
   Eye,
   EyeOff,
-  Users
+  Users,
+  Maximize2
 } from 'lucide-react';
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
@@ -97,9 +98,9 @@ const InterviewRound = () => {
   // Refs
   const videoRef = useRef(null);
   const textareaRef = useRef(null);
+  const deepgramTokenRef = useRef(null); // Pre-fetch token cache
   const recognitionRef = useRef(null);  // Deepgram WebSocket ref
   const mediaRecorderRef = useRef(null);
-  const deepgramTokenRef = useRef(null);
   const hasInitialized = useRef(false);
   const tabSwitchCountRef = useRef(0);
   const cameraOffCountRef = useRef(0);
@@ -145,6 +146,23 @@ const InterviewRound = () => {
       setWarningType(type);
       setWarningMessage(msgs[type] || `Face proctoring warning ${newCount}/${maxWarnings}`);
       setShowWarningModal(true);
+    }
+  };
+
+  const handleFullscreen = async () => {
+    try {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        await elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        await elem.msRequestFullscreen();
+      }
+      // Close warning modal after fullscreen activation
+      setShowWarningModal(false);
+    } catch (err) {
+      console.error('Fullscreen request failed:', err);
     }
   };
 
@@ -197,25 +215,34 @@ const InterviewRound = () => {
   useEffect(() => {
     const initMedia = async () => {
       try {
+        console.log('[📹 Interview Media Init] Requesting camera + mic...');
         const mediaStream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true
         });
+        const videoTracks = mediaStream.getVideoTracks();
+        const audioTracks = mediaStream.getAudioTracks();
+        console.log('[✅ Interview Media] Got streams:', {
+          videoTracks: videoTracks.length,
+          audioTracks: audioTracks.length,
+          videoState: videoTracks[0]?.readyState,
+          audioState: audioTracks[0]?.readyState
+        });
         setStream(mediaStream);
         streamRef.current = mediaStream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = mediaStream;
-        }
         setMediaReady(true);
       } catch (error) {
-        console.error('Media error:', error);
+        console.error('[❌ Interview Media Error]', error);
         // Try audio only
         try {
+          console.log('[Fallback] Requesting audio-only...');
           const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          console.log('[Audio-only] Got audio stream');
           setStream(audioStream);
           streamRef.current = audioStream;
           setMediaReady(true);
         } catch (e) {
+          console.error('[Audio fallback failed]', e);
           setError('Please enable microphone access to continue');
         }
       }
@@ -587,6 +614,21 @@ const InterviewRound = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roundType, paramSessionId, isScreenSharing, sessionChecked]);
 
+  // Auto-dismiss non-fatal warnings after 3 seconds
+  useEffect(() => {
+    if (showWarningModal) {
+      const currentViolationCount = warningType === 'tab_switch' ? tabSwitchCount : warningType === 'camera_off' ? cameraOffCount : screenShareStopCount;
+      const isFatal = currentViolationCount >= maxWarnings;
+      
+      if (!isFatal) {
+        const timer = setTimeout(() => {
+          setShowWarningModal(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [showWarningModal, tabSwitchCount, cameraOffCount, screenShareStopCount, maxWarnings, warningType]);
+
   // Format time helper
   const formatTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
@@ -747,6 +789,10 @@ const InterviewRound = () => {
               setIsComplete(true);
             } else {
               setFeedback(null);
+              // Pre-fetch Deepgram token while backend analyzes answer
+              getDeepgramToken().then(token => {
+                deepgramTokenRef.current = token;
+              }).catch(err => console.error('Token prefetch failed:', err));
               fetchQuestion();
             }
           } else if (finalAction === 'complete_round' || response.data.roundComplete === true) {
@@ -1158,50 +1204,38 @@ const InterviewRound = () => {
   };
 
   const startListening = async () => {
-    console.log('[🎤 STT Start]', { isSpeaking, tabHidden: document.hidden });
+    console.log('[🎤 STT Start] Zero-delay listening', { isSpeaking, tabHidden: document.hidden });
     
     try {
-      // 1. Get audio-only stream for MediaRecorder
+      // 1. Get audio-only stream for MediaRecorder (non-blocking)
       let audioStream;
       if (stream) {
         const audioTracks = stream.getAudioTracks();
         if (audioTracks.length > 0) {
           audioStream = new MediaStream(audioTracks);
-          console.log('[STT] Using existing audio tracks:', {
-            count: audioTracks.length,
-            enabled: audioTracks[0]?.enabled,
-            state: audioTracks[0]?.readyState,
-            label: audioTracks[0]?.label
-          });
-        } else {
-          console.warn('[STT] No audio tracks in main stream, creating new');
         }
-      } else {
-        console.warn('[STT] No main stream available, creating new');
       }
       
       if (!audioStream) {
         audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const tracks = audioStream.getAudioTracks();
-        console.log('[STT] Created new audio stream:', { tracks: tracks.length });
       }
 
-      // 2. Get Deepgram temporary token
-      let token;
-      try {
-        console.log('[STT] Fetching Deepgram token...');
-        token = await getDeepgramToken();
-        console.log('[✅ STT] Got token, length:', token?.length);
-      } catch (tokenErr) {
-        console.error('[❌ STT] Token fetch failed:', tokenErr.message);
-        fallbackBrowserSTT();
-        return;
+      // 2. Get Deepgram token (should be pre-fetched, but fallback to fetch)
+      let token = deepgramTokenRef.current;
+      if (!token) {
+        try {
+          token = await getDeepgramToken();
+        } catch (tokenErr) {
+          console.error('[❌ STT] Token fetch failed:', tokenErr.message);
+          fallbackBrowserSTT();
+          return;
+        }
       }
+      deepgramTokenRef.current = token;
 
       // 3. Open WebSocket to Deepgram
       const dgUrl = `wss://api.deepgram.com/v1/listen?model=nova-2&language=en-IN&smart_format=true&punctuate=true&interim_results=true&endpointing=300`;
 
-      console.log('[🌐 WebSocket] Connecting to Deepgram...');
       const ws = new WebSocket(dgUrl, ['token', token]);
       recognitionRef.current = ws;
 
@@ -1557,13 +1591,13 @@ const InterviewRound = () => {
   // Auto-start mic when TTS finishes speaking + start 10s silence nudge timer
   useEffect(() => {
     if (!isSpeaking && currentQuestion && !isComplete && !isLoading && mediaReady) {
-      // TTS just finished — wait 600ms before starting mic (prevents audio bleed)
+      // TTS just finished — start mic immediately (zero delay for instant listening)
       const micDelay = setTimeout(() => {
         if (!isListening) {
-          console.log('[STT] Auto-starting mic after TTS finished (600ms delay)');
+          console.log('[STT] Auto-starting mic instantly after TTS finished');
           startListening();
         }
-      }, 600);
+      }, 0);
 
       // Reset nudge flag and start 10s silence timer
       hasSentNudgeRef.current = false;
@@ -1595,6 +1629,18 @@ const InterviewRound = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSpeaking, currentQuestion, isComplete, isLoading, mediaReady]);
+
+  // Pre-fetch Deepgram token when media is ready (reduces listening startup lag)
+  useEffect(() => {
+    if (mediaReady && !deepgramTokenRef.current) {
+      getDeepgramToken().then(token => {
+        deepgramTokenRef.current = token;
+        console.log('[STT] Deepgram token pre-fetched and cached');
+      }).catch(err => {
+        console.warn('[STT] Token prefetch failed, will fetch on demand:', err.message);
+      });
+    }
+  }, [mediaReady]);
 
   // Color mapping removed in favor of static palette for immersive UI
   const displayQuestion = isFollowup ? currentFollowup?.text : currentQuestion?.text;
@@ -1708,10 +1754,26 @@ const InterviewRound = () => {
                     <div className={`relative aspect-[4/3] rounded-2xl border ${isListening ? 'border-emerald-400/60 shadow-lg shadow-emerald-500/10' : 'border-slate-700/60'} bg-slate-900/80 overflow-hidden transition-all`}>
                       {stream && isVideoOn ? (
                         <video
-                          ref={videoRef}
+                          ref={(videoElement) => {
+                            if (videoElement && stream) {
+                              if (videoElement.srcObject !== stream) {
+                                videoElement.srcObject = stream;
+                                console.log('[🎥 Interview Video Ref] Stream bound successfully', {
+                                  streamTracks: stream.getTracks().length,
+                                  videoTracks: stream.getVideoTracks().length
+                                });
+                              }
+                            }
+                          }}
                           autoPlay
                           muted
                           playsInline
+                          onLoadedMetadata={() => {
+                            console.log('[Video Ready] Interview video metadata loaded');
+                          }}
+                          onError={(e) => {
+                            console.error('[Video Error] Interview video element error:', e);
+                          }}
                           className="h-full w-full object-cover"
                         />
                       ) : (
@@ -1742,11 +1804,6 @@ const InterviewRound = () => {
                           <span className="flex items-center gap-1.5 rounded-full bg-cyan-500/90 px-2.5 py-0.5 text-[10px] font-semibold text-white shadow">
                             <Volume2 className="h-3 w-3 animate-pulse" />
                             Speaking
-                          </span>
-                        )}
-                        {faceDetectionReady && faceStatus === 'ok' && (
-                          <span className="flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
-                            <Eye className="w-3 h-3" /> Proctored
                           </span>
                         )}
                       </div>
@@ -2107,12 +2164,21 @@ const InterviewRound = () => {
                   )}
                 </div>
                 {!isFatal && (
-                  <button
-                    onClick={() => setShowWarningModal(false)}
-                    className="mt-6 w-full rounded-full bg-gradient-to-r from-red-600 to-orange-600 py-3 text-sm font-semibold text-white transition hover:from-red-500 hover:to-orange-500"
-                  >
-                    I Understand, Continue Interview
-                  </button>
+                  <div className="mt-6 flex flex-col gap-3">
+                    <button
+                      onClick={handleFullscreen}
+                      className="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-500 py-3 text-sm font-semibold text-white transition hover:from-blue-500 hover:to-blue-400 flex items-center justify-center gap-2"
+                    >
+                      <Maximize2 className="h-4 w-4" />
+                      Enter Fullscreen
+                    </button>
+                    <button
+                      onClick={() => setShowWarningModal(false)}
+                      className="w-full rounded-full bg-gradient-to-r from-red-600 to-orange-600 py-3 text-sm font-semibold text-white transition hover:from-red-500 hover:to-orange-500"
+                    >
+                      I Understand, Continue Interview
+                    </button>
+                  </div>
                 )}
                 {isFatal && (
                   <div className="mt-6 flex items-center justify-center gap-2 text-sm text-red-300">
