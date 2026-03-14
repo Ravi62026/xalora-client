@@ -79,6 +79,7 @@ const InterviewRound = () => {
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const currentAudioRef = useRef(null);
+  const audioUrlRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
 
   // Proctoring state
@@ -122,6 +123,7 @@ const InterviewRound = () => {
   const [questionVisible, setQuestionVisible] = useState(true);
   const [questionKey, setQuestionKey] = useState(0);
   const [interimTranscript, setInterimTranscript] = useState(''); // Live STT preview
+  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
 
   // ── Face Proctoring (MediaPipe) ─────────────────────────────
   const handleFaceViolation = (type, details) => {
@@ -151,20 +153,48 @@ const InterviewRound = () => {
 
   const handleFullscreen = async () => {
     try {
+      if (document.fullscreenElement) {
+        setIsFullscreen(true);
+        setShowWarningModal(false);
+        return;
+      }
+
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
-        await elem.requestFullscreen();
+        await elem.requestFullscreen({ navigationUI: 'hide' });
       } else if (elem.webkitRequestFullscreen) {
         await elem.webkitRequestFullscreen();
       } else if (elem.msRequestFullscreen) {
         await elem.msRequestFullscreen();
       }
       // Close warning modal after fullscreen activation
+      setIsFullscreen(true);
       setShowWarningModal(false);
     } catch (err) {
       console.error('Fullscreen request failed:', err);
+      setWarningMessage('Could not enter fullscreen. Click "Enter Fullscreen" again and allow browser permission if prompted.');
+      setShowWarningModal(true);
     }
   };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const active = !!document.fullscreenElement;
+      setIsFullscreen(active);
+
+      // If user exits fullscreen during active interview, show warning and ask to re-enter.
+      if (!active && !isComplete && !showScreenSharePrompt && currentQuestion) {
+        setWarningType('tab_switch');
+        setWarningMessage('Fullscreen was exited. Please re-enter fullscreen to continue your interview.');
+        setShowWarningModal(true);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+    };
+  }, [isComplete, showScreenSharePrompt, currentQuestion]);
 
   const { faceStatus, isReady: faceDetectionReady } = useFaceProctoring(
     videoRef,
@@ -350,6 +380,9 @@ const InterviewRound = () => {
     }
 
     return () => {
+      stopAllInterviewAudio();
+      if (isListening) stopListening();
+
       // Use ref to always get current stream (avoids stale closure)
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
@@ -453,6 +486,10 @@ const InterviewRound = () => {
           setWarningMessage(`⚠️ Warning ${newCount}/${maxWarnings}: Tab switching detected! Switching tabs again will end your interview.`);
           setShowWarningModal(true);
         }
+      } else if (!document.fullscreenElement && !isComplete) {
+        setWarningType('tab_switch');
+        setWarningMessage('You switched tabs and fullscreen was exited. Please click "Enter Fullscreen" to continue.');
+        setShowWarningModal(true);
       }
     };
 
@@ -506,6 +543,9 @@ const InterviewRound = () => {
       setIsScreenSharing(true);
       setShowScreenSharePrompt(false); // Close the modal
       setScreenShareError('');
+
+      // Attempt fullscreen immediately from the same user gesture.
+      handleFullscreen();
 
       // Notify backend
       const accessToken = localStorage.getItem('accessToken');
@@ -934,11 +974,21 @@ const InterviewRound = () => {
         currentAudioRef.current = null;
       }
 
+      if (audioUrlRef.current) {
+        URL.revokeObjectURL(audioUrlRef.current);
+        audioUrlRef.current = null;
+      }
+
       const audio = new Audio(audioUrl);
+      audioUrlRef.current = audioUrl;
       currentAudioRef.current = audio;
       audio.playbackRate = 1.2;
       audio.onended = () => {
         currentAudioRef.current = null;
+        if (audioUrlRef.current) {
+          URL.revokeObjectURL(audioUrlRef.current);
+          audioUrlRef.current = null;
+        }
         setIsSpeaking(false);
         if (pendingAfterSpeakRef.current) {
           const cb = pendingAfterSpeakRef.current;
@@ -949,6 +999,10 @@ const InterviewRound = () => {
       audio.onerror = (err) => {
         console.error('Audio playback error:', err);
         currentAudioRef.current = null;
+        if (audioUrlRef.current) {
+          URL.revokeObjectURL(audioUrlRef.current);
+          audioUrlRef.current = null;
+        }
         setIsSpeaking(false);
         if (pendingAfterSpeakRef.current) {
           const cb = pendingAfterSpeakRef.current;
@@ -1438,6 +1492,42 @@ const InterviewRound = () => {
     setInterimTranscript('');
   };
 
+  const stopAllInterviewAudio = () => {
+    // Stop TTS audio playback
+    if (currentAudioRef.current) {
+      try {
+        currentAudioRef.current.pause();
+        currentAudioRef.current.currentTime = 0;
+      } catch {
+        // ignore
+      }
+      currentAudioRef.current = null;
+    }
+
+    // Stop browser speech synthesis fallback
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+    }
+
+    // Stop streamed typing animation
+    if (streamTimerRef.current) {
+      clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
+    }
+
+    // Revoke audio blob URL
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+
+    // Prevent post-TTS callbacks from firing after redirect
+    pendingAfterSpeakRef.current = null;
+    pendingSkipRef.current = false;
+    setIsTyping(false);
+    setIsSpeaking(false);
+  };
+
   // Fallback: Browser Web Speech API (Chrome only)
   const fallbackBrowserSTT = () => {
     console.warn('[⚠️ STT Fallback] Using browser Web Speech API...');
@@ -1546,6 +1636,15 @@ const InterviewRound = () => {
 
   // End call / Complete round (force end interview)
   const handleEndCall = async () => {
+    // Hard stop all active voice flows before redirect
+    stopAllInterviewAudio();
+    if (isListening) stopListening();
+
+    if (silenceNudgeTimerRef.current) {
+      clearTimeout(silenceNudgeTimerRef.current);
+      silenceNudgeTimerRef.current = null;
+    }
+
     // Stop media
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -1589,6 +1688,9 @@ const InterviewRound = () => {
 
   // Proceed to next round
   const handleNextRound = () => {
+    stopAllInterviewAudio();
+    if (isListening) stopListening();
+
     const isSpecificMode = sessionData?.interviewMode === 'specific';
 
     if (roundNum < 7 && !isSpecificMode) {
@@ -1604,6 +1706,7 @@ const InterviewRound = () => {
     if (isComplete) {
       // Stop mic when round completes
       if (isListening) stopListening();
+      stopAllInterviewAudio();
       // Clear any silence nudge timer
       if (silenceNudgeTimerRef.current) {
         clearTimeout(silenceNudgeTimerRef.current);
@@ -2204,14 +2307,16 @@ const InterviewRound = () => {
                       className="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-500 py-3 text-sm font-semibold text-white transition hover:from-blue-500 hover:to-blue-400 flex items-center justify-center gap-2"
                     >
                       <Maximize2 className="h-4 w-4" />
-                      Enter Fullscreen
+                      {isFullscreen ? 'Fullscreen Active' : 'Enter Fullscreen'}
                     </button>
-                    <button
-                      onClick={() => setShowWarningModal(false)}
-                      className="w-full rounded-full bg-gradient-to-r from-red-600 to-orange-600 py-3 text-sm font-semibold text-white transition hover:from-red-500 hover:to-orange-500"
-                    >
-                      I Understand, Continue Interview
-                    </button>
+                    {(warningType !== 'tab_switch' || isFullscreen) && (
+                      <button
+                        onClick={() => setShowWarningModal(false)}
+                        className="w-full rounded-full bg-gradient-to-r from-red-600 to-orange-600 py-3 text-sm font-semibold text-white transition hover:from-red-500 hover:to-orange-500"
+                      >
+                        I Understand, Continue Interview
+                      </button>
+                    )}
                   </div>
                 )}
                 {isFatal && (
