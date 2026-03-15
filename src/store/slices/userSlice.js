@@ -18,11 +18,6 @@ export const initializeAuth = createAsyncThunk(
 
     lastAuthCheck = now;
 
-    // No token = not authenticated
-    if (!getAccessToken()) {
-      return null;
-    }
-
     try {
       const response = await authService.getUser();
       if (response.success && response.data) {
@@ -31,6 +26,7 @@ export const initializeAuth = createAsyncThunk(
     } catch (error) {
       if (error.response?.status === 401) {
         try {
+          // Cookie-based sessions may exist even when localStorage tokens are absent.
           const refreshResponse = await authService.refreshToken();
           if (refreshResponse.success) {
             const retryResponse = await authService.getUser();
@@ -41,6 +37,9 @@ export const initializeAuth = createAsyncThunk(
         } catch (refreshError) {
           // Ignore and fall through to unauthenticated state.
         }
+      } else if (!getAccessToken()) {
+        // If there is no local token and server rejected auth, treat as logged out quietly.
+        return null;
       }
     }
 

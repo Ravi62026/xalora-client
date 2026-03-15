@@ -136,13 +136,9 @@ axiosInstance.interceptors.response.use(
 
       try {
         const refreshToken = getRefreshToken();
-        if (!refreshToken) {
-          throw new Error("No refresh token available");
-        }
-
         const refreshResponse = await axios.post(
           `${baseURL}/api/v1/users/refresh-token`,
-          { refreshToken },
+          refreshToken ? { refreshToken } : {},
           { timeout: 120000, withCredentials: true }
         );
 
