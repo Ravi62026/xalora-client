@@ -636,9 +636,12 @@ function InviteModal({ org, isSuperAdmin, onClose, onComplete }) {
             };
       });
 
+      console.log(`[MANUAL-INVITE] Sending invites to ${members.length} member(s)`, members);
       const response = await organizationService.inviteMembers(org._id, members);
+      console.log(`[MANUAL-INVITE-RESULT] Response:`, response);
       setResult(response.data || null);
     } catch (error) {
+      console.error(`[MANUAL-INVITE-ERROR] ❌ Failed to send invites:`, error);
       setError(error?.response?.data?.message || "Failed to send invites");
     } finally {
       setLoading(false);

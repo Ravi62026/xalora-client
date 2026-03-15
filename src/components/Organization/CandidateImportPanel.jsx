@@ -42,13 +42,21 @@ export default function CandidateImportPanel({ orgId, onImported }) {
     setError("");
 
     try {
+      console.log(`[CANDIDATE-IMPORT] ${mode === "validate" ? "Validating" : "Committing"} candidate import for ${file.name}`);
       const response = await organizationService.importCompanyCandidates(orgId, file, mode);
       setResult(response.data);
+      
       if (mode === "commit") {
+        const { summary = {} } = response.data || {};
+        const { sent = 0 } = summary;
+        console.log(`[CANDIDATE-IMPORT-RESULT] 📧 Emails sent to ${sent} candidate(s)`);
         onImported?.();
+      } else {
+        console.log(`[CANDIDATE-IMPORT-RESULT] ✅ Validation completed`);
       }
     } catch (err) {
       setError(err?.response?.data?.message || "Import failed");
+      console.error(`[CANDIDATE-IMPORT-ERROR] ❌ ${err?.response?.data?.message || "Import failed"}`, err);
     } finally {
       setLoadingMode("");
     }

@@ -39,7 +39,15 @@ const organizationService = {
   // ─── Invites ─────────────────────────────────────────────────────────────
 
   inviteMembers: async (orgId, members) => {
+    console.log(`[INVITE] Sending invites for ${members.length} member(s) to org ${orgId}`);
     const response = await axiosInstance.post(ApiRoutes.organization.invite(orgId), { members });
+    
+    // Log email send results
+    const { sent = [], failed = [], skipped = [] } = response.data || {};
+    console.log(`[INVITE-RESULT] ✅ Emails sent: ${sent.length}`, sent);
+    if (failed.length > 0) console.log(`[INVITE-RESULT] ❌ Emails failed: ${failed.length}`, failed);
+    if (skipped.length > 0) console.log(`[INVITE-RESULT] ⚠️ Emails skipped: ${skipped.length}`, skipped);
+    
     return response.data;
   },
 

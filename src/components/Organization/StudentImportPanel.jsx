@@ -43,17 +43,25 @@ export default function StudentImportPanel({ orgId, onImported }) {
     setError("");
 
     try {
+      console.log(`[STUDENT-IMPORT] ${mode === "validate" ? "Validating" : "Committing"} student import for ${file.name}`);
       const response = await organizationService.importCollegeMembers(
         orgId,
         file,
         mode
       );
       setResult(response.data);
+      
       if (mode === "commit") {
+        const { result: importResult } = response.data || {};
+        const { sent = 0 } = importResult || {};
+        console.log(`[STUDENT-IMPORT-RESULT] 📧 Emails sent to ${sent} student(s)`);
         onImported?.();
+      } else {
+        console.log(`[STUDENT-IMPORT-RESULT] ✅ Validation completed`);
       }
     } catch (err) {
       setError(err?.response?.data?.message || "Import failed");
+      console.error(`[STUDENT-IMPORT-ERROR] ❌ ${err?.response?.data?.message || "Import failed"}`, err);
     } finally {
       setLoadingMode("");
     }
