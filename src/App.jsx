@@ -129,6 +129,34 @@ const AppContent = () => {
   const location = useLocation();
   const { isInitializing, user } = useSelector((state) => state.user);
 
+  const PUBLIC_BOOTSTRAP_PATHS = new Set([
+    "/",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/verify-email",
+    "/problems",
+    "/quiz",
+    "/internships",
+    "/about",
+    "/careers",
+    "/blog",
+    "/help-center",
+    "/contact",
+    "/community",
+    "/status",
+    "/roadmap",
+    "/pricing",
+  ]);
+
+  const isPublicBootstrapPath =
+    PUBLIC_BOOTSTRAP_PATHS.has(location.pathname) ||
+    location.pathname.startsWith("/problems/") ||
+    location.pathname.startsWith("/quiz/") ||
+    location.pathname.startsWith("/internships/") ||
+    location.pathname.startsWith("/org/join/") ||
+    location.pathname.startsWith("/org/setup/");
+
   // Use a ref to track if we've already initialized
   const hasInitialized = React.useRef(false);
 
@@ -156,7 +184,7 @@ const AppContent = () => {
   }, [dispatch, isInitializing]);
 
   // Show loading screen while checking authentication
-  if (isInitializing && !user) {
+  if (isInitializing && !user && !isPublicBootstrapPath) {
     return <LoadingMessage />;
   }
 

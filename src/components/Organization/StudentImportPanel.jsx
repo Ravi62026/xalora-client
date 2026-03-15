@@ -52,9 +52,34 @@ export default function StudentImportPanel({ orgId, onImported }) {
       setResult(response.data);
       
       if (mode === "commit") {
-        const { result: importResult } = response.data || {};
-        const { sent = 0 } = importResult || {};
-        console.log(`[STUDENT-IMPORT-RESULT] 📧 Emails sent to ${sent} student(s)`);
+        const { result: importResult, rows = [] } = response.data || {};
+        const {
+          sent = 0,
+          sentNoEmail = 0,
+          failed = 0,
+          skipped = 0,
+        } = importResult || {};
+
+        const unsentRows = rows.filter((row) => row.status !== "sent");
+        const unsentSummary = unsentRows.map((row) => ({
+          rowNumber: row.rowNumber,
+          email: row.email,
+          status: row.status,
+          reason: (row.issues || []).join(", ") || "No reason provided",
+        }));
+
+        console.log(
+          `[STUDENT-IMPORT-RESULT] sent=${sent}, sent_no_email=${sentNoEmail}, skipped=${skipped}, failed=${failed}`
+        );
+        if (unsentSummary.length > 0) {
+          console.log("[STUDENT-IMPORT-RESULT] Unsent/Skipped details:", unsentSummary);
+        }
+
+        if (sentNoEmail > 0 || failed > 0) {
+          setError(
+            `${sent} invite emails sent. ${sentNoEmail + failed} invite(s) created/processed without email delivery. Check Status + Notes table.`
+          );
+        }
         onImported?.();
       } else {
         console.log(`[STUDENT-IMPORT-RESULT] ✅ Validation completed`);
@@ -147,13 +172,21 @@ export default function StudentImportPanel({ orgId, onImported }) {
 
       {result && (
         <div className="mt-5 space-y-4">
-          <div className="grid gap-3 sm:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-6">
             <SummaryCard label="Rows" value={result.summary?.totalRows || 0} />
             <SummaryCard label="Valid" value={result.summary?.validRows || 0} />
             <SummaryCard label="Invalid" value={result.summary?.invalidRows || 0} />
             <SummaryCard
+              label="Skipped"
+              value={typeof result.result?.skipped === "number" ? result.result.skipped : 0}
+            />
+            <SummaryCard
               label="Sent"
               value={typeof result.result?.sent === "number" ? result.result.sent : "—"}
+            />
+            <SummaryCard
+              label="Sent No Email"
+              value={typeof result.result?.sentNoEmail === "number" ? result.result.sentNoEmail : 0}
             />
           </div>
 

@@ -47,7 +47,7 @@ const authService = {
   },
 
   getUser: async () => {
-    const response = await axiosInstance.get(ApiRoutes.user.getUser);
+    const response = await axiosInstance.get(ApiRoutes.user.getUser, { timeout: 8000 });
     return response.data;
   },
 
@@ -69,7 +69,7 @@ const authService = {
   },
 
   refreshToken: async () => {
-    const response = await axiosInstance.post(ApiRoutes.user.refreshToken);
+    const response = await axiosInstance.post(ApiRoutes.user.refreshToken, {}, { timeout: 8000 });
     return response.data;
   },
 

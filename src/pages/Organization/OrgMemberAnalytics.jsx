@@ -46,6 +46,25 @@ export default function OrgMemberAnalytics() {
 
   const isCollege = org?.type === "college";
 
+  const loadOrganizationContext = useCallback(async () => {
+    if (!orgId) return;
+
+    try {
+      const orgRes = await organizationService.get(orgId);
+      const organization = orgRes.data?.organization || null;
+      setOrg(organization);
+
+      if (organization?.type === "college") {
+        const filterRes = await organizationService.getCollegeFilterOptions(orgId);
+        setFilterOptions(filterRes.data || { degreeTypes: [] });
+      } else {
+        setFilterOptions({ degreeTypes: [] });
+      }
+    } catch (error) {
+      console.error("Failed to load organization:", error);
+    }
+  }, [orgId]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearch(searchInput);
@@ -56,30 +75,11 @@ export default function OrgMemberAnalytics() {
   }, [searchInput]);
 
   useEffect(() => {
-    if (!orgId) return;
-
-    const loadOrg = async () => {
-      try {
-        const orgRes = await organizationService.get(orgId);
-        const organization = orgRes.data?.organization || null;
-        setOrg(organization);
-
-        if (organization?.type === "college") {
-          const filterRes = await organizationService.getCollegeFilterOptions(orgId);
-          setFilterOptions(filterRes.data || { degreeTypes: [] });
-        } else {
-          setFilterOptions({ degreeTypes: [] });
-        }
-      } catch (error) {
-        console.error("Failed to load organization:", error);
-      }
-    };
-
-    loadOrg();
-  }, [orgId]);
+    loadOrganizationContext();
+  }, [loadOrganizationContext]);
 
   const fetchAnalytics = useCallback(async () => {
-    if (!orgId || !org) return;
+    if (!orgId) return;
     setLoading(true);
     try {
       const params = { page, limit: 20 };
@@ -103,7 +103,6 @@ export default function OrgMemberAnalytics() {
     }
   }, [
     orgId,
-    org,
     page,
     search,
     isCollege,
@@ -290,11 +289,15 @@ export default function OrgMemberAnalytics() {
 }
 
 function StatCard({ label, value, icon: Icon }) {
+  const iconNode = Icon
+    ? Icon({ className: "h-4 w-4 text-gray-500", "aria-hidden": true })
+    : null;
+
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
       <div className="mb-2 flex items-center justify-between">
         <p className="text-xs text-gray-500">{label}</p>
-        <Icon className="h-4 w-4 text-gray-500" />
+        {iconNode}
       </div>
       <p className="text-2xl font-semibold text-white">{value}</p>
     </div>

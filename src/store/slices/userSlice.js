@@ -1,15 +1,53 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
-import { clearTokens, getAccessToken } from "../../utils/axios";
+import { clearTokens, getAccessToken, getRefreshToken } from "../../utils/axios";
 
 let lastAuthCheck = 0;
 const AUTH_CHECK_INTERVAL = 5000;
+const PUBLIC_BOOTSTRAP_PATHS = new Set([
+  "/",
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/verify-email",
+  "/problems",
+  "/quiz",
+  "/internships",
+  "/about",
+  "/careers",
+  "/blog",
+  "/help-center",
+  "/contact",
+  "/community",
+  "/status",
+  "/roadmap",
+  "/pricing",
+]);
+
+const isPublicBootstrapPath = (pathname = "/") => {
+  return (
+    PUBLIC_BOOTSTRAP_PATHS.has(pathname) ||
+    pathname.startsWith("/problems/") ||
+    pathname.startsWith("/quiz/") ||
+    pathname.startsWith("/internships/") ||
+    pathname.startsWith("/org/join/") ||
+    pathname.startsWith("/org/setup/")
+  );
+};
 
 export const initializeAuth = createAsyncThunk(
   "user/initializeAuth",
   async (_, { getState }) => {
     const now = Date.now();
     const { user } = getState().user;
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+    const pathname = window?.location?.pathname || "/";
+
+    // Fast path: unauthenticated visitors on public routes should not block app startup.
+    if (!accessToken && !refreshToken && isPublicBootstrapPath(pathname)) {
+      return null;
+    }
 
     // If user is already loaded and we checked recently, skip
     if (user?.email && now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
@@ -37,7 +75,7 @@ export const initializeAuth = createAsyncThunk(
         } catch (refreshError) {
           // Ignore and fall through to unauthenticated state.
         }
-      } else if (!getAccessToken()) {
+      } else if (!accessToken) {
         // If there is no local token and server rejected auth, treat as logged out quietly.
         return null;
       }
