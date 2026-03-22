@@ -85,6 +85,8 @@ import TermsOfService from "./pages/Legal/TermsOfService";
 import CookiePolicy from "./pages/Legal/CookiePolicy";
 import AcceptableUsePolicy from "./pages/Legal/AcceptableUsePolicy";
 import CookieConsentBanner from "./components/Cookie/CookieConsentBanner";
+import SEO from "./components/SEO";
+import { initializeAnalytics, trackPageView } from "./utils/analytics";
 
 // Component to show page-specific loading messages
 const LoadingMessage = () => {
@@ -128,6 +130,61 @@ const AppContent = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { isInitializing, user } = useSelector((state) => state.user);
+
+  const getSeoConfigForPath = (pathname) => {
+    const exactMap = {
+      "/": "home",
+      "/about": "about",
+      "/contact": "contact",
+      "/blog": "blog",
+      "/pricing": "pricing",
+      "/internships": "internships",
+      "/quiz": "quizzes",
+      "/problems": "codingProblems",
+      "/ai-interview/setup": "aiInterview",
+    };
+
+    if (exactMap[pathname]) {
+      return { pageKey: exactMap[pathname], robots: "index, follow" };
+    }
+
+    if (pathname.startsWith("/ai-interview/")) {
+      return { pageKey: "aiInterview", robots: "noindex, nofollow" };
+    }
+
+    if (pathname.startsWith("/problems/")) {
+      return { pageKey: "codingProblems", robots: "noindex, nofollow" };
+    }
+
+    if (pathname.startsWith("/quiz/")) {
+      return { pageKey: "quizzes", robots: "noindex, nofollow" };
+    }
+
+    const privatePrefixes = [
+      "/dashboard",
+      "/profile",
+      "/my-problems",
+      "/payment-history",
+      "/internships/enrolled",
+      "/internships/submit",
+      "/org/",
+      "/login",
+      "/signup",
+      "/forgot-password",
+      "/verify-email",
+      "/resume-ai",
+      "/my-interviews",
+      "/subscription-debug",
+    ];
+
+    if (privatePrefixes.some((prefix) => pathname.startsWith(prefix))) {
+      return { pageKey: "home", robots: "noindex, nofollow" };
+    }
+
+    return { pageKey: "home", robots: "index, follow" };
+  };
+
+  const seoConfig = getSeoConfigForPath(location.pathname);
 
   const PUBLIC_BOOTSTRAP_PATHS = new Set([
     "/",
@@ -183,6 +240,14 @@ const AppContent = () => {
     // };
   }, [dispatch, isInitializing]);
 
+  useEffect(() => {
+    initializeAnalytics();
+  }, []);
+
+  useEffect(() => {
+    trackPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
+
   // Show loading screen while checking authentication
   if (isInitializing && !user && !isPublicBootstrapPath) {
     return <LoadingMessage />;
@@ -199,6 +264,7 @@ const AppContent = () => {
   };
 
   const isOrgTeam = user?.userType === "org_team";
+  const isOrgSuperAdmin = user?.organization?.role === "super_admin";
   // const showHomeCursorEffects = location.pathname === "/";
   if (isOrgTeam) {
     const allowedOrgPaths = [
@@ -211,6 +277,7 @@ const AppContent = () => {
     ];
     const isAllowed =
       allowedOrgPaths.some((p) => location.pathname.startsWith(p)) ||
+      (isOrgSuperAdmin && location.pathname.startsWith("/pricing")) ||
       location.pathname === "/" ||
       location.pathname.startsWith("/org/setup/") ||
       location.pathname.startsWith("/org/join/") ||
@@ -228,6 +295,10 @@ const AppContent = () => {
 
   return (
     <>
+      <SEO
+        pageKey={seoConfig.pageKey}
+        custom={{ robots: seoConfig.robots, canonical: location.pathname }}
+      />
       <CookieConsentBanner />
       <Routes>
         <Route path="/" element={<Home />} />

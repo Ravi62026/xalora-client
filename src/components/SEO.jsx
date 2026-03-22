@@ -1,6 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import SEO_CONFIG, { generateMetaTags } from './seo-config';
+import { useEffect } from "react";
+import SEO_CONFIG, { generateMetaTags } from "../config/seo-config";
 
 /**
  * SEO Component for Xalora
@@ -27,77 +26,86 @@ import SEO_CONFIG, { generateMetaTags } from './seo-config';
  * />
  */
 
-const SEO = ({ pageKey = 'home', custom = {}, structuredData = [] }) => {
+const SEO = ({ pageKey = "home", custom = {}, structuredData = [] }) => {
   const metaTags = generateMetaTags(pageKey, custom);
   const { site } = SEO_CONFIG;
 
-  return (
-    <Helmet>
-      {/* Primary Meta Tags */}
-      <title>{metaTags.title}</title>
-      <meta name="title" content={metaTags.title} />
-      <meta name="description" content={metaTags.description} />
-      <meta name="keywords" content={metaTags.keywords} />
-      <meta name="author" content={metaTags.author} />
-      <meta name="robots" content={metaTags.robots} />
-      <meta name="googlebot" content={metaTags.robots} />
-      <meta name="language" content={site.language} />
-      <meta name="theme-color" content={metaTags.themeColor} />
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
 
-      {/* Canonical URL */}
-      <link rel="canonical" href={metaTags.canonical} />
+    const ensureMeta = (attr, key, value) => {
+      if (!value) return;
+      let el = document.head.querySelector(`meta[${attr}="${key}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, key);
+        el.setAttribute("data-xalora-seo", "true");
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", value);
+    };
 
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={metaTags.ogType} />
-      <meta property="og:url" content={metaTags.ogUrl} />
-      <meta property="og:title" content={metaTags.ogTitle} />
-      <meta property="og:description" content={metaTags.ogDescription} />
-      <meta property="og:image" content={metaTags.ogImage} />
-      <meta property="og:site_name" content={metaTags.ogSiteName} />
-      <meta property="og:locale" content={metaTags.ogLocale} />
+    const ensureLink = (rel, href) => {
+      if (!href) return;
+      let el = document.head.querySelector(`link[rel="${rel}"]`);
+      if (!el) {
+        el = document.createElement("link");
+        el.setAttribute("rel", rel);
+        el.setAttribute("data-xalora-seo", "true");
+        document.head.appendChild(el);
+      }
+      el.setAttribute("href", href);
+    };
 
-      {/* Twitter Card */}
-      <meta name="twitter:card" content={metaTags.twitterCard} />
-      <meta name="twitter:site" content={metaTags.twitterSite} />
-      <meta name="twitter:creator" content={metaTags.twitterCreator} />
-      <meta name="twitter:title" content={metaTags.twitterTitle} />
-      <meta name="twitter:description" content={metaTags.twitterDescription} />
-      <meta name="twitter:image" content={metaTags.twitterImage} />
+    document.title = metaTags.title;
 
-      {/* Favicon */}
-      <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <link rel="shortcut icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-      <link rel="manifest" href="/site.webmanifest" />
+    ensureMeta("name", "title", metaTags.title);
+    ensureMeta("name", "description", metaTags.description);
+    ensureMeta("name", "keywords", metaTags.keywords);
+    ensureMeta("name", "author", metaTags.author);
+    ensureMeta("name", "robots", metaTags.robots);
+    ensureMeta("name", "googlebot", metaTags.robots);
+    ensureMeta("name", "language", site.language);
+    ensureMeta("name", "theme-color", metaTags.themeColor);
 
-      {/* Preconnect to external resources */}
-      <link rel="preconnect" href="https://www.google-analytics.com" />
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+    ensureMeta("property", "og:type", metaTags.ogType);
+    ensureMeta("property", "og:url", metaTags.ogUrl);
+    ensureMeta("property", "og:title", metaTags.ogTitle);
+    ensureMeta("property", "og:description", metaTags.ogDescription);
+    ensureMeta("property", "og:image", metaTags.ogImage);
+    ensureMeta("property", "og:site_name", metaTags.ogSiteName);
+    ensureMeta("property", "og:locale", metaTags.ogLocale);
 
-      {/* Structured Data (JSON-LD) */}
-      {metaTags.structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(metaTags.structuredData)}
-        </script>
-      )}
+    ensureMeta("name", "twitter:card", metaTags.twitterCard);
+    ensureMeta("name", "twitter:site", metaTags.twitterSite);
+    ensureMeta("name", "twitter:creator", metaTags.twitterCreator);
+    ensureMeta("name", "twitter:title", metaTags.twitterTitle);
+    ensureMeta("name", "twitter:description", metaTags.twitterDescription);
+    ensureMeta("name", "twitter:image", metaTags.twitterImage);
 
-      {/* Additional structured data if provided */}
-      {structuredData.map((data, index) => (
-        <script key={index} type="application/ld+json">
-          {JSON.stringify(data)}
-        </script>
-      ))}
+    ensureLink("canonical", metaTags.canonical);
 
-      {/* Google Site Verification (add your verification code) */}
-      {/* <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE" /> */}
+    const oldStructured = document.head.querySelectorAll(
+      'script[type="application/ld+json"][data-xalora-seo="true"]'
+    );
+    oldStructured.forEach((node) => node.remove());
 
-      {/* Bing Webmaster Tools (add your verification code) */}
-      {/* <meta name="msvalidate.01" content="YOUR_VERIFICATION_CODE" /> */}
-    </Helmet>
-  );
+    const schemas = [];
+    if (metaTags.structuredData) schemas.push(metaTags.structuredData);
+    structuredData.forEach((item) => schemas.push(item));
+
+    schemas.forEach((schema) => {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-xalora-seo", "true");
+      script.text = JSON.stringify(schema);
+      document.head.appendChild(script);
+    });
+  }, [metaTags, site.language, structuredData]);
+
+  return null;
 };
 
 export default SEO;

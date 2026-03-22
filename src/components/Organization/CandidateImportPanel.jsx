@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Download, FileUp, Loader2, Upload } from "lucide-react";
 import organizationService from "../../services/organizationService";
 
@@ -7,6 +7,56 @@ export default function CandidateImportPanel({ orgId, onImported }) {
   const [loadingMode, setLoadingMode] = useState("");
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
+  const [trackingJobId, setTrackingJobId] = useState("");
+
+  useEffect(() => {
+    if (!trackingJobId) return undefined;
+
+    let intervalId = null;
+
+    const pollStatus = async () => {
+      try {
+        const response = await organizationService.getCompanyImportStatus(
+          orgId,
+          trackingJobId
+        );
+        const payload = response?.data || {};
+        setResult(payload);
+
+        if (payload.status === "completed") {
+          setTrackingJobId("");
+          onImported?.();
+          return true;
+        }
+
+        if (payload.status === "failed") {
+          setError(payload.error || "Import job failed");
+          setTrackingJobId("");
+          return true;
+        }
+      } catch (err) {
+        setError(err?.response?.data?.message || "Failed to fetch import progress");
+        setTrackingJobId("");
+        return true;
+      }
+
+      return false;
+    };
+
+    pollStatus().then((done) => {
+      if (done) return;
+      intervalId = setInterval(async () => {
+        const finished = await pollStatus();
+        if (finished && intervalId) {
+          clearInterval(intervalId);
+        }
+      }, 1500);
+    });
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [orgId, trackingJobId, onImported]);
 
   const downloadTemplate = async () => {
     setError("");
@@ -43,11 +93,35 @@ export default function CandidateImportPanel({ orgId, onImported }) {
 
     try {
       console.log(`[CANDIDATE-IMPORT] ${mode === "validate" ? "Validating" : "Committing"} candidate import for ${file.name}`);
-      const response = await organizationService.importCompanyCandidates(orgId, file, mode);
-      setResult(response.data);
+      const response = await organizationService.importCompanyCandidates(orgId, file, mode, {
+        track: mode === "commit",
+      });
+
+      const payload = response?.data || {};
+      if (mode === "commit" && payload.tracking && payload.jobId) {
+        setResult({
+          status: "processing",
+          progress: {
+            processed: 0,
+            total: payload.totalRows || 0,
+          },
+          summary: {
+            sent: 0,
+            sentNoEmail: 0,
+            skipped: 0,
+            failed: 0,
+            invalid: 0,
+          },
+          rows: [],
+        });
+        setTrackingJobId(payload.jobId);
+        return;
+      }
+
+      setResult(payload);
       
       if (mode === "commit") {
-        const { summary = {} } = response.data || {};
+        const { summary = {} } = payload || {};
         const { sent = 0 } = summary;
         console.log(`[CANDIDATE-IMPORT-RESULT] 📧 Emails sent to ${sent} candidate(s)`);
         onImported?.();
@@ -62,13 +136,18 @@ export default function CandidateImportPanel({ orgId, onImported }) {
     }
   };
 
+  const metrics = deriveCandidateMetrics(result);
+  const droppedRows = (result?.rows || []).filter(
+    (row) => row.status === "sent_no_email" || row.status === "failed"
+  );
+
   return (
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-white">Candidate Import</h3>
           <p className="text-sm text-gray-400">
-            Download the template, fill candidate details, validate, then commit to send invites.
+            Download the template, keep email mandatory, and fill other candidate fields only if available.
           </p>
         </div>
 
@@ -89,7 +168,7 @@ export default function CandidateImportPanel({ orgId, onImported }) {
             {file ? file.name : "Upload candidate CSV or XLSX"}
           </span>
           <span className="text-xs text-gray-500">
-            Required: name, email, position. Optional: rounds, deadline
+            Required: email. Optional: name, position, rounds, deadline
           </span>
           <input
             type="file"
@@ -110,11 +189,17 @@ export default function CandidateImportPanel({ orgId, onImported }) {
         </div>
       )}
 
+      {trackingJobId && (
+        <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+          Import in progress: {metrics.processed}/{metrics.total} rows processed.
+        </div>
+      )}
+
       <div className="mt-4 flex flex-wrap gap-3">
         <button
           type="button"
           onClick={() => handleImport("validate")}
-          disabled={loadingMode !== ""}
+          disabled={loadingMode !== "" || Boolean(trackingJobId)}
           className="inline-flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-emerald-500/40 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loadingMode === "validate" ? (
@@ -128,7 +213,7 @@ export default function CandidateImportPanel({ orgId, onImported }) {
         <button
           type="button"
           onClick={() => handleImport("commit")}
-          disabled={loadingMode !== ""}
+          disabled={loadingMode !== "" || Boolean(trackingJobId)}
           className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loadingMode === "commit" ? (
@@ -142,15 +227,13 @@ export default function CandidateImportPanel({ orgId, onImported }) {
 
       {result && (
         <div className="mt-5 space-y-4">
-          <div className="grid gap-3 sm:grid-cols-5">
-            <SummaryCard label="Total Rows" value={result.totalRows || 0} />
-            <SummaryCard label="Valid" value={result.summary?.valid || 0} />
-            <SummaryCard label="Invalid" value={result.summary?.invalid || 0} />
-            <SummaryCard label="Skipped" value={result.summary?.skipped || 0} />
-            <SummaryCard
-              label="Sent"
-              value={result.summary?.sent ?? "—"}
-            />
+          <div className="grid gap-3 sm:grid-cols-6">
+            <SummaryCard label="Processed" value={`${metrics.processed}/${metrics.total}`} />
+            <SummaryCard label="Valid" value={metrics.valid} />
+            <SummaryCard label="Invalid" value={metrics.invalid} />
+            <SummaryCard label="Skipped" value={metrics.skipped} />
+            <SummaryCard label="Sent" value={metrics.sent} />
+            <SummaryCard label="Sent No Email" value={metrics.sentNoEmail} />
           </div>
 
           <div className="max-h-72 overflow-auto rounded-xl border border-white/10">
@@ -185,10 +268,99 @@ export default function CandidateImportPanel({ orgId, onImported }) {
               </tbody>
             </table>
           </div>
+
+          {droppedRows.length > 0 && (
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+              <h4 className="text-sm font-semibold text-amber-300">
+                Delivery Issues ({droppedRows.length})
+              </h4>
+              <p className="mt-1 text-xs text-amber-200/80">
+                These invites were created, but email delivery did not complete.
+              </p>
+              <div className="mt-3 max-h-56 overflow-auto rounded-lg border border-amber-400/20">
+                <table className="w-full text-left text-sm">
+                  <thead className="sticky top-0 bg-amber-950/80 text-amber-200">
+                    <tr>
+                      <th className="px-3 py-2">Row</th>
+                      <th className="px-3 py-2">Email</th>
+                      <th className="px-3 py-2">Status</th>
+                      <th className="px-3 py-2">Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-amber-400/10">
+                    {droppedRows.map((row) => (
+                      <tr key={`drop-${row.rowNumber}`} className="text-amber-100">
+                        <td className="px-3 py-2">{row.rowNumber}</td>
+                        <td className="px-3 py-2">{row.email || "—"}</td>
+                        <td className="px-3 py-2 capitalize">{row.status}</td>
+                        <td className="px-3 py-2">
+                          {(row.issues || []).join(", ") || "No details provided"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </section>
   );
+}
+
+function deriveCandidateMetrics(result) {
+  const rows = result?.rows || [];
+  const summary = result?.summary || {};
+  const progress = result?.progress || {};
+
+  const countByStatus = (status) =>
+    rows.filter((row) => String(row.status || "").toLowerCase() === status).length;
+
+  const total =
+    progress.total ??
+    result?.totalRows ??
+    rows.length;
+
+  const processed =
+    progress.processed ??
+    (summary.sent || 0) +
+      (summary.sentNoEmail || 0) +
+      (summary.failed || 0) +
+      (summary.invalid || 0);
+
+  const valid =
+    summary.valid ??
+    countByStatus("valid") +
+      countByStatus("sent") +
+      countByStatus("sent_no_email") +
+      countByStatus("failed");
+
+  const invalid =
+    summary.invalid ??
+    countByStatus("invalid");
+
+  const skipped =
+    summary.skipped ??
+    countByStatus("skipped");
+
+  const sent =
+    summary.sent ??
+    countByStatus("sent");
+
+  const sentNoEmail =
+    summary.sentNoEmail ??
+    countByStatus("sent_no_email");
+
+  return {
+    total,
+    processed,
+    valid,
+    invalid,
+    skipped,
+    sent,
+    sentNoEmail,
+  };
 }
 
 function SummaryCard({ label, value }) {

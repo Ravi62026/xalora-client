@@ -66,12 +66,15 @@ const organizationService = {
     return response;
   },
 
-  importCollegeMembers: async (orgId, file, mode = "validate") => {
+  importCollegeMembers: async (orgId, file, mode = "validate", options = {}) => {
     const formData = new FormData();
     formData.append("file", file);
 
+    const { track = false } = options;
+    const query = `mode=${mode}${track ? "&track=1" : ""}`;
+
     const response = await axiosInstance.post(
-      `${ApiRoutes.organization.collegeImportMembers(orgId)}?mode=${mode}`,
+      `${ApiRoutes.organization.collegeImportMembers(orgId)}?${query}`,
       formData,
       {
         headers: {
@@ -80,6 +83,13 @@ const organizationService = {
       }
     );
 
+    return response.data;
+  },
+
+  getCollegeImportStatus: async (orgId, jobId) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeImportStatus(orgId, jobId)
+    );
     return response.data;
   },
 
@@ -129,20 +139,30 @@ const organizationService = {
 
   downloadCandidateTemplate: async (orgId) => {
     const response = await axiosInstance.get(
-      `/organizations/${orgId}/company/candidate-template`,
+      ApiRoutes.organization.companyCandidateTemplate(orgId),
       { responseType: "blob" }
     );
     return response;
   },
 
-  importCompanyCandidates: async (orgId, file, mode = "validate") => {
+  importCompanyCandidates: async (orgId, file, mode = "validate", options = {}) => {
     const formData = new FormData();
     formData.append("file", file);
 
+    const { track = false } = options;
+    const query = `mode=${mode}${track ? "&track=1" : ""}`;
+
     const response = await axiosInstance.post(
-      `/organizations/${orgId}/company/candidates/import?mode=${mode}`,
+      `${ApiRoutes.organization.companyImportCandidates(orgId)}?${query}`,
       formData,
       { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return response.data;
+  },
+
+  getCompanyImportStatus: async (orgId, jobId) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.companyImportStatus(orgId, jobId)
     );
     return response.data;
   },

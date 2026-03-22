@@ -133,8 +133,12 @@ const ApiRoutes = {
         collegeFilterOptions: (orgId) => `/api/v1/organizations/${orgId}/college/filter-options`,
         collegeStudentTemplate: (orgId) => `/api/v1/organizations/${orgId}/college/student-template`,
         collegeImportMembers: (orgId) => `/api/v1/organizations/${orgId}/college/members/import`,
+        collegeImportStatus: (orgId, jobId) => `/api/v1/organizations/${orgId}/college/members/import/${jobId}/status`,
         collegeLeaderboard: (orgId) => `/api/v1/organizations/${orgId}/college/leaderboard`,
         collegeMyRank: (orgId) => `/api/v1/organizations/${orgId}/college/me/rank`,
+        companyCandidateTemplate: (orgId) => `/api/v1/organizations/${orgId}/company/candidate-template`,
+        companyImportCandidates: (orgId) => `/api/v1/organizations/${orgId}/company/candidates/import`,
+        companyImportStatus: (orgId, jobId) => `/api/v1/organizations/${orgId}/company/candidates/import/${jobId}/status`,
     },
     jobs: {
         searchByRole: "/api/v1/ai/jobs/search/role",

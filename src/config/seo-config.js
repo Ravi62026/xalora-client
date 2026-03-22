@@ -391,6 +391,11 @@ export const SEO_CONFIG = {
 export const generateMetaTags = (pageKey, custom = {}) => {
   const page = SEO_CONFIG.pages[pageKey] || SEO_CONFIG.pages.home;
   const { site, social } = SEO_CONFIG;
+  const canonicalPath = custom.canonical || page.canonical;
+  const canonicalUrl = canonicalPath?.startsWith("http")
+    ? canonicalPath
+    : `${site.url}${canonicalPath}`;
+  const ogImage = custom.ogImage || page.ogImage || SEO_CONFIG.getOgImageUrl(pageKey);
 
   return {
     // Basic Meta Tags
@@ -398,17 +403,17 @@ export const generateMetaTags = (pageKey, custom = {}) => {
     description: custom.description || page.description,
     keywords: custom.keywords || page.keywords,
     author: site.author,
-    robots: page.robots || site.robots,
+    robots: custom.robots || page.robots || site.robots,
 
     // Canonical URL
-    canonical: `${site.url}${page.canonical}`,
+    canonical: canonicalUrl,
 
     // Open Graph / Facebook
     ogType: 'website',
-    ogUrl: `${site.url}${page.canonical}`,
+    ogUrl: canonicalUrl,
     ogTitle: custom.ogTitle || page.title,
     ogDescription: custom.ogDescription || page.description,
-    ogImage: custom.ogImage || page.ogImage || SEO_CONFIG.getOgImageUrl(pageKey),
+    ogImage,
     ogSiteName: site.name,
     ogLocale: site.language,
 
@@ -418,7 +423,7 @@ export const generateMetaTags = (pageKey, custom = {}) => {
     twitterCreator: social.twitter,
     twitterTitle: custom.twitterTitle || page.title,
     twitterDescription: custom.twitterDescription || page.description,
-    twitterImage: custom.twitterImage || page.ogImage || SEO_CONFIG.getOgImageUrl(pageKey),
+    twitterImage: custom.twitterImage || ogImage,
 
     // Theme
     themeColor: site.themeColor,

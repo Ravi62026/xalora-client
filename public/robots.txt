@@ -1,163 +1,39 @@
-# ================================================================
-# XALORA.ONE - ROBOTS.TXT
-# ================================================================
-# This file tells search engines which pages to crawl and index
-# 
-# INSTRUCTIONS:
-# 1. Upload to xalora-client/public/robots.txt
-# 2. Test with Google Robots Testing Tool
-# 3. Submit sitemap in Google Search Console
-# ================================================================
-
-# Allow all crawlers by default
 User-agent: *
-
-# Allow crawling of all public pages
 Allow: /
 
-# Allow crawling of blog content (important for SEO)
-Allow: /blog
-
-# Allow crawling of problem pages (good for organic traffic)
-Allow: /coding-problems
-
-# Allow crawling of quiz pages
-Allow: /quizzes
-
-# Allow crawling of internship pages
-Allow: /internships
-
-# Allow crawling of pricing page
-Allow: /pricing
-
-# Allow crawling of about/contact pages
+# Public pages
 Allow: /about
 Allow: /contact
-Allow: /faq
+Allow: /blog
+Allow: /pricing
+Allow: /internships
+Allow: /problems
+Allow: /quiz
+Allow: /algorithms
+Allow: /data-structures
+Allow: /system-design
+Allow: /interview-prep
+Allow: /privacy
+Allow: /terms
+Allow: /cookies
 
-# ================================================================
-# PRIVATE/SENSITIVE PAGES - DO NOT CRAWL
-# ================================================================
-
-# User authentication pages (prevent duplicate content)
-Disallow: /login
-Disallow: /register
-Disallow: /signup
-Disallow: /forgot-password
-Disallow: /reset-password
-Disallow: /verify-email
-
-# User dashboard and profile pages (private content)
+# Private/auth pages
 Disallow: /dashboard
 Disallow: /profile
-Disallow: /settings
-Disallow: /account
-
-# User interview sessions (private)
-Disallow: /interviews
-Disallow: /interview/
-Disallow: /ai-interview/session
-
-# User quiz submissions and results (private)
-Disallow: /quiz-submissions
-Disallow: /quiz-results
-Disallow: /quiz/*/submit
-
-# User subscription/payment pages (private)
-Disallow: /subscription
-Disallow: /payment
-Disallow: /billing
-Disallow: /premium/checkout
-
-# Organization private pages
-Disallow: /organization/
+Disallow: /payment-history
+Disallow: /my-problems
+Disallow: /resume-ai
+Disallow: /my-interviews
 Disallow: /org/
-Disallow: /admin/
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /verify-email
+Disallow: /ai-interview/
 
-# API endpoints (not for public indexing)
+# API/internal
 Disallow: /api/
-Disallow: /api/v1/
-
-# Compiler service endpoints
-Disallow: /compiler/execute
-Disallow: /compiler/execute-tests
-
-# AI service endpoints
-Disallow: /python-ai/
-
-# Utility pages
 Disallow: /health
-Disallow: /health-check
 Disallow: /status
-Disallow: /ping
-
-# Search and filter pages (prevent crawl traps)
-Disallow: /search
-Disallow: /search?*
-Disallow: /*?search=
-Disallow: /*?q=
-
-# Filter and sort parameters (prevent infinite URLs)
-Disallow: /*?sort=
-Disallow: /*?filter=
-Disallow: /*?page=
-Disallow: /*?limit=
-
-# Session and tracking parameters
-Disallow: /*?session=
-Disallow: /*?token=
-Disallow: /*?ref=
-Disallow: /*?utm_
-
-# ================================================================
-# SPECIAL CRAWLER RULES
-# ================================================================
-
-# Google AdsBot (for landing page quality score)
-User-agent: AdsBot-Google
-Allow: /
-Allow: /pricing
-Allow: /ai-interview
-Disallow: /api/
-Disallow: /dashboard/
-
-# Google Images (allow OG images)
-User-agent: Googlebot-Image
-Allow: /og-images/
-Allow: /images/
-Disallow: /
-
-# ================================================================
-# SITEMAP
-# ================================================================
-# Tell Google where to find your sitemap
 
 Sitemap: https://xalora.one/sitemap.xml
-
-# Alternative sitemap locations (if you split sitemaps)
-# Sitemap: https://xalora.one/sitemap-pages.xml
-# Sitemap: https://xalora.one/sitemap-blog.xml
-# Sitemap: https://xalora.one/sitemap-problems.xml
-# Sitemap: https://xalora.one/sitemap-quizzes.xml
-
-# ================================================================
-# CRAWL DELAY (optional - for server load management)
-# ================================================================
-# Crawl-delay: 1
-
-# ================================================================
-# NOTES FOR DEVELOPERS
-# ================================================================
-# 
-# 1. Test this file: https://www.google.com/webmasters/tools/robots-testing-tool
-# 2. Monitor crawl stats in Google Search Console
-# 3. Update rules if you add new private sections
-# 4. Consider adding specific rules for new content types
-# 
-# Common Issues to Avoid:
-# - Don't block CSS/JS files (Google needs them for rendering)
-# - Don't block images you want in Google Images
-# - Don't create crawl traps with infinite URL parameters
-# - Keep sitemap URL updated
-# 
-# ================================================================

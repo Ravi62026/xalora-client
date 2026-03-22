@@ -293,6 +293,20 @@ const Profile = () => {
     return Math.max(0, Math.min(100, raw));
   }, [interviewUsage]);
 
+  const normalizedInterviewUsage = useMemo(() => {
+    const used = Number(interviewUsage?.interviewsUsed ?? 0);
+    const limit = Number(interviewUsage?.interviewsLimit ?? 0);
+    const remaining = Number(
+      interviewUsage?.interviewsRemaining ?? Math.max(0, limit - used)
+    );
+
+    return {
+      used: Number.isFinite(used) ? used : 0,
+      limit: Number.isFinite(limit) ? limit : 0,
+      remaining: Number.isFinite(remaining) ? Math.max(0, remaining) : 0,
+    };
+  }, [interviewUsage]);
+
   const statCards = useMemo(
     () => [
       {
@@ -519,7 +533,7 @@ const Profile = () => {
                       <h3 className="text-lg font-semibold text-white">🎤 AI Interviews</h3>
                       <p className="mt-1 text-sm text-slate-300">
                         {interviewUsage
-                          ? `${interviewUsage.interviewsUsed} of ${interviewUsage.interviewsLimit} used this month`
+                          ? `${normalizedInterviewUsage.used} of ${normalizedInterviewUsage.limit} used this month`
                           : "Interview data unavailable"}
                       </p>
                       <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
@@ -529,7 +543,9 @@ const Profile = () => {
                         />
                       </div>
                       <p className="mt-2 text-xs text-slate-400">
-                        {interviewUsage ? `${interviewUsage.interviewsRemaining} interviews remaining` : "No active quota"}
+                        {interviewUsage
+                          ? `${normalizedInterviewUsage.remaining} interviews remaining`
+                          : "No active quota"}
                       </p>
                     </div>
                   </>

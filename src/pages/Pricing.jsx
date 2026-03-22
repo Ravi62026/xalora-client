@@ -3,22 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Layout from "../components/Layout";
 import subscriptionService from "../services/subscriptionService";
+import organizationService from "../services/organizationService";
 
 const Pricing = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState({});
-  const [plans, setPlans] = useState([]);
   const [currentSubscription, setCurrentSubscription] = useState(null);
+  const [currentOrgPlanId, setCurrentOrgPlanId] = useState(null);
   const [activeTab, setActiveTab] = useState("individual");
   // Removed billingCycle - only monthly billing now (recurring subscriptions)
-
-  const planValues = {
-    spark: 0,
-    pulse: 1,
-    nexus: 2,
-    infinity: 3,
-  };
 
   const individualPlans = [
     {
@@ -282,22 +276,35 @@ const Pricing = () => {
   ];
 
   useEffect(() => {
-    setPlans(activeTab === "individual" ? individualPlans : organizationPlans);
-    fetchCurrentSubscription();
+    const loadPricingContext = async () => {
+      try {
+        const subscription = await subscriptionService.getCurrentSubscription();
+        setCurrentSubscription(subscription?.data || null);
+      } catch (error) {
+        setCurrentSubscription(null);
+      }
+
+      try {
+        if (user?.organization?.role !== "super_admin" || !user?.organization?.orgId) {
+          setCurrentOrgPlanId(null);
+          return;
+        }
+
+        const response = await organizationService.get(user.organization.orgId);
+        const orgPlan = response?.data?.organization?.subscription?.plan || "free";
+        setCurrentOrgPlanId(`org-${orgPlan}`);
+      } catch (error) {
+        setCurrentOrgPlanId(null);
+      }
+    };
+
+    loadPricingContext();
   }, [isAuthenticated, user, activeTab]);
 
-  const fetchCurrentSubscription = async () => {
-    try {
-      const subscription = await subscriptionService.getCurrentSubscription();
-      setCurrentSubscription(subscription?.data || null);
-    } catch (error) {
-      setCurrentSubscription(null);
-    }
-  };
+  const plans = activeTab === "individual" ? individualPlans : organizationPlans;
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setPlans(tab === "individual" ? individualPlans : organizationPlans);
   };
 
   const getPrice = (plan) => {
@@ -316,6 +323,15 @@ const Pricing = () => {
       return;
     }
 
+    const isOrgPlan = planId.startsWith("org-");
+    if (isOrgPlan) {
+      const isOrgSuperAdmin = user?.organization?.role === "super_admin" && !!user?.organization?.orgId;
+      if (!isOrgSuperAdmin) {
+        alert("Only organization super admin can purchase organization plans.");
+        return;
+      }
+    }
+
     setIsLoading((prev) => ({ ...prev, [planId]: true }));
 
     const selectedPlan = plans.find((plan) => plan.id === planId);
@@ -325,11 +341,14 @@ const Pricing = () => {
       return;
     }
 
-    // Free plan (Spark) - activate directly
-    if (planId === "spark" || selectedPlan.monthlyPrice === 0) {
+    // Free plans - activate directly
+    if (selectedPlan.monthlyPrice === 0) {
       try {
-        await subscriptionService.createSubscription("spark");
-        alert("Xalora Spark plan activated! You now have access to basic features.");
+        await subscriptionService.createSubscription(planId);
+        const successMessage = planId.startsWith("org-")
+          ? "Organization starter plan activated successfully."
+          : "Xalora Spark plan activated! You now have access to basic features.";
+        alert(successMessage);
         window.location.reload();
       } catch (err) {
         console.error("Error activating free plan:", err);
@@ -423,7 +442,10 @@ const Pricing = () => {
     if (urlParams.has('razorpay_subscription_id') || urlParams.has('payment')) {
       // Clean up URL params
       window.history.replaceState({}, document.title, window.location.pathname);
-      fetchCurrentSubscription();
+      subscriptionService
+        .getCurrentSubscription()
+        .then((subscription) => setCurrentSubscription(subscription?.data || null))
+        .catch(() => setCurrentSubscription(null));
     }
   }, []);
 
@@ -628,6 +650,8 @@ const Pricing = () => {
               const colors = getColorClasses(plan.color, plan.popular);
               const price = getPrice(plan);
               const originalPrice = getOriginalPrice(plan);
+              const currentPlanId = activeTab === "organization" ? currentOrgPlanId : currentSubscription?.planId;
+              const isCurrentPlan = Boolean(currentPlanId && currentPlanId === plan.id);
 
               return (
                 <div
@@ -642,7 +666,7 @@ const Pricing = () => {
                   )}
 
                   {/* Current Plan Badge */}
-                  {currentSubscription && currentSubscription.planId === plan.id && (
+                  {isCurrentPlan && (
                     <div className="absolute top-0 left-0 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs font-bold px-5 py-2 rounded-br-xl z-10">
                       YOUR PLAN
                     </div>
@@ -791,9 +815,9 @@ const Pricing = () => {
                         }
                         handlePlanSelect(plan.id);
                       }}
-                      disabled={isLoading[plan.id] || (currentSubscription && currentSubscription.planId === plan.id) || plan.comingSoon}
+                      disabled={isLoading[plan.id] || isCurrentPlan || plan.comingSoon}
                       className={`w-full py-3 px-4 rounded-xl font-bold text-white text-sm transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-offset-gray-900 bg-gradient-to-r ${colors.button} shadow-lg hover:shadow-xl ${
-                        currentSubscription && currentSubscription.planId === plan.id
+                        isCurrentPlan
                           ? "bg-gray-600 cursor-not-allowed opacity-50"
                           : ""
                       } ${isLoading[plan.id] ? "opacity-75 cursor-not-allowed" : ""}`}
@@ -806,7 +830,7 @@ const Pricing = () => {
                           </svg>
                           Processing...
                         </div>
-                      ) : currentSubscription && currentSubscription.planId === plan.id ? (
+                      ) : isCurrentPlan ? (
                         "Current Plan"
                       ) : plan.customPricing ? (
                         "Contact Sales"

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
+import { updateAnalyticsConsent } from '../../utils/analytics';
 
 export const CookieConsentBanner = () => {
   const [showBanner, setShowBanner] = useState(() => {
@@ -27,12 +28,8 @@ export const CookieConsentBanner = () => {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
+    updateAnalyticsConsent(true);
     setShowBanner(false);
-
-    // Initialize analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', 'G-XXXXXXXXXX');
-    }
   };
 
   const handleRejectAll = () => {
@@ -44,6 +41,7 @@ export const CookieConsentBanner = () => {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
+    updateAnalyticsConsent(false);
     setShowBanner(false);
   };
 
@@ -54,6 +52,7 @@ export const CookieConsentBanner = () => {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookie_consent', JSON.stringify(consent));
+    updateAnalyticsConsent(Boolean(consent.analytics));
     setShowBanner(false);
     setShowSettings(false);
   };
