@@ -149,7 +149,9 @@ const organizationService = {
     const formData = new FormData();
     formData.append("file", file);
 
-    const { track = false } = options;
+    const { track = false, deadline } = options;
+    if (deadline) formData.append("deadline", String(deadline));
+
     const query = `mode=${mode}${track ? "&track=1" : ""}`;
 
     const response = await axiosInstance.post(

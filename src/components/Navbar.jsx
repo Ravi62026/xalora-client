@@ -131,6 +131,7 @@ const Navbar = () => {
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
     const avatarInitial = (user?.name || user?.username || "U").charAt(0).toUpperCase();
     const isOrgTeam = user?.userType === "org_team";
+    const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
 
     const getDashboardRoute = () => {
         if (!user?.organization?.orgId && !user?.organization?._id) return "/dashboard";
@@ -212,11 +213,18 @@ const Navbar = () => {
                     <div className="hidden lg:flex items-center h-full gap-8">
                         <Link to="/" className={navLinkClass("/")}>Home</Link>
 
-                        {!isOrgTeam && (
+                        {!isOrgTeam && !isCompanyCandidate && (
                             <>
                                 <NavDropdown label="Practice" items={practiceItems} isActive={isDropdownActive(practiceItems)} />
                                 <NavDropdown label="AI Tools" items={aiToolsItems} isActive={isDropdownActive(aiToolsItems)} />
                                 <NavDropdown label="Learn" items={learnItems} isActive={isDropdownActive(learnItems)} />
+                            </>
+                        )}
+
+                        {isCompanyCandidate && (
+                            <>
+                                <Link to="/ai-interview/setup" className={navLinkClass("/ai-interview")}>AI Interview</Link>
+                                <Link to="/my-interviews" className={navLinkClass("/my-interviews")}>My Interviews</Link>
                             </>
                         )}
 
@@ -285,6 +293,7 @@ const Navbar = () => {
                                         >
                                             <span>📊</span> Dashboard
                                         </Link>
+                                        {!isCompanyCandidate && (
                                         <Link
                                             to="/pricing"
                                             className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
@@ -292,6 +301,7 @@ const Navbar = () => {
                                         >
                                             <span>💎</span> Subscription
                                         </Link>
+                                        )}
 
                                         <div className="border-t border-emerald-500/20 mt-1.5 pt-1.5">
                                             <button
@@ -374,7 +384,7 @@ const Navbar = () => {
                                 Home
                             </Link>
 
-                            {!isOrgTeam && (
+                            {!isOrgTeam && !isCompanyCandidate && (
                                 <>
                                     {/* Practice Section */}
                                     <div className="pt-4 pb-2 px-4">
@@ -417,6 +427,20 @@ const Navbar = () => {
                                 </>
                             )}
 
+                            {isCompanyCandidate && (
+                                <>
+                                    <div className="pt-4 pb-2 px-4">
+                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Interview</div>
+                                    </div>
+                                    <Link to="/ai-interview/setup" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                        <span className="text-xl">🎥</span> AI Interview
+                                    </Link>
+                                    <Link to="/my-interviews" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
+                                        <span className="text-xl">📋</span> My Interviews
+                                    </Link>
+                                </>
+                            )}
+
                             {isAuthenticated && (
                                 <>
                                     <div className="pt-4 pb-2 px-4">
@@ -454,9 +478,11 @@ const Navbar = () => {
                                     <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
                                         <span className="text-xl">👤</span> Profile
                                     </Link>
+                                    {!isCompanyCandidate && (
                                     <Link to="/pricing" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
                                         <span className="text-xl">💎</span> Subscription
                                     </Link>
+                                    )}
                                     <button
                                         onClick={handleLogout}
                                         className="flex items-center gap-3 w-full mt-2 px-4 py-3 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-150"

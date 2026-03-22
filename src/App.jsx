@@ -265,7 +265,34 @@ const AppContent = () => {
 
   const isOrgTeam = user?.userType === "org_team";
   const isOrgSuperAdmin = user?.organization?.role === "super_admin";
-  // const showHomeCursorEffects = location.pathname === "/";
+  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+
+  // Company candidates: only allow interview, dashboard, profile, and public pages
+  if (isCompanyCandidate) {
+    const allowedCompanyPaths = [
+      "/ai-interview",
+      "/my-interviews",
+      "/dashboard",
+      "/profile",
+      "/",
+    ];
+    const isAllowed =
+      allowedCompanyPaths.some((p) => location.pathname.startsWith(p)) ||
+      location.pathname.startsWith("/org/join/") ||
+      location.pathname.startsWith("/privacy") ||
+      location.pathname.startsWith("/terms") ||
+      location.pathname.startsWith("/cookies") ||
+      location.pathname.startsWith("/acceptable-use") ||
+      location.pathname.startsWith("/login") ||
+      location.pathname.startsWith("/signup") ||
+      location.pathname.startsWith("/about") ||
+      location.pathname.startsWith("/contact");
+
+    if (!isAllowed) {
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+
   if (isOrgTeam) {
     const allowedOrgPaths = [
       "/org/dashboard",

@@ -11,7 +11,7 @@ import SEO_CONFIG, { generateMetaTags } from "../config/seo-config";
  *   return (
  *     <>
  *       <SEO pageKey="home" />
- *       {/* Your page content */}
+ *       {/* Your page content *\/}
  *     </>
  *   );
  * }

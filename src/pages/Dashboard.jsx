@@ -1071,7 +1071,10 @@ const Dashboard = () => {
                     Quick Actions
                   </h2>
                   <nav className="space-y-2">
-                    {QUICK_ACTIONS.map((action) => (
+                    {(user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0
+                      ? QUICK_ACTIONS.filter((a) => a.to === "/my-interviews")
+                      : QUICK_ACTIONS
+                    ).map((action) => (
                       <QuickActionCard
                         key={action.title}
                         {...action}

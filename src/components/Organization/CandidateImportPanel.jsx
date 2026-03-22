@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Download, FileUp, Loader2, Upload } from "lucide-react";
+import { Download, FileUp, Loader2, Upload, Calendar } from "lucide-react";
 import organizationService from "../../services/organizationService";
 
 export default function CandidateImportPanel({ orgId, onImported }) {
   const [file, setFile] = useState(null);
+  const [deadline, setDeadline] = useState(7);
   const [loadingMode, setLoadingMode] = useState("");
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
@@ -92,9 +93,10 @@ export default function CandidateImportPanel({ orgId, onImported }) {
     setError("");
 
     try {
-      console.log(`[CANDIDATE-IMPORT] ${mode === "validate" ? "Validating" : "Committing"} candidate import for ${file.name}`);
+      console.log(`[CANDIDATE-IMPORT] ${mode === "validate" ? "Validating" : "Committing"} candidate import for ${file.name} (deadline: ${deadline} days)`);
       const response = await organizationService.importCompanyCandidates(orgId, file, mode, {
         track: mode === "commit",
+        deadline,
       });
 
       const payload = response?.data || {};
@@ -168,7 +170,7 @@ export default function CandidateImportPanel({ orgId, onImported }) {
             {file ? file.name : "Upload candidate CSV or XLSX"}
           </span>
           <span className="text-xs text-gray-500">
-            Required: email. Optional: name, position, rounds, deadline
+            Required: email. Optional: name, position, rounds
           </span>
           <input
             type="file"
@@ -180,6 +182,29 @@ export default function CandidateImportPanel({ orgId, onImported }) {
               setError("");
             }}
           />
+        </label>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-white/10 bg-gray-900/50 p-4">
+        <label className="flex items-center gap-3">
+          <Calendar className="h-5 w-5 text-emerald-400 shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-medium text-white">Interview Deadline</p>
+            <p className="text-xs text-gray-500">
+              Candidates must complete their interviews within this many days after accepting the invite.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min={1}
+              max={90}
+              value={deadline}
+              onChange={(e) => setDeadline(Math.max(1, Math.min(90, parseInt(e.target.value, 10) || 1)))}
+              className="w-20 rounded-lg border border-emerald-500/30 bg-gray-800 px-3 py-2 text-center text-sm text-white focus:border-emerald-500 focus:outline-none"
+            />
+            <span className="text-sm text-gray-400">days</span>
+          </div>
         </label>
       </div>
 

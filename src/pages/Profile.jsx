@@ -86,6 +86,7 @@ const Profile = () => {
   const orgDetails = user?.organization;
   const isOrgMember = Boolean(orgDetails?.orgId);
   const isSuperAdminOrg = orgDetails?.role === "super_admin";
+  const isCompanyCandidate = user?.userType === "org_member" && orgDetails?.interviewRounds?.length > 0;
   const upgradeDisabled = isOrgMember && !isSuperAdminOrg;
 
   const [subscription, setSubscription] = useState(null);
@@ -362,6 +363,7 @@ const Profile = () => {
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
+                {!isCompanyCandidate && (
                 <Link
                   to="/pricing"
                   onClick={(event) => {
@@ -383,6 +385,7 @@ const Profile = () => {
                 >
                   Upgrade Plan
                 </Link>
+                )}
                 <Link
                   to="/"
                   className="inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
@@ -450,7 +453,40 @@ const Profile = () => {
               </div>
 
               <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur">
-                {isOrgUser ? (
+                {isCompanyCandidate ? (
+                  // Company Candidate Card
+                  <>
+                    <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-5">
+                      <p className="text-xs uppercase tracking-wide text-white/75">Company Screening</p>
+                      <h3 className="mt-1 text-xl font-semibold text-white">{orgName}</h3>
+                      <p className="mt-1 text-xs text-amber-100">
+                        Position: <span className="font-semibold">{orgDetails?.position || "Candidate"}</span>
+                      </p>
+                    </div>
+                    <div className="space-y-3 p-5 text-sm">
+                      <div>
+                        <p className="text-xs text-slate-400">Assigned Interview Rounds</p>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {orgDetails.interviewRounds.map((round) => (
+                            <span key={round} className="rounded-lg bg-amber-500/15 border border-amber-500/25 px-2.5 py-1 text-xs font-semibold text-amber-200 capitalize">
+                              {round.replace(/_/g, " ")}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-400">Interview Attempts</p>
+                        <p className="text-sm font-medium text-white">3 attempts allowed</p>
+                      </div>
+                      {orgDetails?.deadlineDays && (
+                        <div>
+                          <p className="text-xs text-slate-400">Deadline</p>
+                          <p className="text-sm font-medium text-white">{orgDetails.deadlineDays} days from invite acceptance</p>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : isOrgUser ? (
                   // Organization Plan Card
                   <>
                     <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-5">
@@ -551,27 +587,66 @@ const Profile = () => {
                   </>
                 )}
                 {isOrgUser && (
-                  <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur lg:col-span-2">
-                    <h3 className="text-lg font-semibold text-white">Organization Info</h3>
+                  <div className={`rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur ${isCompanyCandidate ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
+                    <h3 className="text-lg font-semibold text-white">
+                      {isCompanyCandidate ? 'Interview Assignment' : 'Organization Info'}
+                    </h3>
                     <div className="mt-4 space-y-3">
                       <div>
-                        <p className="text-xs text-slate-400">Organization Name</p>
+                        <p className="text-xs text-slate-400">Organization</p>
                         <p className="text-sm font-medium text-white">{orgName}</p>
                       </div>
-                      <div>
-                        <p className="text-xs text-slate-400">Your Role</p>
-                        <p className="text-sm font-medium text-white capitalize">{orgRole}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-400">Organization Type</p>
-                        <p className="text-sm font-medium text-white capitalize">{orgType}</p>
-                      </div>
-                      <Link
-                        to={getOrgDashboardRoute()}
-                        className="mt-4 inline-flex items-center rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-medium text-white hover:from-emerald-700 hover:to-teal-700 transition-all"
-                      >
-                        Go to Organization Dashboard →
-                      </Link>
+                      {isCompanyCandidate ? (
+                        <>
+                          <div>
+                            <p className="text-xs text-slate-400">Position</p>
+                            <p className="text-sm font-medium text-white">{orgDetails?.position || "Candidate"}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-400">Assigned Rounds</p>
+                            <div className="mt-1 flex flex-wrap gap-1.5">
+                              {orgDetails.interviewRounds.map((round) => (
+                                <span key={round} className="rounded-lg bg-amber-500/15 border border-amber-500/25 px-2.5 py-1 text-xs font-semibold text-amber-200 capitalize">
+                                  {round.replace(/_/g, " ")}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-400">Max Attempts</p>
+                            <p className="text-sm font-medium text-white">3 interviews</p>
+                          </div>
+                          {orgDetails?.deadlineDays && (
+                            <div>
+                              <p className="text-xs text-slate-400">Deadline</p>
+                              <p className="text-sm font-medium text-white">{orgDetails.deadlineDays} days from invite acceptance</p>
+                            </div>
+                          )}
+                          <Link
+                            to="/my-interviews"
+                            className="mt-4 inline-flex items-center rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 px-4 py-2 text-sm font-medium text-white hover:from-amber-700 hover:to-orange-700 transition-all"
+                          >
+                            Go to My Interviews →
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <div>
+                            <p className="text-xs text-slate-400">Your Role</p>
+                            <p className="text-sm font-medium text-white capitalize">{orgRole}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-400">Organization Type</p>
+                            <p className="text-sm font-medium text-white capitalize">{orgType}</p>
+                          </div>
+                          <Link
+                            to={getOrgDashboardRoute()}
+                            className="mt-4 inline-flex items-center rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-sm font-medium text-white hover:from-emerald-700 hover:to-teal-700 transition-all"
+                          >
+                            Go to Organization Dashboard →
+                          </Link>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}

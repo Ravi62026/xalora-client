@@ -306,17 +306,21 @@ const InterviewSetup = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
 
+  // Company candidate detection
+  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+  const assignedRounds = user?.organization?.interviewRounds || [];
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     age: '',
     gender: '',
     experience: '',
-    position: '',
+    position: isCompanyCandidate ? (user?.organization?.position || '') : '',
     selectedRole: '', // Dropdown value
     customPosition: '', // Manual input if 'other'
     companyType: 'startup',
-    interviewMode: 'full',
-    specificRound: '',
+    interviewMode: isCompanyCandidate ? 'specific' : 'full',
+    specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
     jobDescription: '',
     codingDifficulty: 'auto'
   });
@@ -618,7 +622,66 @@ const InterviewSetup = () => {
           {/* Main Form Card */}
           <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-2xl p-4 sm:p-6 space-y-6 sm:space-y-8">
 
-            {/* 1. Interview Mode — Choose First */}
+            {/* Company Candidate Banner */}
+            {isCompanyCandidate && (
+              <section className="space-y-4">
+                <div className="p-5 rounded-2xl border-2 border-amber-500/30 bg-amber-500/10">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400">
+                      <Building className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-bold text-amber-300">Company Screening Interview</h3>
+                      <p className="text-xs text-amber-200/70 mt-1">
+                        You have <span className="font-bold text-white">3 interview attempts</span> for your assigned round{assignedRounds.length > 1 ? 's' : ''}.
+                        {user?.organization?.deadlineDays && (
+                          <> Complete within <span className="font-bold text-white">{user.organization.deadlineDays} days</span> of accepting your invite.</>
+                        )}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {assignedRounds.map(round => (
+                          <span key={round} className="text-[11px] uppercase font-bold px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-300">
+                            {round.replace(/_/g, ' ')}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Round selection for company candidates */}
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="w-5 h-5 text-emerald-400" />
+                  <h2 className="text-lg font-semibold text-white">Select Your Interview Round</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {assignedRounds.map(round => (
+                    <label key={round} className="relative group cursor-pointer">
+                      <input
+                        type="radio"
+                        name="specificRound"
+                        value={round}
+                        checked={formData.specificRound === round}
+                        onChange={(e) => setFormData({ ...formData, specificRound: e.target.value, interviewMode: 'specific' })}
+                        className="hidden"
+                        disabled={isLoading}
+                      />
+                      <div className={`p-5 rounded-2xl border-2 transition-all duration-300 text-center ${formData.specificRound === round
+                        ? 'bg-emerald-600/10 border-emerald-500 shadow-lg shadow-emerald-500/20'
+                        : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'
+                      }`}>
+                        <p className={`text-sm font-bold capitalize ${formData.specificRound === round ? 'text-emerald-400' : 'text-slate-300'}`}>
+                          {round.replace(/_/g, ' ')}
+                        </p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 1. Interview Mode — Choose First (hidden for company candidates) */}
+            {!isCompanyCandidate && (
             <section className="space-y-4">
               <div className="flex items-center gap-2 mb-4">
                 <Building className="w-5 h-5 text-emerald-400" />
@@ -743,6 +806,7 @@ const InterviewSetup = () => {
                 </div>
               )}
             </section>
+            )}
 
             {/* Divider */}
             <div className="border-t border-slate-700/50" />
