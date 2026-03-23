@@ -289,15 +289,11 @@ export default function OrgMemberAnalytics() {
 }
 
 function StatCard({ label, value, icon: Icon }) {
-  const iconNode = Icon
-    ? Icon({ className: "h-4 w-4 text-gray-500", "aria-hidden": true })
-    : null;
-
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
       <div className="mb-2 flex items-center justify-between">
         <p className="text-xs text-gray-500">{label}</p>
-        {iconNode}
+        {Icon && <Icon className="h-4 w-4 text-gray-500" aria-hidden="true" />}
       </div>
       <p className="text-2xl font-semibold text-white">{value}</p>
     </div>
