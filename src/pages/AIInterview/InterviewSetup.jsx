@@ -318,11 +318,11 @@ const InterviewSetup = () => {
     position: isCompanyCandidate ? (user?.organization?.position || '') : '',
     selectedRole: '', // Dropdown value
     customPosition: '', // Manual input if 'other'
-    companyType: 'startup',
+    companyType: isCompanyCandidate ? 'product_based' : 'startup',
     interviewMode: isCompanyCandidate ? 'specific' : 'full',
     specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
     jobDescription: '',
-    codingDifficulty: 'auto'
+    codingDifficulty: isCompanyCandidate ? 'medium' : 'auto'
   });
   const [resumeFile, setResumeFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -995,6 +995,20 @@ const InterviewSetup = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {isCompanyCandidate ? (
+                  <div className="group">
+                    <label className="block text-sm font-medium text-slate-400 mb-2">
+                      Position
+                    </label>
+                    <input
+                      type="text"
+                      readOnly
+                      value={formData.position}
+                      className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-xl text-white opacity-80 cursor-not-allowed outline-none"
+                    />
+                  </div>
+                  ) : (
+                  <>
                   <div className="group">
                     <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
                       Position <span className="text-red-400">*</span>
@@ -1034,7 +1048,10 @@ const InterviewSetup = () => {
                       />
                     </div>
                   )}
+                  </>
+                  )}
 
+                  {!isCompanyCandidate && (
                   <div className="group">
                     <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
                       Target Company Type <span className="text-red-400">*</span>
@@ -1056,6 +1073,8 @@ const InterviewSetup = () => {
                       </div>
                     </div>
                   </div>
+                  )}
+                  {!isCompanyCandidate && (
                   <div className="group">
                     <label className="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-purple-400 transition-colors">
                       Coding Difficulty
@@ -1077,6 +1096,7 @@ const InterviewSetup = () => {
                       </div>
                     </div>
                   </div>
+                  )}
                 </div>
 
                 <div className="pt-2">
