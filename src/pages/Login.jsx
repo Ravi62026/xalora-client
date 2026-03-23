@@ -13,6 +13,7 @@ const Login = () => {
     });
     const [showPassword, setShowPassword] = useState(false);
     const [currentFeature, setCurrentFeature] = useState(0);
+    const [orgSetupMessage, setOrgSetupMessage] = useState("");
 
     const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
@@ -95,13 +96,7 @@ const Login = () => {
             navigate("/verify-email");
         } else if (result.payload?.requiresOrgSetup) {
             console.log("🏢 LOGIN: Organization setup required");
-            // Redirect to org setup with token if available
-            if (result.payload?.setupToken) {
-                navigate(`/org/setup/${result.payload.setupToken}`);
-            } else {
-                // Token exists but not returned (already generated before)
-                alert("Organization setup required. Please check your email for the setup link or contact support.");
-            }
+            setOrgSetupMessage(result.payload?.message || "Organization setup required. Please check your email for the setup link.");
         } else {
             console.log("❌ LOGIN: Failed with error:", result.payload);
         }
@@ -231,7 +226,20 @@ const Login = () => {
                                     Organization created successfully! Sign in to access your admin dashboard.
                                 </div>
                             )}
-                            {error && (
+                            {orgSetupMessage && (
+                                <div className="mb-4 sm:mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 mt-0.5 text-yellow-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        <div>
+                                            <p className="text-yellow-300 font-medium text-sm mb-1">Organization Setup Required</p>
+                                            <p className="text-yellow-300/70 text-xs">{orgSetupMessage}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {error && !orgSetupMessage && (
                                 <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-xs sm:text-sm flex items-center">
                                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />

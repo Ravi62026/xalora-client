@@ -21,6 +21,7 @@ const Signup = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [currentFeature, setCurrentFeature] = useState(0);
     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+    const [signupSuccess, setSignupSuccess] = useState(null); // null or { type, email }
 
     const { loading, error, execute, setError } = useApiCall();
     const navigate = useNavigate();
@@ -125,18 +126,9 @@ const Signup = () => {
                 console.log("✅ API Response:", response);
                 if (response.success) {
                     console.log("✅ Signup successful!");
-                    
-                    // Show success toast based on account type
-                    let toastMsg;
-                    if (accountType === "organization") {
-                        toastMsg = "Organization account created! Please check your email for the setup link.";
-                    } else {
-                        toastMsg = "Account created successfully! Please verify your email before logging in.";
-                    }
-                    setToast({ show: true, message: toastMsg, type: "success" });
-                    
-                    // Redirect to login after showing message
-                    setTimeout(() => navigate("/login"), 3000);
+
+                    // Show email confirmation screen instead of redirecting
+                    setSignupSuccess({ type: accountType, email: formData.email });
                 } else {
                     console.error("❌ Signup failed:", response.message);
                     setToast({ show: true, message: response.message || "Signup failed. Please try again.", type: "error" });
@@ -175,6 +167,88 @@ const Signup = () => {
                     </div>
                 </div>
             )}
+            {/* Email Confirmation Screen */}
+            {signupSuccess && (
+                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-md w-full text-center">
+                        <Link to="/" className="inline-block mb-8 group">
+                            <div className="flex items-center justify-center space-x-3">
+                                <div className="relative">
+                                    <img src="/logo_xalora.png" alt="Xalora Logo" className="h-14 w-auto group-hover:scale-110 transition-transform duration-300" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
+                                </div>
+                                <span className="text-3xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">XALORA</span>
+                            </div>
+                        </Link>
+
+                        <div className="bg-white/10 backdrop-blur-sm p-8 sm:p-10 shadow-2xl rounded-2xl border border-white/20">
+                            {/* Email Icon */}
+                            <div className="mx-auto w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
+                                <svg className="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                </svg>
+                            </div>
+
+                            <h2 className="text-2xl font-bold text-white mb-3">Check Your Email</h2>
+
+                            {signupSuccess.type === "organization" ? (
+                                <>
+                                    <p className="text-white/70 mb-4">
+                                        We've sent an <span className="text-emerald-400 font-medium">organization setup link</span> to
+                                    </p>
+                                    <p className="text-white font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
+                                    <div className="text-left space-y-3 mb-6">
+                                        <div className="flex items-start gap-3 bg-white/5 p-3 rounded-lg">
+                                            <svg className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <div>
+                                                <p className="text-white font-medium text-sm">Account Created Successfully</p>
+                                                <p className="text-white/60 text-xs">Your account is ready. No email verification needed.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-3 bg-white/5 p-3 rounded-lg">
+                                            <svg className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                            </svg>
+                                            <div>
+                                                <p className="text-white font-medium text-sm">Complete Organization Setup</p>
+                                                <p className="text-white/60 text-xs">Click the setup link in your email to configure your organization, or login and we'll guide you.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-white/70 mb-4">
+                                        We've sent a verification email to
+                                    </p>
+                                    <p className="text-white font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
+                                    <p className="text-white/60 text-sm mb-6">
+                                        Click the verification link in the email to activate your account. The link expires in 24 hours.
+                                    </p>
+                                </>
+                            )}
+
+                            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-6">
+                                <p className="text-yellow-300/90 text-xs">
+                                    Don't see the email? Check your spam/junk folder. It may take a minute to arrive.
+                                </p>
+                            </div>
+
+                            <Link
+                                to="/login"
+                                className="inline-flex items-center justify-center w-full py-3 px-4 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
+                            >
+                                Go to Login
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Signup Form */}
+            {!signupSuccess && (
                         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     {/* Left side - Features */}
@@ -596,6 +670,7 @@ const Signup = () => {
                     </div>
                 </div>
             </div>
+            )}
         </Layout>
     );
 };
