@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Layout } from "../components";
 import { loginUser, googleLoginUser } from "../store/slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
+import api from "../utils/axios";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -14,6 +15,9 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [currentFeature, setCurrentFeature] = useState(0);
     const [orgSetupMessage, setOrgSetupMessage] = useState("");
+    const [orgSetupEmail, setOrgSetupEmail] = useState("");
+    const [resendLoading, setResendLoading] = useState(false);
+    const [resendSuccess, setResendSuccess] = useState("");
 
     const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
@@ -97,8 +101,24 @@ const Login = () => {
         } else if (result.payload?.requiresOrgSetup) {
             console.log("🏢 LOGIN: Organization setup required");
             setOrgSetupMessage(result.payload?.message || "Organization setup required. Please check your email for the setup link.");
+            setOrgSetupEmail(formData.email);
+            setResendSuccess("");
         } else {
             console.log("❌ LOGIN: Failed with error:", result.payload);
+        }
+    };
+
+    const handleResendOrgSetup = async () => {
+        if (!orgSetupEmail || resendLoading) return;
+        setResendLoading(true);
+        setResendSuccess("");
+        try {
+            await api.post("/api/v1/email/resend-org-setup", { email: orgSetupEmail });
+            setResendSuccess("Setup link sent! Check your inbox.");
+        } catch (err) {
+            setResendSuccess(err.response?.data?.message || "Failed to resend. Please try again.");
+        } finally {
+            setResendLoading(false);
         }
     };
 
@@ -232,9 +252,19 @@ const Login = () => {
                                         <svg className="w-5 h-5 mt-0.5 text-yellow-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                         </svg>
-                                        <div>
+                                        <div className="flex-1">
                                             <p className="text-yellow-300 font-medium text-sm mb-1">Organization Setup Required</p>
-                                            <p className="text-yellow-300/70 text-xs">{orgSetupMessage}</p>
+                                            <p className="text-yellow-300/70 text-xs mb-3">{orgSetupMessage}</p>
+                                            <button
+                                                onClick={handleResendOrgSetup}
+                                                disabled={resendLoading}
+                                                className="px-4 py-1.5 text-xs font-medium rounded-md bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 hover:bg-yellow-500/30 transition-all duration-200 disabled:opacity-50"
+                                            >
+                                                {resendLoading ? "Sending..." : "Resend Setup Email"}
+                                            </button>
+                                            {resendSuccess && (
+                                                <p className="text-emerald-400 text-xs mt-2">{resendSuccess}</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
