@@ -100,7 +100,8 @@ const Login = () => {
             localStorage.setItem('pending_verification_user', JSON.stringify(result.payload.user));
             navigate("/verify-email");
         } else if (result.payload?.requiresOrgSetup) {
-            console.log("🏢 LOGIN: Organization setup required");
+            console.log("🏢 LOGIN: Organization setup required. Server message:", result.payload?.message);
+            console.log("🏢 LOGIN: Use 'Resend Setup Email' button to get the setup link");
             setOrgSetupMessage(result.payload?.message || "Organization setup required. Please check your email for the setup link.");
             setOrgSetupEmail(formData.email);
             setResendSuccess("");
@@ -112,20 +113,25 @@ const Login = () => {
 
     const handleResendOrgSetup = async () => {
         if (!orgSetupEmail || resendLoading) return;
+        console.log("📧 RESEND: Requesting org setup email for:", orgSetupEmail);
         setResendLoading(true);
         setResendSuccess("");
         setResendError("");
         try {
             const res = await api.post("/api/v1/email/resend-org-setup", { email: orgSetupEmail });
+            console.log("📧 RESEND: Response:", res.status, res.data);
             const setupLink = res.data?.data?.setupLink;
             if (setupLink) {
-                // Email failed but backend returned direct link as fallback
+                console.log("📧 RESEND: Email delivery failed, redirecting to setup link directly");
                 window.location.href = setupLink;
             } else {
+                console.log("📧 RESEND: ✅ Email sent successfully");
                 setResendSuccess("Setup link sent! Check your inbox.");
             }
         } catch (err) {
-            setResendError(err.response?.data?.message || "Failed to send email. Please try again later.");
+            const errMsg = err.response?.data?.message || "Failed to send email. Please try again later.";
+            console.error("📧 RESEND: ❌ Failed:", err.response?.status, errMsg);
+            setResendError(errMsg);
         } finally {
             setResendLoading(false);
         }
