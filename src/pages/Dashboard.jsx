@@ -402,7 +402,7 @@ const QuickActionCard = ({ title, subtitle, to, icon: Icon, color }) => {
 /**
  * Subscription Card - Shows current plan info
  */
-const SubscriptionCard = ({ planInfo, planMeta, isLoading }) => {
+const SubscriptionCard = ({ planInfo, planMeta, isLoading, isCompanyCandidate = false, interviewsDone = 0 }) => {
   if (isLoading) {
     return (
       <div
@@ -415,6 +415,44 @@ const SubscriptionCard = ({ planInfo, planMeta, isLoading }) => {
           <div className="h-3 w-32 rounded bg-slate-700/50" />
         </div>
       </div>
+    );
+  }
+
+  if (isCompanyCandidate) {
+    const totalInterviews = planInfo?.features?.interviewsMonthly || 3;
+    const remaining = Math.max(0, totalInterviews - interviewsDone);
+    const usedPercent = Math.min(100, (interviewsDone / totalInterviews) * 100);
+
+    return (
+      <section
+        className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+        aria-labelledby="subscription-heading"
+      >
+        <div className="flex items-center gap-2 mb-5">
+          <Bot className="h-5 w-5 text-fuchsia-400" aria-hidden="true" />
+          <h2 id="subscription-heading" className="text-lg font-semibold text-white">
+            Interview Attempts
+          </h2>
+        </div>
+
+        <div className="rounded-lg border border-white/10 bg-slate-900/50 p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-slate-300">Used</span>
+            <span className="text-sm font-semibold text-white">{interviewsDone} / {totalInterviews}</span>
+          </div>
+          <div className="h-2.5 rounded-full bg-slate-800 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${remaining === 0 ? 'bg-red-500' : 'bg-gradient-to-r from-fuchsia-500 to-purple-500'}`}
+              style={{ width: `${usedPercent}%` }}
+            />
+          </div>
+          <p className="text-xs text-slate-400">
+            {remaining > 0
+              ? `${remaining} interview attempt${remaining !== 1 ? 's' : ''} remaining`
+              : 'All attempts used. Contact your organization admin.'}
+          </p>
+        </div>
+      </section>
     );
   }
 
@@ -896,6 +934,8 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
+  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+
   const completionRate = useMemo(() => {
     return metrics.totalProblems
       ? Math.round((metrics.solvedProblems / metrics.totalProblems) * 100)
@@ -922,9 +962,11 @@ const Dashboard = () => {
                   {isAuthenticated ? `Welcome, ${user?.name?.split(" ")[0] || "there"}` : "Welcome to Xalora"}
                 </h1>
                 <p className="mt-2 text-slate-400 max-w-2xl">
-                  {isAuthenticated
-                    ? "Track your progress across DSA problems, quizzes, internships, and AI interviews."
-                    : "Sign in to access your personalized learning dashboard and track your progress."}
+                  {!isAuthenticated
+                    ? "Sign in to access your personalized learning dashboard and track your progress."
+                    : isCompanyCandidate
+                    ? "Complete your assigned AI interview rounds."
+                    : "Track your progress across DSA problems, quizzes, internships, and AI interviews."}
                 </p>
               </div>
 
@@ -985,12 +1027,30 @@ const Dashboard = () => {
 
           {/* Metrics Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-              {Array(4)
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isCompanyCandidate ? '' : 'xl:grid-cols-4'} gap-4`}>
+              {Array(isCompanyCandidate ? 2 : 4)
                 .fill(null)
                 .map((_, i) => (
                   <MetricSkeleton key={i} />
                 ))}
+            </div>
+          ) : isCompanyCandidate ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <MetricCard
+                title="AI Interviews"
+                value={metrics.interviewsDone}
+                hint={`${planInfo?.features?.interviewsMonthly ? `${planInfo.features.interviewsMonthly - metrics.interviewsDone} remaining of ${planInfo.features.interviewsMonthly}` : 'Total mock sessions'}`}
+                icon={Bot}
+                iconColor="fuchsia"
+                to="/my-interviews"
+              />
+              <MetricCard
+                title="Position"
+                value={user?.organization?.position || "Candidate"}
+                hint={`${(user?.organization?.interviewRounds || []).length} round(s) assigned`}
+                icon={BriefcaseBusiness}
+                iconColor="emerald"
+              />
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -1031,10 +1091,13 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
               {/* Left Column */}
               <div className="xl:col-span-8 space-y-6">
-                <ActivityChart data={weeklyActivity} isLoading={isLoading} />
+                {!isCompanyCandidate && (
+                  <ActivityChart data={weeklyActivity} isLoading={isLoading} />
+                )}
                 <ActivityFeed activities={recentActivity} isLoading={isLoading} />
 
                 {/* Stats Row */}
+                {!isCompanyCandidate && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <StatCard
                     title="Current Streak"
@@ -1049,6 +1112,7 @@ const Dashboard = () => {
                     color="indigo"
                   />
                 </div>
+                )}
               </div>
 
               {/* Right Column */}
@@ -1057,9 +1121,13 @@ const Dashboard = () => {
                   planInfo={planInfo}
                   planMeta={planMeta}
                   isLoading={isLoading}
+                  isCompanyCandidate={isCompanyCandidate}
+                  interviewsDone={metrics.interviewsDone}
                 />
 
-                <AIUsageCard aiUsage={aiUsage} isLoading={isLoading} />
+                {!isCompanyCandidate && (
+                  <AIUsageCard aiUsage={aiUsage} isLoading={isLoading} />
+                )}
 
                 {/* Quick Actions */}
                 <section
