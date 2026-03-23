@@ -18,6 +18,7 @@ const Login = () => {
     const [orgSetupEmail, setOrgSetupEmail] = useState("");
     const [resendLoading, setResendLoading] = useState(false);
     const [resendSuccess, setResendSuccess] = useState("");
+    const [resendError, setResendError] = useState("");
 
     const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
@@ -103,6 +104,7 @@ const Login = () => {
             setOrgSetupMessage(result.payload?.message || "Organization setup required. Please check your email for the setup link.");
             setOrgSetupEmail(formData.email);
             setResendSuccess("");
+            setResendError("");
         } else {
             console.log("❌ LOGIN: Failed with error:", result.payload);
         }
@@ -112,19 +114,18 @@ const Login = () => {
         if (!orgSetupEmail || resendLoading) return;
         setResendLoading(true);
         setResendSuccess("");
+        setResendError("");
         try {
             const res = await api.post("/api/v1/email/resend-org-setup", { email: orgSetupEmail });
             const setupLink = res.data?.data?.setupLink;
             if (setupLink) {
-                // Email failed but we got the direct link
-                setResendSuccess("EMAIL_FAILED");
-                setOrgSetupMessage(null);
+                // Email failed but backend returned direct link as fallback
                 window.location.href = setupLink;
             } else {
                 setResendSuccess("Setup link sent! Check your inbox.");
             }
         } catch (err) {
-            setResendSuccess(err.response?.data?.message || "Failed to resend. Please try again.");
+            setResendError(err.response?.data?.message || "Failed to send email. Please try again later.");
         } finally {
             setResendLoading(false);
         }
@@ -272,6 +273,9 @@ const Login = () => {
                                             </button>
                                             {resendSuccess && (
                                                 <p className="text-emerald-400 text-xs mt-2">{resendSuccess}</p>
+                                            )}
+                                            {resendError && (
+                                                <p className="text-red-400 text-xs mt-2">{resendError}</p>
                                             )}
                                         </div>
                                     </div>
