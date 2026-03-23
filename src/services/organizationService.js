@@ -169,6 +169,14 @@ const organizationService = {
     return response.data;
   },
 
+  getCompanyImportHistory: async (orgId, params = {}) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.companyImportHistory(orgId),
+      { params }
+    );
+    return response.data;
+  },
+
   // ─── Members ─────────────────────────────────────────────────────────────
 
   getMembers: async (orgId, params = {}) => {

@@ -139,6 +139,7 @@ const ApiRoutes = {
         companyCandidateTemplate: (orgId) => `/api/v1/organizations/${orgId}/company/candidate-template`,
         companyImportCandidates: (orgId) => `/api/v1/organizations/${orgId}/company/candidates/import`,
         companyImportStatus: (orgId, jobId) => `/api/v1/organizations/${orgId}/company/candidates/import/${jobId}/status`,
+        companyImportHistory: (orgId) => `/api/v1/organizations/${orgId}/company/import-history`,
     },
     jobs: {
         searchByRole: "/api/v1/ai/jobs/search/role",

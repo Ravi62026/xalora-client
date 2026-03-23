@@ -23,6 +23,7 @@ import organizationService from "../../services/organizationService";
 import StudentImportPanel from "../../components/Organization/StudentImportPanel";
 import CandidateImportPanel from "../../components/Organization/CandidateImportPanel";
 import AcademicFilters from "../../components/Organization/AcademicFilters";
+import ImportHistoryTable from "../../components/Organization/ImportHistoryTable";
 
 const inputClass =
   "rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500";
@@ -292,8 +293,9 @@ export default function OrgAdminDashboard() {
             )}
           </div>
         ) : isAdmin ? (
-          <div className="mb-6">
+          <div className="mb-6 space-y-6">
             <CandidateImportPanel orgId={orgId} onImported={refreshAll} />
+            <ImportHistoryTable orgId={orgId} />
           </div>
         ) : null}
 
