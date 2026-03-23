@@ -157,8 +157,7 @@ export default function OrgAdminDashboard() {
   };
 
   const refreshAll = async () => {
-    await Promise.all([fetchContext(), fetchMembers()]);
-    if (showInvites) fetchInvites();
+    await Promise.all([fetchContext(), fetchMembers(), fetchInvites()]);
   };
 
   const handleStatusChange = async (memberId, nextStatus) => {
