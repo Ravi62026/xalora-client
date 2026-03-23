@@ -113,8 +113,16 @@ const Login = () => {
         setResendLoading(true);
         setResendSuccess("");
         try {
-            await api.post("/api/v1/email/resend-org-setup", { email: orgSetupEmail });
-            setResendSuccess("Setup link sent! Check your inbox.");
+            const res = await api.post("/api/v1/email/resend-org-setup", { email: orgSetupEmail });
+            const setupLink = res.data?.data?.setupLink;
+            if (setupLink) {
+                // Email failed but we got the direct link
+                setResendSuccess("EMAIL_FAILED");
+                setOrgSetupMessage(null);
+                window.location.href = setupLink;
+            } else {
+                setResendSuccess("Setup link sent! Check your inbox.");
+            }
         } catch (err) {
             setResendSuccess(err.response?.data?.message || "Failed to resend. Please try again.");
         } finally {
