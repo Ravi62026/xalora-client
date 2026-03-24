@@ -26,6 +26,9 @@ const Layout = ({ children, showNavbar = true, showFooter = true }) => {
                                     <img
                                         src="/logo_xalora.png"
                                         alt="Xalora"
+                                        width={140}
+                                        height={140}
+                                        loading="lazy"
                                         className="h-35 w-auto"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>

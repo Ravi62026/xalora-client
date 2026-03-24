@@ -45,8 +45,14 @@
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Preconnects -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/logo_xalora.png" as="image" />
 
     <!-- JSON-LD Structured Data: Organization -->
     <script type="application/ld+json">
@@ -160,7 +166,7 @@
     }
     </script>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     <style>
       body {
         margin: 0;

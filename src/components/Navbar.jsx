@@ -205,6 +205,8 @@ const Navbar = () => {
                         <img
                             src="/logo_xalora.png"
                             alt="Xalora"
+                            width={40}
+                            height={40}
                             className="h-10 w-auto object-contain"
                         />
                     </Link>
@@ -365,6 +367,8 @@ const Navbar = () => {
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora"
+                                            width={40}
+                                            height={40}
                                             className="h-10 w-auto object-contain"
                                         />
                                     </Link>
