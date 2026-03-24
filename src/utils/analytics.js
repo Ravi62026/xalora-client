@@ -1,23 +1,12 @@
-const CONSENT_KEY = "cookie_consent";
-const DEFAULT_MEASUREMENT_ID = "G-MD0PRVGGWD";
+const MEASUREMENT_ID = "G-MD0PRVGGWD";
 
 const getMeasurementId = () =>
-  (import.meta.env.VITE_GA_MEASUREMENT_ID || "").trim() || DEFAULT_MEASUREMENT_ID;
+  (import.meta.env.VITE_GA_MEASUREMENT_ID || "").trim() || MEASUREMENT_ID;
 
-const getConsent = () => {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(CONSENT_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-};
-
-export const isAnalyticsAllowed = () => Boolean(getConsent()?.analytics);
+let initialized = false;
 
 const ensureAnalyticsScript = (measurementId) => {
-  if (typeof window === "undefined" || window.gtag || !measurementId) return;
+  if (typeof window === "undefined" || initialized || !measurementId) return;
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
@@ -26,43 +15,40 @@ const ensureAnalyticsScript = (measurementId) => {
 
   window.gtag("js", new Date());
   window.gtag("consent", "default", {
-    analytics_storage: "denied",
+    analytics_storage: "granted",
     ad_storage: "denied",
   });
+
+  window.gtag("config", measurementId, { send_page_view: true });
 
   const script = document.createElement("script");
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
   script.setAttribute("data-xalora-analytics", "true");
   document.head.appendChild(script);
+
+  initialized = true;
 };
 
 export const updateAnalyticsConsent = (allowAnalytics) => {
-  const measurementId = getMeasurementId();
-  if (measurementId === DEFAULT_MEASUREMENT_ID) return;
-
-  ensureAnalyticsScript(measurementId);
-  if (!window.gtag) return;
+  if (typeof window === "undefined" || !window.gtag) return;
 
   window.gtag("consent", "update", {
     analytics_storage: allowAnalytics ? "granted" : "denied",
     ad_storage: "denied",
   });
-
-  if (allowAnalytics) {
-    window.gtag("config", measurementId, { send_page_view: false });
-  }
 };
 
 export const initializeAnalytics = () => {
-  const consent = isAnalyticsAllowed();
-  updateAnalyticsConsent(consent);
+  const measurementId = getMeasurementId();
+  ensureAnalyticsScript(measurementId);
 };
 
+export const isAnalyticsAllowed = () => true;
+
 export const trackPageView = (path) => {
-  if (!isAnalyticsAllowed() || typeof window === "undefined" || !window.gtag) return;
+  if (typeof window === "undefined" || !window.gtag) return;
   const measurementId = getMeasurementId();
-  if (!measurementId || measurementId === DEFAULT_MEASUREMENT_ID) return;
 
   window.gtag("event", "page_view", {
     page_path: path,
@@ -73,6 +59,6 @@ export const trackPageView = (path) => {
 };
 
 export const trackEvent = (eventName, params = {}) => {
-  if (!isAnalyticsAllowed() || typeof window === "undefined" || !window.gtag) return;
+  if (typeof window === "undefined" || !window.gtag) return;
   window.gtag("event", eventName, params);
 };
