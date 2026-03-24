@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -79,11 +79,11 @@ import {
 import DebugUserInfo from "./components/DebugUserInfo";
 import { initializeAuth } from "./store/slices/userSlice";
 
-// Phase 1: Legal & Compliance Components
-import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
-import TermsOfService from "./pages/Legal/TermsOfService";
-import CookiePolicy from "./pages/Legal/CookiePolicy";
-import AcceptableUsePolicy from "./pages/Legal/AcceptableUsePolicy";
+// Phase 1: Legal & Compliance Components (lazy loaded)
+const PrivacyPolicy = React.lazy(() => import("./pages/Legal/PrivacyPolicy"));
+const TermsOfService = React.lazy(() => import("./pages/Legal/TermsOfService"));
+const CookiePolicy = React.lazy(() => import("./pages/Legal/CookiePolicy"));
+const AcceptableUsePolicy = React.lazy(() => import("./pages/Legal/AcceptableUsePolicy"));
 import CookieConsentBanner from "./components/Cookie/CookieConsentBanner";
 import SEO from "./components/SEO";
 import { initializeAnalytics, trackPageView } from "./utils/analytics";
@@ -327,6 +327,7 @@ const AppContent = () => {
         custom={{ robots: seoConfig.robots, canonical: location.pathname }}
       />
       <CookieConsentBanner />
+      <Suspense fallback={<LoadingMessage />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -432,6 +433,7 @@ const AppContent = () => {
         <Route path="/cookie-policy" element={<CookiePolicy />} />
         <Route path="/acceptable-use" element={<AcceptableUsePolicy />} />
       </Routes>
+      </Suspense>
       {/* Debug component - remove in production */}
       {/* <DebugUserInfo /> */}
     </>
