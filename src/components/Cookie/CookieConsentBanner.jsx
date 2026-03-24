@@ -111,6 +111,7 @@ export const CookieConsentBanner = () => {
                 <h3 className="text-lg font-bold text-white">Cookie Preferences</h3>
                 <button
                   onClick={() => setShowSettings(false)}
+                  aria-label="Close cookie preferences"
                   className="p-1 hover:bg-slate-700 rounded transition-colors"
                 >
                   <X size={20} className="text-gray-400" />

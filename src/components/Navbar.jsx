@@ -337,6 +337,7 @@ const Navbar = () => {
                     {/* Mobile menu button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                         className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white transition-colors duration-200"
                     >
                         {isMobileMenuOpen ? (
@@ -374,6 +375,7 @@ const Navbar = () => {
                                     </Link>
                                     <button
                                         onClick={closeMobileMenu}
+                                        aria-label="Close menu"
                                         className="rounded-lg p-2 text-gray-400 hover:text-white transition-colors duration-200"
                                     >
                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
