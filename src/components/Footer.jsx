@@ -27,18 +27,18 @@ export const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <h3 className="text-2xl font-bold mb-4">Xalora</h3>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-300 text-sm">
               Master coding interviews with AI-powered practice and real-time feedback.
             </p>
             {/* Social Links */}
             <div className="flex gap-4 mt-6">
-              <a href="https://twitter.com/xalora" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://twitter.com/xalora" className="text-gray-300 hover:text-white transition-colors">
                 <Twitter size={20} />
               </a>
-              <a href="https://github.com/xalora" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://github.com/xalora" className="text-gray-300 hover:text-white transition-colors">
                 <Github size={20} />
               </a>
-              <a href="https://linkedin.com/company/xalora" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://linkedin.com/company/xalora" className="text-gray-300 hover:text-white transition-colors">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -48,11 +48,11 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4">Product</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="/problems" className="text-gray-400 hover:text-white transition-colors">Problems</a></li>
-              <li><a href="/quizzes" className="text-gray-400 hover:text-white transition-colors">Quizzes</a></li>
-              <li><a href="/interviews" className="text-gray-400 hover:text-white transition-colors">Interviews</a></li>
-              <li><a href="/internships" className="text-gray-400 hover:text-white transition-colors">Internships</a></li>
-              <li><a href="/resume-ai" className="text-gray-400 hover:text-white transition-colors">Resume AI</a></li>
+              <li><a href="/problems" className="text-gray-300 hover:text-white transition-colors">Problems</a></li>
+              <li><a href="/quizzes" className="text-gray-300 hover:text-white transition-colors">Quizzes</a></li>
+              <li><a href="/interviews" className="text-gray-300 hover:text-white transition-colors">Interviews</a></li>
+              <li><a href="/internships" className="text-gray-300 hover:text-white transition-colors">Internships</a></li>
+              <li><a href="/resume-ai" className="text-gray-300 hover:text-white transition-colors">Resume AI</a></li>
             </ul>
           </div>
 
@@ -60,11 +60,11 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4">Company</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-              <li><a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-              <li><a href="/careers" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
-              <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-              <li><a href="/status" className="text-gray-400 hover:text-white transition-colors">Status</a></li>
+              <li><a href="/about" className="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+              <li><a href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="/careers" className="text-gray-300 hover:text-white transition-colors">Careers</a></li>
+              <li><a href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+              <li><a href="/status" className="text-gray-300 hover:text-white transition-colors">Status</a></li>
             </ul>
           </div>
 
@@ -72,10 +72,10 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4">Legal</h4>
             <ul className="space-y-3 text-sm">
-              <li><button onClick={() => handleNavigateLegal('/privacy')} className="text-gray-400 hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
-              <li><button onClick={() => handleNavigateLegal('/terms')} className="text-gray-400 hover:text-white transition-colors cursor-pointer">Terms of Service</button></li>
-              <li><button onClick={() => handleNavigateLegal('/cookies')} className="text-gray-400 hover:text-white transition-colors cursor-pointer">Cookie Policy</button></li>
-              <li><button onClick={() => handleNavigateLegal('/acceptable-use')} className="text-gray-400 hover:text-white transition-colors cursor-pointer">Acceptable Use</button></li>
+              <li><button onClick={() => handleNavigateLegal('/privacy')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Privacy Policy</button></li>
+              <li><button onClick={() => handleNavigateLegal('/terms')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Terms of Service</button></li>
+              <li><button onClick={() => handleNavigateLegal('/cookies')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Cookie Policy</button></li>
+              <li><button onClick={() => handleNavigateLegal('/acceptable-use')} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Acceptable Use</button></li>
             </ul>
           </div>
 
@@ -85,18 +85,18 @@ export const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <Mail size={16} />
-                <a href="mailto:support@xalora.com" className="text-gray-400 hover:text-white transition-colors">
+                <a href="mailto:support@xalora.com" className="text-gray-300 hover:text-white transition-colors">
                   support@xalora.com
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} />
-                <a href="mailto:legal@xalora.com" className="text-gray-400 hover:text-white transition-colors">
+                <a href="mailto:legal@xalora.com" className="text-gray-300 hover:text-white transition-colors">
                   legal@xalora.com
                 </a>
               </li>
-              <li><a href="/help" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="/help" className="text-gray-300 hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="/faq" className="text-gray-300 hover:text-white transition-colors">FAQ</a></li>
             </ul>
           </div>
         </div>
@@ -107,14 +107,14 @@ export const Footer = () => {
           <div className="text-center mb-6">
             <button
               onClick={handleManageCookiePreferences}
-              className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer"
+              className="text-gray-300 hover:text-white text-sm transition-colors cursor-pointer"
             >
               Manage Cookie Preferences
             </button>
             <span className="text-gray-600 mx-2">•</span>
             <button
               onClick={() => handleNavigateLegal('/privacy')}
-              className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer"
+              className="text-gray-300 hover:text-white text-sm transition-colors cursor-pointer"
             >
               Do Not Sell My Personal Information
             </button>
@@ -122,8 +122,8 @@ export const Footer = () => {
 
           {/* Bottom Section */}
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">&copy; 2025 Xalora Inc. All rights reserved.</p>
-            <div className="flex gap-4 text-gray-400 text-sm mt-4 md:mt-0">
+            <p className="text-gray-300 text-sm">&copy; 2025 Xalora Inc. All rights reserved.</p>
+            <div className="flex gap-4 text-gray-300 text-sm mt-4 md:mt-0">
               <a href="/accessibility" className="hover:text-white transition-colors">Accessibility</a>
               <span>•</span>
               <a href="/sitemap" className="hover:text-white transition-colors">Sitemap</a>
@@ -132,7 +132,7 @@ export const Footer = () => {
         </div>
 
         {/* Compliance Note */}
-        <div className="text-center text-xs text-gray-500 border-t border-gray-800 pt-6">
+        <div className="text-center text-xs text-gray-400 border-t border-gray-800 pt-6">
           <p>
             Xalora is committed to legal compliance and user privacy. We comply with GDPR, CCPA, and other privacy regulations.
             Read our <a href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</a> for details on how we handle your data.

@@ -142,6 +142,57 @@ const AppContent = () => {
       "/quiz": "quizzes",
       "/problems": "codingProblems",
       "/ai-interview/setup": "aiInterview",
+
+      // Algorithm pages
+      "/algorithms": "algorithms",
+      "/algorithms/searching": "algorithmsSearching",
+      "/algorithms/sorting": "algorithmsSorting",
+      "/algorithms/fundamentals": "algorithmsFundamentals",
+      "/algorithms/dynamic-programming": "algorithmsDp",
+      "/algorithms/greedy": "algorithmsGreedy",
+      "/algorithms/graph": "algorithmsGraph",
+      "/algorithms/tree": "algorithmsTree",
+      "/algorithms/string": "algorithmsString",
+      "/algorithms/backtracking": "algorithmsBacktracking",
+      "/algorithms/mathematical": "algorithmsMath",
+      "/algorithms/geometric": "algorithmsGeometric",
+      "/algorithms/randomized": "algorithmsRandomized",
+
+      // Data Structure pages
+      "/data-structures": "dataStructures",
+      "/data-structures/basic": "dsBasic",
+      "/data-structures/linear": "dsLinear",
+      "/data-structures/arrays": "dsArrays",
+      "/data-structures/linked-lists": "dsLinkedLists",
+      "/data-structures/stacks": "dsStacks",
+      "/data-structures/queues": "dsQueues",
+      "/data-structures/hash-based": "dsHashBased",
+      "/data-structures/hash-based/hash-tables": "dsHashTables",
+      "/data-structures/hash-based/hash-maps": "dsHashMaps",
+      "/data-structures/hash-based/hash-sets": "dsHashSets",
+      "/data-structures/hash-based/bloom-filters": "dsBloomFilters",
+      "/data-structures/hash-based/consistent-hashing": "dsConsistentHashing",
+      "/data-structures/hash-based/perfect-hashing": "dsPerfectHashing",
+      "/data-structures/hash-based/cuckoo-hashing": "dsCuckooHashing",
+
+      // Other public pages
+      "/system-design": "systemDesign",
+      "/interview-prep": "interviewPrep",
+      "/careers": "careers",
+      "/help-center": "helpCenter",
+      "/community": "community",
+      "/status": "status",
+      "/roadmap": "roadmap",
+      "/job-genie": "jobGenie",
+
+      // Legal pages
+      "/privacy": "privacy",
+      "/privacy-policy": "privacy",
+      "/terms": "terms",
+      "/terms-of-service": "terms",
+      "/cookies": "cookies",
+      "/cookie-policy": "cookies",
+      "/acceptable-use": "acceptableUse",
     };
 
     if (exactMap[pathname]) {

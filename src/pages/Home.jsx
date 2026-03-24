@@ -233,7 +233,7 @@ const Home = () => {
             </motion.p>
 
             <motion.p
-              className="text-lg text-gray-400 max-w-2xl mx-auto mb-12"
+              className="text-lg text-gray-300 max-w-2xl mx-auto mb-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5, duration: 1 }}
@@ -274,7 +274,7 @@ const Home = () => {
 
         {/* Enhanced Scroll Indicator */}
         <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-gray-400"
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-gray-300"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3.5, duration: 1 }}
@@ -309,7 +309,7 @@ const Home = () => {
                 Powerful Features
               </span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Everything you need to master computer science and land your dream job
             </p>
           </motion.div>
@@ -368,7 +368,7 @@ const Home = () => {
                 <h3 className="text-lg font-semibold text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-300 text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
@@ -395,7 +395,7 @@ const Home = () => {
                 Success Stories
               </span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Join thousands of engineers who transformed their careers with Xalora
             </p>
           </motion.div>
@@ -435,7 +435,7 @@ const Home = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-white">{testimonial.name}</h4>
-                    <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                    <p className="text-gray-300 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
                 <p className="text-gray-300 italic">
@@ -472,7 +472,7 @@ const Home = () => {
             </p>
 
             <div className="mt-8 space-y-2">
-              <p className="text-gray-400">
+              <p className="text-gray-300">
                 Free forever • No credit card required
               </p>
 
