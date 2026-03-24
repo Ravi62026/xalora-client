@@ -157,7 +157,7 @@ const organizationService = {
     const response = await axiosInstance.post(
       `${ApiRoutes.organization.companyImportCandidates(orgId)}?${query}`,
       formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
+      { headers: { "Content-Type": "multipart/form-data" }, timeout: 300000 }
     );
     return response.data;
   },

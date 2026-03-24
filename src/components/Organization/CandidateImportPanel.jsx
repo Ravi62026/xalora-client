@@ -214,9 +214,27 @@ export default function CandidateImportPanel({ orgId, onImported }) {
         </div>
       )}
 
+      {loadingMode === "validate" && (
+        <div className="mt-4 flex items-center gap-3 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-3 text-sm text-blue-300">
+          <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+          Validating candidates... This may take a moment for large files.
+        </div>
+      )}
+
       {trackingJobId && (
-        <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
-          Import in progress: {metrics.processed}/{metrics.total} rows processed.
+        <div className="mt-4 space-y-2">
+          <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+            <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+            Sending invites: {metrics.processed}/{metrics.total} candidates processed
+          </div>
+          {metrics.total > 0 && (
+            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-800">
+              <div
+                className="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                style={{ width: `${Math.round((metrics.processed / metrics.total) * 100)}%` }}
+              />
+            </div>
+          )}
         </div>
       )}
 
