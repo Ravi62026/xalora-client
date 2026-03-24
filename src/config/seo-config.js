@@ -6,6 +6,9 @@ export const SEO_CONFIG = {
     url: 'https://xalora.one',
     description: 'Practice AI-powered mock interviews for FAANG, startups & product companies. Get instant feedback, improve coding skills, and land your dream job.',
     keywords: [
+      'Xalora',
+      'xalora',
+      'xalora.one',
       'AI mock interview',
       'coding interview practice',
       'FAANG preparation',
@@ -15,7 +18,10 @@ export const SEO_CONFIG = {
       'AI interview platform',
       'mock interview free India',
       'product company interview',
-      'software engineer interview prep'
+      'software engineer interview prep',
+      'leetcode alternative India',
+      'AI interview platform India',
+      'mock interview app'
     ].join(', '),
     author: 'Xalora Team',
     robots: 'index, follow',
@@ -44,9 +50,9 @@ export const SEO_CONFIG = {
     home: {
       title: 'Xalora - AI Mock Interview Platform | Practice & Get Hired',
       description: 'Master your technical interviews with AI-powered mock interviews. Practice DSA, system design, behavioral questions. Used by 10,000+ students. Start free today!',
-      keywords: 'AI mock interview, coding interview, FAANG preparation, technical interview, DSA practice, system design, behavioral interview',
+      keywords: 'Xalora, xalora.one, AI mock interview, coding interview, FAANG preparation, technical interview, DSA practice, system design, behavioral interview, mock interview platform India',
       canonical: '/',
-      ogImage: '/og-images/home.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'WebSite',
         name: 'Xalora',
@@ -64,7 +70,7 @@ export const SEO_CONFIG = {
       description: 'Experience realistic AI-powered mock interviews for software engineering roles. 7 rounds including coding, system design, behavioral. Get instant feedback & detailed reports.',
       keywords: 'AI mock interview, technical interview simulator, coding interview AI, system design interview practice, behavioral interview AI',
       canonical: '/ai-interview',
-      ogImage: '/og-images/ai-interview.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'SoftwareApplication',
         name: 'Xalora AI Interview',
@@ -89,7 +95,7 @@ export const SEO_CONFIG = {
       description: 'Solve 500+ DSA problems curated from FAANG interviews. Easy to Hard difficulty. Detailed explanations, test cases, and AI code review.',
       keywords: 'DSA problems, coding questions, leetcode alternatives, FAANG coding questions, data structures problems, algorithms practice',
       canonical: '/coding-problems',
-      ogImage: '/og-images/coding-problems.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'LearningResource',
         name: 'Xalora DSA Problems',
@@ -103,7 +109,7 @@ export const SEO_CONFIG = {
       description: 'Take timed quizzes on DSA, System Design, OOPs, DBMS, Computer Networks. Earn JBP coins. Get certificates. Track your progress.',
       keywords: 'tech quizzes, CS quizzes, DSA quiz, system design quiz, computer science MCQ, technical quiz with certificate',
       canonical: '/quizzes',
-      ogImage: '/og-images/quizzes.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'Quiz',
         name: 'Xalora Tech Quizzes',
@@ -116,7 +122,7 @@ export const SEO_CONFIG = {
       description: 'Work on real-world projects with mentor guidance. Get internship certificates. Build portfolio. Improve your chances of getting hired.',
       keywords: 'virtual internships, online internships, tech internships, programming internships, internship with certificate, remote internships',
       canonical: '/internships',
-      ogImage: '/og-images/internships.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'EducationalOccupationalProgram',
         name: 'Xalora Virtual Internships',
@@ -129,7 +135,7 @@ export const SEO_CONFIG = {
       description: 'Start free with Spark plan. Upgrade to Pulse, Nexus, or Infinity for unlimited AI interviews, advanced features. Student discounts available.',
       keywords: 'Xalora pricing, AI interview cost, mock interview free, premium features, student discount',
       canonical: '/pricing',
-      ogImage: '/og-images/pricing.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'Product',
         name: 'Xalora Premium',
@@ -170,7 +176,7 @@ export const SEO_CONFIG = {
       description: 'Xalora is on a mission to democratize interview preparation. Founded by IITians, we help students crack their dream jobs with AI-powered practice.',
       keywords: 'about Xalora, Xalora story, who made Xalora, Xalora founders, AI interview platform India',
       canonical: '/about',
-      ogImage: '/og-images/about.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'Organization',
         name: 'Xalora',
@@ -194,7 +200,7 @@ export const SEO_CONFIG = {
       description: 'Have questions? Reach out to our support team. We\'re here to help you succeed in your interview journey.',
       keywords: 'contact Xalora, Xalora support, help desk, customer support',
       canonical: '/contact',
-      ogImage: '/og-images/contact.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'ContactPage',
         name: 'Contact Xalora',
@@ -211,7 +217,7 @@ export const SEO_CONFIG = {
       description: 'Read expert articles on cracking FAANG interviews, resume tips, salary negotiation, career growth. Learn from success stories.',
       keywords: 'interview tips, career advice, FAANG guide, resume tips, salary negotiation, tech career',
       canonical: '/blog',
-      ogImage: '/og-images/blog.jpg',
+      ogImage: '/logo_xalora.png',
       schema: {
         '@type': 'Blog',
         name: 'Xalora Blog',
@@ -352,20 +358,8 @@ export const SEO_CONFIG = {
   },
 
   // ─── Open Graph Image Generator Helper ─────────────────────────────────────
-  getOgImageUrl: (page = 'home') => {
-    const baseUrl = 'https://xalora.one/og-images';
-    const imageMap = {
-      home: 'home.jpg',
-      'ai-interview': 'ai-interview.jpg',
-      'coding-problems': 'coding-problems.jpg',
-      quizzes: 'quizzes.jpg',
-      internships: 'internships.jpg',
-      pricing: 'pricing.jpg',
-      about: 'about.jpg',
-      contact: 'contact.jpg',
-      blog: 'blog.jpg'
-    };
-    return `${baseUrl}/${imageMap[page] || 'home.jpg'}`;
+  getOgImageUrl: () => {
+    return 'https://xalora.one/logo_xalora.png';
   },
 
   // ─── Twitter Card Types ────────────────────────────────────────────────────

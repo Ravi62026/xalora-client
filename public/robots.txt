@@ -10,12 +10,37 @@ Allow: /internships
 Allow: /problems
 Allow: /quiz
 Allow: /algorithms
+Allow: /algorithms/searching
+Allow: /algorithms/sorting
+Allow: /algorithms/fundamentals
+Allow: /algorithms/dynamic-programming
+Allow: /algorithms/greedy
+Allow: /algorithms/graph
+Allow: /algorithms/tree
+Allow: /algorithms/string
+Allow: /algorithms/backtracking
+Allow: /algorithms/mathematical
+Allow: /algorithms/geometric
+Allow: /algorithms/randomized
 Allow: /data-structures
+Allow: /data-structures/basic
+Allow: /data-structures/linear
+Allow: /data-structures/arrays
+Allow: /data-structures/linked-lists
+Allow: /data-structures/stacks
+Allow: /data-structures/queues
+Allow: /data-structures/hash-based
 Allow: /system-design
 Allow: /interview-prep
+Allow: /ai-interview/setup
+Allow: /careers
+Allow: /community
+Allow: /help-center
+Allow: /roadmap
 Allow: /privacy
 Allow: /terms
 Allow: /cookies
+Allow: /acceptable-use
 
 # Private/auth pages
 Disallow: /dashboard
@@ -29,11 +54,17 @@ Disallow: /login
 Disallow: /signup
 Disallow: /forgot-password
 Disallow: /verify-email
-Disallow: /ai-interview/
+Disallow: /ai-interview/*/waiting-room
+Disallow: /ai-interview/*/round
+Disallow: /ai-interview/*/report
+Disallow: /subscription-debug
 
 # API/internal
 Disallow: /api/
 Disallow: /health
 Disallow: /status
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
 
 Sitemap: https://xalora.one/sitemap.xml
