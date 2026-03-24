@@ -44,6 +44,7 @@ export default function OrgAdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [membersLoading, setMembersLoading] = useState(false);
   const [invites, setInvites] = useState([]);
+  const [invitesPagination, setInvitesPagination] = useState({ page: 1, pages: 1, total: 0 });
   const [invitesLoading, setInvitesLoading] = useState(false);
   const [showInvites, setShowInvites] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -129,12 +130,13 @@ export default function OrgAdminDashboard() {
     fetchMembers();
   }, [fetchMembers]);
 
-  const fetchInvites = useCallback(async () => {
+  const fetchInvites = useCallback(async (page = 1) => {
     if (!orgId || !isAdmin) return;
     setInvitesLoading(true);
     try {
-      const response = await organizationService.getInvites(orgId, { status: "pending", limit: 50 });
+      const response = await organizationService.getInvites(orgId, { status: "pending", limit: 50, page });
       setInvites(response.data?.invites || []);
+      setInvitesPagination(response.data?.pagination || { page: 1, pages: 1, total: 0 });
     } catch (error) {
       console.error("Failed to load invites:", error);
     } finally {
@@ -263,7 +265,10 @@ export default function OrgAdminDashboard() {
             loading={invitesLoading}
             isCollege={isCollege}
             onRevoke={handleRevokeInvite}
-            onRefresh={fetchInvites}
+            onRefresh={() => fetchInvites(invitesPagination.page)}
+            pagination={invitesPagination}
+            onPageChange={fetchInvites}
+            acceptedCount={stats?.acceptedInvites ?? 0}
           />
         )}
 
@@ -878,7 +883,7 @@ function InviteModal({ org, isSuperAdmin, onClose, onComplete }) {
   );
 }
 
-function PendingInvitesSection({ invites, loading, isCollege, onRevoke, onRefresh }) {
+function PendingInvitesSection({ invites, loading, isCollege, onRevoke, onRefresh, pagination, onPageChange, acceptedCount }) {
   if (loading) {
     return (
       <section className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-5">
@@ -892,10 +897,17 @@ function PendingInvitesSection({ invites, loading, isCollege, onRevoke, onRefres
   return (
     <section className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
-          <Clock className="h-5 w-5 text-yellow-400" />
-          Pending Invites ({invites.length})
-        </h2>
+        <div className="flex items-center gap-4">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+            <Clock className="h-5 w-5 text-yellow-400" />
+            Pending Invites ({pagination.total})
+          </h2>
+          {acceptedCount > 0 && (
+            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+              {acceptedCount} accepted
+            </span>
+          )}
+        </div>
         <button
           type="button"
           onClick={onRefresh}
@@ -908,6 +920,7 @@ function PendingInvitesSection({ invites, loading, isCollege, onRevoke, onRefres
       {invites.length === 0 ? (
         <p className="py-6 text-center text-sm text-gray-500">No pending invites.</p>
       ) : (
+        <>
         <div className="overflow-hidden rounded-xl border border-white/10">
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-950 text-gray-400">
@@ -964,6 +977,33 @@ function PendingInvitesSection({ invites, loading, isCollege, onRevoke, onRefres
             </tbody>
           </table>
         </div>
+
+        {pagination.pages > 1 && (
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-xs text-gray-500">
+              Page {pagination.page} of {pagination.pages} ({pagination.total} invites)
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => onPageChange(pagination.page - 1)}
+                disabled={pagination.page <= 1}
+                className="rounded-lg border border-gray-700 px-3 py-1.5 text-sm text-gray-400 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => onPageChange(pagination.page + 1)}
+                disabled={pagination.page >= pagination.pages}
+                className="rounded-lg border border-gray-700 px-3 py-1.5 text-sm text-gray-400 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+        </>
       )}
     </section>
   );
