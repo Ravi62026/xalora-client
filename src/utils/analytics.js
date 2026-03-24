@@ -1,5 +1,5 @@
 const CONSENT_KEY = "cookie_consent";
-const DEFAULT_MEASUREMENT_ID = "G-XXXXXXXXXX";
+const DEFAULT_MEASUREMENT_ID = "G-MD0PRVGGWD";
 
 const getMeasurementId = () =>
   (import.meta.env.VITE_GA_MEASUREMENT_ID || "").trim() || DEFAULT_MEASUREMENT_ID;
