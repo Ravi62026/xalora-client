@@ -209,6 +209,20 @@ const organizationService = {
     return response.data;
   },
 
+  exportMembersAnalytics: async (orgId, params = {}) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.membersAnalytics(orgId),
+      {
+        params: {
+          ...params,
+          export: "csv",
+        },
+        responseType: "blob",
+      }
+    );
+    return response;
+  },
+
   getMemberAnalytics: async (orgId, memberId) => {
     const response = await axiosInstance.get(ApiRoutes.organization.memberAnalytics(orgId, memberId));
     return response.data;

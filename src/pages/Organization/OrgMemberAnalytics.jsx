@@ -41,8 +41,11 @@ export default function OrgMemberAnalytics() {
   const [programFilter, setProgramFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [batchFilter, setBatchFilter] = useState("");
+  const [minScoreFilter, setMinScoreFilter] = useState("");
+  const [minInterviewsFilter, setMinInterviewsFilter] = useState("");
   const [page, setPage] = useState(1);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   const isCollege = org?.type === "college";
 
@@ -78,11 +81,13 @@ export default function OrgMemberAnalytics() {
     loadOrganizationContext();
   }, [loadOrganizationContext]);
 
-  const fetchAnalytics = useCallback(async () => {
-    if (!orgId) return;
-    setLoading(true);
-    try {
-      const params = { page, limit: 20 };
+  const buildAnalyticsParams = useCallback(
+    (includePagination = true) => {
+      const params = {};
+      if (includePagination) {
+        params.page = page;
+        params.limit = 20;
+      }
       if (search) params.search = search;
       if (isCollege) {
         if (degreeTypeFilter) params.degreeType = degreeTypeFilter;
@@ -90,9 +95,33 @@ export default function OrgMemberAnalytics() {
       } else {
         if (departmentFilter) params.department = departmentFilter;
         if (batchFilter) params.batch = batchFilter;
+        if (minScoreFilter !== "") params.minScore = minScoreFilter;
+        if (minInterviewsFilter !== "") params.minInterviews = minInterviewsFilter;
       }
 
-      const response = await organizationService.getMembersAnalytics(orgId, params);
+      return params;
+    },
+    [
+      page,
+      search,
+      isCollege,
+      degreeTypeFilter,
+      programFilter,
+      departmentFilter,
+      batchFilter,
+      minScoreFilter,
+      minInterviewsFilter,
+    ]
+  );
+
+  const fetchAnalytics = useCallback(async () => {
+    if (!orgId) return;
+    setLoading(true);
+    try {
+      const response = await organizationService.getMembersAnalytics(
+        orgId,
+        buildAnalyticsParams(true)
+      );
       setMembers(response.data?.members || []);
       setStats(response.data?.aggregateStats || null);
       setPagination(response.data?.pagination || { page: 1, pages: 1, total: 0 });
@@ -101,16 +130,37 @@ export default function OrgMemberAnalytics() {
     } finally {
       setLoading(false);
     }
-  }, [
-    orgId,
-    page,
-    search,
-    isCollege,
-    degreeTypeFilter,
-    programFilter,
-    departmentFilter,
-    batchFilter,
-  ]);
+  }, [orgId, buildAnalyticsParams]);
+
+  const exportAnalytics = async () => {
+    if (!orgId || exporting) return;
+
+    setExporting(true);
+    try {
+      const response = await organizationService.exportMembersAnalytics(
+        orgId,
+        buildAnalyticsParams(false)
+      );
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const safeOrgName = (org?.name || "organization")
+        .replace(/[^a-z0-9]+/gi, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase();
+
+      link.href = url;
+      link.download = `${safeOrgName || "organization"}-member-analytics.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to export analytics:", error);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     fetchAnalytics();
@@ -153,7 +203,11 @@ export default function OrgMemberAnalytics() {
             <StatCard label="Interviews" value={stats.totalInterviewsCompleted} icon={Mic} />
             <StatCard
               label="Avg Score"
-              value={stats.avgInterviewScore ? `${stats.avgInterviewScore}/100` : "—"}
+              value={
+                stats.avgInterviewScore !== null && stats.avgInterviewScore !== undefined
+                  ? `${stats.avgInterviewScore}/100`
+                  : "--"
+              }
               icon={TrendingUp}
             />
           </div>
@@ -228,7 +282,46 @@ export default function OrgMemberAnalytics() {
                       ))}
                     </select>
                   )}
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={minScoreFilter}
+                    onChange={(event) => {
+                      setMinScoreFilter(event.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Min score"
+                    className="w-28 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    value={minInterviewsFilter}
+                    onChange={(event) => {
+                      setMinInterviewsFilter(event.target.value);
+                      setPage(1);
+                    }}
+                    placeholder="Min interviews"
+                    className="w-36 rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                  />
                 </>
+              )}
+
+              {!isCollege && (
+                <button
+                  type="button"
+                  onClick={exportAnalytics}
+                  disabled={exporting}
+                  className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-600/10 px-3 py-2 text-sm font-medium text-emerald-300 hover:bg-emerald-600/20 disabled:opacity-50"
+                >
+                  {exporting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Download className="h-4 w-4" />
+                  )}
+                  Export CSV
+                </button>
               )}
 
               <button
