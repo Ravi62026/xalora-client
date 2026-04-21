@@ -17,6 +17,8 @@ const ApiRoutes = {
         updateUser: "/api/v1/users/user",
         refreshToken: "/api/v1/users/refresh-token",
         checkAuth: "/api/v1/users/check-auth",
+        workspaces: "/api/v1/users/workspaces",
+        switchWorkspace: "/api/v1/users/workspaces/switch",
     },
     problems: {
         create: "/api/v1/problems",
@@ -135,6 +137,7 @@ const ApiRoutes = {
         collegeImportMembers: (orgId) => `/api/v1/organizations/${orgId}/college/members/import`,
         collegeImportStatus: (orgId, jobId) => `/api/v1/organizations/${orgId}/college/members/import/${jobId}/status`,
         collegeLeaderboard: (orgId) => `/api/v1/organizations/${orgId}/college/leaderboard`,
+        collegeWeeklyLeaderboard: (orgId) => `/api/v1/organizations/${orgId}/college/leaderboard/weekly`,
         collegeMyRank: (orgId) => `/api/v1/organizations/${orgId}/college/me/rank`,
         companyCandidateTemplate: (orgId) => `/api/v1/organizations/${orgId}/company/candidate-template`,
         companyImportCandidates: (orgId) => `/api/v1/organizations/${orgId}/company/candidates/import`,

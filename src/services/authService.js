@@ -73,6 +73,18 @@ const authService = {
     return response.data;
   },
 
+  getWorkspaces: async () => {
+    const response = await axiosInstance.get(ApiRoutes.user.workspaces);
+    return response.data;
+  },
+
+  switchWorkspace: async (workspaceId) => {
+    const response = await axiosInstance.post(ApiRoutes.user.switchWorkspace, {
+      workspaceId,
+    });
+    return response.data;
+  },
+
   forgotPassword: async (email) => {
     const response = await axiosInstance.post(ApiRoutes.auth.forgotPassword, {
       email,

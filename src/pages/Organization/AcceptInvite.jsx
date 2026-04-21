@@ -14,6 +14,7 @@ import {
 import { Layout } from "../../components";
 import organizationService from "../../services/organizationService";
 import { initializeAuth } from "../../store/slices/userSlice";
+import { getDashboardRouteForUser } from "../../utils/workspace";
 
 const inputClass =
   "w-full px-4 py-3 text-sm bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300";
@@ -26,6 +27,7 @@ export default function AcceptInvite() {
   const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const [invite, setInvite] = useState(null);
+  const [existingAccount, setExistingAccount] = useState(false);
   const [validating, setValidating] = useState(true);
   const [invalid, setInvalid] = useState(false);
   const [invalidMsg, setInvalidMsg] = useState("");
@@ -37,15 +39,7 @@ export default function AcceptInvite() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const getOrgDashboardRoute = (currentUser) => {
-    if (!currentUser?.organization?.orgId) return "/dashboard";
-    if (currentUser?.organization?.role === "super_admin") return "/org/dashboard";
-    if (currentUser?.userType === "org_team") return "/org/teamdashboard";
-    return currentUser?.organization?.degreeTypeValue ||
-      currentUser?.organization?.programValue
-      ? "/org/student/dashboard"
-      : "/dashboard";
-  };
+  const getOrgDashboardRoute = (currentUser) => getDashboardRouteForUser(currentUser);
 
   // ── Validate invite token on mount ──────────────────────────────────
   useEffect(() => {
@@ -60,6 +54,7 @@ export default function AcceptInvite() {
       try {
         const res = await organizationService.validateInvite(token);
         setInvite(res.data?.invite);
+        setExistingAccount(Boolean(res.data?.existingAccount));
         if (res.data?.invite?.name) {
           setName(res.data.invite.name);
         }
@@ -80,9 +75,8 @@ export default function AcceptInvite() {
     e.preventDefault();
     setError("");
 
-    // If user is logged in and already has an org
-    if (isAuthenticated && user?.organization?.orgId) {
-      setError("You are already part of an organization. Please leave it first.");
+    if (!isAuthenticated && existingAccount) {
+      setError("This email already has an account. Please log in first, then accept the invite.");
       return;
     }
 
@@ -243,6 +237,20 @@ export default function AcceptInvite() {
                     </>
                   )}
                 </button>
+              </div>
+            ) : existingAccount ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <p className="text-amber-200 text-sm">
+                    An account already exists for <strong>{invite?.email}</strong>. Log in with that email, then reopen this invite to join the workspace.
+                  </p>
+                </div>
+                <a
+                  href={`/login?redirect=/org/join/${token}`}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors font-medium"
+                >
+                  <ArrowRight className="w-4 h-4" /> Log In To Continue
+                </a>
               </div>
             ) : (
               <form onSubmit={handleAccept} className="space-y-5">

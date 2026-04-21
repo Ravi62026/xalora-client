@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Layout from "../components/Layout";
 import subscriptionService from "../services/subscriptionService";
 import organizationService from "../services/organizationService";
+import { getActiveWorkspace } from "../utils/workspace";
 
 const Pricing = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -12,6 +13,7 @@ const Pricing = () => {
   const [currentSubscription, setCurrentSubscription] = useState(null);
   const [currentOrgPlanId, setCurrentOrgPlanId] = useState(null);
   const [activeTab, setActiveTab] = useState("individual");
+  const activeWorkspace = getActiveWorkspace(user);
   // Removed billingCycle - only monthly billing now (recurring subscriptions)
 
   const individualPlans = [
@@ -285,12 +287,12 @@ const Pricing = () => {
       }
 
       try {
-        if (user?.organization?.role !== "super_admin" || !user?.organization?.orgId) {
+        if (activeWorkspace?.role !== "super_admin" || !activeWorkspace?.organization?._id) {
           setCurrentOrgPlanId(null);
           return;
         }
 
-        const response = await organizationService.get(user.organization.orgId);
+        const response = await organizationService.get(activeWorkspace.organization._id);
         const orgPlan = response?.data?.organization?.subscription?.plan || "free";
         setCurrentOrgPlanId(`org-${orgPlan}`);
       } catch (error) {
@@ -299,7 +301,7 @@ const Pricing = () => {
     };
 
     loadPricingContext();
-  }, [isAuthenticated, user, activeTab]);
+  }, [isAuthenticated, activeWorkspace?.organization?._id, activeWorkspace?.role, activeTab]);
 
   const plans = activeTab === "individual" ? individualPlans : organizationPlans;
 
@@ -325,7 +327,7 @@ const Pricing = () => {
 
     const isOrgPlan = planId.startsWith("org-");
     if (isOrgPlan) {
-      const isOrgSuperAdmin = user?.organization?.role === "super_admin" && !!user?.organization?.orgId;
+      const isOrgSuperAdmin = activeWorkspace?.role === "super_admin" && !!activeWorkspace?.organization?._id;
       if (!isOrgSuperAdmin) {
         alert("Only organization super admin can purchase organization plans.");
         return;

@@ -3,6 +3,7 @@ import authService from "../../services/authService";
 import { clearTokens, getAccessToken, getRefreshToken } from "../../utils/axios";
 
 let lastAuthCheck = 0;
+let authBootstrapPromise = null;
 const AUTH_CHECK_INTERVAL = 5000;
 const PUBLIC_BOOTSTRAP_PATHS = new Set([
   "/",
@@ -38,51 +39,63 @@ const isPublicBootstrapPath = (pathname = "/") => {
 export const initializeAuth = createAsyncThunk(
   "user/initializeAuth",
   async (_, { getState }) => {
+    if (authBootstrapPromise) {
+      return authBootstrapPromise;
+    }
+
     const now = Date.now();
     const { user } = getState().user;
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
     const pathname = window?.location?.pathname || "/";
 
-    // Fast path: unauthenticated visitors on public routes should not block app startup.
-    if (!accessToken && !refreshToken && isPublicBootstrapPath(pathname)) {
-      return null;
-    }
-
-    // If user is already loaded and we checked recently, skip
-    if (user?.email && now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
-      return user;
-    }
-
-    lastAuthCheck = now;
-
-    try {
-      const response = await authService.getUser();
-      if (response.success && response.data) {
-        return response.data;
-      }
-    } catch (error) {
-      if (error.response?.status === 401) {
-        try {
-          // Cookie-based sessions may exist even when localStorage tokens are absent.
-          const refreshResponse = await authService.refreshToken();
-          if (refreshResponse.success) {
-            const retryResponse = await authService.getUser();
-            if (retryResponse.success && retryResponse.data) {
-              return retryResponse.data;
-            }
-          }
-        } catch (refreshError) {
-          // Ignore and fall through to unauthenticated state.
+    authBootstrapPromise = (async () => {
+      try {
+        // Fast path: unauthenticated visitors on public routes should not block app startup.
+        if (!accessToken && !refreshToken && isPublicBootstrapPath(pathname)) {
+          return null;
         }
-      } else if (!accessToken) {
-        // If there is no local token and server rejected auth, treat as logged out quietly.
-        return null;
-      }
-    }
 
-    clearTokens();
-    return null;
+        // If user is already loaded and we checked recently, skip
+        if (user?.email && now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
+          return user;
+        }
+
+        lastAuthCheck = now;
+
+        try {
+          const response = await authService.getUser();
+          if (response.success && response.data) {
+            return response.data;
+          }
+        } catch (error) {
+          if (error.response?.status === 401) {
+            try {
+              // Cookie-based sessions may exist even when localStorage tokens are absent.
+              const refreshResponse = await authService.refreshToken();
+              if (refreshResponse.success) {
+                const retryResponse = await authService.getUser();
+                if (retryResponse.success && retryResponse.data) {
+                  return retryResponse.data;
+                }
+              }
+            } catch (refreshError) {
+              // Ignore and fall through to unauthenticated state.
+            }
+          } else if (!accessToken) {
+            // If there is no local token and server rejected auth, treat as logged out quietly.
+            return null;
+          }
+        }
+
+        clearTokens();
+        return null;
+      } finally {
+        authBootstrapPromise = null;
+      }
+    })();
+
+    return authBootstrapPromise;
   }
 );
 
@@ -164,6 +177,23 @@ export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
   }
   return null;
 });
+
+export const switchWorkspace = createAsyncThunk(
+  "user/switchWorkspace",
+  async (workspaceId, { rejectWithValue }) => {
+    try {
+      const response = await authService.switchWorkspace(workspaceId);
+      if (response.success) {
+        return response.data;
+      }
+      return rejectWithValue(response.message || "Failed to switch workspace");
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to switch workspace"
+      );
+    }
+  }
+);
 
 const initialState = {
   isAuthenticated: false,
@@ -300,6 +330,23 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.error = null;
+      })
+      .addCase(switchWorkspace.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(switchWorkspace.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(switchWorkspace.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          typeof action.payload === "string"
+            ? action.payload
+            : action.payload?.message || "Failed to switch workspace";
       });
   },
 });

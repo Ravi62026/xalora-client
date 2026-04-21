@@ -16,6 +16,7 @@ import {
 import { Layout } from "../../components";
 import organizationService from "../../services/organizationService";
 import AcademicStructureBuilder from "../../components/Organization/AcademicStructureBuilder";
+import { getActiveWorkspace, getDashboardRouteForUser } from "../../utils/workspace";
 
 const STEPS = [
   { id: 1, label: "Organization Info" },
@@ -47,6 +48,7 @@ export default function OrganizationSetup() {
   const navigate = useNavigate();
   const { token } = useParams();
   const { user } = useSelector((state) => state.user);
+  const activeWorkspace = getActiveWorkspace(user);
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -108,14 +110,7 @@ export default function OrganizationSetup() {
     validateToken();
   }, [token]);
 
-  const getOrgDashboardRoute = () => {
-    if (!user?.organization?.orgId) return "/dashboard";
-    if (user?.organization?.role === "super_admin") return "/org/dashboard";
-    if (user?.userType === "org_team") return "/org/teamdashboard";
-    return user?.organization?.degreeTypeValue || user?.organization?.programValue
-      ? "/org/student/dashboard"
-      : "/dashboard";
-  };
+  const getOrgDashboardRoute = () => getDashboardRouteForUser(user);
 
   const handleChange = (event) => {
     setForm((previous) => ({
@@ -228,7 +223,7 @@ export default function OrganizationSetup() {
     );
   }
 
-  if (user?.organization?.orgId) {
+  if (activeWorkspace?.organization) {
     return (
       <Layout>
         <div className="flex min-h-[80vh] items-center justify-center px-4">
@@ -236,7 +231,7 @@ export default function OrganizationSetup() {
             <Building2 className="mx-auto mb-4 h-10 w-10 text-emerald-400" />
             <h1 className="text-xl font-semibold text-white">Already in an Organization</h1>
             <p className="mt-2 text-sm text-gray-400">
-              Each account can belong to only one organization at a time.
+              Your account already has an organization workspace. Switch workspaces from the top bar if needed.
             </p>
             <button
               type="button"

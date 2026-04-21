@@ -28,6 +28,11 @@ import subscriptionService from "../services/subscriptionService";
 import interviewService from "../services/interviewService";
 import axios from "../utils/axios";
 import ApiRoutes from "../routes/routes";
+import {
+  getActiveWorkspace,
+  getDashboardRouteForUser,
+  isCompanyCandidateWorkspace,
+} from "../utils/workspace";
 
 const PLAN_META = {
   spark: { label: "Xalora Spark", badgeClass: "bg-slate-600/80 text-slate-100" },
@@ -603,8 +608,8 @@ const AIUsageCard = ({ aiUsage, isLoading }) => {
 /**
  * Organization Banner - Shows org membership info
  */
-const OrganizationBanner = ({ user, onNavigateOrgDashboard }) => {
-  if (!user?.organization?.orgId) return null;
+const OrganizationBanner = ({ workspace, onNavigateOrgDashboard }) => {
+  if (!workspace?.organization) return null;
 
   return (
     <aside
@@ -618,14 +623,14 @@ const OrganizationBanner = ({ user, onNavigateOrgDashboard }) => {
         </div>
         <div>
           <p className="text-sm font-medium text-white">
-            {user?.organization?.orgName || "Organization Member"}
+            {workspace?.organization?.name || workspace?.name || "Organization Member"}
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            {user.organization.role?.replace("_", " ")}{" "}
-            {user.organization.programLabel
-              ? `• ${user.organization.programLabel}`
-              : user.organization.department
-              ? `• ${user.organization.department}`
+            {workspace.role?.replace("_", " ")}{" "}
+            {workspace.programLabel
+              ? `• ${workspace.programLabel}`
+              : workspace.department
+              ? `• ${workspace.department}`
               : ""}
           </p>
         </div>
@@ -656,6 +661,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
  */
 const Dashboard = () => {
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const activeWorkspace = getActiveWorkspace(user);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -674,14 +680,7 @@ const Dashboard = () => {
   const [planInfo, setPlanInfo] = useState(null);
   const [aiUsage, setAiUsage] = useState(null);
 
-  const getOrgDashboardRoute = () => {
-    if (!user?.organization?.orgId) return "/dashboard";
-    if (user?.organization?.role === "super_admin") return "/org/dashboard";
-    if (user?.userType === "org_team") return "/org/teamdashboard";
-    return user?.organization?.degreeTypeValue || user?.organization?.programValue
-      ? "/org/student/dashboard"
-      : "/dashboard";
-  };
+  const getOrgDashboardRoute = () => getDashboardRouteForUser(user);
 
   const fetchDashboardData = useCallback(
     async ({ background = false } = {}) => {
@@ -934,7 +933,7 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+  const isCompanyCandidate = isCompanyCandidateWorkspace(activeWorkspace);
 
   const completionRate = useMemo(() => {
     return metrics.totalProblems
@@ -1009,7 +1008,7 @@ const Dashboard = () => {
           {/* Organization Info */}
           {isAuthenticated && (
             <OrganizationBanner
-              user={user}
+              workspace={activeWorkspace}
               onNavigateOrgDashboard={() => window.location.href = getOrgDashboardRoute()}
             />
           )}
@@ -1046,8 +1045,8 @@ const Dashboard = () => {
               />
               <MetricCard
                 title="Position"
-                value={user?.organization?.position || "Candidate"}
-                hint={`${(user?.organization?.interviewRounds || []).length} round(s) assigned`}
+                value={activeWorkspace?.position || "Candidate"}
+                hint={`${(activeWorkspace?.interviewRounds || []).length} round(s) assigned`}
                 icon={BriefcaseBusiness}
                 iconColor="emerald"
               />
@@ -1067,6 +1066,7 @@ const Dashboard = () => {
                 hint={`Avg score: ${metrics.averageQuizScore}%`}
                 icon={ClipboardCheck}
                 iconColor="violet"
+                to="/quiz/analytics"
               />
               <MetricCard
                 title="Internships"
@@ -1139,7 +1139,7 @@ const Dashboard = () => {
                     Quick Actions
                   </h2>
                   <nav className="space-y-2">
-                    {(user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0
+                    {(isCompanyCandidate
                       ? QUICK_ACTIONS.filter((a) => a.to === "/my-interviews")
                       : QUICK_ACTIONS
                     ).map((action) => (

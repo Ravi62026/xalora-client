@@ -19,6 +19,19 @@ import {
 import axiosInstance from "../utils/axios";
 import { useApiCall } from "../hooks";
 
+const QUESTION_TYPE_LABELS = {
+  theory: "Theory",
+  quirks: "Quirks",
+  debugging: "Debugging",
+  guess_output: "Guess Output",
+  code: "Code",
+  scenario: "Scenario",
+  mcq: "MCQ",
+};
+
+const formatQuestionType = (value) =>
+  QUESTION_TYPE_LABELS[value] || (value ? value.replace(/_/g, " ") : "Theory");
+
 const QuizReport = () => {
   const { submissionId } = useParams();
   const navigate = useNavigate();
@@ -392,6 +405,9 @@ const QuizReport = () => {
                         <span className="ml-2 font-semibold text-white">
                           Question {question.questionNumber}
                         </span>
+                        <span className="ml-2 text-xs bg-cyan-500/15 text-cyan-200 px-2 py-1 rounded-full border border-cyan-500/20">
+                          {formatQuestionType(question.questionType)}
+                        </span>
                         <span className="ml-2 text-xs bg-gray-700 text-gray-200 px-2 py-1 rounded-full">
                           {question.difficulty}
                         </span>
@@ -399,6 +415,19 @@ const QuizReport = () => {
                       <p className="text-gray-200 mb-4">
                         {question.questionText}
                       </p>
+                      {question.codeSnippet && (
+                        <div className="mb-4 rounded-xl border border-slate-700/80 bg-slate-950/80 p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-medium text-cyan-300">Code Canvas</span>
+                            {question.language && (
+                              <span className="text-[11px] text-slate-400">{question.language}</span>
+                            )}
+                          </div>
+                          <pre className="overflow-x-auto whitespace-pre-wrap text-sm leading-6 text-slate-100">
+                            <code>{question.codeSnippet}</code>
+                          </pre>
+                        </div>
+                      )}
                     </div>
                   </div>
 

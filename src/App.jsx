@@ -2,6 +2,12 @@ import React, { useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getActiveWorkspace,
+  getDashboardRouteForUser,
+  isCompanyCandidateWorkspace,
+} from "./utils/workspace";
+import { getAccessToken, getRefreshToken } from "./utils/axios";
+import {
   Home,
   Login,
   ForgotPassword,
@@ -267,6 +273,7 @@ const AppContent = () => {
 
   // Use a ref to track if we've already initialized
   const hasInitialized = React.useRef(false);
+  const hasStoredAuthSession = Boolean(getAccessToken() || getRefreshToken());
 
   useEffect(() => {
     // Initialize auth on app load only once
@@ -300,23 +307,15 @@ const AppContent = () => {
   }, [location.pathname, location.search]);
 
   // Show loading screen while checking authentication
-  if (isInitializing && !user && !isPublicBootstrapPath) {
+  if (isInitializing && !user && (!isPublicBootstrapPath || hasStoredAuthSession)) {
     return <LoadingMessage />;
   }
 
-  const getOrgDashboardRoute = (currentUser) => {
-    if (!currentUser?.organization?.orgId) return "/dashboard";
-    if (currentUser?.organization?.role === "super_admin") return "/org/dashboard";
-    if (currentUser?.userType === "org_team") return "/org/teamdashboard";
-    return currentUser?.organization?.degreeTypeValue ||
-      currentUser?.organization?.programValue
-      ? "/org/student/dashboard"
-      : "/dashboard";
-  };
-
+  const activeWorkspace = getActiveWorkspace(user);
+  const getOrgDashboardRoute = (currentUser) => getDashboardRouteForUser(currentUser);
   const isOrgTeam = user?.userType === "org_team";
-  const isOrgSuperAdmin = user?.organization?.role === "super_admin";
-  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+  const isOrgSuperAdmin = activeWorkspace?.role === "super_admin";
+  const isCompanyCandidate = isCompanyCandidateWorkspace(activeWorkspace);
 
   // Company candidates: only allow interview, dashboard, profile, and public pages
   if (isCompanyCandidate) {

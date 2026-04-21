@@ -2,20 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
+  BadgeCheck,
   BarChart3,
   Building2,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
+  CalendarDays,
   Clock,
   Loader2,
   Mail,
+  Medal,
   RefreshCw,
   Search,
   Shield,
   Trash2,
   UserPlus,
   Users,
+  Trophy,
   X,
 } from "lucide-react";
 import { Layout } from "../../components";
@@ -24,6 +28,7 @@ import StudentImportPanel from "../../components/Organization/StudentImportPanel
 import CandidateImportPanel from "../../components/Organization/CandidateImportPanel";
 import AcademicFilters from "../../components/Organization/AcademicFilters";
 import ImportHistoryTable from "../../components/Organization/ImportHistoryTable";
+import { getActiveWorkspace } from "../../utils/workspace";
 
 const inputClass =
   "rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500";
@@ -31,9 +36,10 @@ const inputClass =
 export default function OrgAdminDashboard() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const orgId = user?.organization?.orgId;
-  const isSuperAdmin = user?.organization?.role === "super_admin";
-  const isAdmin = isSuperAdmin || user?.organization?.role === "admin";
+  const activeWorkspace = getActiveWorkspace(user);
+  const orgId = activeWorkspace?.organization?._id || null;
+  const isSuperAdmin = activeWorkspace?.role === "super_admin";
+  const isAdmin = isSuperAdmin || activeWorkspace?.role === "admin";
 
   const [org, setOrg] = useState(null);
   const [stats, setStats] = useState(null);
@@ -54,6 +60,10 @@ export default function OrgAdminDashboard() {
   const [degreeTypeFilter, setDegreeTypeFilter] = useState("");
   const [programFilter, setProgramFilter] = useState("");
   const [page, setPage] = useState(1);
+  const [weeklySnapshot, setWeeklySnapshot] = useState(null);
+  const [weeklyHistory, setWeeklyHistory] = useState([]);
+  const [weeklyRepeatHighlights, setWeeklyRepeatHighlights] = useState([]);
+  const [weeklyLoading, setWeeklyLoading] = useState(false);
 
   const isCollege = org?.type === "college";
 
@@ -130,6 +140,44 @@ export default function OrgAdminDashboard() {
     fetchMembers();
   }, [fetchMembers]);
 
+  const fetchWeeklyPreview = useCallback(async () => {
+    if (!orgId || !isCollege) {
+      setWeeklySnapshot(null);
+      setWeeklyHistory([]);
+      setWeeklyRepeatHighlights([]);
+      return;
+    }
+
+    setWeeklyLoading(true);
+    try {
+      const response = await organizationService.getCollegeWeeklyLeaderboard(orgId, {
+        page: 1,
+        limit: 5,
+      });
+      setWeeklySnapshot(response.data?.snapshot || null);
+      setWeeklyHistory(response.data?.history || []);
+      setWeeklyRepeatHighlights(response.data?.repeatHighlights || []);
+    } catch (error) {
+      console.error("Failed to load weekly leaderboard preview:", error);
+      setWeeklySnapshot(null);
+      setWeeklyHistory([]);
+      setWeeklyRepeatHighlights([]);
+    } finally {
+      setWeeklyLoading(false);
+    }
+  }, [orgId, isCollege]);
+
+  useEffect(() => {
+    if (isCollege) {
+      fetchWeeklyPreview();
+      return;
+    }
+
+    setWeeklySnapshot(null);
+    setWeeklyHistory([]);
+    setWeeklyRepeatHighlights([]);
+  }, [isCollege, fetchWeeklyPreview]);
+
   const fetchInvites = useCallback(async (page = 1) => {
     if (!orgId || !isAdmin) return;
     setInvitesLoading(true);
@@ -160,7 +208,7 @@ export default function OrgAdminDashboard() {
   };
 
   const refreshAll = async () => {
-    await Promise.all([fetchContext(), fetchMembers(), fetchInvites()]);
+    await Promise.all([fetchContext(), fetchMembers(), fetchInvites(), fetchWeeklyPreview()]);
   };
 
   const handleStatusChange = async (memberId, nextStatus) => {
@@ -318,6 +366,103 @@ export default function OrgAdminDashboard() {
             }
           />
         </div>
+
+        {isCollege && (
+          <section className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div>
+                <h2 className="flex items-center gap-2 text-lg font-semibold text-white">
+                  <CalendarDays className="h-5 w-5 text-emerald-400" />
+                  Weekly Leaderboard Preview
+                </h2>
+                <p className="mt-1 text-sm text-gray-400">
+                  Latest weekly snapshot with repeat top performers.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={fetchWeeklyPreview}
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-200 hover:border-emerald-500/40 hover:text-emerald-300"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh Weekly
+              </button>
+            </div>
+
+            {weeklyLoading ? (
+              <div className="flex items-center justify-center py-10">
+                <Loader2 className="h-6 w-6 animate-spin text-emerald-400" />
+              </div>
+            ) : weeklySnapshot ? (
+              <>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <StatCard
+                    label="Week"
+                    value={weeklySnapshot.periodKey || "Latest"}
+                    icon={Trophy}
+                  />
+                  <StatCard
+                    label="Top 10"
+                    value={weeklySnapshot.summary?.top10Members ?? 0}
+                    icon={Medal}
+                  />
+                  <StatCard
+                    label="Repeat Top 10"
+                    value={weeklySnapshot.summary?.repeatTop10Members ?? 0}
+                    icon={BadgeCheck}
+                  />
+                  <StatCard
+                    label="Members"
+                    value={weeklySnapshot.summary?.totalMembers ?? 0}
+                    icon={Users}
+                  />
+                </div>
+
+                {weeklyRepeatHighlights.length > 0 && (
+                  <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+                    <p className="mb-3 flex items-center gap-2 text-sm font-medium text-amber-200">
+                      <BadgeCheck className="h-4 w-4" />
+                      Repeat top performers
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {weeklyRepeatHighlights.slice(0, 8).map((entry) => (
+                        <span
+                          key={`${entry.userId}-${entry.rank}`}
+                          className="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-xs text-amber-100"
+                        >
+                          {entry.name} - {entry.top10Appearances}x top 10
+                          {entry.bestRank ? `, best #${entry.bestRank}` : ""}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {weeklyHistory.length > 0 && (
+                  <div className="mt-4">
+                    <p className="mb-2 text-xs uppercase tracking-[0.3em] text-gray-500">
+                      Recent weeks
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {weeklyHistory.slice(0, 6).map((week) => (
+                        <span
+                          key={week.periodKey}
+                          className="rounded-full border border-gray-700 bg-gray-900 px-3 py-1.5 text-xs text-gray-300"
+                        >
+                          {week.periodLabel}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="mt-4 text-sm text-gray-500">
+                Weekly snapshot has not been generated yet.
+              </p>
+            )}
+          </section>
+        )}
 
         <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
           <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

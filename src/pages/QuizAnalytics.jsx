@@ -195,21 +195,6 @@ const QuizAnalytics = () => {
                 <h1 className="text-3xl font-bold text-white mb-2">Quiz Analytics Dashboard</h1>
                 <p className="text-gray-300">Track your quiz performance and earn JBP coins!</p>
               </div>
-              <button
-                onClick={async () => {
-                  try {
-                    const response = await axiosInstance.get(ApiRoutes.quizzes.debugSubmissions);
-                    console.log('🔍 DEBUG RESPONSE:', response.data);
-                    alert('Debug info logged to console. Check browser dev tools.');
-                  } catch (error) {
-                    console.error('Debug error:', error);
-                    alert('Debug failed. Check console for errors.');
-                  }
-                }}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700"
-              >
-                🔍 Debug Submissions
-              </button>
             </div>
           </div>
 

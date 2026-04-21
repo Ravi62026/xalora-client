@@ -20,6 +20,7 @@ import {
 import { Layout } from "../../components";
 import organizationService from "../../services/organizationService";
 import AcademicFilters from "../../components/Organization/AcademicFilters";
+import { getActiveWorkspace } from "../../utils/workspace";
 
 const inputClass =
   "rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500";
@@ -27,7 +28,8 @@ const inputClass =
 export default function OrgMemberAnalytics() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const orgId = user?.organization?.orgId;
+  const activeWorkspace = getActiveWorkspace(user);
+  const orgId = activeWorkspace?.organization?._id || null;
 
   const [org, setOrg] = useState(null);
   const [filterOptions, setFilterOptions] = useState({ degreeTypes: [] });

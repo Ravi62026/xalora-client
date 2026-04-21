@@ -4,6 +4,10 @@ import { Upload, User, Briefcase, Building, FileText, Loader2, AlertCircle, Spar
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
 import { useSelector } from 'react-redux';
+import {
+  getActiveWorkspace,
+  isCompanyCandidateWorkspace,
+} from "../../utils/workspace";
 
 // Predefined Roles & JDs
 const PREDEFINED_ROLES = [
@@ -305,17 +309,18 @@ Evaluation Signals:
 const InterviewSetup = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const activeWorkspace = getActiveWorkspace(user);
 
   // Company candidate detection
-  const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
-  const assignedRounds = user?.organization?.interviewRounds || [];
+  const isCompanyCandidate = isCompanyCandidateWorkspace(activeWorkspace);
+  const assignedRounds = activeWorkspace?.interviewRounds || [];
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
     age: '',
     gender: '',
     experience: '',
-    position: isCompanyCandidate ? (user?.organization?.position || '') : '',
+    position: isCompanyCandidate ? (activeWorkspace?.position || '') : '',
     selectedRole: '', // Dropdown value
     customPosition: '', // Manual input if 'other'
     companyType: isCompanyCandidate ? 'product_based' : 'startup',
@@ -634,8 +639,8 @@ const InterviewSetup = () => {
                       <h3 className="text-sm font-bold text-amber-300">Company Screening Interview</h3>
                       <p className="text-xs text-amber-200/70 mt-1">
                         You have <span className="font-bold text-white">3 interview attempts</span> for your assigned round{assignedRounds.length > 1 ? 's' : ''}.
-                        {user?.organization?.deadlineDays && (
-                          <> Complete within <span className="font-bold text-white">{user.organization.deadlineDays} days</span> of accepting your invite.</>
+                        {activeWorkspace?.deadlineDays && (
+                          <> Complete within <span className="font-bold text-white">{activeWorkspace.deadlineDays} days</span> of accepting your invite.</>
                         )}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-3">

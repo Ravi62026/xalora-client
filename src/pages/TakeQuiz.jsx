@@ -7,6 +7,43 @@ import axiosInstance from '../utils/axios';
 import ApiRoutes from '../routes/routes';
 import { setUser } from '../store/slices/userSlice'; // Import the action to update user data
 
+const QUESTION_TYPE_LABELS = {
+    theory: 'Theory',
+    quirks: 'Quirks',
+    debugging: 'Debugging',
+    guess_output: 'Guess Output',
+    code: 'Code',
+    scenario: 'Scenario',
+    mcq: 'MCQ'
+};
+
+const formatQuestionType = (value) => QUESTION_TYPE_LABELS[value] || (value ? value.replace(/_/g, ' ') : 'Theory');
+
+const CodeCanvas = ({ code, language, onCopy }) => {
+    if (!code) return null;
+
+    return (
+        <div className="mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-950/90 shadow-[0_0_0_1px_rgba(34,211,238,0.08),0_18px_45px_rgba(2,6,23,0.45)]">
+            <div className="flex items-center justify-between border-b border-cyan-500/10 bg-slate-900/80 px-4 py-3">
+                <div>
+                    <p className="text-sm font-semibold text-cyan-300">Code Canvas</p>
+                    <p className="text-xs text-slate-400">{language || 'source'} • read carefully before answering</p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => onCopy?.(code)}
+                    className="rounded-lg border border-cyan-400/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-200 transition hover:bg-cyan-500/20"
+                >
+                    Copy code
+                </button>
+            </div>
+            <pre className="overflow-x-auto px-4 py-4 text-sm leading-6 text-slate-100">
+                <code className="font-mono whitespace-pre-wrap">{code}</code>
+            </pre>
+        </div>
+    );
+};
+
 const TakeQuiz = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -20,14 +57,37 @@ const TakeQuiz = () => {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [result, setResult] = useState(null);
+    const [submissionError, setSubmissionError] = useState(null);
     const { execute } = useApiCall();
 
+    const getCompletionStorageKey = () => `quiz_completion_${user?._id || 'anonymous'}_${id}`;
+
+    const loadSavedCompletion = () => {
+        try {
+            const raw = sessionStorage.getItem(getCompletionStorageKey());
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            return parsed?.quizId === id ? parsed : null;
+        } catch (error) {
+            console.warn('Failed to read saved quiz completion:', error);
+            return null;
+        }
+    };
+
+    const saveCompletion = (payload) => {
+        try {
+            sessionStorage.setItem(getCompletionStorageKey(), JSON.stringify(payload));
+        } catch (error) {
+            console.warn('Failed to save quiz completion:', error);
+        }
+    };
+
     useEffect(() => {
-        // Only fetch quiz if user is authenticated and we don't have a result yet
-        if (isAuthenticated && !result) {
+        // Only fetch quiz if user is authenticated
+        if (isAuthenticated) {
             fetchQuiz();
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, id, user?._id]);
 
     useEffect(() => {
         // Clear timer when component unmounts or when we have a result
@@ -58,6 +118,13 @@ const TakeQuiz = () => {
             setAnswers(new Array(quizData.questions.length).fill(null));
             setTimeLeft(quizData.timeLimit * 60);
             setStartTime(Date.now());
+
+            const savedCompletion = loadSavedCompletion();
+            if (savedCompletion?.result) {
+                setResult(savedCompletion.result);
+                setSubmitting(false);
+                return;
+            }
         } catch (error) {
             console.error('Error fetching quiz:', error);
             // Fallback mock data
@@ -70,6 +137,9 @@ const TakeQuiz = () => {
                     {
                         _id: 'q1',
                         questionText: 'Mock question 1?',
+                        questionType: 'theory',
+                        codeSnippet: '',
+                        language: '',
                         options: ['A', 'B', 'C', 'D'],
                         correctAnswer: 0,
                         difficulty: 'easy',
@@ -103,12 +173,20 @@ const TakeQuiz = () => {
             const response = await execute(async () => {
                 const res = await axiosInstance.post(ApiRoutes.quizzes.submit, {
                     quizId: id,
+                    questionIds: quiz.questions.map((question) => question._id),
                     answers,
                     timeTaken
                 });
                 return res.data;
             });
             setResult(response.data);
+            setSubmissionError(null);
+            saveCompletion({
+                quizId: id,
+                userId: user?._id,
+                result: response.data,
+                savedAt: new Date().toISOString()
+            });
             
             // Update user data in Redux store to reflect new JBP coins
             // Instead of dispatching initializeAuth which might cause a full re-render,
@@ -125,24 +203,7 @@ const TakeQuiz = () => {
             }
         } catch (error) {
             console.error('Error submitting quiz:', error);
-            // Fallback mock result
-            const mockResult = {
-                quizId: id,
-                totalQuestions: quiz.questions.length,
-                correctCount: answers.filter((a, i) => a === quiz.questions[i].correctAnswer).length,
-                score: Math.round((answers.filter((a, i) => a === quiz.questions[i].correctAnswer).length / quiz.questions.length) * 100),
-                passed: answers.filter((a, i) => a === quiz.questions[i].correctAnswer).length / quiz.questions.length >= 0.6,
-                results: quiz.questions.map((q, i) => ({
-                    questionId: q._id,
-                    questionText: q.questionText,
-                    userAnswer: answers[i],
-                    correctAnswer: q.correctAnswer,
-                    isCorrect: answers[i] === q.correctAnswer,
-                    explanation: q.explanation
-                })),
-                submissionId: 'fallback-submission-id'
-            };
-            setResult(mockResult);
+            setSubmissionError('Submission failed. Your attempt was not saved, so the quiz will stay open.');
         } finally {
             setSubmitting(false);
         }
@@ -152,6 +213,14 @@ const TakeQuiz = () => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    const handleCopyCode = async (code) => {
+        try {
+            await navigator.clipboard.writeText(code);
+        } catch (error) {
+            console.error('Failed to copy code:', error);
+        }
     };
 
     if (!isAuthenticated) {
@@ -208,6 +277,11 @@ const TakeQuiz = () => {
                             <h1 className="text-3xl font-bold text-white text-center mb-8">Quiz Results</h1>
 
                             <div className="text-center mb-8">
+                                {submissionError && (
+                                    <div className="mb-4 rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-3 text-red-200">
+                                        {submissionError}
+                                    </div>
+                                )}
                                 <div className="text-6xl font-bold mb-4">
                                     {result.score}%
                                 </div>
@@ -281,6 +355,23 @@ const TakeQuiz = () => {
                                         <div className="font-semibold mb-2 text-white">
                                             Question {index + 1}: {item.questionText}
                                         </div>
+                                        <div className="flex flex-wrap gap-2 mb-3">
+                                            <span className="px-2 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-[11px] border border-cyan-500/20">
+                                                {formatQuestionType(quiz.questions[index]?.questionType)}
+                                            </span>
+                                            {quiz.questions[index]?.language && (
+                                                <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] border border-emerald-500/20">
+                                                    {quiz.questions[index].language}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {quiz.questions[index]?.codeSnippet && (
+                                            <div className="mb-3 rounded-xl border border-slate-700/70 bg-slate-950/80 p-3">
+                                                <pre className="overflow-x-auto text-xs leading-5 text-slate-100 whitespace-pre-wrap">
+                                                    <code>{quiz.questions[index].codeSnippet}</code>
+                                                </pre>
+                                            </div>
+                                        )}
                                         <div className="text-sm text-gray-300 mb-2">
                                             Your answer: {item.userAnswer !== null ? quiz.questions[index].options[item.userAnswer] : 'Not answered'}
                                         </div>
@@ -340,6 +431,12 @@ const TakeQuiz = () => {
                             </div>
                         </div>
 
+                        {submissionError && (
+                            <div className="mb-6 rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-red-200">
+                                {submissionError}
+                            </div>
+                        )}
+
                         <div className="mb-8">
                             <div className="flex justify-between text-sm text-gray-600 mb-4">
                                 <span>Question {currentQuestion + 1} of {quiz.questions.length}</span>
@@ -354,7 +451,25 @@ const TakeQuiz = () => {
                         </div>
 
                         <div className="mb-8">
-                            <h2 className="text-xl font-semibold mb-4 text-white">{question.questionText}</h2>
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-xs sm:text-sm border border-cyan-500/20">
+                                    {formatQuestionType(question.questionType)}
+                                </span>
+                                <span className="px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-xs sm:text-sm border border-violet-500/20">
+                                    {question.difficulty || 'medium'}
+                                </span>
+                                {question.language && (
+                                    <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm border border-emerald-500/20">
+                                        {question.language}
+                                    </span>
+                                )}
+                            </div>
+                            <h2 className="text-xl font-semibold mb-4 text-white leading-relaxed">{question.questionText}</h2>
+                            <CodeCanvas
+                                code={question.codeSnippet}
+                                language={question.language}
+                                onCopy={handleCopyCode}
+                            />
                             <div className="space-y-3">
                                 {question.options.map((option, index) => (
                                     <label key={index} className="flex items-center space-x-3 cursor-pointer bg-white/5 hover:bg-white/10 p-3 rounded-lg transition-colors">

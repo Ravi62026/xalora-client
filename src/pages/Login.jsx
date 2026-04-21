@@ -7,6 +7,8 @@ import { loginUser, googleLoginUser } from "../store/slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import api from "../utils/axios";
 
+const PENDING_WORKSPACE_CHOICE_KEY = "xalora_pending_workspace_choice";
+
 const Login = () => {
     const [formData, setFormData] = useState({
         email: "",
@@ -88,6 +90,13 @@ const Login = () => {
 
         if (loginUser.fulfilled.match(result)) {
             console.log("✅ LOGIN: Successful, redirecting to home");
+            const workspaces = result.payload?.user?.workspaces || [];
+            const shouldOpenWorkspaceChooser = workspaces.length > 1;
+            if (workspaces.length > 1) {
+                sessionStorage.setItem(PENDING_WORKSPACE_CHOICE_KEY, "1");
+            } else {
+                sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+            }
             // Clear form data on successful login
             setFormData({
                 email: "",
@@ -142,6 +151,13 @@ const Login = () => {
         if (credentialResponse.credential) {
             const result = await dispatch(googleLoginUser(credentialResponse.credential));
             if (googleLoginUser.fulfilled.match(result)) {
+                const workspaces = result.payload?.user?.workspaces || [];
+                const shouldOpenWorkspaceChooser = workspaces.length > 1;
+                if (workspaces.length > 1) {
+                    sessionStorage.setItem(PENDING_WORKSPACE_CHOICE_KEY, "1");
+                } else {
+                    sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+                }
                 navigate("/");
             }
         }

@@ -101,6 +101,14 @@ const organizationService = {
     return response.data;
   },
 
+  getCollegeWeeklyLeaderboard: async (orgId, params = {}) => {
+    const response = await axiosInstance.get(
+      ApiRoutes.organization.collegeWeeklyLeaderboard(orgId),
+      { params }
+    );
+    return response.data;
+  },
+
   getCollegeMyRank: async (orgId, params = {}) => {
     const response = await axiosInstance.get(
       ApiRoutes.organization.collegeMyRank(orgId),

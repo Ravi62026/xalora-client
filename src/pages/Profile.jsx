@@ -9,6 +9,11 @@ import problemService from "../services/problemService";
 import quizService from "../services/quizService";
 import organizationService from "../services/organizationService";
 import { setUser } from "../store/slices/userSlice";
+import {
+  getActiveWorkspace,
+  getDashboardRouteForUser,
+  isCompanyCandidateWorkspace,
+} from "../utils/workspace";
 
 const PLAN_META = {
   spark: {
@@ -75,18 +80,12 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, execute } = useApiCall();
-  const getOrgDashboardRoute = () => {
-    if (!user?.organization?.orgId) return "/dashboard";
-    if (user?.organization?.role === "super_admin") return "/org/dashboard";
-    if (user?.userType === "org_team") return "/org/teamdashboard";
-    return user?.organization?.degreeTypeValue || user?.organization?.programValue
-      ? "/org/student/dashboard"
-      : "/dashboard";
-  };
-  const orgDetails = user?.organization;
-  const isOrgMember = Boolean(orgDetails?.orgId);
+  const activeWorkspace = getActiveWorkspace(user);
+  const getOrgDashboardRoute = () => getDashboardRouteForUser(user);
+  const orgDetails = activeWorkspace;
+  const isOrgMember = Boolean(orgDetails?.organization);
   const isSuperAdminOrg = orgDetails?.role === "super_admin";
-  const isCompanyCandidate = user?.userType === "org_member" && orgDetails?.interviewRounds?.length > 0;
+  const isCompanyCandidate = isCompanyCandidateWorkspace(orgDetails);
   const upgradeDisabled = isOrgMember && !isSuperAdminOrg;
 
   const [subscription, setSubscription] = useState(null);
@@ -109,7 +108,7 @@ const Profile = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   // Check if user is organization member (only if they have actual orgId)
-  const isOrgUser = !!user?.organization?.orgId;
+  const isOrgUser = !!orgDetails?.organization;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -206,13 +205,13 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchOrgProfile = async () => {
-      if (!isOrgMember || !orgDetails?.orgId) {
+      if (!isOrgMember || !orgDetails?.organization?._id) {
         setOrgProfile(null);
         return;
       }
 
       try {
-        const response = await organizationService.get(orgDetails.orgId);
+        const response = await organizationService.get(orgDetails.organization._id);
         setOrgProfile(response?.data?.organization || response?.organization || null);
       } catch (err) {
         setOrgProfile(null);
@@ -220,7 +219,7 @@ const Profile = () => {
     };
 
     fetchOrgProfile();
-  }, [isOrgMember, orgDetails?.orgId]);
+  }, [isOrgMember, orgDetails?.organization?._id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

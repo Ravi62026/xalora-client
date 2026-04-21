@@ -1,13 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../store/slices/userSlice";
+import { logoutUser, switchWorkspace } from "../store/slices/userSlice";
+import {
+    getActiveWorkspace,
+    getDashboardRouteForUser as getWorkspaceDashboardRoute,
+    isCompanyCandidateWorkspace,
+} from "../utils/workspace";
+import WorkspaceChooserModal from "./WorkspaceChooserModal";
 
 const ChevronDown = ({ className = "" }) => (
     <svg className={`w-4 h-4 ${className}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
     </svg>
 );
+
+const PENDING_WORKSPACE_CHOICE_KEY = "xalora_pending_workspace_choice";
+
+const getWorkspaceTypeLabel = (workspace) => {
+    if (workspace?.type === "college") return "College";
+    if (workspace?.type === "company") return "Company";
+    return "Personal";
+};
+
+const getWorkspaceRoleLabel = (workspace) => {
+    if (!workspace?.role) return "Member";
+    return workspace.role
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 // Dropdown component with click-outside handling
 const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
@@ -88,7 +109,10 @@ const Navbar = () => {
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+    const [isSwitchingWorkspace, setIsSwitchingWorkspace] = useState(false);
+    const [isWorkspaceChooserOpen, setIsWorkspaceChooserOpen] = useState(false);
     const profileRef = useRef(null);
+    const workspaceChooserShownRef = useRef(false);
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -121,25 +145,93 @@ const Navbar = () => {
         };
     }, [isMobileMenuOpen]);
 
+    useEffect(() => {
+        if (!isAuthenticated) {
+            workspaceChooserShownRef.current = false;
+            setIsWorkspaceChooserOpen(false);
+            return;
+        }
+
+        const pendingWorkspaceChoice =
+            typeof window !== "undefined" &&
+            sessionStorage.getItem(PENDING_WORKSPACE_CHOICE_KEY) === "1";
+        const hasMultipleWorkspaces = (user?.workspaces || []).length > 1;
+
+        if (!hasMultipleWorkspaces) {
+            workspaceChooserShownRef.current = false;
+            setIsWorkspaceChooserOpen(false);
+            if (pendingWorkspaceChoice) {
+                sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+            }
+            return;
+        }
+
+        const shouldOpenChooser =
+            pendingWorkspaceChoice && !workspaceChooserShownRef.current;
+
+        if (shouldOpenChooser) {
+            workspaceChooserShownRef.current = true;
+            setIsWorkspaceChooserOpen(true);
+            sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+            return;
+        }
+
+        if (!pendingWorkspaceChoice && !isWorkspaceChooserOpen) {
+            setIsWorkspaceChooserOpen(false);
+        }
+    }, [
+        isAuthenticated,
+        isWorkspaceChooserOpen,
+        user?.workspaces?.length,
+    ]);
+
     const handleLogout = async () => {
         await dispatch(logoutUser());
+        sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+        workspaceChooserShownRef.current = false;
         navigate("/");
         setIsMobileMenuOpen(false);
         setIsProfileMenuOpen(false);
+        setIsWorkspaceChooserOpen(false);
     };
 
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
     const avatarInitial = (user?.name || user?.username || "U").charAt(0).toUpperCase();
     const isOrgTeam = user?.userType === "org_team";
-    const isCompanyCandidate = user?.userType === "org_member" && user?.organization?.interviewRounds?.length > 0;
+    const activeWorkspace = getActiveWorkspace(user);
+    const isCompanyCandidate = isCompanyCandidateWorkspace(activeWorkspace);
+    const availableWorkspaces = user?.workspaces || [];
+    const activeWorkspaceId = user?.activeWorkspace?.workspaceId || "";
 
     const getDashboardRoute = () => {
-        if (!user?.organization?.orgId && !user?.organization?._id) return "/dashboard";
-        if (user?.organization?.role === "super_admin") return "/org/dashboard";
-        if (user?.userType === "org_team") return "/org/teamdashboard";
-        return user?.organization?.degreeTypeValue || user?.organization?.programValue
-            ? "/org/student/dashboard"
-            : "/dashboard";
+        return getWorkspaceDashboardRoute(user);
+    };
+
+    const getDashboardRouteForUser = (currentUser) => {
+        return getWorkspaceDashboardRoute(currentUser);
+    };
+
+    const handleWorkspaceChange = async (nextWorkspaceId) => {
+        if (!nextWorkspaceId || nextWorkspaceId === activeWorkspaceId) return;
+
+        setIsSwitchingWorkspace(true);
+        try {
+            const nextUser = await dispatch(switchWorkspace(nextWorkspaceId)).unwrap();
+            sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+            workspaceChooserShownRef.current = true;
+            setIsWorkspaceChooserOpen(false);
+            navigate(getDashboardRouteForUser(nextUser));
+            setIsProfileMenuOpen(false);
+            setIsMobileMenuOpen(false);
+        } finally {
+            setIsSwitchingWorkspace(false);
+        }
+    };
+
+    const handleDismissWorkspaceChooser = () => {
+        sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
+        workspaceChooserShownRef.current = true;
+        setIsWorkspaceChooserOpen(false);
     };
 
     // Check if path is active
@@ -274,12 +366,58 @@ const Navbar = () => {
                                             <div className="text-sm font-medium text-white truncate">{user?.name || user?.username}</div>
                                             <div className="text-xs text-gray-400 truncate">{user?.email}</div>
                                             {user && typeof user.jbpCoins === "number" && (
-                                                <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md w-fit">
+                                        <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md w-fit">
                                                     <span>🪙</span>
                                                     <span className="font-medium">{user.jbpCoins} JBP Coins</span>
                                                 </div>
                                             )}
                                         </div>
+
+                                        {availableWorkspaces.length > 1 && (
+                                            <div className="px-4 py-3 border-t border-emerald-500/20">
+                                                <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/80">
+                                                    Workspaces
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    {availableWorkspaces.map((workspace) => {
+                                                        const isActive = workspace.workspaceId === activeWorkspaceId;
+                                                        return (
+                                                            <button
+                                                                key={workspace.workspaceId}
+                                                                onClick={() => handleWorkspaceChange(workspace.workspaceId)}
+                                                                disabled={isSwitchingWorkspace}
+                                                                className={`w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-200 disabled:opacity-60 ${
+                                                                    isActive
+                                                                        ? "border-emerald-400/60 bg-emerald-500/15"
+                                                                        : "border-white/10 bg-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/10"
+                                                                }`}
+                                                            >
+                                                                <div className="flex items-start justify-between gap-2">
+                                                                    <div className="min-w-0">
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="truncate text-sm font-medium text-white">
+                                                                                {workspace.name}
+                                                                            </div>
+                                                                            {isActive && (
+                                                                                <span className="rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                                                                                    Current
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="mt-1 text-xs text-gray-400">
+                                                                            {getWorkspaceTypeLabel(workspace)}
+                                                                            {" • "}
+                                                                            {getWorkspaceRoleLabel(workspace)}
+                                                                            {workspace.requiresPassword ? " • Protected" : ""}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
 
                                         <Link
                                             to="/profile"
@@ -481,6 +619,47 @@ const Navbar = () => {
                                             </div>
                                         )}
                                     </div>
+                                    {availableWorkspaces.length > 1 && (
+                                        <div className="px-4 pb-2">
+                                            <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/80">
+                                                Workspaces
+                                            </div>
+                                            <div className="space-y-2">
+                                                {availableWorkspaces.map((workspace) => {
+                                                    const isActive = workspace.workspaceId === activeWorkspaceId;
+                                                    return (
+                                                        <button
+                                                            key={workspace.workspaceId}
+                                                            onClick={() => handleWorkspaceChange(workspace.workspaceId)}
+                                                            disabled={isSwitchingWorkspace}
+                                                            className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 disabled:opacity-60 ${
+                                                                isActive
+                                                                    ? "border-emerald-400/60 bg-emerald-500/15"
+                                                                    : "border-white/10 bg-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/10"
+                                                            }`}
+                                                        >
+                                                            <div className="flex items-center justify-between gap-3">
+                                                                <div className="min-w-0">
+                                                                    <div className="truncate text-sm font-medium text-white">
+                                                                        {workspace.name}
+                                                                    </div>
+                                                                    <div className="mt-1 text-xs text-gray-400">
+                                                                        {getWorkspaceTypeLabel(workspace)} • {getWorkspaceRoleLabel(workspace)}
+                                                                        {workspace.requiresPassword ? " • Protected" : ""}
+                                                                    </div>
+                                                                </div>
+                                                                {isActive && (
+                                                                    <span className="rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                                                                        Current
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
                                     <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
                                         <span className="text-xl">👤</span> Profile
                                     </Link>
@@ -521,6 +700,13 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
+            <WorkspaceChooserModal
+                isOpen={isWorkspaceChooserOpen && isAuthenticated && availableWorkspaces.length > 1}
+                workspaces={availableWorkspaces}
+                activeWorkspaceId={activeWorkspaceId}
+                onSelect={handleWorkspaceChange}
+                onClose={handleDismissWorkspaceChooser}
+            />
         </nav>
     );
 };
