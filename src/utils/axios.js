@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Simple: Use environment variables, fallback to localhost in dev
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-const compilerURL = import.meta.env.VITE_COMPILER_URL || "http://localhost:3001";
+const compilerURL = import.meta.env.VITE_COMPILER_URL || "http://localhost:3002";
 
 const AUTH_EXCLUDED_ENDPOINTS = [
   "/api/v1/users/login",

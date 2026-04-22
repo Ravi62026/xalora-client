@@ -110,12 +110,15 @@ const Internships = () => {
     'SQL', 'AWS', 'Docker', 'Git', 'HTML/CSS', 'Flutter'
   ];
 
+  const pageShell =
+    "min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_24%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#020617_100%)]";
+
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
+        <div className={`${pageShell} flex items-center justify-center`}>
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto"></div>
             <p className="mt-4 text-white/70">Loading internships...</p>
           </div>
         </div>
@@ -125,21 +128,26 @@ const Internships = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black">
+      <div className={pageShell}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-center md:text-left">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Internship Portal</h1>
-                <p className="mt-2 text-sm sm:text-base text-emerald-100">Discover and enroll in exciting internship opportunities</p>
+        <div className="border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="text-left">
+                <span className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">
+                  Internship Portal
+                </span>
+                <h1 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-semibold text-white">Discover and enroll in internships</h1>
+                <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-300">
+                  Browse project-based internships, track your enrollments, and submit work from one clean workspace.
+                </p>
               </div>
               <div className="flex space-x-4">
                 <Link
                   to="/internships/enrolled"
-                  className="bg-white text-emerald-600 px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors flex items-center shadow-lg text-sm sm:text-base"
+                  className="inline-flex items-center rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition-all hover:border-cyan-400/20 hover:bg-white/[0.09]"
                 >
-                  <Users className="w-4 h-4 mr-2" />
+                  <Users className="w-4 h-4 mr-2 text-cyan-400" />
                   My Internships
                 </Link>
               </div>
@@ -149,7 +157,7 @@ const Internships = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Filters */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 mb-8 border border-white/10">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.05] p-4 sm:p-6 mb-8 backdrop-blur-xl shadow-[0_24px_80px_rgba(2,6,23,0.25)]">
             {/* Added onSubmit handler to prevent form submission */}
             <form onSubmit={(e) => e.preventDefault()} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search */}
@@ -158,7 +166,7 @@ const Internships = () => {
                 <input
                   type="text"
                   placeholder="Search internships..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 pl-10 pr-4 py-3 text-white placeholder-slate-500 transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
@@ -167,27 +175,27 @@ const Internships = () => {
               {/* Difficulty Filter */}
               <div>
                 <select
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white transition-all duration-300"
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                   value={filters.difficulty}
                   onChange={(e) => handleFilterChange('difficulty', e.target.value)}
                 >
-                  <option value="all" className="bg-gray-900">All Difficulties</option>
-                  <option value="beginner" className="bg-gray-900">Beginner</option>
-                  <option value="intermediate" className="bg-gray-900">Intermediate</option>
-                  <option value="advanced" className="bg-gray-900">Advanced</option>
+                  <option value="all" className="bg-slate-950">All Difficulties</option>
+                  <option value="beginner" className="bg-slate-950">Beginner</option>
+                  <option value="intermediate" className="bg-slate-950">Intermediate</option>
+                  <option value="advanced" className="bg-slate-950">Advanced</option>
                 </select>
               </div>
 
               {/* Tech Stack Filter */}
               <div>
                 <select
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white transition-all duration-300"
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                   value={filters.techStack}
                   onChange={(e) => handleFilterChange('techStack', e.target.value)}
                 >
-                  <option value="" className="bg-gray-900">All Technologies</option>
+                  <option value="" className="bg-slate-950">All Technologies</option>
                   {techStackOptions.map(tech => (
-                    <option key={tech} value={tech} className="bg-gray-900">{tech}</option>
+                    <option key={tech} value={tech} className="bg-slate-950">{tech}</option>
                   ))}
                 </select>
               </div>
@@ -197,7 +205,7 @@ const Internships = () => {
                 <button
                   type="button"  // Added type="button" to prevent form submission
                   onClick={() => setFilters({ difficulty: 'all', techStack: '', search: '', page: 1, limit: 12 })}
-                  className="w-full px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors border border-white/20"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white transition-colors hover:bg-white/[0.09]"
                 >
                   Clear Filters
                 </button>
@@ -210,7 +218,7 @@ const Internships = () => {
             {internships.map((internship) => (
               <div
                 key={internship._id}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-white/10 hover:border-emerald-400/30 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                className="rounded-3xl border border-white/10 bg-white/[0.05] shadow-[0_18px_60px_rgba(2,6,23,0.24)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/20 cursor-pointer"
                 onClick={() => navigate(`/internships/${internship._id}`)}
               >
                 <div className="p-5 sm:p-6">
@@ -221,7 +229,7 @@ const Internships = () => {
                     </span>
                   </div>
 
-                  <p className="text-white/70 mb-4 line-clamp-3 text-sm">{internship.description}</p>
+                  <p className="text-slate-300 mb-4 line-clamp-3 text-sm leading-relaxed">{internship.description}</p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {internship.techStack?.slice(0, 3).map((tech, index) => (
@@ -238,15 +246,15 @@ const Internships = () => {
 
                   <div className="flex items-center text-sm text-white/70 mb-4">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>{internship.duration} weeks</span>
+                    <span>{internship.duration} days</span>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <div className="text-emerald-400 font-semibold text-sm sm:text-base">
+                    <div className="text-cyan-300 font-semibold text-sm sm:text-base">
                       {internship.stipend ? `₹${internship.stipend}/month` : 'Unpaid'}
                     </div>
                     <button
-                      className="flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300 text-sm sm:text-base"
+                      className="flex items-center text-cyan-300 hover:text-cyan-200 transition-colors duration-300 text-sm sm:text-base"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/internships/${internship._id}`);
@@ -259,9 +267,9 @@ const Internships = () => {
                 </div>
 
                 {enrolledInternships.has(internship._id) && (
-                  <div className="px-6 py-3 bg-emerald-900/30 border-t border-emerald-700">
-                    <div className="flex items-center text-emerald-400 text-sm">
-                      <Users className="w-4 h-4 mr-2" />
+                  <div className="px-6 py-3 bg-cyan-500/10 border-t border-cyan-400/15">
+                    <div className="flex items-center text-cyan-300 text-sm">
+                      <Users className="w-4 h-4 mr-2 text-cyan-400" />
                       <span>Enrolled</span>
                     </div>
                   </div>
@@ -291,7 +299,7 @@ const Internships = () => {
                       key={page}
                       onClick={() => handlePageChange(page)}
                       className={`px-4 py-2 rounded-lg ${page === pagination.currentPage
-                          ? "bg-emerald-600 text-white border border-emerald-500"
+                          ? "bg-cyan-500 text-slate-950 border border-cyan-400"
                           : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                         } transition-all duration-300`}
                     >

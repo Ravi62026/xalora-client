@@ -76,6 +76,15 @@ const QUICK_ACTIONS = [
   },
 ];
 
+const DASHBOARD_PANEL =
+  "rounded-3xl border border-slate-800/80 bg-slate-900/70 shadow-[0_24px_80px_rgba(2,6,23,0.35)] backdrop-blur-xl";
+
+const DASHBOARD_PANEL_SOFT =
+  "rounded-3xl border border-white/[0.08] bg-white/[0.03] shadow-[0_24px_80px_rgba(2,6,23,0.25)] backdrop-blur-xl";
+
+const DASHBOARD_PANEL_ACCENT =
+  "rounded-3xl border border-cyan-400/15 bg-gradient-to-br from-cyan-500/10 via-slate-900/70 to-emerald-500/10 shadow-[0_24px_80px_rgba(2,6,23,0.4)] backdrop-blur-xl";
+
 // ────────────────────────────── COMPONENTS ──────────────────────────────
 
 /**
@@ -123,7 +132,7 @@ const MetricCard = ({ title, value, hint, icon: Icon, iconColor = "cyan", to }) 
     return (
       <Link
         to={to}
-        className="group block rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-5 sm:p-6 backdrop-blur-md transition-all hover:border-white/20 hover:from-white/8 hover:scale-[1.02] cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
+        className={`group block ${DASHBOARD_PANEL_SOFT} p-5 sm:p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-400/20 hover:shadow-[0_28px_90px_rgba(15,23,42,0.45)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400/50`}
         aria-label={`${title}: ${value} — click to view details`}
       >
         {inner}
@@ -133,7 +142,7 @@ const MetricCard = ({ title, value, hint, icon: Icon, iconColor = "cyan", to }) 
 
   return (
     <article
-      className="group rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-5 sm:p-6 backdrop-blur-md transition-all hover:border-white/20 hover:from-white/8 focus-within:ring-2 focus-within:ring-cyan-400/50"
+      className={`group ${DASHBOARD_PANEL_SOFT} p-5 sm:p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.15] focus-within:ring-2 focus-within:ring-cyan-400/50`}
       aria-label={`${title}: ${value}`}
     >
       <div className="flex items-start justify-between">
@@ -171,7 +180,7 @@ const MetricCard = ({ title, value, hint, icon: Icon, iconColor = "cyan", to }) 
  */
 const MetricSkeleton = () => (
   <div
-    className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6 animate-pulse"
+    className={`animate-pulse ${DASHBOARD_PANEL_SOFT} p-5 sm:p-6`}
     aria-busy="true"
     aria-label="Loading metric"
   >
@@ -198,7 +207,7 @@ const ActivityChart = ({ data, isLoading }) => {
   if (isLoading) {
     return (
       <div
-        className="rounded-2xl border border-white/10 bg-white/5 p-6 animate-pulse"
+        className={`animate-pulse ${DASHBOARD_PANEL_SOFT} p-6`}
         aria-busy="true"
       >
         <div className="h-4 w-32 rounded bg-slate-700/50" />
@@ -221,7 +230,7 @@ const ActivityChart = ({ data, isLoading }) => {
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+      className={`${DASHBOARD_PANEL} p-6`}
       aria-labelledby="activity-heading"
     >
       <div className="flex items-center justify-between gap-4">
@@ -277,7 +286,7 @@ const ActivityFeed = ({ activities, isLoading }) => {
   if (isLoading) {
     return (
       <div
-        className="rounded-2xl border border-white/10 bg-white/5 p-6 animate-pulse"
+        className={`animate-pulse ${DASHBOARD_PANEL_SOFT} p-6`}
         aria-busy="true"
       >
         <div className="h-5 w-32 rounded bg-slate-700/50" />
@@ -300,7 +309,7 @@ const ActivityFeed = ({ activities, isLoading }) => {
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+      className={`${DASHBOARD_PANEL} p-6`}
       aria-labelledby="activity-feed-heading"
     >
       <div className="flex items-center gap-3 mb-5">
@@ -312,7 +321,7 @@ const ActivityFeed = ({ activities, isLoading }) => {
 
       {activities.length === 0 ? (
         <div
-          className="rounded-lg border-2 border-dashed border-white/20 bg-slate-900/40 p-8 text-center"
+          className="rounded-2xl border border-dashed border-white/[0.12] bg-slate-950/35 p-8 text-center"
           role="status"
           aria-live="polite"
         >
@@ -326,7 +335,7 @@ const ActivityFeed = ({ activities, isLoading }) => {
           {activities.map((item, index) => (
             <li
               key={`${item.type}-${item.title}-${index}`}
-              className="group flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-slate-900/50 px-4 py-3 transition hover:border-white/20 hover:bg-slate-900/70"
+              className="group flex items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-slate-950/45 px-4 py-3.5 transition hover:border-white/[0.15] hover:bg-slate-950/65"
               role="listitem"
             >
               <div className="flex-1 min-w-0">
@@ -358,7 +367,7 @@ const StatCard = ({ title, value, icon: Icon, color = "orange" }) => {
 
   return (
     <article
-      className={`rounded-lg border p-4 sm:p-5 space-y-3 ${colorMap[color]}`}
+      className={`rounded-2xl border p-4 sm:p-5 space-y-3 ${colorMap[color]} bg-slate-950/35 backdrop-blur-xl`}
       aria-label={`${title}: ${value}`}
     >
       <div className="flex items-center gap-2">
@@ -390,7 +399,7 @@ const QuickActionCard = ({ title, subtitle, to, icon: Icon, color }) => {
   return (
     <Link
       to={to}
-      className={`flex items-center justify-between gap-3 rounded-lg border bg-gradient-to-r px-4 py-3.5 sm:py-4 transition-all hover:translate-x-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-slate-900 ${colorMap[color]}`}
+      className={`flex items-center justify-between gap-3 rounded-2xl border bg-gradient-to-r px-4 py-3.5 sm:py-4 transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-slate-950 ${colorMap[color]}`}
     >
       <div className="flex items-center gap-3">
         <Icon className="h-5 w-5 text-white flex-shrink-0" aria-hidden="true" />
@@ -411,7 +420,7 @@ const SubscriptionCard = ({ planInfo, planMeta, isLoading, isCompanyCandidate = 
   if (isLoading) {
     return (
       <div
-        className="rounded-2xl border border-white/10 bg-white/5 p-6 animate-pulse"
+        className={`animate-pulse ${DASHBOARD_PANEL_SOFT} p-6`}
         aria-busy="true"
       >
         <div className="h-5 w-24 rounded bg-slate-700/50" />
@@ -430,7 +439,7 @@ const SubscriptionCard = ({ planInfo, planMeta, isLoading, isCompanyCandidate = 
 
     return (
       <section
-        className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+        className={`${DASHBOARD_PANEL} p-6`}
         aria-labelledby="subscription-heading"
       >
         <div className="flex items-center gap-2 mb-5">
@@ -463,7 +472,7 @@ const SubscriptionCard = ({ planInfo, planMeta, isLoading, isCompanyCandidate = 
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+      className={`${DASHBOARD_PANEL} p-6`}
       aria-labelledby="subscription-heading"
     >
       <div className="flex items-center gap-2 mb-5">
@@ -515,7 +524,7 @@ const AIUsageCard = ({ aiUsage, isLoading }) => {
   if (isLoading) {
     return (
       <div
-        className="rounded-2xl border border-white/10 bg-white/5 p-6 animate-pulse"
+        className={`animate-pulse ${DASHBOARD_PANEL_SOFT} p-6`}
         aria-busy="true"
       >
         <div className="h-5 w-32 rounded bg-slate-700/50" />
@@ -543,7 +552,7 @@ const AIUsageCard = ({ aiUsage, isLoading }) => {
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+      className={`${DASHBOARD_PANEL} p-6`}
       aria-labelledby="ai-usage-heading"
     >
       <div className="flex items-center gap-2 mb-5">
@@ -613,7 +622,7 @@ const OrganizationBanner = ({ workspace, onNavigateOrgDashboard }) => {
 
   return (
     <aside
-      className="rounded-lg border border-emerald-400/20 bg-gradient-to-r from-emerald-500/10 via-transparent to-teal-500/10 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      className={`${DASHBOARD_PANEL_ACCENT} p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4`}
       role="complementary"
       aria-label="Organization information"
     >
@@ -946,34 +955,61 @@ const Dashboard = () => {
     [planInfo?.planId]
   );
 
+  const activeWorkspaceName =
+    activeWorkspace?.organization?.name || activeWorkspace?.name || "Personal workspace";
+  const activeWorkspaceType = activeWorkspace?.organization
+    ? activeWorkspace?.type === "college"
+      ? "College workspace"
+      : activeWorkspace?.type === "company"
+      ? "Company workspace"
+      : "Organization workspace"
+    : "Personal workspace";
+  const activeWorkspaceRole = activeWorkspace?.role
+    ? activeWorkspace.role.replace(/_/g, " ")
+    : "Member";
+
   return (
     <Layout>
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-8 sm:py-10 lg:py-12">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
-          {/* Header Section */}
-          <header className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <span className="inline-block text-xs font-semibold uppercase tracking-wider text-cyan-400 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 mb-3">
+      <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#020617_100%)] py-6 sm:py-8 lg:py-10">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Hero Section */}
+          <header className={`${DASHBOARD_PANEL_ACCENT} p-6 sm:p-7 lg:p-8`}>
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-3xl">
+                <span className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">
                   Dashboard
                 </span>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                  {isAuthenticated ? `Welcome, ${user?.name?.split(" ")[0] || "there"}` : "Welcome to Xalora"}
+                <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white">
+                  {isAuthenticated ? `Welcome back, ${user?.name?.split(" ")[0] || "there"}` : "Welcome to Xalora"}
                 </h1>
-                <p className="mt-2 text-slate-400 max-w-2xl">
+                <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-300 leading-relaxed">
                   {!isAuthenticated
                     ? "Sign in to access your personalized learning dashboard and track your progress."
                     : isCompanyCandidate
-                    ? "Complete your assigned AI interview rounds."
-                    : "Track your progress across DSA problems, quizzes, internships, and AI interviews."}
+                    ? "Complete your assigned AI interview rounds with a clean workspace-focused view."
+                    : "Track your progress across DSA problems, quizzes, internships, and AI interviews without the clutter."}
                 </p>
+
+                {isAuthenticated && (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200">
+                      {activeWorkspaceType}
+                    </span>
+                    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200">
+                      {activeWorkspaceName}
+                    </span>
+                    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200">
+                      Role: {activeWorkspaceRole}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="grid gap-3 sm:grid-cols-2 lg:w-[320px]">
                 <button
                   onClick={() => fetchDashboardData({ background: true })}
                   disabled={isRefreshing}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/20 bg-white/10 text-sm font-medium text-white hover:bg-white/15 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/[0.15] bg-white/[0.08] px-4 py-3 text-sm font-medium text-white transition-all duration-300 hover:border-white/[0.25] hover:bg-white/[0.12] disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
                   aria-label="Refresh dashboard data"
                 >
                   {isRefreshing ? (
@@ -987,7 +1023,7 @@ const Dashboard = () => {
                 {!isAuthenticated ? (
                   <Link
                     to="/login"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 transition-all duration-300 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
                   >
                     Sign In
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -995,7 +1031,7 @@ const Dashboard = () => {
                 ) : (
                   <Link
                     to="/profile"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 transition-all duration-300 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
                   >
                     Profile
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -1026,7 +1062,7 @@ const Dashboard = () => {
 
           {/* Metrics Grid */}
           {isLoading ? (
-            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isCompanyCandidate ? '' : 'xl:grid-cols-4'} gap-4`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isCompanyCandidate ? '' : 'xl:grid-cols-4'} gap-5`}>
               {Array(isCompanyCandidate ? 2 : 4)
                 .fill(null)
                 .map((_, i) => (
@@ -1034,7 +1070,7 @@ const Dashboard = () => {
                 ))}
             </div>
           ) : isCompanyCandidate ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <MetricCard
                 title="AI Interviews"
                 value={metrics.interviewsDone}
@@ -1052,7 +1088,7 @@ const Dashboard = () => {
               />
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
               <MetricCard
                 title="Problems Solved"
                 value={metrics.solvedProblems}
@@ -1088,9 +1124,9 @@ const Dashboard = () => {
 
           {/* Main Content Grid */}
           {!isLoading && (
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
               {/* Left Column */}
-              <div className="xl:col-span-8 space-y-6">
+              <div className="xl:col-span-8 space-y-8">
                 {!isCompanyCandidate && (
                   <ActivityChart data={weeklyActivity} isLoading={isLoading} />
                 )}
@@ -1098,25 +1134,25 @@ const Dashboard = () => {
 
                 {/* Stats Row */}
                 {!isCompanyCandidate && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <StatCard
-                    title="Current Streak"
-                    value={`${user?.stats?.currentStreak || 0} days`}
-                    icon={Flame}
-                    color="orange"
-                  />
-                  <StatCard
-                    title="In Progress"
-                    value={metrics.attemptedProblems}
-                    icon={TrendingUp}
-                    color="indigo"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <StatCard
+                      title="Current Streak"
+                      value={`${user?.stats?.currentStreak || 0} days`}
+                      icon={Flame}
+                      color="orange"
+                    />
+                    <StatCard
+                      title="In Progress"
+                      value={metrics.attemptedProblems}
+                      icon={TrendingUp}
+                      color="indigo"
+                    />
+                  </div>
                 )}
               </div>
 
               {/* Right Column */}
-              <div className="xl:col-span-4 space-y-6">
+              <div className="xl:col-span-4 space-y-8">
                 <SubscriptionCard
                   planInfo={planInfo}
                   planMeta={planMeta}
@@ -1131,14 +1167,21 @@ const Dashboard = () => {
 
                 {/* Quick Actions */}
                 <section
-                  className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6 backdrop-blur-md"
+                  className={`${DASHBOARD_PANEL} p-6`}
                   aria-labelledby="quick-actions-heading"
                 >
-                  <h2 id="quick-actions-heading" className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-slate-400" aria-hidden="true" />
-                    Quick Actions
-                  </h2>
-                  <nav className="space-y-2">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div>
+                      <h2 id="quick-actions-heading" className="text-lg font-semibold text-white">
+                        Quick Actions
+                      </h2>
+                      <p className="mt-1 text-xs text-slate-400">
+                        Jump back into the parts of Xalora you use most.
+                      </p>
+                    </div>
+                    <ShieldCheck className="h-5 w-5 text-slate-500" aria-hidden="true" />
+                  </div>
+                  <nav className="space-y-2.5">
                     {(isCompanyCandidate
                       ? QUICK_ACTIONS.filter((a) => a.to === "/my-interviews")
                       : QUICK_ACTIONS
@@ -1155,7 +1198,7 @@ const Dashboard = () => {
                 {/* Unauthenticated CTA */}
                 {!isAuthenticated && (
                   <section
-                    className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-6"
+                    className="rounded-3xl border border-amber-400/20 bg-amber-500/10 p-6"
                     aria-labelledby="login-cta-heading"
                   >
                     <h2 id="login-cta-heading" className="text-sm font-semibold text-amber-200 mb-2">
