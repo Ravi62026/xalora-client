@@ -52,7 +52,7 @@ export const Footer = () => {
               <li><a href="/quizzes" className="text-gray-300 hover:text-white transition-colors">Quizzes</a></li>
               <li><a href="/interviews" className="text-gray-300 hover:text-white transition-colors">Interviews</a></li>
               <li><a href="/internships" className="text-gray-300 hover:text-white transition-colors">Internships</a></li>
-              <li><a href="/resume-ai" className="text-gray-300 hover:text-white transition-colors">Resume AI</a></li>
+              <li><a href="https://www.resume.xalora.one" className="text-gray-300 hover:text-white transition-colors">Resume AI</a></li>
             </ul>
           </div>
 

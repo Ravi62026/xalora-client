@@ -104,7 +104,7 @@ const Layout = ({ children, showNavbar = true, showFooter = true }) => {
                                         <span className="w-1 h-1 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                         Internships
                                     </a></li>
-                                    <li><a href="/resume-ai" className="text-white/90 hover:text-emerald-400 transition-colors duration-300 flex items-center gap-2 group">
+                                    <li><a href="https://www.resume.xalora.one" className="text-white/90 hover:text-emerald-400 transition-colors duration-300 flex items-center gap-2 group">
                                         <span className="w-1 h-1 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                                         Resume AI
                                     </a></li>

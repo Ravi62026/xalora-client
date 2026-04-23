@@ -16,6 +16,7 @@ const ChevronDown = ({ className = "" }) => (
 );
 
 const PENDING_WORKSPACE_CHOICE_KEY = "xalora_pending_workspace_choice";
+const RESUME_SITE_URL = "https://www.resume.xalora.one";
 
 const getWorkspaceTypeLabel = (workspace) => {
     if (workspace?.type === "college") return "College";
@@ -75,6 +76,26 @@ const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
                                         {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
                                     </div>
                                 </button>
+                            );
+                        }
+
+                        if (item.external || item.href) {
+                            return (
+                                <a
+                                    key={item.href || item.to}
+                                    href={item.href || item.to}
+                                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        closeMobileMenu?.();
+                                    }}
+                                >
+                                    <span className="text-xl">{item.icon}</span>
+                                    <div>
+                                        <div className="font-medium">{item.label}</div>
+                                        {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                    </div>
+                                </a>
                             );
                         }
 
@@ -258,7 +279,7 @@ const Navbar = () => {
     ];
 
     const aiToolsItems = [
-        { to: "/resume-ai", icon: "📄", label: "Resume AI", desc: "ATS-ready resume analysis" },
+        { href: RESUME_SITE_URL, external: true, icon: "📄", label: "Resume AI", desc: "ATS-ready resume analysis" },
         { to: "/ai-interview/setup", icon: "🎥", label: "AI Interview", desc: "Mock interview practice" },
         { to: "/job-genie", icon: "🔮", label: "Job Genie", desc: "AI job search" },
         {

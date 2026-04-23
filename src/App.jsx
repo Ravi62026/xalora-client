@@ -22,7 +22,6 @@ import {
   Problem,
   Quiz,
   TakeQuiz,
-  ResumeAI,
   Pricing,
   Algorithms,
   DataStructures,
@@ -93,6 +92,16 @@ const AcceptableUsePolicy = React.lazy(() => import("./pages/Legal/AcceptableUse
 import CookieConsentBanner from "./components/Cookie/CookieConsentBanner";
 import SEO from "./components/SEO";
 import { initializeAnalytics, trackPageView } from "./utils/analytics";
+
+const RESUME_SITE_URL = "https://www.resume.xalora.one";
+
+function ExternalRedirect({ to }) {
+  useEffect(() => {
+    window.location.replace(to);
+  }, [to]);
+
+  return null;
+}
 
 // Component to show page-specific loading messages
 const LoadingMessage = () => {
@@ -400,8 +409,8 @@ const AppContent = () => {
         <Route path="/quiz-history" element={<QuizAnalytics />} />
         <Route path="/quiz/report/:submissionId" element={<QuizReport />} />
         <Route path="/quiz-report/:submissionId" element={<QuizReport />} />
-        <Route path="/resume-ai" element={<ResumeAI />} />
-        <Route path="/resume-ai/:sessionId" element={<ResumeAI />} />
+        <Route path="/resume-ai" element={<ExternalRedirect to={RESUME_SITE_URL} />} />
+        <Route path="/resume-ai/:sessionId" element={<ExternalRedirect to={RESUME_SITE_URL} />} />
         <Route path="/internships" element={<Internships />} />
         <Route path="/internships/enrolled" element={<EnrolledInternships />} />
         <Route path="/internships/:id" element={<InternshipDetail />} />
