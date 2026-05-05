@@ -109,6 +109,10 @@ const ApiRoutes = {
         myInterviews: "/api/v1/interview/my-interviews",
         details: (sessionId) => `/api/v1/interview/details/${sessionId}`,
         delete: (sessionId) => `/api/v1/interview/${sessionId}`,
+        // Conversational mode routes (Phase 5)
+        conversationInit: "/api/v1/interview/conversation/init",
+        conversationUtterance: "/api/v1/interview/conversation/utterance",
+        conversationStatus: (sessionId) => `/api/v1/interview/conversation/status/${sessionId}`,
     },
     organization: {
         validateSetupToken: (token) => `/api/v1/organizations/setup/validate/${token}`,

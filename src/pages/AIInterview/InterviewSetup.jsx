@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, User, Briefcase, Building, FileText, Loader2, AlertCircle, Sparkles, Eye, EyeOff, CheckCircle2, Circle } from 'lucide-react';
+import { Upload, User, Briefcase, Building, FileText, Loader2, AlertCircle, Sparkles, Eye, EyeOff, CheckCircle2, Circle, Mic, MessageSquare, Lock, Zap } from 'lucide-react';
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
 import { useSelector } from 'react-redux';
@@ -326,13 +326,25 @@ const InterviewSetup = () => {
     companyType: isCompanyCandidate ? 'product_based' : 'startup',
     interviewMode: isCompanyCandidate ? 'specific' : 'full',
     specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
+    selectedRole: '', // Dropdown value
+    customPosition: '', // Manual input if 'other'
+    companyType: isCompanyCandidate ? 'product_based' : 'startup',
+    interviewMode: isCompanyCandidate ? 'specific' : 'full',
+    specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
     jobDescription: '',
-    codingDifficulty: isCompanyCandidate ? 'medium' : 'auto'
+    codingDifficulty: isCompanyCandidate ? 'medium' : 'auto',
+    interviewStyle: 'manual', // 'manual' | 'conversational'
+    personality: 'professional' // 'professional' | 'mentoring' | 'challenging'
   });
   const [resumeFile, setResumeFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [userPlan, setUserPlan] = useState(null); // fetched from /api/subscription/current
+
+  // Allowed plans for conversational mode (mirrors server CONVERSATIONAL_MODE_PLANS)
+  const CONVERSATIONAL_ALLOWED = ['nexus', 'infinity', 'org'];
+  const canUseConversational = !userPlan || CONVERSATIONAL_ALLOWED.includes(userPlan?.toLowerCase());
   const [showPreviewJD, setShowPreviewJD] = useState(false);
 
   // Progress tracking
@@ -351,6 +363,22 @@ const InterviewSetup = () => {
   const isSimplifiedForm = isResumeDeepDive || isJDBased;
 
   // Update position when role selection changes
+  // Fetch user plan for conversational mode gating
+  useEffect(() => {
+    const fetchPlan = async () => {
+      try {
+        const res = await fetch('/api/subscription/current', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserPlan(data?.subscription?.planId || 'spark');
+        }
+      } catch { /* silently fail — default to allowed */ }
+    };
+    fetchPlan();
+  }, []);
+
   useEffect(() => {
     if (formData.selectedRole && formData.selectedRole !== 'other') {
       const roleLabel = PREDEFINED_ROLES.find(r => r.value === formData.selectedRole)?.label || '';
@@ -414,6 +442,8 @@ const InterviewSetup = () => {
       submitData.append('candidateName', formData.name);
       submitData.append('interviewMode', formData.interviewMode);
       submitData.append('codingDifficulty', formData.codingDifficulty);
+      submitData.append('interviewStyle', formData.interviewStyle || 'manual');
+      submitData.append('personality', formData.personality || 'professional');
       if (formData.specificRound) submitData.append('specificRound', formData.specificRound);
 
       // Simplified mode: only pass what's needed
@@ -495,13 +525,16 @@ const InterviewSetup = () => {
         localStorage.setItem('interviewSessionId', response.data.sessionId);
         localStorage.setItem('interviewSessionData', JSON.stringify({
           sessionId: response.data.sessionId,
+          userId: response.data.userId,
           candidateInfo: response.data.candidateInfo,
           resumeAnalysis: response.data.resumeAnalysis,
           position: formData.position,
           companyType: formData.companyType,
           interviewMode: formData.interviewMode,
           specificRound: formData.specificRound,
-          codingDifficulty: formData.codingDifficulty
+          codingDifficulty: formData.codingDifficulty,
+          interviewStyle: formData.interviewStyle,
+          personality: formData.personality
         }));
 
         // Mark all done
@@ -653,170 +686,106 @@ const InterviewSetup = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Round selection for company candidates */}
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertCircle className="w-5 h-5 text-emerald-400" />
-                  <h2 className="text-lg font-semibold text-white">Select Your Interview Round</h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {assignedRounds.map(round => (
-                    <label key={round} className="relative group cursor-pointer">
-                      <input
-                        type="radio"
-                        name="specificRound"
-                        value={round}
-                        checked={formData.specificRound === round}
-                        onChange={(e) => setFormData({ ...formData, specificRound: e.target.value, interviewMode: 'specific' })}
-                        className="hidden"
-                        disabled={isLoading}
-                      />
-                      <div className={`p-5 rounded-2xl border-2 transition-all duration-300 text-center ${formData.specificRound === round
-                        ? 'bg-emerald-600/10 border-emerald-500 shadow-lg shadow-emerald-500/20'
-                        : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'
-                      }`}>
-                        <p className={`text-sm font-bold capitalize ${formData.specificRound === round ? 'text-emerald-400' : 'text-slate-300'}`}>
-                          {round.replace(/_/g, ' ')}
-                        </p>
-                      </div>
-                    </label>
-                  ))}
-                </div>
               </section>
             )}
 
-            {/* 1. Interview Mode — Choose First (hidden for company candidates) */}
-            {!isCompanyCandidate && (
+            {/* 2. Interview Style — Manual vs Conversational */}
             <section className="space-y-4">
               <div className="flex items-center gap-2 mb-4">
-                <Building className="w-5 h-5 text-emerald-400" />
-                <h2 className="text-lg font-semibold text-white">Choose Interview Mode</h2>
+                <Mic className="w-5 h-5 text-purple-400" />
+                <h2 className="text-lg font-semibold text-white">Interview Style</h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-500/10 rounded-full border border-purple-500/20 ml-2">
+                  <Sparkles className="w-3 h-3 text-purple-400" />
+                  <span className="text-[10px] text-purple-300 font-medium">NEW</span>
+                </span>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Full Interview Card */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <label className="relative group cursor-pointer">
-                  <input
-                    type="radio"
-                    name="interviewMode"
-                    value="full"
-                    checked={formData.interviewMode === 'full'}
-                    onChange={(e) => setFormData({ ...formData, interviewMode: e.target.value, specificRound: '' })}
-                    className="hidden"
-                    disabled={isLoading}
-                  />
-                  <div className={`h-full p-6 rounded-2xl border-2 transition-all duration-300 ${formData.interviewMode === 'full'
-                    ? 'bg-blue-600/10 border-blue-500 shadow-lg shadow-blue-500/20 translate-y-[-4px]'
-                    : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'
-                    }`}>
-                    <div className="flex justify-between items-start mb-4">
-                      <div className={`p-3 rounded-xl ${formData.interviewMode === 'full' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-400 group-hover:text-white transition-colors'}`}>
-                        <Briefcase className="w-6 h-6" />
-                      </div>
-                      {formData.interviewMode === 'full' && <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />}
+                  <input type="radio" name="interviewStyle" value="manual"
+                    checked={formData.interviewStyle === 'manual'}
+                    onChange={(e) => setFormData({ ...formData, interviewStyle: e.target.value })}
+                    className="hidden" disabled={isLoading} />
+                  <div className={`h-full p-5 rounded-2xl border-2 transition-all duration-300 ${formData.interviewStyle === 'manual' ? 'bg-blue-600/10 border-blue-500 shadow-lg shadow-blue-500/20' : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'}`}>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className={`p-2.5 rounded-xl ${formData.interviewStyle === 'manual' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-400'}`}><MessageSquare className="w-5 h-5" /></div>
+                      {formData.interviewStyle === 'manual' && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse" />}
                     </div>
-                    <h3 className={`text-lg font-bold mb-2 ${formData.interviewMode === 'full' ? 'text-white' : 'text-slate-300'}`}>Full Interview</h3>
-                    <p className="text-sm text-slate-500 mb-4 leading-relaxed">Complete simulation with all 7 rounds — including Resume Deep Dive and JD-based rounds.</p>
-                    <div className="flex flex-wrap gap-2">
-                      {['Formal', 'DSA', 'Sys Design', 'HR', 'Resume', 'JD'].map(tag => (
-                        <span key={tag} className="text-[10px] uppercase font-bold px-2 py-1 rounded bg-slate-900 border border-slate-700 text-slate-400">{tag}</span>
+                    <h3 className={`text-base font-bold mb-1.5 ${formData.interviewStyle === 'manual' ? 'text-white' : 'text-slate-300'}`}>📝 Manual Mode</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">Record your answer, review it, then submit. Full control over each response.</p>
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {['Record', 'Review', 'Submit'].map(tag => (
+                        <span key={tag} className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400">{tag}</span>
                       ))}
                     </div>
                   </div>
                 </label>
-
-                {/* Practice Mode Card */}
-                <label className="relative group cursor-pointer">
-                  <input
-                    type="radio"
-                    name="interviewMode"
-                    value="practice"
-                    checked={formData.interviewMode === 'practice'}
-                    onChange={(e) => setFormData({ ...formData, interviewMode: e.target.value, specificRound: '' })}
-                    className="hidden"
-                    disabled={isLoading}
-                  />
-                  <div className={`h-full p-6 rounded-2xl border-2 transition-all duration-300 ${formData.interviewMode === 'practice'
-                    ? 'bg-purple-600/10 border-purple-500 shadow-lg shadow-purple-500/20 translate-y-[-4px]'
-                    : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'
-                    }`}>
-                    <div className="flex justify-between items-start mb-4">
-                      <div className={`p-3 rounded-xl ${formData.interviewMode === 'practice' ? 'bg-purple-500 text-white' : 'bg-slate-700 text-slate-400 group-hover:text-white transition-colors'}`}>
-                        <Sparkles className="w-6 h-6" />
+                <label className={`relative group ${canUseConversational ? 'cursor-pointer' : 'cursor-not-allowed'}`}>
+                  <input type="radio" name="interviewStyle" value="conversational"
+                    checked={formData.interviewStyle === 'conversational'}
+                    onChange={(e) => canUseConversational && setFormData({ ...formData, interviewStyle: e.target.value })}
+                    className="hidden" disabled={isLoading || !canUseConversational} />
+                  <div className={`relative h-full p-5 rounded-2xl border-2 transition-all duration-300 ${!canUseConversational ? 'bg-slate-800/30 border-slate-700/50 opacity-70' : formData.interviewStyle === 'conversational' ? 'bg-purple-600/10 border-purple-500 shadow-lg shadow-purple-500/20' : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'}`}>
+                    {!canUseConversational && (
+                      <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 bg-amber-500/15 border border-amber-500/30 rounded-full">
+                        <Lock className="w-3 h-3 text-amber-400" />
+                        <span className="text-[10px] text-amber-300 font-bold">Nexus+</span>
                       </div>
-                      {formData.interviewMode === 'practice' && <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse" />}
+                    )}
+                    <div className="flex justify-between items-start mb-3">
+                      <div className={`p-2.5 rounded-xl ${!canUseConversational ? 'bg-slate-700 text-slate-500' : formData.interviewStyle === 'conversational' ? 'bg-purple-500 text-white' : 'bg-slate-700 text-slate-400'}`}><Mic className="w-5 h-5" /></div>
+                      {formData.interviewStyle === 'conversational' && canUseConversational && <div className="w-2.5 h-2.5 bg-purple-500 rounded-full animate-pulse" />}
                     </div>
-                    <h3 className={`text-lg font-bold mb-2 ${formData.interviewMode === 'practice' ? 'text-white' : 'text-slate-300'}`}>Practice Mode</h3>
-                    <p className="text-sm text-slate-500 mb-4 leading-relaxed">Quick warm-up session focusing on verbal technical questions (No coding).</p>
-                    <div className="flex flex-wrap gap-2">
-                      {['Theory', 'Concepts', 'Behavioral'].map(tag => (
-                        <span key={tag} className="text-[10px] uppercase font-bold px-2 py-1 rounded bg-slate-900 border border-slate-700 text-slate-400">{tag}</span>
+                    <h3 className={`text-base font-bold mb-1.5 ${!canUseConversational ? 'text-slate-500' : formData.interviewStyle === 'conversational' ? 'text-white' : 'text-slate-300'}`}>🎙️ Conversational Mode</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">Talk naturally like a real interview. AI listens & responds in real-time.</p>
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {['Voice', 'Real-time', 'Natural'].map(tag => (
+                        <span key={tag} className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400">{tag}</span>
                       ))}
                     </div>
-                  </div>
-                </label>
-
-                {/* Specific Round Card */}
-                <label className="relative group cursor-pointer">
-                  <input
-                    type="radio"
-                    name="interviewMode"
-                    value="specific"
-                    checked={formData.interviewMode === 'specific'}
-                    onChange={(e) => setFormData({ ...formData, interviewMode: e.target.value })}
-                    className="hidden"
-                    disabled={isLoading}
-                  />
-                  <div className={`h-full p-6 rounded-2xl border-2 transition-all duration-300 ${formData.interviewMode === 'specific'
-                    ? 'bg-emerald-600/10 border-emerald-500 shadow-lg shadow-emerald-500/20 translate-y-[-4px]'
-                    : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'
-                    }`}>
-                    <div className="flex justify-between items-start mb-4">
-                      <div className={`p-3 rounded-xl ${formData.interviewMode === 'specific' ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400 group-hover:text-white transition-colors'}`}>
-                        <User className="w-6 h-6" />
-                      </div>
-                      {formData.interviewMode === 'specific' && <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />}
-                    </div>
-                    <h3 className={`text-lg font-bold mb-2 ${formData.interviewMode === 'specific' ? 'text-white' : 'text-slate-300'}`}>Specific Round</h3>
-                    <p className="text-sm text-slate-500 mb-4 leading-relaxed">Deep dive into a single topic. Perfect for targeted preparation.</p>
+                    {!canUseConversational && (
+                      <button type="button" onClick={() => window.location.href = '/pricing'}
+                        className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl text-[11px] text-amber-300 font-semibold transition-all">
+                        <Zap className="w-3 h-3" />
+                        Upgrade to Nexus to unlock
+                      </button>
+                    )}
                   </div>
                 </label>
               </div>
-
-              {formData.interviewMode === 'specific' && (
-                <div className="mt-8 p-6 bg-emerald-900/10 border border-emerald-500/30 rounded-2xl animate-in zoom-in-95 duration-300">
-                  <label className="block text-sm font-medium text-emerald-400 mb-3">
-                    Select Target Round
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={formData.specificRound}
-                      onChange={(e) => setFormData({ ...formData, specificRound: e.target.value })}
-                      className="w-full px-5 py-4 bg-slate-900/80 border border-emerald-500/30 rounded-xl text-white appearance-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none cursor-pointer"
-                      disabled={isLoading}
-                    >
-                      <option value="" className="bg-slate-900">Choose a round...</option>
-                      <option value="formal_qa" className="bg-slate-900">🎯 Formal Q&A - Intro &amp; Basics</option>
-                      <option value="technical" className="bg-slate-900">💻 Technical - Deep Dive</option>
-                      <option value="coding" className="bg-slate-900">⚡ Coding - Algorithms &amp; DSA</option>
-                      <option value="system_design" className="bg-slate-900">🏗️ System Design - Architecture</option>
-                      <option value="behavioral" className="bg-slate-900">🤝 HR - Culture &amp; Fit</option>
-                      <option value="resume_deep_dive" className="bg-slate-900">📄 Resume Deep Dive - Your Experience</option>
-                      <option value="jd_based" className="bg-slate-900">📋 JD Based - Role Requirements</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                    </div>
+              {formData.interviewStyle === 'conversational' && canUseConversational && (
+                <div className="mt-4 p-5 bg-purple-900/10 border border-purple-500/30 rounded-2xl animate-in zoom-in-95 duration-300">
+                  <label className="block text-sm font-medium text-purple-400 mb-3">Interviewer Personality</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { value: 'professional', emoji: '🎯', label: 'Professional', desc: 'Formal & structured' },
+                      { value: 'mentoring', emoji: '🤝', label: 'Mentoring', desc: 'Supportive & guiding' },
+                      { value: 'challenging', emoji: '⚡', label: 'Challenging', desc: 'Push your limits' },
+                    ].map(p => (
+                      <label key={p.value} className="cursor-pointer">
+                        <input type="radio" name="personality" value={p.value}
+                          checked={formData.personality === p.value}
+                          onChange={(e) => setFormData({ ...formData, personality: e.target.value })}
+                          className="hidden" disabled={isLoading} />
+                        <div className={`p-3 rounded-xl border-2 text-center transition-all ${formData.personality === p.value ? 'bg-purple-600/15 border-purple-500 shadow-md shadow-purple-500/10' : 'bg-slate-800/50 border-slate-700 hover:border-slate-500'}`}>
+                          <div className="text-xl mb-1">{p.emoji}</div>
+                          <p className={`text-xs font-bold ${formData.personality === p.value ? 'text-purple-300' : 'text-slate-300'}`}>{p.label}</p>
+                          <p className="text-[10px] text-slate-500 mt-0.5">{p.desc}</p>
+                        </div>
+                      </label>
+                    ))}
                   </div>
+                  <p className="text-[11px] text-slate-500 mt-3 flex items-center gap-1.5">
+                    <AlertCircle className="w-3 h-3" />
+                    Use in a quiet environment with a good microphone for best results
+                  </p>
                 </div>
               )}
             </section>
-            )}
 
             {/* Divider */}
             <div className="border-t border-slate-700/50" />
 
-            {/* ── SIMPLIFIED FORM for resume_deep_dive & jd_based ── */}
+
             {isSimplifiedForm && (
               <section className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
                 {/* Round badge */}

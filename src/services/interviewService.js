@@ -527,6 +527,99 @@ const interviewService = {
             throw error;
         }
     },
+
+    // ════════════════════════════════════════════════════════
+    // CONVERSATIONAL MODE API METHODS (Phase 5)
+    // REST fallbacks for Socket.IO functionality
+    // ════════════════════════════════════════════════════════
+
+    /**
+     * Initialize a conversational interview session
+     * @param {string} sessionId - Interview session ID
+     * @param {string} roundType - Round type
+     * @param {string} personality - Agent personality
+     */
+    initConversation: async (sessionId, roundType, personality = "professional") => {
+        const method = "initConversation";
+        log.info(method, `Initializing conversational session for ${roundType}`);
+        log.request(method, ApiRoutes.interview.conversationInit, { sessionId, roundType, personality });
+
+        try {
+            const response = await axiosInstance.post(ApiRoutes.interview.conversationInit, {
+                sessionId,
+                roundType,
+                personality
+            });
+            log.success(method, "Conversation initialized", response.data?.data);
+            return response.data;
+        } catch (error) {
+            log.error(method, "Failed to init conversation", {
+                status: error.response?.status,
+                message: error.response?.data?.message || error.message
+            });
+            throw error;
+        }
+    },
+
+    /**
+     * Process a text utterance (REST fallback for Socket.IO)
+     * @param {string} sessionId
+     * @param {string} roundType
+     * @param {number} questionIndex
+     * @param {string} utterance
+     * @param {string} currentQuestion
+     */
+    processUtterance: async (sessionId, roundType, questionIndex, utterance, currentQuestion) => {
+        const method = "processUtterance";
+        log.info(method, `Processing utterance: "${utterance?.substring(0, 50)}..."`);
+        log.request(method, ApiRoutes.interview.conversationUtterance, {
+            sessionId, roundType, questionIndex, utteranceLength: utterance?.length
+        });
+
+        try {
+            const response = await axiosInstance.post(ApiRoutes.interview.conversationUtterance, {
+                sessionId,
+                roundType,
+                questionIndex,
+                utterance,
+                currentQuestion
+            });
+            log.success(method, "Utterance processed", {
+                intent: response.data?.data?.intent,
+                action: response.data?.data?.action
+            });
+            return response.data;
+        } catch (error) {
+            log.error(method, "Failed to process utterance", {
+                status: error.response?.status,
+                message: error.response?.data?.message || error.message
+            });
+            throw error;
+        }
+    },
+
+    /**
+     * Get current conversational session status (for reconnection)
+     * @param {string} sessionId
+     */
+    getConversationStatus: async (sessionId) => {
+        const method = "getConversationStatus";
+        log.info(method, `Getting conversation status for ${sessionId}`);
+
+        try {
+            const response = await axiosInstance.get(
+                ApiRoutes.interview.conversationStatus(sessionId)
+            );
+            log.success(method, "Status retrieved", response.data?.data);
+            return response.data;
+        } catch (error) {
+            log.error(method, "Failed to get conversation status", {
+                status: error.response?.status,
+                message: error.response?.data?.message || error.message
+            });
+            throw error;
+        }
+    },
 };
 
 export default interviewService;

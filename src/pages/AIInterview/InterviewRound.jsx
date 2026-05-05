@@ -25,6 +25,7 @@ import interviewService from '../../services/interviewService';
 import useFaceProctoring from '../../hooks/useFaceProctoring';
 import ReactMarkdown from 'react-markdown';
 import Editor from '@monaco-editor/react';
+import ConversationalInterview from '../../components/AIInterview/ConversationalInterview';
 
 // Round configuration
 const ROUND_CONFIG = {
@@ -1811,6 +1812,53 @@ const InterviewRound = () => {
     };
   }, [displayQuestion]);
 
+  // ── Conversational Mode Gate ──────────────────────────
+  // If session is configured for conversational interview,
+  // render the ConversationalInterview component instead.
+  if (sessionData?.interviewStyle === 'conversational') {
+    // Resolve userId: prefer value stored in sessionData (new sessions),
+    // fall back to decoding the JWT access token for existing sessions.
+    const resolveUserId = () => {
+      if (sessionData?.userId) return sessionData.userId;
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return null;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload._id || payload.sub || payload.id || null;
+      } catch {
+        return null;
+      }
+    };
+    const resolvedUserId = resolveUserId();
+
+    return (
+      <Layout showNavbar={false} showFooter={false}>
+        <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100 p-4">
+          <ConversationalInterview
+            sessionId={paramSessionId}
+            roundType={roundConfig.type}
+            personality={sessionData?.personality || 'professional'}
+            candidateName={sessionData?.candidateInfo?.name || 'Candidate'}
+            currentQuestionData={currentQuestion}
+            questionNumber={questionNumber}
+            maxQuestions={roundConfig.maxQuestions}
+            onRoundComplete={() => {
+              setIsComplete(true);
+              navigate(`/ai-interview/${paramSessionId}/report`);
+            }}
+            onFallbackToManual={() => {
+              const updated = { ...sessionData, interviewStyle: 'manual' };
+              localStorage.setItem('interviewSessionData', JSON.stringify(updated));
+              setSessionData(updated);
+            }}
+            userId={resolvedUserId}
+          />
+        </div>
+      </Layout>
+    );
+  }
+
+  // ── Manual / Structured Mode (existing, unchanged) ──
   return (
     <Layout showNavbar={false} showFooter={false}>
       <style>{`
