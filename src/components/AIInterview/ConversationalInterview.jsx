@@ -102,6 +102,7 @@ export default function ConversationalInterview({
     maxQuestions = 5,
     onRoundComplete,
     onFallbackToManual,
+    onFetchNextQuestion,
     userId,
 }) {
     // ── Phase: mic_check | active | completed ──
@@ -174,6 +175,23 @@ export default function ConversationalInterview({
             updateQuestion(currentQuestionData.text, questionNumber - 1);
         }
     }, [currentQuestionData?.text, deepgramReady]);
+
+    // ── Automatic next question fetch ──
+    const handledNextStepRef = useRef(false);
+
+    useEffect(() => {
+        // Reset handled flag when the next step changes (e.g. to "waiting_for_candidate" or null)
+        if (turnInfo?.nextStep !== "next_question") {
+            handledNextStepRef.current = false;
+        }
+
+        // Fetch the next question automatically if the backend decided it's time
+        if (turnInfo?.nextStep === "next_question" && !handledNextStepRef.current) {
+            handledNextStepRef.current = true;
+            console.log("🗣️ [Conversational] Backend requested next question, fetching automatically...");
+            onFetchNextQuestion?.();
+        }
+    }, [turnInfo?.nextStep, onFetchNextQuestion]);
 
     // ── Evaluation reveal on round complete ──
     useEffect(() => {

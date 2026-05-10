@@ -1851,6 +1851,7 @@ const InterviewRound = () => {
               localStorage.setItem('interviewSessionData', JSON.stringify(updated));
               setSessionData(updated);
             }}
+            onFetchNextQuestion={fetchQuestion}
             userId={resolvedUserId}
           />
         </div>

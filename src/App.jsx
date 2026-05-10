@@ -21,6 +21,8 @@ import {
   MyProblems,
   Problem,
   Quiz,
+  Aptitude,
+  AptitudeSession,
   TakeQuiz,
   Pricing,
   Algorithms,
@@ -404,6 +406,8 @@ const AppContent = () => {
         <Route path="/problems/:id/:interviewSessionId" element={<Problem />} />
         <Route path="/problem/:id/:interviewSessionId" element={<Problem />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/aptitude" element={<Aptitude />} />
+        <Route path="/quiz/aptitude/session" element={<AptitudeSession />} />
         <Route path="/quiz/:id" element={<TakeQuiz />} />
         <Route path="/quiz/analytics" element={<QuizAnalytics />} />
         <Route path="/quiz-history" element={<QuizAnalytics />} />

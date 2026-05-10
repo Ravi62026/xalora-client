@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import { useApiCall } from '../hooks';
 import axiosInstance from '../utils/axios';
 import ApiRoutes from '../routes/routes';
-import { setUser } from '../store/slices/userSlice'; // Import the action to update user data
 
 const QUESTION_TYPE_LABELS = {
     theory: 'Theory',
@@ -47,7 +46,6 @@ const CodeCanvas = ({ code, language, onCopy }) => {
 const TakeQuiz = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Add dispatch
     const { isAuthenticated, user } = useSelector((state) => state.user); // Get user from Redux store
     const [quiz, setQuiz] = useState(null);
     const [answers, setAnswers] = useState([]);
@@ -187,20 +185,6 @@ const TakeQuiz = () => {
                 result: response.data,
                 savedAt: new Date().toISOString()
             });
-            
-            // Update user data in Redux store to reflect new JBP coins
-            // Instead of dispatching initializeAuth which might cause a full re-render,
-            // we'll just update the user data directly
-            if (response.data.jbpCoinsEarned > 0) {
-                // Dispatch a specific action to update just the user data
-                dispatch(setUser({
-                    ...user,
-                    stats: {
-                        ...user.stats,
-                        jbpCoins: (user.stats?.jbpCoins || 0) + response.data.jbpCoinsEarned
-                    }
-                }));
-            }
         } catch (error) {
             console.error('Error submitting quiz:', error);
             setSubmissionError('Submission failed. Your attempt was not saved, so the quiz will stay open.');

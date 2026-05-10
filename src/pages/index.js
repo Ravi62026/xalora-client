@@ -14,6 +14,8 @@ export const Problems = lazy(() => import("./Problems"));
 export const MyProblems = lazy(() => import("./MyProblems"));
 export const Problem = lazy(() => import("./Problem"));
 export const Quiz = lazy(() => import("./Quiz"));
+export const Aptitude = lazy(() => import("./Aptitude"));
+export const AptitudeSession = lazy(() => import("./AptitudeSession"));
 export const TakeQuiz = lazy(() => import("./TakeQuiz"));
 export const ResumeAI = lazy(() => import("./ResumeAI"));
 export const Pricing = lazy(() => import("./Pricing"));

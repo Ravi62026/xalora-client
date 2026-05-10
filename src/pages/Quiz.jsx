@@ -2,6 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import {
+    ArrowRight,
+    Brain,
+    BookOpen,
+    Calculator,
+    PlayCircle,
+    ShieldCheck,
+    Shuffle,
+    Timer,
+} from 'lucide-react';
 import axiosInstance from '../utils/axios';
 import ApiRoutes from '../routes/routes';
 
@@ -192,6 +202,10 @@ const Quiz = () => {
         navigate(`/quiz/report/${submissionId}`);
     };
 
+    const handleStartAptitude = () => {
+        navigate('/quiz/aptitude');
+    };
+
     const topicOptions = Array.from(
         new Set(quizzes.map((quiz) => quiz.topic).filter(Boolean))
     ).sort((a, b) => a.localeCompare(b));
@@ -276,6 +290,97 @@ const Quiz = () => {
                                 <p className="mt-1 text-2xl font-bold text-white">
                                     {Math.max(quizzes.length - attemptedCount, 0)}
                                 </p>
+                            </div>
+                        </div>
+
+                        <div className="mb-6 rounded-3xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 via-slate-900/80 to-emerald-500/10 px-5 py-5 text-left shadow-lg shadow-black/20 sm:px-6">
+                            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                                <div className="max-w-3xl">
+                                    <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200">
+                                        <PlayCircle className="h-3.5 w-3.5" />
+                                        Aptitude test
+                                    </p>
+                                    <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl">
+                                        Start a locked aptitude flow from the quiz hub.
+                                    </h2>
+                                    <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
+                                        Choose Quant, Reasoning, Verbal, or Mixed.
+                                        The next screen opens as a dedicated exam room
+                                        with fullscreen, focus-loss monitoring, and no camera prompt.
+                                    </p>
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {[
+                                            { icon: Calculator, label: 'Quant' },
+                                            { icon: Brain, label: 'Reasoning' },
+                                            { icon: BookOpen, label: 'Verbal' },
+                                            { icon: Shuffle, label: 'Mixed' },
+                                        ].map((item) => {
+                                            const Icon = item.icon;
+                                            return (
+                                                <span
+                                                    key={item.label}
+                                                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70"
+                                                >
+                                                    <Icon className="h-3.5 w-3.5 text-cyan-300" />
+                                                    {item.label}
+                                                </span>
+                                            );
+                                        })}
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70">
+                                            <Timer className="h-3.5 w-3.5 text-emerald-300" />
+                                            One timer, one question at a time
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={handleStartAptitude}
+                                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-transform hover:-translate-y-0.5"
+                                    >
+                                        <PlayCircle className="h-4 w-4" />
+                                        Start aptitude
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/quiz/analytics')}
+                                        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10"
+                                    >
+                                        View analytics
+                                        <ArrowRight className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="mt-5 grid gap-3 md:grid-cols-3">
+                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                                        <ShieldCheck className="h-4 w-4 text-emerald-300" />
+                                        Focus lock
+                                    </div>
+                                    <p className="mt-2 text-sm leading-6 text-white/65">
+                                        Strict mode watches for tab switches and pauses the exam room.
+                                    </p>
+                                </div>
+                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                                        <Timer className="h-4 w-4 text-cyan-300" />
+                                        No camera
+                                    </div>
+                                    <p className="mt-2 text-sm leading-6 text-white/65">
+                                        The aptitude flow does not ask for camera access at any point.
+                                    </p>
+                                </div>
+                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                                        <Shuffle className="h-4 w-4 text-amber-300" />
+                                        Topic mix
+                                    </div>
+                                    <p className="mt-2 text-sm leading-6 text-white/65">
+                                        Quant, Reasoning, Verbal, and Mixed follow different launch lanes.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
