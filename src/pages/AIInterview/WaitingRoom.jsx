@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Camera, Mic, Volume2, CheckCircle, XCircle, AlertCircle, User, Briefcase, Sparkles, Clock, FileText, ArrowLeft, Monitor, Shield } from 'lucide-react';
 import { Layout } from '../../components';
@@ -20,6 +20,7 @@ const WaitingRoom = () => {
   const [hasRequestedPermissions, setHasRequestedPermissions] = useState(false);
   const [screenShareStatus, setScreenShareStatus] = useState('pending'); // pending | granted | denied
   const [screenShareError, setScreenShareError] = useState('');
+  const [isDevMode, setIsDevMode] = useState(true);
 
   // Check if session is already completed — redirect to report
   useEffect(() => {
@@ -177,7 +178,7 @@ const WaitingRoom = () => {
       alert('Microphone access is required for the interview.');
       return;
     }
-    if (screenShareStatus !== 'granted') {
+    if (!isDevMode && screenShareStatus !== 'granted') {
       alert('Screen sharing is required for the interview.');
       return;
     }
@@ -233,7 +234,17 @@ const WaitingRoom = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative">
+        {/* Floating Dev Mode Toggle */}
+        <button
+          onClick={() => setIsDevMode(!isDevMode)}
+          className={`fixed top-4 right-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full border shadow-lg transition-all ${
+            isDevMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-800/50 text-slate-400 border-slate-700/50'
+          }`}
+        >
+          DEV: {isDevMode ? 'ON' : 'OFF'}
+        </button>
+
         <div className="max-w-6xl mx-auto">
           {/* Back Button */}
           <button
@@ -398,33 +409,37 @@ const WaitingRoom = () => {
                 </div>
 
                 {/* Screen Share */}
-                <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                    <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Screen Share</span>
-                    {getStatusBadge(screenShareStatus)}
-                    {screenShareStatus !== 'granted' && (
-                      <span className="text-xs text-red-400 hidden sm:inline">(Required)</span>
+                {!isDevMode && (
+                  <>
+                    <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                        <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                        <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Screen Share</span>
+                        {getStatusBadge(screenShareStatus)}
+                        {screenShareStatus !== 'granted' && (
+                          <span className="text-xs text-red-400 hidden sm:inline">(Required)</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {screenShareStatus !== 'granted' && permissions.microphone === 'granted' && (
+                          <button
+                            onClick={requestScreenShare}
+                            className="px-3 py-1 text-xs font-medium rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white transition-colors flex items-center gap-1"
+                          >
+                            <Monitor className="w-3 h-3" />
+                            Share
+                          </button>
+                        )}
+                        {getStatusIcon(screenShareStatus)}
+                      </div>
+                    </div>
+                    {screenShareError && (
+                      <p className="text-xs text-red-400 px-3 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                        {screenShareError}
+                      </p>
                     )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {screenShareStatus !== 'granted' && permissions.microphone === 'granted' && (
-                      <button
-                        onClick={requestScreenShare}
-                        className="px-3 py-1 text-xs font-medium rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white transition-colors flex items-center gap-1"
-                      >
-                        <Monitor className="w-3 h-3" />
-                        Share
-                      </button>
-                    )}
-                    {getStatusIcon(screenShareStatus)}
-                  </div>
-                </div>
-                {screenShareError && (
-                  <p className="text-xs text-red-400 px-3 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 flex-shrink-0" />
-                    {screenShareError}
-                  </p>
+                  </>
                 )}
               </div>
             </div>
@@ -538,7 +553,7 @@ const WaitingRoom = () => {
               {/* Start Button */}
               <button
                 onClick={startInterview}
-                disabled={permissions.microphone !== 'granted' || screenShareStatus !== 'granted' || isStarting}
+                disabled={permissions.microphone !== 'granted' || (!isDevMode && screenShareStatus !== 'granted') || isStarting}
                 className="w-full py-3 sm:py-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl shadow-red-500/30 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {isStarting ? (
@@ -553,7 +568,7 @@ const WaitingRoom = () => {
                   Please grant microphone access to start the interview
                 </p>
               )}
-              {permissions.microphone === 'granted' && screenShareStatus !== 'granted' && (
+              {permissions.microphone === 'granted' && !isDevMode && screenShareStatus !== 'granted' && (
                 <p className="text-center text-cyan-400 text-xs sm:text-sm px-4 flex items-center justify-center gap-1">
                   <Shield className="w-3 h-3" />
                   Please share your entire screen to start the interview

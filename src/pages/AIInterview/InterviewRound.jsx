@@ -91,8 +91,9 @@ const InterviewRound = () => {
   const [warningMessage, setWarningMessage] = useState('');
   const [warningType, setWarningType] = useState('tab_switch');
   const [screenShareStream, setScreenShareStream] = useState(null);
-  const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [showScreenSharePrompt, setShowScreenSharePrompt] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(true);
+  const [isScreenSharing, setIsScreenSharing] = useState(isDevMode);
+  const [showScreenSharePrompt, setShowScreenSharePrompt] = useState(!isDevMode);
   const [screenShareError, setScreenShareError] = useState('');
   const [mediaReady, setMediaReady] = useState(false);
   const maxWarnings = 3;
@@ -184,7 +185,7 @@ const InterviewRound = () => {
       setIsFullscreen(active);
 
       // If user exits fullscreen during active interview, show warning and ask to re-enter.
-      if (!active && !isComplete && !showScreenSharePrompt && currentQuestion) {
+      if (!isDevMode && !active && !isComplete && !showScreenSharePrompt && currentQuestion) {
         setWarningType('tab_switch');
         setWarningMessage('Fullscreen was exited. Please re-enter fullscreen to continue your interview.');
         setShowWarningModal(true);
@@ -464,7 +465,7 @@ const InterviewRound = () => {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    if (isComplete) return;
+    if (isComplete || isDevMode) return;
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -510,7 +511,7 @@ const InterviewRound = () => {
       window.removeEventListener('blur', handleWindowBlur);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isComplete, paramSessionId]);
+  }, [isComplete, paramSessionId, isDevMode]);
 
   // ── Proctoring: Screen Sharing ─────────────────────────────
 
@@ -675,7 +676,16 @@ const InterviewRound = () => {
     setError(null);
     hasInitialized.current = false;
 
-    // Fetch first question after reset (only after screen share is active AND session is verified)
+    // ── Conversational mode: fetch immediately, no screen-share gate ──
+    if (paramSessionId && sessionChecked && sessionData?.interviewStyle === 'conversational') {
+      const timer = setTimeout(() => {
+        hasInitialized.current = true;
+        fetchQuestion();
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+
+    // ── Manual mode: wait for screen share AND session verified ──
     if (paramSessionId && isScreenSharing && sessionChecked) {
       const timer = setTimeout(() => {
         hasInitialized.current = true;
@@ -687,7 +697,7 @@ const InterviewRound = () => {
       return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roundType, paramSessionId, isScreenSharing, sessionChecked]);
+  }, [roundType, paramSessionId, isScreenSharing, sessionChecked, sessionData?.interviewStyle]);
 
   // Auto-dismiss non-fatal warnings after 3 seconds
   useEffect(() => {
@@ -1812,6 +1822,14 @@ const InterviewRound = () => {
     };
   }, [displayQuestion]);
 
+  // ── Dev Mode Toggle ──────────────────────────
+  const toggleDevMode = () => {
+    const newMode = !isDevMode;
+    setIsDevMode(newMode);
+    setIsScreenSharing(newMode);
+    setShowScreenSharePrompt(!newMode);
+  };
+
   // ── Conversational Mode Gate ──────────────────────────
   // If session is configured for conversational interview,
   // render the ConversationalInterview component instead.
@@ -1834,6 +1852,15 @@ const InterviewRound = () => {
     return (
       <Layout showNavbar={false} showFooter={false}>
         <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100 p-4">
+          {/* Floating Dev Mode Toggle */}
+          <button
+            onClick={toggleDevMode}
+            className={`fixed top-4 right-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full border shadow-lg transition-all ${
+              isDevMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-800/50 text-slate-400 border-slate-700/50'
+            }`}
+          >
+            DEV: {isDevMode ? 'ON' : 'OFF'}
+          </button>
           <ConversationalInterview
             sessionId={paramSessionId}
             roundType={roundConfig.type}
@@ -1869,6 +1896,16 @@ const InterviewRound = () => {
         }
       `}</style>
       <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100">
+        {/* Floating Dev Mode Toggle */}
+        <button
+          onClick={toggleDevMode}
+          className={`fixed bottom-4 left-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full border shadow-lg transition-all ${
+            isDevMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-800/50 text-slate-400 border-slate-700/50'
+          }`}
+        >
+          DEV: {isDevMode ? 'ON' : 'OFF'}
+        </button>
+
         <header className="border-b border-slate-800/70 bg-slate-950/70 backdrop-blur">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-4">

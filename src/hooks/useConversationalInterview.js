@@ -217,7 +217,7 @@ export default function useConversationalInterview(config = {}) {
 
         // ── Voice mode events ──
         socket.on("deepgram:ready", (data) => {
-            console.log("🎙️ [ConvHook] Deepgram Voice Agent ready", data?.reconnected ? "(reconnected)" : "");
+            console.log("🎙️ [ConvHook] Deepgram Voice Agent ready received from server!", data);
             setDeepgramReady(true);
             deepgramReadyRef.current = true;
             setMode("voice");
@@ -229,6 +229,7 @@ export default function useConversationalInterview(config = {}) {
         });
 
         socket.on("deepgram:transcript", (data) => {
+            setIsUserSpeaking(false); // User finished their utterance
             setTranscript(prev => [...prev, {
                 role: "user",
                 text: data.text,
@@ -238,6 +239,7 @@ export default function useConversationalInterview(config = {}) {
 
         socket.on("deepgram:agent-text", (data) => {
             setAgentText(data.text || "");
+            setIsUserSpeaking(false); // Agent is responding, user is done
             setTranscript(prev => [...prev, {
                 role: "agent",
                 text: data.text,
@@ -387,12 +389,17 @@ export default function useConversationalInterview(config = {}) {
         lastSessionParamsRef.current = params;
 
         try {
+            console.log("🎙️ [ConvHook] Emitting deepgram:start with params:", params);
             socketRef.current.emit("deepgram:start", params, (response) => {
+                console.log("🎙️ [ConvHook] deepgram:start response:", response);
                 if (!response?.success) {
+                    console.error("❌ [ConvHook] deepgram:start failed:", response);
                     setError(response?.error || "Failed to start voice mode");
                 }
             });
+            console.log("🎙️ [ConvHook] Starting microphone...");
             await startMicrophone();
+            console.log("🎙️ [ConvHook] Microphone started successfully");
         } catch (err) {
             console.error("❌ [ConvHook] Failed to start voice mode:", err);
             setError(err.message);
