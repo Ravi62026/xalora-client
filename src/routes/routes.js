@@ -2,6 +2,7 @@ const ApiRoutes = {
     auth: {
         login: "/api/v1/users/login",
         googleLogin: "/api/v1/users/google-login",
+        githubLogin: "/api/v1/users/github-login",
         register: "/api/v1/users/register",
         forgotPassword: "/api/v1/users/forgot-password",
         resetPassword: "/api/v1/users/reset-password",

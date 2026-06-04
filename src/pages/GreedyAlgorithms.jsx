@@ -511,16 +511,16 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Greedy Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master the art of making locally optimal choices that lead to globally optimal solutions.
               Learn when greedy works and when it doesn't.
             </p>
@@ -531,8 +531,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-teal-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -540,8 +540,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             <button
               onClick={() => setActiveSection("fundamentals")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "fundamentals"
-                  ? "bg-teal-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Fundamentals
@@ -549,8 +549,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             <button
               onClick={() => setActiveSection("classic")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "classic"
-                  ? "bg-teal-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Classic Problems
@@ -558,8 +558,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             <button
               onClick={() => setActiveSection("graphs")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "graphs"
-                  ? "bg-teal-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Graph Algorithms
@@ -567,8 +567,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-teal-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -577,44 +577,44 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Greedy Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Greedy Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-teal-400 mb-4">What are Greedy Algorithms?</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Greedy Algorithms?</h3>
                   <p className="text-gray-300 mb-6">
                     Greedy algorithms make the optimal choice at each step, hoping that these local optimal
                     choices will lead to a global optimal solution. They are simple, efficient, and work
                     for many important problems.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-teal-400 mb-4">Key Characteristics</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
-                      <span className="text-teal-400 mr-2">🎯</span>
+                      <span className="text-indigo-500 mr-2">🎯</span>
                       <span><strong>Greedy Choice Property:</strong> Local optimal choice leads to global optimal</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-teal-400 mr-2">⚡</span>
+                      <span className="text-indigo-500 mr-2">⚡</span>
                       <span><strong>Efficient:</strong> Usually O(n log n) or better time complexity</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-teal-400 mr-2">🔧</span>
+                      <span className="text-indigo-500 mr-2">🔧</span>
                       <span><strong>Simple Implementation:</strong> Easy to understand and code</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-teal-400 mr-2">❓</span>
+                      <span className="text-indigo-500 mr-2">❓</span>
                       <span><strong>Not Always Correct:</strong> Need to prove greedy choice works</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-teal-400 mb-4">When to Use Greedy</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">When to Use Greedy</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">✅ Greedy Works</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">✅ Greedy Works</h4>
                       <ul className="text-gray-300 text-sm space-y-1">
                         <li>• Activity Selection Problem</li>
                         <li>• Huffman Coding</li>
@@ -624,8 +624,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                       </ul>
                     </div>
 
-                    <div className="bg-red-900/20 border border-red-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-red-400 mb-2">❌ Greedy Fails</h4>
+                    <div className="bg-red-50 border border-red-200 p-4 rounded-xl">
+                      <h4 className="text-lg font-semibold text-red-600 mb-2">❌ Greedy Fails</h4>
                       <ul className="text-gray-300 text-sm space-y-1">
                         <li>• 0/1 Knapsack (need DP)</li>
                         <li>• Coin Change (may need DP)</li>
@@ -638,8 +638,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-teal-900/20 to-cyan-900/20 border border-teal-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-teal-400 mb-3">Advantages</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Advantages</h4>
                   <ul className="text-gray-300 space-y-2">
                     <li>• Simple and intuitive</li>
                     <li>• Efficient time complexity</li>
@@ -648,8 +648,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border border-yellow-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-yellow-400 mb-3">Limitations</h4>
+                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-amber-600 mb-3">Limitations</h4>
                   <ul className="text-gray-300 space-y-2">
                     <li>• May not give optimal solution</li>
                     <li>• Hard to prove correctness</li>
@@ -658,7 +658,7 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Proof Strategy</h4>
                   <ul className="text-gray-300 space-y-2">
                     <li>• Prove greedy choice property</li>
@@ -674,18 +674,18 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           {/* Fundamentals Section */}
           {activeSection === "fundamentals" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Greedy Fundamentals</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Greedy Fundamentals</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {fundamentals.map((concept) => (
                   <div
                     key={concept.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-teal-500 hover:shadow-2xl hover:shadow-teal-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{concept.name}</h3>
-                        <span className="px-3 py-1 bg-teal-900/50 text-teal-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{concept.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                           Core Concept
                         </span>
                       </div>
@@ -693,19 +693,19 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                       <p className="text-gray-300 mb-6">{concept.description}</p>
 
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-teal-400 mb-3">Examples</h4>
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Examples</h4>
                         <div className="flex flex-wrap gap-2">
                           {concept.examples.map((example, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-teal-900/50 text-teal-300 text-sm rounded-lg">
+                            <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                               {example}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{concept.code}</code>
                         </pre>
                       </div>
@@ -719,17 +719,17 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           {/* Classic Problems Section */}
           {activeSection === "classic" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Classic Greedy Problems</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Classic Greedy Problems</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {classicProblems.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -738,9 +738,9 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -754,17 +754,17 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           {/* Graph Algorithms Section */}
           {activeSection === "graphs" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Graph Greedy Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Graph Greedy Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {graphGreedy.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -773,9 +773,9 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -789,17 +789,17 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           {/* Advanced Problems Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Greedy Problems</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Greedy Problems</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedProblems.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -808,9 +808,9 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -819,20 +819,20 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 ))}
 
                 {/* Greedy Analysis Section */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">When Greedy Works vs Doesn't Work</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">When Greedy Works vs Doesn't Work</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {greedyAnalysis.map((analysis, idx) => (
                       <div key={idx} className={`p-4 rounded-xl ${analysis.name.includes("Works")
-                          ? "bg-green-900/20 border border-green-700/50"
-                          : "bg-red-900/20 border border-red-700/50"
+                          ? "bg-green-50 border border-green-200"
+                          : "bg-red-50 border border-red-200"
                         }`}>
                         <h4 className={`text-lg font-semibold mb-3 ${analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
                           }`}>
                           {analysis.name}
                         </h4>
-                        <ul className="space-y-2 text-gray-300">
+                        <ul className="space-y-2 text-gray-600">
                           {analysis.examples.map((example, i) => (
                             <li key={i} className="flex items-start">
                               <span className={`mr-2 ${analysis.name.includes("Works") ? "text-green-400" : "text-red-400"
@@ -852,15 +852,15 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-teal-500 hover:shadow-2xl hover:shadow-teal-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Greedy</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Easy Greedy</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Assign Cookies (greedy assignment)</span>
@@ -880,9 +880,9 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Greedy</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Medium Greedy</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Jump Game II (minimum jumps)</span>
@@ -906,9 +906,9 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Greedy</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Hard Greedy</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Create Maximum Number</span>
@@ -934,22 +934,22 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
               <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Common Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                            'bg-red-900/50 text-red-300'
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                          problem.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         {problem.difficulty}
                       </span>
                     </div>
                     <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -957,14 +957,14 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
           </div>
 
           {/* Greedy Mastery Checklist */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Greedy Mastery Checklist
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-green-400 mb-2">✅ Fundamentals</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-green-600 mb-2">✅ Fundamentals</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Greedy choice property</li>
                   <li>• Optimal substructure</li>
@@ -973,7 +973,7 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
                 <h4 className="text-lg font-semibold text-blue-400 mb-2">🎯 Classic Problems</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Activity selection</li>
@@ -983,7 +983,7 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
                 <h4 className="text-lg font-semibold text-purple-400 mb-2">🔗 Graph Algorithms</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Kruskal's MST</li>
@@ -993,8 +993,8 @@ vector<Edge> kruskalMST(vector<Edge>& edges, int V) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-red-400 mb-2">🚀 Interview Ready</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-red-600 mb-2">🚀 Interview Ready</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Prove greedy correctness</li>
                   <li>• Handle edge cases</li>

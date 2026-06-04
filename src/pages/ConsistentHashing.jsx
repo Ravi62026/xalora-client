@@ -673,16 +673,16 @@ struct ConsistentHashingConfig {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 Consistent Hashing
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Scalable distributed systems algorithm for minimal key remapping during node changes.
               Master the foundation of modern distributed databases and caching systems.
             </p>
@@ -694,7 +694,7 @@ struct ConsistentHashingConfig {
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-cyan-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -703,7 +703,7 @@ struct ConsistentHashingConfig {
               onClick={() => setActiveSection("implementation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementation"
                   ? "bg-cyan-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Implementation
@@ -712,7 +712,7 @@ struct ConsistentHashingConfig {
               onClick={() => setActiveSection("mathematical")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "mathematical"
                   ? "bg-cyan-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Mathematical Analysis
@@ -721,7 +721,7 @@ struct ConsistentHashingConfig {
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-cyan-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -730,70 +730,70 @@ struct ConsistentHashingConfig {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Consistent Hashing Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Consistent Hashing Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-cyan-400 mb-4">What is Consistent Hashing?</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What is Consistent Hashing?</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Consistent hashing is a distributed hashing scheme that operates independently of
                     the number of servers or objects in a distributed hash table. It provides a way to
                     distribute keys across a cluster of machines with minimal key remapping when nodes
                     are added or removed.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-cyan-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-cyan-400 mr-2">🔄</span>
+                      <span className="text-indigo-600 mr-2">🔄</span>
                       <span><strong>Minimal Remapping:</strong> Only K/n keys need to be moved when adding/removing nodes</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-400 mr-2">🎯</span>
+                      <span className="text-indigo-600 mr-2">🎯</span>
                       <span><strong>Load Balancing:</strong> Evenly distributes keys across available nodes</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-400 mr-2">🔧</span>
+                      <span className="text-indigo-600 mr-2">🔧</span>
                       <span><strong>Scalability:</strong> Handles dynamic addition and removal of nodes</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-cyan-400 mr-2">🎭</span>
+                      <span className="text-indigo-600 mr-2">🎭</span>
                       <span><strong>Virtual Nodes:</strong> Uses virtual nodes to improve load distribution</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-cyan-400 mb-4">How It Works</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">How It Works</h3>
                   <div className="space-y-6">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-blue-400 mb-2">1. Hash Ring Creation</h4>
-                      <p className="text-gray-300 text-sm">Arrange nodes on a circular hash ring based on their hash values</p>
+                      <p className="text-gray-700 text-sm">Arrange nodes on a circular hash ring based on their hash values</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-blue-400 mb-2">2. Key Assignment</h4>
-                      <p className="text-gray-300 text-sm">Map keys to the first node clockwise on the ring</p>
+                      <p className="text-gray-700 text-sm">Map keys to the first node clockwise on the ring</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-blue-400 mb-2">3. Node Addition</h4>
-                      <p className="text-gray-300 text-sm">Only keys between new node and next node are remapped</p>
+                      <p className="text-gray-700 text-sm">Only keys between new node and next node are remapped</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-blue-400 mb-2">4. Virtual Nodes</h4>
-                      <p className="text-gray-300 text-sm">Each physical node has multiple virtual nodes for better distribution</p>
+                      <p className="text-gray-700 text-sm">Each physical node has multiple virtual nodes for better distribution</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Advantages</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Advantages</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Minimal key remapping</li>
                     <li>• Good load balancing</li>
                     <li>• Fault tolerance</li>
@@ -801,9 +801,9 @@ struct ConsistentHashingConfig {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Challenges</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Challenges</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Hotspots possible</li>
                     <li>• Virtual node management</li>
                     <li>• Node failure handling</li>
@@ -811,9 +811,9 @@ struct ConsistentHashingConfig {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Distributed caching</li>
                     <li>• Database sharding</li>
                     <li>• Load balancing</li>
@@ -827,21 +827,21 @@ struct ConsistentHashingConfig {
           {/* Implementation Section */}
           {activeSection === "implementation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Consistent Hashing Implementations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Consistent Hashing Implementations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Basic Implementation */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-cyan-400 mb-4">Basic Consistent Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Basic Consistent Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Fundamental implementation with hash ring and virtual nodes for even distribution.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Hash ring implementation</li>
                           <li>• Virtual node support</li>
                           <li>• Node addition/removal</li>
@@ -849,26 +849,26 @@ struct ConsistentHashingConfig {
                           <li>• Minimal remapping</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Complexity</h4>
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Complexity</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Key Lookup:</span>
+                            <span className="text-gray-700">Key Lookup:</span>
                             {renderComplexityBadge("O(log V)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Node Addition:</span>
+                            <span className="text-gray-700">Node Addition:</span>
                             {renderComplexityBadge("O(V log V)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Space:</span>
+                            <span className="text-gray-700">Space:</span>
                             {renderComplexityBadge("O(V × P)")}
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{consistentHashingImplementation.basic}</code>
                         </pre>
                       </div>
@@ -877,17 +877,17 @@ struct ConsistentHashingConfig {
                 </div>
 
                 {/* Load Balanced Implementation */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-cyan-400 mb-4">Load Balanced Consistent Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Load Balanced Consistent Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Enhanced implementation with load monitoring and automatic redistribution.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Load factor monitoring</li>
                           <li>• Automatic redistribution</li>
                           <li>• Overload detection</li>
@@ -895,8 +895,8 @@ struct ConsistentHashingConfig {
                           <li>• Performance optimization</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Benefits</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Benefits</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Prevents hotspots</li>
                           <li>• Maintains performance</li>
                           <li>• Automatic optimization</li>
@@ -904,9 +904,9 @@ struct ConsistentHashingConfig {
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{consistentHashingImplementation.withLoadBalancing}</code>
                         </pre>
                       </div>
@@ -915,17 +915,17 @@ struct ConsistentHashingConfig {
                 </div>
 
                 {/* Distributed Implementation */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-cyan-400 mb-4">Distributed Consistent Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Distributed Consistent Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Advanced implementation with data replication and fault tolerance.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Data replication</li>
                           <li>• Fault tolerance</li>
                           <li>• Replica management</li>
@@ -933,8 +933,8 @@ struct ConsistentHashingConfig {
                           <li>• High availability</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Advantages</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Advantages</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Data durability</li>
                           <li>• Fault tolerance</li>
                           <li>• High availability</li>
@@ -942,9 +942,9 @@ struct ConsistentHashingConfig {
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{consistentHashingImplementation.distributed}</code>
                         </pre>
                       </div>
@@ -958,21 +958,21 @@ struct ConsistentHashingConfig {
           {/* Mathematical Analysis Section */}
           {activeSection === "mathematical" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Mathematical Analysis</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Mathematical Analysis</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {mathematicalAnalysis.map((analysis, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-cyan-400 mb-4">{analysis.title}</h3>
-                      <p className="text-gray-300 mb-6">{analysis.explanation}</p>
+                      <h3 className="text-2xl font-bold text-indigo-600 mb-4">{analysis.title}</h3>
+                      <p className="text-gray-700 mb-6">{analysis.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Mathematical Details</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Mathematical Details</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{analysis.content}</code>
                         </pre>
                       </div>
@@ -981,56 +981,56 @@ struct ConsistentHashingConfig {
                 ))}
 
                 {/* Comparison with Traditional Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-cyan-400 mb-6">Consistent vs Traditional Hashing</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Consistent vs Traditional Hashing</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Aspect</th>
-                            <th className="pb-4 text-cyan-400 text-lg font-bold">Consistent Hashing</th>
-                            <th className="pb-4 text-red-400 text-lg font-bold">Traditional Hashing</th>
-                            <th className="pb-4 text-yellow-400 text-lg font-bold">Improvement</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Aspect</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Consistent Hashing</th>
+                            <th className="pb-4 text-red-700 text-lg font-bold">Traditional Hashing</th>
+                            <th className="pb-4 text-amber-700 text-lg font-bold">Improvement</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-cyan-400 transition-all duration-300">Node Addition Remapping</td>
-                            <td className="py-4 text-green-400 font-medium">K/(n+1) keys</td>
-                            <td className="py-4 text-red-400 font-medium">All keys</td>
-                            <td className="py-4 text-yellow-400 font-medium">n/(n+1) reduction</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-cyan-400 transition-all duration-300">Node Addition Remapping</td>
+                            <td className="py-4 text-green-700 font-medium">K/(n+1) keys</td>
+                            <td className="py-4 text-red-700 font-medium">All keys</td>
+                            <td className="py-4 text-amber-700 font-medium">n/(n+1) reduction</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-cyan-400 transition-all duration-300">Load Distribution</td>
-                            <td className="py-4 text-green-400 font-medium">Even with virtual nodes</td>
-                            <td className="py-4 text-red-400 font-medium">Uneven clustering</td>
-                            <td className="py-4 text-yellow-400 font-medium">σ ≈ √(V/P)</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-cyan-400 transition-all duration-300">Load Distribution</td>
+                            <td className="py-4 text-green-700 font-medium">Even with virtual nodes</td>
+                            <td className="py-4 text-red-700 font-medium">Uneven clustering</td>
+                            <td className="py-4 text-amber-700 font-medium">σ ≈ √(V/P)</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-cyan-400 transition-all duration-300">Scalability</td>
-                            <td className="py-4 text-green-400 font-medium">Excellent</td>
-                            <td className="py-4 text-red-400 font-medium">Poor</td>
-                            <td className="py-4 text-yellow-400 font-medium">Handles growth well</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-cyan-400 transition-all duration-300">Scalability</td>
+                            <td className="py-4 text-green-700 font-medium">Excellent</td>
+                            <td className="py-4 text-red-700 font-medium">Poor</td>
+                            <td className="py-4 text-amber-700 font-medium">Handles growth well</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-cyan-400 transition-all duration-300">Memory Overhead</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(V × P)</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)</td>
-                            <td className="py-4 text-yellow-400 font-medium">V × P extra space</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-cyan-400 transition-all duration-300">Memory Overhead</td>
+                            <td className="py-4 text-amber-700 font-medium">O(V × P)</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)</td>
+                            <td className="py-4 text-amber-700 font-medium">V × P extra space</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-cyan-400 transition-all duration-300">Implementation Complexity</td>
-                            <td className="py-4 text-red-400 font-medium">High</td>
-                            <td className="py-4 text-green-400 font-medium">Low</td>
-                            <td className="py-4 text-yellow-400 font-medium">Worth the benefits</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-cyan-400 transition-all duration-300">Implementation Complexity</td>
+                            <td className="py-4 text-red-700 font-medium">High</td>
+                            <td className="py-4 text-green-700 font-medium">Low</td>
+                            <td className="py-4 text-amber-700 font-medium">Worth the benefits</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
 
-                    <div className="mt-6 text-sm text-gray-400">
+                    <div className="mt-6 text-sm text-gray-600">
                       K = total keys, n = number of nodes, V = virtual nodes, P = physical nodes, σ = standard deviation
                     </div>
                   </div>
@@ -1042,22 +1042,22 @@ struct ConsistentHashingConfig {
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Consistent Hashing Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Consistent Hashing Applications</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-cyan-400 mb-4">{app.name}</h3>
-                      <p className="text-gray-300 mb-4">{app.description}</p>
+                      <h3 className="text-2xl font-bold text-indigo-600 mb-4">{app.name}</h3>
+                      <p className="text-gray-700 mb-4">{app.description}</p>
                       <p className="text-blue-300 mb-6"><strong>Example:</strong> {app.example}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Code Example</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Code Example</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{app.code}</code>
                         </pre>
                       </div>
@@ -1069,77 +1069,77 @@ struct ConsistentHashingConfig {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Implement Basic Consistent Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Key Distribution Analysis</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Virtual Node Management</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Load Balanced Consistent Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Distributed Data Replication</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Node Failure Handling</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Consistent Hashing with Bounded Loads</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Virtual Node Optimization</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Rendezvous Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Multi-Probe Consistent Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Consistent Hashing with Hierarchical Namespaces</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Dynamic Load Balancing in Consistent Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Consistent Hashing for Content Delivery Networks</span>
                   </li>
                 </ul>
@@ -1147,12 +1147,12 @@ struct ConsistentHashingConfig {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Fundamental Concepts</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Fundamental Concepts</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• How does consistent hashing work?</li>
                     <li>• What are virtual nodes and why are they needed?</li>
                     <li>• How does it minimize key remapping?</li>
@@ -1160,9 +1160,9 @@ struct ConsistentHashingConfig {
                     <li>• How do you handle node failures?</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">System Design</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">System Design</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Design a distributed cache using consistent hashing</li>
                     <li>• How would you implement database sharding?</li>
                     <li>• Design a load balancer with consistent hashing</li>
@@ -1170,9 +1170,9 @@ struct ConsistentHashingConfig {
                     <li>• Implement replication with consistent hashing</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Performance Analysis</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Performance Analysis</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Analyze load distribution in consistent hashing</li>
                     <li>• Calculate expected remapping when adding nodes</li>
                     <li>• Optimize virtual nodes per physical node</li>
@@ -1180,9 +1180,9 @@ struct ConsistentHashingConfig {
                     <li>• Handle the hash ring maintenance overhead</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Advanced Topics</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Advanced Topics</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Implement consistent hashing with bounded loads</li>
                     <li>• Handle network partitions in distributed systems</li>
                     <li>• Implement consistent hashing for microservices</li>
@@ -1195,60 +1195,60 @@ struct ConsistentHashingConfig {
           </div>
 
           {/* Consistent Hashing Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Consistent Hashing Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-cyan-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Key Lookup:</span>
-                    <span className="text-blue-400 font-mono">O(log V)</span>
+                    <span className="text-gray-700">Key Lookup:</span>
+                    <span className="text-indigo-600 font-mono">O(log V)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Node Addition:</span>
-                    <span className="text-yellow-400 font-mono">O(V log V)</span>
+                    <span className="text-gray-700">Node Addition:</span>
+                    <span className="text-amber-700 font-mono">O(V log V)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Node Removal:</span>
-                    <span className="text-yellow-400 font-mono">O(V log V)</span>
+                    <span className="text-gray-700">Node Removal:</span>
+                    <span className="text-amber-700 font-mono">O(V log V)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Space Complexity:</span>
+                    <span className="text-gray-700">Space Complexity:</span>
                     <span className="text-purple-400 font-mono">O(V × P)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Key Remapping (node change):</span>
-                    <span className="text-green-400 font-mono">O(K/n)</span>
+                    <span className="text-gray-700">Key Remapping (node change):</span>
+                    <span className="text-green-700 font-mono">O(K/n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-cyan-400 mb-4">Key Concepts</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Key Concepts</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Hash Ring:</div>
-                    <div className="text-gray-400">Circular arrangement of hash values representing nodes</div>
+                    <div className="text-gray-600">Circular arrangement of hash values representing nodes</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Virtual Nodes:</div>
-                    <div className="text-gray-400">Multiple hash positions per physical node for better load distribution</div>
+                    <div className="text-gray-600">Multiple hash positions per physical node for better load distribution</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Clockwise Assignment:</div>
-                    <div className="text-gray-400">Keys map to first node encountered moving clockwise on the ring</div>
+                    <div className="text-gray-600">Keys map to first node encountered moving clockwise on the ring</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Minimal Remapping:</div>
-                    <div className="text-gray-400">Only K/n keys affected when adding/removing nodes (K=keys, n=nodes)</div>
+                    <div className="text-gray-600">Only K/n keys affected when adding/removing nodes (K=keys, n=nodes)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Load Balancing:</div>
-                    <div className="text-gray-400">Even distribution with low variance using virtual nodes</div>
+                    <div className="text-gray-600">Even distribution with low variance using virtual nodes</div>
                   </div>
                 </div>
               </div>

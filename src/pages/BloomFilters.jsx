@@ -710,16 +710,16 @@ struct BloomFilterConfig {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
               <span className="bg-gradient-to-r from-rose-400 to-pink-400 bg-clip-text text-transparent">
                 Bloom Filters
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Probabilistic data structures for fast membership testing with controlled false positives.
               Master space-efficient approximate set membership algorithms.
             </p>
@@ -731,7 +731,7 @@ struct BloomFilterConfig {
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-rose-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -740,7 +740,7 @@ struct BloomFilterConfig {
               onClick={() => setActiveSection("implementation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementation"
                   ? "bg-rose-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Implementation
@@ -749,7 +749,7 @@ struct BloomFilterConfig {
               onClick={() => setActiveSection("mathematical")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "mathematical"
                   ? "bg-rose-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Mathematical Analysis
@@ -758,7 +758,7 @@ struct BloomFilterConfig {
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-rose-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -767,20 +767,20 @@ struct BloomFilterConfig {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Bloom Filters Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Bloom Filters Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-rose-400 mb-4">What are Bloom Filters?</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-rose-700 mb-4">What are Bloom Filters?</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Bloom filters are space-efficient probabilistic data structures that can tell you
                     with certainty whether an element is NOT in a set, but can only tell you that an
                     element MIGHT BE in the set. They use multiple hash functions and a bit array
                     to achieve this with minimal memory usage.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-rose-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-rose-700 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
                       <span className="text-rose-400 mr-2">🔍</span>
@@ -806,40 +806,40 @@ struct BloomFilterConfig {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-rose-400 mb-4">How Bloom Filters Work</h3>
+                  <h3 className="text-2xl font-semibold text-rose-700 mb-4">How Bloom Filters Work</h3>
                   <div className="space-y-6">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">1. Initialization</h4>
-                      <p className="text-gray-300 text-sm">Create a bit array of size m, all bits set to 0</p>
+                      <p className="text-gray-700 text-sm">Create a bit array of size m, all bits set to 0</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">2. Adding Elements</h4>
-                      <p className="text-gray-300 text-sm">Use k hash functions to set k bits to 1 for each element</p>
+                      <p className="text-gray-700 text-sm">Use k hash functions to set k bits to 1 for each element</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">3. Testing Membership</h4>
-                      <p className="text-gray-300 text-sm">Check if all k corresponding bits are 1</p>
+                      <p className="text-gray-700 text-sm">Check if all k corresponding bits are 1</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">4. Probabilistic Nature</h4>
-                      <p className="text-gray-300 text-sm">All 1s = "might be present" (possible false positive)</p>
+                      <p className="text-gray-700 text-sm">All 1s = "might be present" (possible false positive)</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">5. Optimal Parameters</h4>
-                      <p className="text-gray-300 text-sm">k ≈ (m/n) × ln(2), m ≈ - (n × ln(p)) / (ln(2))²</p>
+                      <p className="text-gray-700 text-sm">k ≈ (m/n) × ln(2), m ≈ - (n × ln(p)) / (ln(2))²</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-rose-900/20 to-pink-900/20 border border-rose-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-rose-400 mb-3">Advantages</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-rose-50 border border-rose-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-rose-700 mb-3">Advantages</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Extremely space efficient</li>
                     <li>• Very fast operations</li>
                     <li>• No false negatives</li>
@@ -847,9 +847,9 @@ struct BloomFilterConfig {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Limitations</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Limitations</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• False positives possible</li>
                     <li>• No element deletion</li>
                     <li>• No element retrieval</li>
@@ -857,9 +857,9 @@ struct BloomFilterConfig {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Spell checking</li>
                     <li>• Web crawling</li>
                     <li>• Database caching</li>
@@ -873,22 +873,22 @@ struct BloomFilterConfig {
           {/* Implementation Section */}
           {activeSection === "implementation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Bloom Filter Implementations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Bloom Filter Implementations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Basic Bloom Filter */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-rose-400 mb-4">Basic Bloom Filter</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-rose-700 mb-4">Basic Bloom Filter</h3>
+                    <p className="text-gray-700 mb-6">
                       The fundamental Bloom filter implementation with optimal parameter calculation
                       and support for membership testing.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Optimal parameter calculation</li>
                           <li>• Multiple hash functions</li>
                           <li>• False positive rate estimation</li>
@@ -896,26 +896,26 @@ struct BloomFilterConfig {
                           <li>• No false negatives guarantee</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Complexity</h4>
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Complexity</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Add:</span>
+                            <span className="text-gray-700">Add:</span>
                             {renderComplexityBadge("O(k)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Query:</span>
+                            <span className="text-gray-700">Query:</span>
                             {renderComplexityBadge("O(k)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Space:</span>
+                            <span className="text-gray-700">Space:</span>
                             {renderComplexityBadge("O(m)")}
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{bloomFilterImplementation.basic}</code>
                         </pre>
                       </div>
@@ -924,18 +924,18 @@ struct BloomFilterConfig {
                 </div>
 
                 {/* Counting Bloom Filter */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-rose-400 mb-4">Counting Bloom Filter</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-rose-700 mb-4">Counting Bloom Filter</h3>
+                    <p className="text-gray-700 mb-6">
                       Extended Bloom filter that supports element deletion by using counters
                       instead of single bits.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Supports element deletion</li>
                           <li>• Uses counters instead of bits</li>
                           <li>• Handles multiple insertions</li>
@@ -943,17 +943,17 @@ struct BloomFilterConfig {
                           <li>• Still allows false positives</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Advantages</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Advantages</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Deletions are possible</li>
                           <li>• Handles frequency counting</li>
                           <li>• More flexible than basic version</li>
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{bloomFilterImplementation.counting}</code>
                         </pre>
                       </div>
@@ -962,18 +962,18 @@ struct BloomFilterConfig {
                 </div>
 
                 {/* Scalable Bloom Filter */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-rose-400 mb-4">Scalable Bloom Filter</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-rose-700 mb-4">Scalable Bloom Filter</h3>
+                    <p className="text-gray-700 mb-6">
                       Automatically growing Bloom filter that maintains false positive rate
                       by adding new filters as needed.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Automatically scales with data</li>
                           <li>• Maintains false positive rate</li>
                           <li>• Multiple filter layers</li>
@@ -981,17 +981,17 @@ struct BloomFilterConfig {
                           <li>• No size limits</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Benefits</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Benefits</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Handles growing datasets</li>
                           <li>• Predictable performance</li>
                           <li>• Automatic optimization</li>
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{bloomFilterImplementation.scalable}</code>
                         </pre>
                       </div>
@@ -1005,21 +1005,21 @@ struct BloomFilterConfig {
           {/* Mathematical Analysis Section */}
           {activeSection === "mathematical" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Mathematical Analysis</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Mathematical Analysis</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {mathematicalAnalysis.map((analysis, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-rose-400 mb-4">{analysis.title}</h3>
-                      <p className="text-gray-300 mb-6">{analysis.explanation}</p>
+                      <h3 className="text-2xl font-bold text-rose-700 mb-4">{analysis.title}</h3>
+                      <p className="text-gray-700 mb-6">{analysis.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Mathematical Details</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Mathematical Details</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{analysis.content}</code>
                         </pre>
                       </div>
@@ -1028,69 +1028,69 @@ struct BloomFilterConfig {
                 ))}
 
                 {/* Performance Comparison */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-rose-400 mb-6">Bloom Filter vs Other Data Structures</h3>
+                    <h3 className="text-2xl font-bold text-rose-700 mb-6">Bloom Filter vs Other Data Structures</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Aspect</th>
-                            <th className="pb-4 text-rose-400 text-lg font-bold">Bloom Filter</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Hash Set</th>
-                            <th className="pb-4 text-green-400 text-lg font-bold">Binary Search</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">Trie</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Aspect</th>
+                            <th className="pb-4 text-rose-700 text-lg font-bold">Bloom Filter</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Hash Set</th>
+                            <th className="pb-4 text-green-700 text-lg font-bold">Binary Search</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">Trie</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">Time Complexity</td>
-                            <td className="py-4 text-green-400 font-medium">O(k)</td>
-                            <td className="py-4 text-green-400 font-medium">O(1) avg</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(m)</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">Time Complexity</td>
+                            <td className="py-4 text-green-700 font-medium">O(k)</td>
+                            <td className="py-4 text-green-700 font-medium">O(1) avg</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(m)</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">Space Complexity</td>
-                            <td className="py-4 text-green-400 font-medium">O(m)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">Space Complexity</td>
+                            <td className="py-4 text-green-700 font-medium">O(m)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">False Positives</td>
-                            <td className="py-4 text-red-400 font-medium">Yes</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">False Positives</td>
+                            <td className="py-4 text-red-700 font-medium">Yes</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">False Negatives</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">No</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">False Negatives</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">No</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">Supports Deletion</td>
-                            <td className="py-4 text-red-400 font-medium">No*</td>
-                            <td className="py-4 text-green-400 font-medium">Yes</td>
-                            <td className="py-4 text-red-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">Yes</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">Supports Deletion</td>
+                            <td className="py-4 text-red-700 font-medium">No*</td>
+                            <td className="py-4 text-green-700 font-medium">Yes</td>
+                            <td className="py-4 text-red-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">Yes</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-rose-400 transition-all duration-300">Use Case</td>
-                            <td className="py-4 text-rose-400 font-medium">Large datasets, speed critical</td>
-                            <td className="py-4 text-blue-400 font-medium">Exact membership</td>
-                            <td className="py-4 text-green-400 font-medium">Sorted data lookup</td>
-                            <td className="py-4 text-purple-400 font-medium">Prefix matching</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-rose-400 transition-all duration-300">Use Case</td>
+                            <td className="py-4 text-rose-700 font-medium">Large datasets, speed critical</td>
+                            <td className="py-4 text-blue-700 font-medium">Exact membership</td>
+                            <td className="py-4 text-green-700 font-medium">Sorted data lookup</td>
+                            <td className="py-4 text-purple-700 font-medium">Prefix matching</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
 
-                    <div className="mt-4 text-sm text-gray-400">
+                    <div className="mt-4 text-sm text-gray-600">
                       * Basic Bloom filters don't support deletion, but Counting Bloom filters do
                     </div>
                   </div>
@@ -1102,22 +1102,22 @@ struct BloomFilterConfig {
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Bloom Filter Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Bloom Filter Applications</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-rose-400 mb-4">{app.name}</h3>
-                      <p className="text-gray-300 mb-4">{app.description}</p>
+                      <h3 className="text-2xl font-bold text-rose-700 mb-4">{app.name}</h3>
+                      <p className="text-gray-700 mb-4">{app.description}</p>
                       <p className="text-cyan-300 mb-6"><strong>Example:</strong> {app.example}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Code Example</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Code Example</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{app.code}</code>
                         </pre>
                       </div>
@@ -1129,77 +1129,77 @@ struct BloomFilterConfig {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-rose-500 hover:shadow-2xl hover:shadow-rose-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Implement Basic Bloom Filter</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Check String Membership</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>False Positive Rate Calculation</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Counting Bloom Filter</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Optimal Parameter Calculation</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Bloom Filter for Spell Checking</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Scalable Bloom Filter</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Cache Filtering System</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Spectral Bloom Filter</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Compressed Bloom Filter</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Distributed Bloom Filters</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Multi-set Bloom Filters</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Bloom Filter with Cryptographic Properties</span>
                   </li>
                 </ul>
@@ -1207,12 +1207,12 @@ struct BloomFilterConfig {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Fundamental Concepts</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Fundamental Concepts</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• How does a Bloom filter work?</li>
                     <li>• What are false positives and false negatives?</li>
                     <li>• Why are Bloom filters space efficient?</li>
@@ -1220,9 +1220,9 @@ struct BloomFilterConfig {
                     <li>• How do you choose optimal parameters?</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Advanced Topics</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Advanced Topics</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Explain Counting Bloom filters</li>
                     <li>• How do Scalable Bloom filters work?</li>
                     <li>• Mathematical analysis of false positive rates</li>
@@ -1230,9 +1230,9 @@ struct BloomFilterConfig {
                     <li>• Real-world applications and trade-offs</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Design Problems</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Design Problems</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Design a spell checker using Bloom filters</li>
                     <li>• Implement a web crawler deduplication system</li>
                     <li>• Design a cache filtering mechanism</li>
@@ -1240,9 +1240,9 @@ struct BloomFilterConfig {
                     <li>• Create a distributed Bloom filter system</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Mathematical Questions</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Mathematical Questions</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Derive optimal number of hash functions</li>
                     <li>• Calculate false positive probability</li>
                     <li>• Analyze space-time trade-offs</li>
@@ -1255,60 +1255,60 @@ struct BloomFilterConfig {
           </div>
 
           {/* Bloom Filter Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Bloom Filter Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-rose-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-rose-700 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Add Operation:</span>
-                    <span className="text-blue-400 font-mono">O(k)</span>
+                    <span className="text-gray-700">Add Operation:</span>
+                    <span className="text-indigo-600 font-mono">O(k)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Query Operation:</span>
-                    <span className="text-blue-400 font-mono">O(k)</span>
+                    <span className="text-gray-700">Query Operation:</span>
+                    <span className="text-indigo-600 font-mono">O(k)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Space Complexity:</span>
-                    <span className="text-yellow-400 font-mono">O(m)</span>
+                    <span className="text-gray-700">Space Complexity:</span>
+                    <span className="text-amber-700 font-mono">O(m)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Optimal Hash Functions:</span>
+                    <span className="text-gray-700">Optimal Hash Functions:</span>
                     <span className="text-purple-400 font-mono">k = (m/n) × ln(2)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Optimal Bit Array Size:</span>
+                    <span className="text-gray-700">Optimal Bit Array Size:</span>
                     <span className="text-purple-400 font-mono">m = -(n × ln p) / (ln 2)²</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-rose-400 mb-4">Key Concepts</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-rose-700 mb-4">Key Concepts</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">No False Negatives:</div>
-                    <div className="text-gray-400">If filter says "no", element is definitely not present</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">No False Negatives:</div>
+                    <div className="text-gray-600">If filter says "no", element is definitely not present</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Possible False Positives:</div>
-                    <div className="text-gray-400">Filter may say "yes" for elements not actually present</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Possible False Positives:</div>
+                    <div className="text-gray-600">Filter may say "yes" for elements not actually present</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Space Efficient:</div>
-                    <div className="text-gray-400">~10 bits per element for 1% false positive rate</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Space Efficient:</div>
+                    <div className="text-gray-600">~10 bits per element for 1% false positive rate</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Multiple Hash Functions:</div>
-                    <div className="text-gray-400">k hash functions reduce false positive probability</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Multiple Hash Functions:</div>
+                    <div className="text-gray-600">k hash functions reduce false positive probability</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Bit Array:</div>
-                    <div className="text-gray-400">Compact representation using individual bits</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Bit Array:</div>
+                    <div className="text-gray-600">Compact representation using individual bits</div>
                   </div>
                 </div>
               </div>

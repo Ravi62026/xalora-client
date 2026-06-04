@@ -505,16 +505,16 @@ int fibonacci_optimized(int n) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Dynamic Programming
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master the art of breaking down complex problems into simpler subproblems with optimal substructure and overlapping subproblems.
             </p>
           </div>
@@ -524,8 +524,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -533,8 +533,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("fundamentals")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "fundamentals"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Fundamentals
@@ -542,8 +542,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("1d")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "1d"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               1D DP
@@ -551,8 +551,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("2d")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "2d"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               2D DP
@@ -560,8 +560,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("string")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "string"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               String DP
@@ -569,8 +569,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("grid")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "grid"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Grid DP
@@ -578,8 +578,8 @@ int fibonacci_optimized(int n) {
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -588,19 +588,19 @@ int fibonacci_optimized(int n) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Dynamic Programming Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Dynamic Programming Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">What is DP?</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What is DP?</h3>
                   <p className="text-gray-300 mb-6">
                     Dynamic Programming is a method for solving complex problems by breaking them down into simpler
                     subproblems. It solves each subproblem only once and stores the solution for future reference.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">Two Key Properties</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Two Key Properties</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-purple-400 mr-2">🔄</span>
                       <span><strong>Overlapping Subproblems:</strong> The problem can be broken down into subproblems which are reused multiple times</span>
@@ -613,44 +613,44 @@ int fibonacci_optimized(int n) {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">DP Approaches</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">DP Approaches</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Top-Down (Memoization)</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Top-Down (Memoization)</h4>
                       <p className="text-gray-300 text-sm">Recursive approach with caching. Natural way to think about problems.</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Bottom-Up (Tabulation)</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Bottom-Up (Tabulation)</h4>
                       <p className="text-gray-300 text-sm">Iterative approach filling DP table. Often more space efficient.</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Space Optimization</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Space Optimization</h4>
                       <p className="text-gray-300 text-sm">Reduce space complexity by keeping only necessary previous states.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-purple-400 mb-4">When to Use DP?</h3>
+              <div className="mt-8 bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">When to Use DP?</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="text-center">
                     <div className="text-2xl mb-2">🔄</div>
-                    <div className="text-sm text-gray-300">Overlapping subproblems exist</div>
+                    <div className="text-sm text-gray-600">Overlapping subproblems exist</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">⚡</div>
-                    <div className="text-sm text-gray-300">Optimal substructure property</div>
+                    <div className="text-sm text-gray-600">Optimal substructure property</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">💾</div>
-                    <div className="text-sm text-gray-300">Subproblem solutions can be cached</div>
+                    <div className="text-sm text-gray-600">Subproblem solutions can be cached</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">🎯</div>
-                    <div className="text-sm text-gray-300">Need optimal solution, not just any</div>
+                    <div className="text-sm text-gray-600">Need optimal solution, not just any</div>
                   </div>
                 </div>
               </div>
@@ -660,18 +660,18 @@ int fibonacci_optimized(int n) {
           {/* Fundamentals Section */}
           {activeSection === "fundamentals" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">DP Fundamentals</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">DP Fundamentals</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {fundamentals.map((concept) => (
                   <div
                     key={concept.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{concept.name}</h3>
-                        <span className="px-3 py-1 bg-purple-900/50 text-purple-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{concept.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                           Core Concept
                         </span>
                       </div>
@@ -679,19 +679,19 @@ int fibonacci_optimized(int n) {
                       <p className="text-gray-300 mb-6">{concept.description}</p>
 
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-purple-400 mb-3">Examples</h4>
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Examples</h4>
                         <div className="flex flex-wrap gap-2">
                           {concept.examples.map((example, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-purple-900/50 text-purple-300 text-sm rounded-lg">
+                            <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                               {example}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Code Illustration</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Code Illustration</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{concept.code}</code>
                         </pre>
                       </div>
@@ -705,17 +705,17 @@ int fibonacci_optimized(int n) {
           {/* 1D DP Section */}
           {activeSection === "1d" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">1D Dynamic Programming</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">1D Dynamic Programming</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {oneDDP.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -726,10 +726,10 @@ int fibonacci_optimized(int n) {
 
                       {problem.approaches && (
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-blue-400 mb-3">Solution Approaches</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Solution Approaches</h4>
                           <div className="flex flex-wrap gap-2">
                             {problem.approaches.map((approach, idx) => (
-                              <span key={idx} className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                              <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                                 {approach}
                               </span>
                             ))}
@@ -737,9 +737,9 @@ int fibonacci_optimized(int n) {
                         </div>
                       )}
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -753,17 +753,17 @@ int fibonacci_optimized(int n) {
           {/* 2D DP Section */}
           {activeSection === "2d" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">2D Dynamic Programming</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">2D Dynamic Programming</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {twoDDP.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -772,9 +772,9 @@ int fibonacci_optimized(int n) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -788,17 +788,17 @@ int fibonacci_optimized(int n) {
           {/* String DP Section */}
           {activeSection === "string" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">String Dynamic Programming</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">String Dynamic Programming</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {stringDP.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -807,9 +807,9 @@ int fibonacci_optimized(int n) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -823,22 +823,22 @@ int fibonacci_optimized(int n) {
           {/* Grid DP Section */}
           {activeSection === "grid" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Grid/Matrix Dynamic Programming</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Grid/Matrix Dynamic Programming</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {gridDP.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-yellow-900/50 text-yellow-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-amber-100 text-amber-700 text-sm rounded-lg border border-amber-200">
                             Time: {problem.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-orange-900/50 text-orange-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-orange-100 text-orange-700 text-sm rounded-lg border border-orange-200">
                             Space: {problem.complexity.space}
                           </span>
                         </div>
@@ -846,9 +846,9 @@ int fibonacci_optimized(int n) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -862,22 +862,22 @@ int fibonacci_optimized(int n) {
           {/* Advanced DP Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Dynamic Programming</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Dynamic Programming</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedDP.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-red-900/50 text-red-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-red-100 text-red-700 text-sm rounded-lg border border-red-200">
                             Time: {problem.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-cyan-900/50 text-cyan-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                             Space: {problem.complexity.space}
                           </span>
                         </div>
@@ -885,9 +885,9 @@ int fibonacci_optimized(int n) {
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -896,15 +896,15 @@ int fibonacci_optimized(int n) {
                 ))}
 
                 {/* Space Optimization Section */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">Space Optimization Techniques</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Space Optimization Techniques</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {spaceOptimization.map((technique, idx) => (
-                      <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-2">{technique.name}</h4>
+                      <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-2">{technique.name}</h4>
                         <p className="text-gray-300 mb-2 text-sm">{technique.description}</p>
-                        <p className="text-xs text-gray-400 italic">{technique.example}</p>
+                        <p className="text-xs text-gray-500 italic">{technique.example}</p>
                       </div>
                     ))}
                   </div>
@@ -914,15 +914,15 @@ int fibonacci_optimized(int n) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy DP Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Easy DP Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Climbing Stairs (different step sizes)</span>
@@ -946,9 +946,9 @@ int fibonacci_optimized(int n) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium DP Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Medium DP Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Decode Ways (message decoding)</span>
@@ -972,9 +972,9 @@ int fibonacci_optimized(int n) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard DP Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Hard DP Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Regular Expression Matching</span>
@@ -1000,10 +1000,10 @@ int fibonacci_optimized(int n) {
             </div>
 
             {/* Common Interview Patterns */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Common DP Interview Patterns</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <h3 className="text-xl font-semibold text-indigo-600 mb-4">💡 Common DP Interview Patterns</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                   <h4 className="text-cyan-400 font-semibold mb-2">1D DP Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Kadane's Algorithm (Max Subarray)</li>
@@ -1013,7 +1013,7 @@ int fibonacci_optimized(int n) {
                     <li>• Best time to buy/sell stock</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                   <h4 className="text-cyan-400 font-semibold mb-2">2D DP Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Knapsack problems</li>
@@ -1023,7 +1023,7 @@ int fibonacci_optimized(int n) {
                     <li>• Optimal binary search tree</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                   <h4 className="text-cyan-400 font-semibold mb-2">String DP Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Palindrome problems</li>
@@ -1033,7 +1033,7 @@ int fibonacci_optimized(int n) {
                     <li>• Longest common substring</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                   <h4 className="text-cyan-400 font-semibold mb-2">Advanced Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• State compression DP</li>
@@ -1048,14 +1048,14 @@ int fibonacci_optimized(int n) {
           </div>
 
           {/* Key Takeaways */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               DP Mastery Checklist
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-green-400 mb-2">✅ Fundamentals</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-green-600 mb-2">✅ Fundamentals</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Overlapping subproblems</li>
                   <li>• Optimal substructure</li>
@@ -1064,8 +1064,8 @@ int fibonacci_optimized(int n) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-blue-400 mb-2">🎯 Problem Recognition</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-indigo-600 mb-2">🎯 Problem Recognition</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• When to use DP</li>
                   <li>• State space analysis</li>
@@ -1074,8 +1074,8 @@ int fibonacci_optimized(int n) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-purple-400 mb-2">⚡ Optimization</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-indigo-600 mb-2">⚡ Optimization</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Space optimization</li>
                   <li>• Time optimization</li>
@@ -1084,8 +1084,8 @@ int fibonacci_optimized(int n) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-5 rounded-xl">
-                <h4 className="text-lg font-semibold text-red-400 mb-2">🚀 Advanced Techniques</h4>
+              <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                <h4 className="text-lg font-semibold text-red-600 mb-2">🚀 Advanced Techniques</h4>
                 <ul className="text-gray-300 text-sm space-y-1">
                   <li>• Bitmask DP</li>
                   <li>• Digit DP</li>

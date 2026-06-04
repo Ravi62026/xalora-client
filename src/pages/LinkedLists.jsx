@@ -626,16 +626,16 @@ MultilevelNode* flatten(MultilevelNode* head) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Linked Lists
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Master dynamic data structures with flexible memory allocation and efficient insertions/deletions.
             </p>
           </div>
@@ -645,8 +645,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -654,8 +654,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
             <button
               onClick={() => setActiveSection("theory")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "theory"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Theory
@@ -663,8 +663,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
             <button
               onClick={() => setActiveSection("types")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "types"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               List Types
@@ -672,8 +672,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
             <button
               onClick={() => setActiveSection("algorithms")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "algorithms"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Algorithms
@@ -681,8 +681,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -692,32 +692,32 @@ MultilevelNode* flatten(MultilevelNode* head) {
           {/* Theory Section */}
           {activeSection === "theory" && (
             <div className="mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 text-center">Linked List Theory & Deep Concepts</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Linked List Theory & Deep Concepts</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Memory Layout & Pointer Overhead */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-green-400 mb-6">Memory Layout & Pointer Overhead</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Memory Layout & Pointer Overhead</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Scattered Memory Allocation</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Scattered Memory Allocation</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Linked lists allocate memory dynamically across the heap:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-red-400 mr-2">🔗</span>
+                              <span className="text-red-700 mr-2">🔗</span>
                               <span><strong>Non-contiguous:</strong> Nodes scattered across memory addresses</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-red-400 mr-2">📍</span>
+                              <span className="text-red-700 mr-2">📍</span>
                               <span><strong>Dynamic Allocation:</strong> malloc/new for each node</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-red-400 mr-2">🎯</span>
+                              <span className="text-red-700 mr-2">🎯</span>
                               <span><strong>Fragmentation:</strong> Memory holes from deallocation patterns</span>
                             </li>
                           </ul>
@@ -725,22 +725,22 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Pointer Overhead Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Pointer Overhead Analysis</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Each node carries pointer overhead:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-yellow-400 mr-2">📏</span>
+                              <span className="text-amber-700 mr-2">📏</span>
                               <span><strong>Singly Linked:</strong> 1 pointer (8 bytes on 64-bit)</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-yellow-400 mr-2">🔄</span>
+                              <span className="text-amber-700 mr-2">🔄</span>
                               <span><strong>Doubly Linked:</strong> 2 pointers (16 bytes on 64-bit)</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-yellow-400 mr-2">📊</span>
+                              <span className="text-amber-700 mr-2">📊</span>
                               <span><strong>Space Usage:</strong> (data + pointers) × n nodes</span>
                             </li>
                           </ul>
@@ -748,21 +748,21 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Cache Performance Issues</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Cache Performance Issues</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-red-400 font-medium mb-2">❌ Poor Spatial Locality</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-red-700 font-medium mb-2">❌ Poor Spatial Locality</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Nodes scattered in memory</li>
                             <li>• Cache misses on traversal</li>
                             <li>• Prefetcher ineffective</li>
                             <li>• Poor branch prediction</li>
                           </ul>
                         </div>
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-green-400 font-medium mb-2">✅ Sequential Access Benefits</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-green-700 font-medium mb-2">✅ Sequential Access Benefits</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Predictable access pattern</li>
                             <li>• Good for streaming data</li>
                             <li>• Iterator-based algorithms</li>
@@ -774,62 +774,62 @@ MultilevelNode* flatten(MultilevelNode* head) {
                 </div>
 
                 {/* Linked List vs Arrays Comparison */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-green-400 mb-6">Linked Lists vs Arrays: Theoretical Comparison</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Linked Lists vs Arrays: Theoretical Comparison</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Characteristic</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Arrays</th>
-                            <th className="pb-4 text-green-400 text-lg font-bold">Linked Lists</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">When to Choose</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Characteristic</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Arrays</th>
+                            <th className="pb-4 text-green-700 text-lg font-bold">Linked Lists</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">When to Choose</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Memory Layout</td>
-                            <td className="py-4 text-blue-400 font-medium">Contiguous blocks</td>
-                            <td className="py-4 text-green-400 font-medium">Scattered nodes</td>
-                            <td className="py-4 text-purple-400 font-medium">Arrays for cache performance</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Memory Layout</td>
+                            <td className="py-4 text-blue-700 font-medium">Contiguous blocks</td>
+                            <td className="py-4 text-green-700 font-medium">Scattered nodes</td>
+                            <td className="py-4 text-purple-700 font-medium">Arrays for cache performance</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Size Flexibility</td>
-                            <td className="py-4 text-red-400 font-medium">Fixed/static</td>
-                            <td className="py-4 text-green-400 font-medium">Dynamic</td>
-                            <td className="py-4 text-purple-400 font-medium">Lists for variable sizes</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Size Flexibility</td>
+                            <td className="py-4 text-red-700 font-medium">Fixed/static</td>
+                            <td className="py-4 text-green-700 font-medium">Dynamic</td>
+                            <td className="py-4 text-purple-700 font-medium">Lists for variable sizes</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Access Pattern</td>
-                            <td className="py-4 text-green-400 font-medium">Random access</td>
-                            <td className="py-4 text-red-400 font-medium">Sequential only</td>
-                            <td className="py-4 text-purple-400 font-medium">Arrays for indexed access</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Access Pattern</td>
+                            <td className="py-4 text-green-700 font-medium">Random access</td>
+                            <td className="py-4 text-red-700 font-medium">Sequential only</td>
+                            <td className="py-4 text-purple-700 font-medium">Arrays for indexed access</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Insert/Delete</td>
-                            <td className="py-4 text-red-400 font-medium">O(n) worst case</td>
-                            <td className="py-4 text-green-400 font-medium">O(1) with pointer</td>
-                            <td className="py-4 text-purple-400 font-medium">Lists for frequent mutations</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Insert/Delete</td>
+                            <td className="py-4 text-red-700 font-medium">O(n) worst case</td>
+                            <td className="py-4 text-green-700 font-medium">O(1) with pointer</td>
+                            <td className="py-4 text-purple-700 font-medium">Lists for frequent mutations</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Memory Overhead</td>
-                            <td className="py-4 text-green-400 font-medium">None</td>
-                            <td className="py-4 text-red-400 font-medium">High (pointers)</td>
-                            <td className="py-4 text-purple-400 font-medium">Arrays for memory efficiency</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Memory Overhead</td>
+                            <td className="py-4 text-green-700 font-medium">None</td>
+                            <td className="py-4 text-red-700 font-medium">High (pointers)</td>
+                            <td className="py-4 text-purple-700 font-medium">Arrays for memory efficiency</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Cache Performance</td>
-                            <td className="py-4 text-green-400 font-medium">Excellent</td>
-                            <td className="py-4 text-red-400 font-medium">Poor</td>
-                            <td className="py-4 text-purple-400 font-medium">Arrays for performance</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Cache Performance</td>
+                            <td className="py-4 text-green-700 font-medium">Excellent</td>
+                            <td className="py-4 text-red-700 font-medium">Poor</td>
+                            <td className="py-4 text-purple-700 font-medium">Arrays for performance</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-green-400 transition-all duration-300">Use Cases</td>
-                            <td className="py-4 text-blue-400 font-medium">Static data, matrices</td>
-                            <td className="py-4 text-green-400 font-medium">Dynamic lists, stacks</td>
-                            <td className="py-4 text-purple-400 font-medium">Choose based on access patterns</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Use Cases</td>
+                            <td className="py-4 text-blue-700 font-medium">Static data, matrices</td>
+                            <td className="py-4 text-green-700 font-medium">Dynamic lists, stacks</td>
+                            <td className="py-4 text-purple-700 font-medium">Choose based on access patterns</td>
                           </tr>
                         </tbody>
                       </table>
@@ -838,17 +838,17 @@ MultilevelNode* flatten(MultilevelNode* head) {
                 </div>
 
                 {/* Linked List Variants Analysis */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-green-400 mb-6">Linked List Variants: Theoretical Analysis</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Linked List Variants: Theoretical Analysis</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Singly Linked Lists</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Singly Linked Lists</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Advantages</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Advantages</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Minimal memory overhead (1 pointer per node)</li>
                               <li>• Simple implementation</li>
                               <li>• Efficient for stack operations</li>
@@ -856,9 +856,9 @@ MultilevelNode* flatten(MultilevelNode* head) {
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-red-400 font-medium mb-2">Limitations</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-red-700 font-medium mb-2">Limitations</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• No backward traversal</li>
                               <li>• O(n) access to arbitrary positions</li>
                               <li>• Cannot efficiently remove last element</li>
@@ -869,11 +869,11 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Doubly Linked Lists</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Doubly Linked Lists</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Advantages</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Advantages</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Bidirectional traversal</li>
                               <li>• Efficient deletion of known nodes</li>
                               <li>• Can implement deque efficiently</li>
@@ -881,9 +881,9 @@ MultilevelNode* flatten(MultilevelNode* head) {
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-red-400 font-medium mb-2">Trade-offs</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-red-700 font-medium mb-2">Trade-offs</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Higher memory overhead (2 pointers)</li>
                               <li>• More complex pointer management</li>
                               <li>• Additional book-keeping required</li>
@@ -894,12 +894,12 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Circular Linked Lists</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Circular Linked Lists</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Advantages</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Advantages</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Endless traversal capability</li>
                             <li>• Efficient for circular buffers</li>
                             <li>• No null pointer checks needed</li>
@@ -907,8 +907,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Use Cases</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Use Cases</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• CPU scheduling algorithms</li>
                             <li>• Music playlist (repeat)</li>
                             <li>• Token ring networks</li>
@@ -921,17 +921,17 @@ MultilevelNode* flatten(MultilevelNode* head) {
                 </div>
 
                 {/* Mathematical Analysis */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-green-400 mb-6">Mathematical Analysis of Linked List Operations</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Mathematical Analysis of Linked List Operations</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Time Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Head Operations: O(1)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Head Operations: O(1)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Mathematical Basis:</strong></p>
                               <p>• Direct pointer manipulation</p>
                               <p>• No traversal required</p>
@@ -940,9 +940,9 @@ MultilevelNode* flatten(MultilevelNode* head) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-yellow-400 font-medium mb-2">Search Operation: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-amber-700 font-medium mb-2">Search Operation: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Traversal Required:</strong></p>
                               <p>• Must visit each node sequentially</p>
                               <p>• Linear time proportional to size</p>
@@ -954,11 +954,11 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Space Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Space Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-blue-400 font-medium mb-2">Singly Linked: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-indigo-600 font-medium mb-2">Singly Linked: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Space Usage:</strong></p>
                               <p>• Data: n × element_size</p>
                               <p>• Pointers: n × pointer_size</p>
@@ -967,9 +967,9 @@ MultilevelNode* flatten(MultilevelNode* head) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Doubly Linked: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Doubly Linked: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Increased Overhead:</strong></p>
                               <p>• Data: n × element_size</p>
                               <p>• Pointers: 2n × pointer_size</p>
@@ -981,20 +981,20 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Asymptotic Analysis Summary</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Asymptotic Analysis Summary</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="text-center">
                           <div className="text-green-400 font-bold text-lg mb-2">O(1) Operations</div>
-                          <div className="text-gray-300 text-sm">Insert/Delete head, Push/Pop</div>
+                          <div className="text-gray-700 text-sm">Insert/Delete head, Push/Pop</div>
                         </div>
                         <div className="text-center">
                           <div className="text-yellow-400 font-bold text-lg mb-2">O(n) Operations</div>
-                          <div className="text-gray-300 text-sm">Search, Access by index, Traverse</div>
+                          <div className="text-gray-700 text-sm">Search, Access by index, Traverse</div>
                         </div>
                         <div className="text-center">
                           <div className="text-blue-400 font-bold text-lg mb-2">O(k) Operations</div>
-                          <div className="text-gray-300 text-sm">Insert/Delete at position k</div>
+                          <div className="text-gray-700 text-sm">Insert/Delete at position k</div>
                         </div>
                       </div>
                     </div>
@@ -1002,17 +1002,17 @@ MultilevelNode* flatten(MultilevelNode* head) {
                 </div>
 
                 {/* Linked Lists in Algorithms */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-green-400 mb-6">Linked Lists in Algorithm Design</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Linked Lists in Algorithm Design</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Algorithmic Applications</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Algorithmic Applications</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Stack Implementation</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Stack Implementation</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• LIFO behavior naturally</p>
                               <p>• O(1) push/pop operations</p>
                               <p>• Dynamic sizing capability</p>
@@ -1020,18 +1020,18 @@ MultilevelNode* flatten(MultilevelNode* head) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Queue Implementation</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Queue Implementation</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• FIFO with head/tail pointers</p>
                               <p>• O(1) enqueue/dequeue</p>
                               <p>• Used in: BFS, task scheduling</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Hash Table Collision Resolution</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Hash Table Collision Resolution</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Separate chaining method</p>
                               <p>• Handles collisions gracefully</p>
                               <p>• Load factor management</p>
@@ -1041,29 +1041,29 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Advanced Techniques</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Advanced Techniques</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Fast/Slow Pointers</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Fast/Slow Pointers</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Cycle detection in O(n) time</p>
                               <p>• Finding middle element</p>
                               <p>• Floyd's tortoise and hare</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">In-Place Reversal</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">In-Place Reversal</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• O(n) time, O(1) space</p>
                               <p>• Pointer manipulation only</p>
                               <p>• No extra memory allocation</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Dummy Node Technique</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Dummy Node Technique</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Simplifies edge case handling</p>
                               <p>• Eliminates null pointer checks</p>
                               <p>• Cleaner algorithm implementation</p>
@@ -1073,12 +1073,12 @@ MultilevelNode* flatten(MultilevelNode* head) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-green-400 mb-4">Why Linked Lists Matter</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-green-700 mb-4">Why Linked Lists Matter</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Algorithm Foundations</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Algorithm Foundations</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Dynamic memory management</li>
                             <li>• Pointer manipulation skills</li>
                             <li>• Recursive algorithm thinking</li>
@@ -1086,8 +1086,8 @@ MultilevelNode* flatten(MultilevelNode* head) {
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">System Programming</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">System Programming</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Understanding heap allocation</li>
                             <li>• Manual memory management</li>
                             <li>• Cache-unfriendly patterns</li>
@@ -1104,64 +1104,64 @@ MultilevelNode* flatten(MultilevelNode* head) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Linked Lists Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Linked Lists Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">What are Linked Lists?</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Linked Lists?</h3>
+                  <p className="text-gray-700 mb-6">
                     Linked lists are dynamic data structures where elements are stored in nodes,
                     and each node contains a reference (pointer) to the next node in the sequence.
                     Unlike arrays, linked lists don't require contiguous memory allocation.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">🔗</span>
+                      <span className="text-green-700 mr-2">🔗</span>
                       <span><strong>Dynamic Size:</strong> Can grow/shrink at runtime</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">💾</span>
+                      <span className="text-green-700 mr-2">💾</span>
                       <span><strong>Non-contiguous:</strong> Elements scattered in memory</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">⚡</span>
+                      <span className="text-green-700 mr-2">⚡</span>
                       <span><strong>Efficient Insertions:</strong> O(1) at head with proper implementation</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">🎯</span>
+                      <span className="text-green-700 mr-2">🎯</span>
                       <span><strong>Sequential Access:</strong> No random access, O(n) to reach element</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">Types of Linked Lists</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Types of Linked Lists</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Singly Linked List</h4>
-                      <p className="text-gray-300">Each node points to next node only</p>
-                      <div className="text-sm text-gray-400 mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Singly Linked List</h4>
+                      <p className="text-gray-700">Each node points to next node only</p>
+                      <div className="text-sm text-gray-600 mt-2">
                         <strong>Pros:</strong> Simple, memory efficient<br />
                         <strong>Cons:</strong> Can't traverse backwards
                       </div>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Doubly Linked List</h4>
-                      <p className="text-gray-300">Each node has prev and next pointers</p>
-                      <div className="text-sm text-gray-400 mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Doubly Linked List</h4>
+                      <p className="text-gray-700">Each node has prev and next pointers</p>
+                      <div className="text-sm text-gray-600 mt-2">
                         <strong>Pros:</strong> Bidirectional traversal<br />
                         <strong>Cons:</strong> More memory overhead
                       </div>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Circular Linked List</h4>
-                      <p className="text-gray-300">Last node points back to first node</p>
-                      <div className="text-sm text-gray-400 mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Circular Linked List</h4>
+                      <p className="text-gray-700">Last node points back to first node</p>
+                      <div className="text-sm text-gray-600 mt-2">
                         <strong>Pros:</strong> Endless traversal<br />
                         <strong>Cons:</strong> Careful with cycle detection
                       </div>
@@ -1171,9 +1171,9 @@ MultilevelNode* flatten(MultilevelNode* head) {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-green-900/20 to-teal-900/20 border border-green-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-green-400 mb-3">Operations</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-green-700 mb-3">Operations</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Insert: O(1) to O(n)</li>
                     <li>• Delete: O(1) to O(n)</li>
                     <li>• Search: O(n)</li>
@@ -1181,15 +1181,15 @@ MultilevelNode* flatten(MultilevelNode* head) {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
-                  <p className="text-gray-300">O(n) for elements</p>
-                  <p className="text-sm text-gray-400 mt-2">+ O(1) per node overhead</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
+                  <p className="text-gray-700">O(n) for elements</p>
+                  <p className="text-sm text-gray-600 mt-2">+ O(1) per node overhead</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Dynamic memory allocation</li>
                     <li>• Implementing stacks/queues</li>
                     <li>• Symbol tables</li>
@@ -1203,31 +1203,31 @@ MultilevelNode* flatten(MultilevelNode* head) {
           {/* List Types Section */}
           {activeSection === "types" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Linked List Types</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Linked List Types</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {listTypes.map((listType) => (
                   <div
                     key={listType.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{listType.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{listType.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(listType.complexity).map(([key, value]) => (
-                            <span key={key} className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                            <span key={key} className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                               {key.toUpperCase()}: {value}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{listType.description}</p>
+                      <p className="text-gray-700 mb-6">{listType.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{listType.code}</code>
                         </pre>
                       </div>
@@ -1241,32 +1241,32 @@ MultilevelNode* flatten(MultilevelNode* head) {
           {/* Algorithms Section */}
           {activeSection === "algorithms" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Linked List Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Linked List Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {algorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-teal-500 hover:shadow-2xl hover:shadow-teal-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                             Time: {algorithm.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 text-sm rounded-lg">
                             Space: {algorithm.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-700 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1280,32 +1280,32 @@ MultilevelNode* flatten(MultilevelNode* head) {
           {/* Advanced Problems Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Linked List Problems</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Linked List Problems</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedProblems.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                             Time: {problem.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 text-sm rounded-lg">
                             Space: {problem.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{problem.description}</p>
+                      <p className="text-gray-700 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -1317,81 +1317,81 @@ MultilevelNode* flatten(MultilevelNode* head) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Linked List Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Linked List Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Remove Linked List Elements</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Merge Two Sorted Lists</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Linked List Cycle</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Intersection of Two Linked Lists</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Linked List Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Linked List Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Add Two Numbers</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Remove Nth Node From End</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Reorder List</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Palindrome Linked List</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Copy List with Random Pointer</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Linked List Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Linked List Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Merge K Sorted Lists</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Reverse Nodes in k-Group</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>LFU Cache (using DLL)</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Flatten Multilevel Doubly LL</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>LRU Cache (using HashMap + DLL)</span>
                   </li>
                 </ul>
@@ -1399,22 +1399,22 @@ MultilevelNode* flatten(MultilevelNode* head) {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                            'bg-red-900/50 text-red-300'
+                      <h4 className="text-indigo-600 font-semibold">{problem.name}</h4>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                          problem.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         {problem.difficulty}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-gray-700 text-sm mb-2">{problem.description}</p>
+                    <p className="text-xs text-gray-600 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1422,64 +1422,64 @@ MultilevelNode* flatten(MultilevelNode* head) {
           </div>
 
           {/* Linked List Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-teal-500 hover:shadow-2xl hover:shadow-teal-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Linked List Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-green-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-700 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Access by index:</span>
-                    <span className="text-red-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Access by index:</span>
+                    <span className="text-red-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Search element:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Search element:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Insert at head:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Insert at head:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Insert in middle:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Insert in middle:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Delete from head:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Delete from head:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Delete from middle:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Delete from middle:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-green-400 mb-4">Common Patterns</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-700 mb-4">Common Patterns</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Dummy Node:</div>
-                    <div className="text-gray-400">Handle edge cases (empty list, single node)</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Dummy Node:</div>
+                    <div className="text-gray-600">Handle edge cases (empty list, single node)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Two Pointers:</div>
-                    <div className="text-gray-400">Fast/slow pointers for cycle detection</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Two Pointers:</div>
+                    <div className="text-gray-600">Fast/slow pointers for cycle detection</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Reverse List:</div>
-                    <div className="text-gray-400">Iterative (3 pointers) or recursive approach</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Reverse List:</div>
+                    <div className="text-gray-600">Iterative (3 pointers) or recursive approach</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Find Middle:</div>
-                    <div className="text-gray-400">Slow/fast pointers to find middle node</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Find Middle:</div>
+                    <div className="text-gray-600">Slow/fast pointers to find middle node</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Cycle Detection:</div>
-                    <div className="text-gray-400">Floyd's algorithm: slow + fast pointers</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Cycle Detection:</div>
+                    <div className="text-gray-600">Floyd's algorithm: slow + fast pointers</div>
                   </div>
                 </div>
               </div>

@@ -383,16 +383,16 @@ void demonstrateRAII() {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Basic Data Structures
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Foundational concepts that form the building blocks for complex data structures and algorithms.
             </p>
           </div>
@@ -402,8 +402,8 @@ void demonstrateRAII() {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -411,8 +411,8 @@ void demonstrateRAII() {
             <button
               onClick={() => setActiveSection("variables")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "variables"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Variables & Memory
@@ -420,8 +420,8 @@ void demonstrateRAII() {
             <button
               onClick={() => setActiveSection("strings")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "strings"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Strings
@@ -429,8 +429,8 @@ void demonstrateRAII() {
             <button
               onClick={() => setActiveSection("pointers")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "pointers"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Pointers & Memory
@@ -438,8 +438,8 @@ void demonstrateRAII() {
             <button
               onClick={() => setActiveSection("structures")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "structures"
-                  ? "bg-green-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Structures
@@ -448,82 +448,82 @@ void demonstrateRAII() {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">What are Basic Data Structures?</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">What are Basic Data Structures?</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">Core Concepts</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Core Concepts</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Basic data structures are the fundamental building blocks of programming.
                     They represent the simplest ways to organize and store data in memory,
                     forming the foundation for more complex data structures and algorithms.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">Why They're Important</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Why They're Important</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">🏗️</span>
+                      <span className="text-green-700 mr-2">🏗️</span>
                       <span><strong>Foundation:</strong> Basis for all complex structures</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">⚡</span>
+                      <span className="text-green-700 mr-2">⚡</span>
                       <span><strong>Efficiency:</strong> Understanding memory and access patterns</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">🔧</span>
+                      <span className="text-green-700 mr-2">🔧</span>
                       <span><strong>Control:</strong> Direct memory management and optimization</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-green-400 mr-2">🎯</span>
+                      <span className="text-green-700 mr-2">🎯</span>
                       <span><strong>Problem Solving:</strong> Essential for algorithm implementation</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-green-400 mb-4">Components Covered</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Components Covered</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Variables & Memory</h4>
-                      <p className="text-gray-300">Data types, memory allocation, scope, and lifetime</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Variables & Memory</h4>
+                      <p className="text-gray-700">Data types, memory allocation, scope, and lifetime</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Arrays</h4>
-                      <p className="text-gray-300">Contiguous memory, random access, fixed-size sequences</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Arrays</h4>
+                      <p className="text-gray-700">Contiguous memory, random access, fixed-size sequences</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Strings</h4>
-                      <p className="text-gray-300">Character sequences, operations, and manipulations</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Strings</h4>
+                      <p className="text-gray-700">Character sequences, operations, and manipulations</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Pointers & References</h4>
-                      <p className="text-gray-300">Memory addresses, indirect access, dynamic allocation</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Pointers & References</h4>
+                      <p className="text-gray-700">Memory addresses, indirect access, dynamic allocation</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-green-400 mb-3">Memory Understanding</h4>
-                  <p className="text-gray-300">Stack vs heap, allocation strategies</p>
-                  <p className="text-sm text-gray-400 mt-2">Essential for performance</p>
+                <div className="bg-green-50 border border-green-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-green-700 mb-3">Memory Understanding</h4>
+                  <p className="text-gray-700">Stack vs heap, allocation strategies</p>
+                  <p className="text-sm text-gray-600 mt-2">Essential for performance</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Data Organization</h4>
-                  <p className="text-gray-300">How data is stored and accessed</p>
-                  <p className="text-sm text-gray-400 mt-2">Foundation of algorithms</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Data Organization</h4>
+                  <p className="text-gray-700">How data is stored and accessed</p>
+                  <p className="text-sm text-gray-600 mt-2">Foundation of algorithms</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Type Systems</h4>
-                  <p className="text-gray-300">Primitive and derived types</p>
-                  <p className="text-sm text-gray-400 mt-2">Type safety and conversion</p>
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Type Systems</h4>
+                  <p className="text-gray-700">Primitive and derived types</p>
+                  <p className="text-sm text-gray-600 mt-2">Type safety and conversion</p>
                 </div>
               </div>
             </div>
@@ -532,40 +532,40 @@ void demonstrateRAII() {
           {/* Variables & Memory Section */}
           {activeSection === "variables" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Variables & Memory Management</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Variables & Memory Management</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {variableTypes.map((category, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-6">
-                      <h3 className="text-2xl font-bold text-green-400 mb-6">{category.category}</h3>
+                      <h3 className="text-2xl font-bold text-indigo-600 mb-6">{category.category}</h3>
 
                       <div className="overflow-x-auto">
                         <table className="w-full text-left">
                           <thead>
-                            <tr className="border-b border-gray-700">
-                              <th className="pb-4 text-gray-200 text-lg font-bold">Type</th>
-                              <th className="pb-4 text-gray-200 text-lg font-bold">Size</th>
-                              <th className="pb-4 text-gray-200 text-lg font-bold">Range</th>
-                              <th className="pb-4 text-gray-200 text-lg font-bold">Use Case</th>
+                            <tr className="border-b border-gray-200">
+                              <th className="pb-4 text-gray-700 text-lg font-bold">Type</th>
+                              <th className="pb-4 text-gray-700 text-lg font-bold">Size</th>
+                              <th className="pb-4 text-gray-700 text-lg font-bold">Range</th>
+                              <th className="pb-4 text-gray-700 text-lg font-bold">Use Case</th>
                             </tr>
                           </thead>
                           <tbody>
                             {category.types.map((type, typeIdx) => (
-                              <tr key={typeIdx} className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                                <td className="py-4 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">
+                              <tr key={typeIdx} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                                <td className="py-4 text-indigo-600 font-medium group-hover:text-cyan-300 transition-all duration-300">
                                   {type.name}
                                 </td>
-                                <td className="py-4 text-green-400 font-medium group-hover:text-green-300 transition-all duration-300">
+                                <td className="py-4 text-green-700 font-medium group-hover:text-green-300 transition-all duration-300">
                                   {type.size}
                                 </td>
-                                <td className="py-4 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300 text-sm">
+                                <td className="py-4 text-amber-700 font-medium group-hover:text-yellow-300 transition-all duration-300 text-sm">
                                   {type.range}
                                 </td>
-                                <td className="py-4 text-gray-300 group-hover:text-gray-200 transition-all duration-300">
+                                <td className="py-4 text-gray-700 group-hover:text-gray-200 transition-all duration-300">
                                   {type.use}
                                 </td>
                               </tr>
@@ -578,12 +578,12 @@ void demonstrateRAII() {
                 ))}
 
                 {/* Memory Concepts */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8">
-                  <h3 className="text-2xl font-bold text-green-400 mb-6">Memory Concepts</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+                  <h3 className="text-2xl font-bold text-indigo-600 mb-6">Memory Concepts</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-cyan-400 mb-4">Stack Memory</h4>
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-indigo-600 mb-4">Stack Memory</h4>
                       <ul className="space-y-2 text-gray-300">
                         <li>• Automatic allocation/deallocation</li>
                         <li>• Fast access</li>
@@ -593,8 +593,8 @@ void demonstrateRAII() {
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-cyan-400 mb-4">Heap Memory</h4>
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-indigo-600 mb-4">Heap Memory</h4>
                       <ul className="space-y-2 text-gray-300">
                         <li>• Manual allocation/deallocation</li>
                         <li>• Larger size available</li>
@@ -605,23 +605,23 @@ void demonstrateRAII() {
                     </div>
                   </div>
 
-                  <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                    <h4 className="text-xl font-semibold text-cyan-400 mb-4">Scope & Lifetime</h4>
+                  <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <h4 className="text-xl font-semibold text-indigo-600 mb-4">Scope & Lifetime</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="text-center">
                         <div className="text-green-400 font-bold text-lg mb-2">Local</div>
-                        <div className="text-gray-300 text-sm">Function/block scope</div>
-                        <div className="text-gray-400 text-xs">Stack memory</div>
+                        <div className="text-gray-700 text-sm">Function/block scope</div>
+                        <div className="text-gray-600 text-xs">Stack memory</div>
                       </div>
                       <div className="text-center">
                         <div className="text-blue-400 font-bold text-lg mb-2">Global</div>
-                        <div className="text-gray-300 text-sm">Program lifetime</div>
-                        <div className="text-gray-400 text-xs">Static memory</div>
+                        <div className="text-gray-700 text-sm">Program lifetime</div>
+                        <div className="text-gray-600 text-xs">Static memory</div>
                       </div>
                       <div className="text-center">
                         <div className="text-purple-400 font-bold text-lg mb-2">Dynamic</div>
-                        <div className="text-gray-300 text-sm">Manual control</div>
-                        <div className="text-gray-400 text-xs">Heap memory</div>
+                        <div className="text-gray-700 text-sm">Manual control</div>
+                        <div className="text-gray-600 text-xs">Heap memory</div>
                       </div>
                     </div>
                   </div>
@@ -633,21 +633,21 @@ void demonstrateRAII() {
           {/* Strings Section */}
           {activeSection === "strings" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">String Operations & Concepts</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">String Operations & Concepts</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {stringOperations.map((operation, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-6">
                       <h3 className="text-2xl font-bold text-white mb-4">{operation.name}</h3>
-                      <p className="text-gray-300 mb-6">{operation.explanation}</p>
+                      <p className="text-gray-700 mb-6">{operation.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{operation.code}</code>
                         </pre>
                       </div>
@@ -656,13 +656,13 @@ void demonstrateRAII() {
                 ))}
 
                 {/* String Encoding */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">String Encoding & Representation</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">String Encoding & Representation</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-cyan-400 mb-4">ASCII (7-bit)</h4>
-                      <ul className="space-y-2 text-gray-300 text-sm">
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-indigo-600 mb-4">ASCII (7-bit)</h4>
+                      <ul className="space-y-2 text-gray-700 text-sm">
                         <li>• 128 characters (0-127)</li>
                         <li>• Basic Latin alphabet</li>
                         <li>• Control characters</li>
@@ -671,9 +671,9 @@ void demonstrateRAII() {
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-cyan-400 mb-4">Unicode (UTF-8/16/32)</h4>
-                      <ul className="space-y-2 text-gray-300 text-sm">
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-indigo-600 mb-4">Unicode (UTF-8/16/32)</h4>
+                      <ul className="space-y-2 text-gray-700 text-sm">
                         <li>• Millions of characters</li>
                         <li>• Worldwide language support</li>
                         <li>• Variable encoding size</li>
@@ -690,21 +690,21 @@ void demonstrateRAII() {
           {/* Pointers Section */}
           {activeSection === "pointers" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Pointers, References & Memory Management</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Pointers, References & Memory Management</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {pointerConcepts.map((concept, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-6">
                       <h3 className="text-2xl font-bold text-white mb-4">{concept.name}</h3>
-                      <p className="text-gray-300 mb-6">{concept.explanation}</p>
+                      <p className="text-gray-700 mb-6">{concept.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{concept.code}</code>
                         </pre>
                       </div>
@@ -716,15 +716,15 @@ void demonstrateRAII() {
                 {memoryManagement.map((topic, idx) => (
                   <div
                     key={`memory-${idx}`}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-6">
                       <h3 className="text-2xl font-bold text-white mb-4">{topic.name}</h3>
-                      <p className="text-gray-300 mb-6">{topic.explanation}</p>
+                      <p className="text-gray-700 mb-6">{topic.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{topic.code}</code>
                         </pre>
                       </div>
@@ -738,27 +738,27 @@ void demonstrateRAII() {
           {/* Structures Section */}
           {activeSection === "structures" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Basic Data Structures Overview</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Basic Data Structures Overview</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {basicStructures.map((structure) => (
                   <div
                     key={structure.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex items-center mb-4">
                         <span className="text-4xl mr-4">{structure.icon}</span>
                         <div>
-                          <h3 className="text-2xl font-bold text-white mb-1">{structure.name}</h3>
-                          <p className="text-gray-300 text-sm">{structure.description}</p>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-1">{structure.name}</h3>
+                          <p className="text-gray-700 text-sm">{structure.description}</p>
                         </div>
                       </div>
 
                       {/* Complexity Table */}
                       {structure.complexity && (
-                        <div className="bg-gray-700/50 p-4 rounded-xl mb-6">
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">Complexity</h4>
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Complexity</h4>
                           <div className="grid grid-cols-2 gap-2 text-sm">
                             {Object.entries(structure.complexity).map(([op, comp]) => (
                               <div key={op} className="flex justify-between items-center">
@@ -772,10 +772,10 @@ void demonstrateRAII() {
 
                       {/* Features */}
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Key Features</h4>
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Key Features</h4>
                         <div className="flex flex-wrap gap-2">
                           {structure.features.map((feature, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                            <span key={idx} className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                               {feature}
                             </span>
                           ))}
@@ -785,12 +785,12 @@ void demonstrateRAII() {
                       {structure.route ? (
                         <button
                           onClick={() => navigate(structure.route)}
-                          className="w-full py-4 px-6 bg-gradient-to-r from-green-600 to-emerald-500 rounded-xl font-bold text-white hover:from-green-500 hover:to-emerald-400 transition-all duration-500 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full py-3 px-6 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors"
                         >
                           Learn {structure.name}
                         </button>
                       ) : (
-                        <div className="w-full py-4 px-6 bg-gradient-to-r from-gray-600 to-gray-500 rounded-xl font-bold text-white text-center">
+                        <div className="w-full py-3 px-6 bg-gray-200 text-gray-700 rounded-xl font-bold text-center">
                           Content Available Above
                         </div>
                       )}
@@ -802,85 +802,85 @@ void demonstrateRAII() {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Reverse String</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Palindrome Check</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>String to Integer (atoi)</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Valid Anagram</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>First Unique Character</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Longest Substring Without Repeating</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>String Compression</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Group Anagrams</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Valid Parentheses</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Implement strStr()</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Minimum Window Substring</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Longest Palindromic Substring</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Regular Expression Matching</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Word Break II</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Edit Distance</span>
                   </li>
                 </ul>
@@ -888,39 +888,39 @@ void demonstrateRAII() {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Memory Management</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Memory Management</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Stack vs Heap memory</li>
                     <li>• Memory leaks prevention</li>
                     <li>• Smart pointers usage</li>
                     <li>• RAII principle</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">String Operations</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">String Operations</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• String immutability concepts</li>
                     <li>• String concatenation efficiency</li>
                     <li>• Character encoding differences</li>
                     <li>• String searching algorithms</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Pointers & References</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Pointers & References</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Pointer arithmetic</li>
                     <li>• Memory addresses vs values</li>
                     <li>• Null pointer safety</li>
                     <li>• Reference vs pointer trade-offs</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Data Types & Sizes</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Data Types & Sizes</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Type conversion rules</li>
                     <li>• Overflow handling</li>
                     <li>• Platform-dependent sizes</li>
@@ -932,52 +932,52 @@ void demonstrateRAII() {
           </div>
 
           {/* Basic Concepts Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Basic Concepts Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-green-400 mb-4">Data Types</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-700 mb-4">Data Types</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Primitive types:</span>
+                    <span className="text-gray-700">Primitive types:</span>
                     <span className="text-cyan-400 font-mono">int, float, char, bool</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Derived types:</span>
+                    <span className="text-gray-700">Derived types:</span>
                     <span className="text-cyan-400 font-mono">arrays, pointers, references</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">User-defined:</span>
+                    <span className="text-gray-700">User-defined:</span>
                     <span className="text-cyan-400 font-mono">classes, structs, enums</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Type modifiers:</span>
+                    <span className="text-gray-700">Type modifiers:</span>
                     <span className="text-cyan-400 font-mono">signed, unsigned, const</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-green-400 mb-4">Memory Management</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-700 mb-4">Memory Management</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Stack Memory:</div>
-                    <div className="text-gray-400">Automatic, fast, limited, LIFO</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Stack Memory:</div>
+                    <div className="text-gray-600">Automatic, fast, limited, LIFO</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Heap Memory:</div>
-                    <div className="text-gray-400">Manual, slow, large, flexible</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Heap Memory:</div>
+                    <div className="text-gray-600">Manual, slow, large, flexible</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">RAII Principle:</div>
-                    <div className="text-gray-400">Resource management tied to lifetime</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">RAII Principle:</div>
+                    <div className="text-gray-600">Resource management tied to lifetime</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Smart Pointers:</div>
-                    <div className="text-gray-400">Automatic memory management</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Smart Pointers:</div>
+                    <div className="text-gray-600">Automatic memory management</div>
                   </div>
                 </div>
               </div>

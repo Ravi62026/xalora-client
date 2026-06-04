@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme 6 - Neutral Sage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #faf9f7 0%, #f5f3f0 100%);
+            background-attachment: fixed;
+            color: #2d2d2d;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(255, 255, 255, 0.99);
+            border-bottom: 1px solid #e5e0da;
+            padding: 1.3rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            sticky: top;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #5a6f6d;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.8rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #7a7a7a;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #5a6f6d;
+        }
+
+        .btn-primary {
+            background: #5a6f6d;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #4a5a59;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5.5rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.3rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: #1a1a1a;
+            line-height: 1.2;
+            letter-spacing: -0.8px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #7a7a7a;
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.65;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #5a6f6d;
+            border: 1px solid #d0ccc8;
+            padding: 0.7rem 1.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: #5a6f6d;
+            background: #faf9f7;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1100px;
+            margin: 3.5rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 6px;
+            border: 1px solid #ede8e2;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #5a6f6d;
+            box-shadow: 0 8px 24px rgba(90, 111, 109, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #7a7a7a;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            max-width: 1100px;
+            margin: 3.5rem auto;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ede8e2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #5a6f6d;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-label {
+            color: #7a7a7a;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            border-top: 1px solid #e5e0da;
+            padding: 2rem;
+            text-align: center;
+            color: #7a7a7a;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #5a6f6d;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">xalora</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <button class="btn-primary">Get Started</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Learn with Purpose, Code with Confidence</h1>
+        <p>A thoughtfully designed platform for mastering data structures and algorithms</p>
+        <div class="hero-buttons">
+            <button class="btn-primary">Start Learning</button>
+            <button class="btn-secondary">View Problems</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3>Curated Content</h3>
+            <p>Carefully selected problems and resources, designed for deep understanding</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Progress Tracking</h3>
+            <p>Simple, elegant analytics to understand your learning journey</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Structured Path</h3>
+            <p>Learn fundamentals first, advance at your own pace</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Community</h3>
+            <p>Connect with learners, share solutions, grow together</p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Learners</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Problems</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">Success</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Support</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Xalora. Thoughtfully designed. | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+    </footer>
+</body>
+</html>

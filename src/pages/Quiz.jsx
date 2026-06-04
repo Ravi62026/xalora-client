@@ -2,31 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import {
-    ArrowRight,
-    Brain,
-    BookOpen,
-    Calculator,
-    PlayCircle,
-    ShieldCheck,
-    Shuffle,
-    Timer,
-} from 'lucide-react';
 import axiosInstance from '../utils/axios';
 import ApiRoutes from '../routes/routes';
 
 const buildQuizStats = (submissions = []) => {
     const stats = {};
-
     submissions.forEach((submission) => {
         const quizId = String(submission?.quizId || '');
         if (!quizId) return;
-
         const score = Number(submission?.score) || 0;
-        const submittedAtMs = submission?.submittedAt
-            ? new Date(submission.submittedAt).getTime()
-            : 0;
-
+        const submittedAtMs = submission?.submittedAt ? new Date(submission.submittedAt).getTime() : 0;
         if (!stats[quizId]) {
             stats[quizId] = {
                 attempts: 0,
@@ -37,19 +22,16 @@ const buildQuizStats = (submissions = []) => {
                 latestSubmittedAt: 0,
             };
         }
-
         const entry = stats[quizId];
         entry.attempts += 1;
         entry.passed = entry.passed || Boolean(submission?.passed);
         entry.bestScore = Math.max(entry.bestScore, score);
-
         if (submittedAtMs >= entry.latestSubmittedAt) {
             entry.latestScore = score;
             entry.latestSubmissionId = String(submission?.id || '');
             entry.latestSubmittedAt = submittedAtMs;
         }
     });
-
     return stats;
 };
 
@@ -57,96 +39,10 @@ const getQuizPoolLabel = (quiz) => {
     if (Array.isArray(quiz.questions)) {
         return quiz.questions.length;
     }
-
     if (typeof quiz.questionPoolSize === 'number') {
         return quiz.questionPoolSize;
     }
-
     return quiz.attemptQuestionCount ? `${quiz.attemptQuestionCount}+` : 'N/A';
-};
-
-const FilterDropdown = ({
-    label,
-    value,
-    options,
-    onChange,
-    className = '',
-}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const selectedOption =
-        options.find((option) => option.value === value) || options[0];
-
-    return (
-        <div ref={dropdownRef} className={`relative ${className}`}>
-            <button
-                type="button"
-                onClick={() => setIsOpen((prev) => !prev)}
-                className="flex w-full items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-white transition-all duration-200 hover:border-emerald-400/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-            >
-                <span className="min-w-0">
-                    <span className="block text-[11px] uppercase tracking-[0.22em] text-white/40">
-                        {label}
-                    </span>
-                    <span className="mt-1 block truncate font-medium">
-                        {selectedOption?.label}
-                    </span>
-                </span>
-                <svg
-                    className={`h-4 w-4 flex-shrink-0 text-white/70 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                    />
-                </svg>
-            </button>
-
-            {isOpen && (
-                <div className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-xl border border-white/10 bg-[#0b1220] shadow-2xl shadow-black/50">
-                    {options.map((option) => {
-                        const isActive = option.value === value;
-                        return (
-                            <button
-                                key={option.value}
-                                type="button"
-                                onClick={() => {
-                                    onChange(option.value);
-                                    setIsOpen(false);
-                                }}
-                                className={`flex w-full items-center px-4 py-3 text-left text-sm transition-colors duration-150 ${
-                                    isActive
-                                        ? 'bg-emerald-500/20 text-emerald-300'
-                                        : 'text-white/80 hover:bg-white/5 hover:text-white'
-                                }`}
-                            >
-                                {option.label}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
-        </div>
-    );
 };
 
 const Quiz = () => {
@@ -162,7 +58,6 @@ const Quiz = () => {
     useEffect(() => {
         const loadQuizzes = async () => {
             setLoading(true);
-
             try {
                 const [quizResponse, analyticsResponse] = await Promise.all([
                     axiosInstance.get(ApiRoutes.quizzes.getAll),
@@ -170,10 +65,8 @@ const Quiz = () => {
                         data: { data: { allSubmissions: [] } },
                     })),
                 ]);
-
                 const quizList = quizResponse.data?.data || [];
                 const analyticsData = analyticsResponse.data?.data || {};
-
                 setQuizzes(quizList);
                 setQuizStats(buildQuizStats(analyticsData.allSubmissions || []));
             } catch (error) {
@@ -189,7 +82,6 @@ const Quiz = () => {
                 setLoading(false);
             }
         };
-
         loadQuizzes();
     }, []);
 
@@ -200,10 +92,6 @@ const Quiz = () => {
     const handleViewResult = (submissionId) => {
         if (!submissionId) return;
         navigate(`/quiz/report/${submissionId}`);
-    };
-
-    const handleStartAptitude = () => {
-        navigate('/quiz/aptitude');
     };
 
     const topicOptions = Array.from(
@@ -222,7 +110,6 @@ const Quiz = () => {
             statusFilter === 'all' ||
             (statusFilter === 'attempted' && isAttempted) ||
             (statusFilter === 'not_attempted' && !isAttempted);
-
         return matchesSearch && matchesTopic && matchesStatus;
     });
 
@@ -239,10 +126,10 @@ const Quiz = () => {
     if (!isAuthenticated) {
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-                    <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-2xl">
-                        <h2 className="text-2xl font-bold text-white mb-4">Please Login</h2>
-                        <p className="text-white/80">You need to be logged in to take quizzes.</p>
+                <div className="min-h-screen xalora-grid-bg flex items-center justify-center px-4">
+                    <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-center max-w-md">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Please Login</h2>
+                        <p className="text-gray-600">You need to be logged in to take quizzes.</p>
                     </div>
                 </div>
             </Layout>
@@ -251,309 +138,192 @@ const Quiz = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-8 sm:mb-10">
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-8">
-                            <div className="flex-1 text-left sm:text-left">
-                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-4">Quizzes</h1>
-                                <p className="text-base sm:text-lg md:text-xl text-white/80">
-                                    Test your knowledge with our interactive quizzes
-                                </p>
+            <div className="min-h-screen xalora-grid-bg py-8 sm:py-12">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* Header */}
+                    <div className="mb-12">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 mb-8">
+                            <div>
+                                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Quizzes</h1>
+                                <p className="text-gray-600">Test your knowledge with our interactive quizzes</p>
                             </div>
                             <button
                                 onClick={() => navigate('/quiz/analytics')}
-                                className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium py-2.5 sm:py-2 px-4 sm:px-6 text-sm sm:text-base rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg"
+                                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 w-fit"
                             >
-                                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                                View Analytics
+                                📊 Analytics
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left">
-                                <p className="text-xs uppercase tracking-[0.2em] text-white/50">Total</p>
-                                <p className="mt-1 text-2xl font-bold text-white">{quizzes.length}</p>
+                        {/* Stats Cards */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <p className="text-xs font-semibold text-gray-600 uppercase">Total</p>
+                                <p className="text-2xl font-bold text-gray-900 mt-1">{quizzes.length}</p>
                             </div>
-                            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-left">
-                                <p className="text-xs uppercase tracking-[0.2em] text-emerald-300/80">Attempted</p>
-                                <p className="mt-1 text-2xl font-bold text-emerald-300">{attemptedCount}</p>
+                            <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <p className="text-xs font-semibold text-indigo-600 uppercase">Attempted</p>
+                                <p className="text-2xl font-bold text-indigo-600 mt-1">{attemptedCount}</p>
                             </div>
-                            <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-left">
-                                <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">Passed</p>
-                                <p className="mt-1 text-2xl font-bold text-cyan-300">{passedCount}</p>
+                            <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <p className="text-xs font-semibold text-green-600 uppercase">Passed</p>
+                                <p className="text-2xl font-bold text-green-600 mt-1">{passedCount}</p>
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left">
-                                <p className="text-xs uppercase tracking-[0.2em] text-white/50">Not Attempted</p>
-                                <p className="mt-1 text-2xl font-bold text-white">
-                                    {Math.max(quizzes.length - attemptedCount, 0)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="mb-6 rounded-3xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 via-slate-900/80 to-emerald-500/10 px-5 py-5 text-left shadow-lg shadow-black/20 sm:px-6">
-                            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                                <div className="max-w-3xl">
-                                    <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200">
-                                        <PlayCircle className="h-3.5 w-3.5" />
-                                        Aptitude test
-                                    </p>
-                                    <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl">
-                                        Start a locked aptitude flow from the quiz hub.
-                                    </h2>
-                                    <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70 sm:text-base">
-                                        Choose Quant, Reasoning, Verbal, or Mixed.
-                                        The next screen opens as a dedicated exam room
-                                        with fullscreen, focus-loss monitoring, and no camera prompt.
-                                    </p>
-                                    <div className="mt-4 flex flex-wrap gap-2">
-                                        {[
-                                            { icon: Calculator, label: 'Quant' },
-                                            { icon: Brain, label: 'Reasoning' },
-                                            { icon: BookOpen, label: 'Verbal' },
-                                            { icon: Shuffle, label: 'Mixed' },
-                                        ].map((item) => {
-                                            const Icon = item.icon;
-                                            return (
-                                                <span
-                                                    key={item.label}
-                                                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70"
-                                                >
-                                                    <Icon className="h-3.5 w-3.5 text-cyan-300" />
-                                                    {item.label}
-                                                </span>
-                                            );
-                                        })}
-                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70">
-                                            <Timer className="h-3.5 w-3.5 text-emerald-300" />
-                                            One timer, one question at a time
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-wrap gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={handleStartAptitude}
-                                        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-transform hover:-translate-y-0.5"
-                                    >
-                                        <PlayCircle className="h-4 w-4" />
-                                        Start aptitude
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => navigate('/quiz/analytics')}
-                                        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10"
-                                    >
-                                        View analytics
-                                        <ArrowRight className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="mt-5 grid gap-3 md:grid-cols-3">
-                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                                        <ShieldCheck className="h-4 w-4 text-emerald-300" />
-                                        Focus lock
-                                    </div>
-                                    <p className="mt-2 text-sm leading-6 text-white/65">
-                                        Strict mode watches for tab switches and pauses the exam room.
-                                    </p>
-                                </div>
-                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                                        <Timer className="h-4 w-4 text-cyan-300" />
-                                        No camera
-                                    </div>
-                                    <p className="mt-2 text-sm leading-6 text-white/65">
-                                        The aptitude flow does not ask for camera access at any point.
-                                    </p>
-                                </div>
-                                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                                        <Shuffle className="h-4 w-4 text-amber-300" />
-                                        Topic mix
-                                    </div>
-                                    <p className="mt-2 text-sm leading-6 text-white/65">
-                                        Quant, Reasoning, Verbal, and Mixed follow different launch lanes.
-                                    </p>
-                                </div>
+                            <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <p className="text-xs font-semibold text-gray-600 uppercase">Not Attempted</p>
+                                <p className="text-2xl font-bold text-gray-900 mt-1">{Math.max(quizzes.length - attemptedCount, 0)}</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="grid gap-3 lg:grid-cols-[1.5fr_0.8fr_0.8fr_auto] text-left">
-                            <div className="relative">
+                    {/* Filters */}
+                    <div className="mb-8 space-y-4">
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            {/* Search */}
+                            <div className="flex-1 relative">
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search quiz or topic..."
-                                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-11 text-sm text-white placeholder:text-white/40 focus:border-emerald-400/40 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                    placeholder="Search quizzes..."
+                                    className="w-full px-0 py-2.5 bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200"
                                 />
-                                <svg className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
                             </div>
 
-                            <FilterDropdown
-                                label="Topic"
+                            {/* Topic Filter */}
+                            <select
                                 value={topicFilter}
-                                onChange={setTopicFilter}
-                                options={[
-                                    { value: 'all', label: 'All Topics' },
-                                    ...topicOptions.map((topic) => ({
-                                        value: topic,
-                                        label: topic,
-                                    })),
-                                ]}
-                            />
+                                onChange={(e) => setTopicFilter(e.target.value)}
+                                className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value="all">All Topics</option>
+                                {topicOptions.map((topic) => (
+                                    <option key={topic} value={topic}>{topic}</option>
+                                ))}
+                            </select>
 
-                            <FilterDropdown
-                                label="Status"
+                            {/* Status Filter */}
+                            <select
                                 value={statusFilter}
-                                onChange={setStatusFilter}
-                                options={[
-                                    { value: 'all', label: 'All Status' },
-                                    { value: 'attempted', label: 'Attempted' },
-                                    { value: 'not_attempted', label: 'Not Attempted' },
-                                ]}
-                            />
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                                <option value="all">All Status</option>
+                                <option value="attempted">Attempted</option>
+                                <option value="not_attempted">Not Attempted</option>
+                            </select>
 
+                            {/* Reset Button */}
                             <button
-                                type="button"
                                 onClick={() => {
                                     setSearchQuery('');
                                     setTopicFilter('all');
                                     setStatusFilter('all');
                                 }}
-                                className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-emerald-400/30 hover:bg-emerald-500/10"
+                                className="px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 hover:bg-gray-50 transition-all duration-200 font-medium"
                             >
                                 Reset
                             </button>
                         </div>
                     </div>
 
+                    {/* Quiz Grid */}
                     {loading ? (
                         <div className="flex justify-center py-16">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                        </div>
+                    ) : filteredQuizzes.length === 0 ? (
+                        <div className="text-center py-16 bg-white rounded-lg border border-gray-100 shadow-sm">
+                            <p className="text-gray-600 mb-4">No quizzes found</p>
+                            <button
+                                onClick={() => {
+                                    setSearchQuery('');
+                                    setTopicFilter('all');
+                                    setStatusFilter('all');
+                                }}
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200"
+                            >
+                                Clear Filters
+                            </button>
                         </div>
                     ) : (
-                        <>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                                {filteredQuizzes.map((quiz) => {
-                                    const stats = quizStats[String(quiz._id)] || null;
-                                    const isAttempted = Boolean(stats?.attempts > 0);
-                                    const statusLabel = isAttempted
-                                        ? stats?.passed
-                                            ? 'Passed'
-                                            : 'Attempted'
-                                        : 'Not attempted';
-                                    const statusClass = isAttempted
-                                        ? stats?.passed
-                                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25'
-                                            : 'bg-amber-500/15 text-amber-300 border-amber-500/25'
-                                        : 'bg-white/5 text-white/60 border-white/10';
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredQuizzes.map((quiz) => {
+                                const stats = quizStats[String(quiz._id)] || null;
+                                const isAttempted = Boolean(stats?.attempts > 0);
 
-                                    return (
-                                        <div
-                                            key={quiz._id}
-                                            className={`rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 border backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] ${
-                                                isAttempted
-                                                    ? 'bg-emerald-500/5 border-emerald-400/30'
-                                                    : 'bg-white/10 border-white/10 hover:border-emerald-400/30'
-                                            }`}
-                                        >
-                                            <div className="flex items-start justify-between gap-3">
-                                                <div className="min-w-0">
-                                                    <h3 className="truncate text-lg sm:text-xl font-semibold text-white mb-1">
-                                                        {quiz.title}
-                                                    </h3>
-                                                    <p className="text-sm sm:text-base text-white/80">
-                                                        Topic: {quiz.topic}
-                                                    </p>
-                                                </div>
-                                                <span className={`rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${statusClass}`}>
-                                                    {statusLabel}
-                                                </span>
-                                            </div>
-
-                                            <div className="flex flex-wrap gap-2 mt-4">
-                                                <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm border border-emerald-500/20">
-                                                    Pool: {getQuizPoolLabel(quiz)}
-                                                </span>
-                                                <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-xs sm:text-sm border border-cyan-500/20">
-                                                    Attempt: {quiz.attemptQuestionCount || (Array.isArray(quiz.questions) ? quiz.questions.length : 'N/A')} random
-                                                </span>
-                                                <span className="px-3 py-1 rounded-full bg-white/5 text-white/70 text-xs sm:text-sm border border-white/10">
-                                                    Time: {quiz.timeLimit} min
-                                                </span>
-                                                {isAttempted && (
-                                                    <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 text-xs sm:text-sm border border-amber-500/20">
-                                                        Attempts: {stats.attempts}
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            {isAttempted && (
-                                                <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-                                                    <div className="flex items-center justify-between gap-3">
-                                                        <div>
-                                                            <p className="text-xs uppercase tracking-[0.18em] text-white/40">Latest Score</p>
-                                                            <p className="mt-1 text-lg font-semibold text-white">{stats.latestScore}%</p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <p className="text-xs uppercase tracking-[0.18em] text-white/40">Best Score</p>
-                                                            <p className="mt-1 text-lg font-semibold text-emerald-300">{stats.bestScore}%</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            <div className={`mt-5 grid gap-3 ${isAttempted && stats.latestSubmissionId ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>
-                                                <button
-                                                    onClick={() => handleStartQuiz(quiz._id)}
-                                                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium py-2.5 sm:py-2 px-4 text-sm sm:text-base rounded-lg transition-all duration-300 shadow-lg"
-                                                >
-                                                    {isAttempted ? 'Retake Quiz' : 'Start Quiz'}
-                                                </button>
-
-                                                {isAttempted && stats.latestSubmissionId && (
-                                                    <button
-                                                        onClick={() => handleViewResult(stats.latestSubmissionId)}
-                                                        className="w-full rounded-lg border border-white/10 bg-white/5 py-2.5 sm:py-2 px-4 text-sm sm:text-base font-medium text-white transition-colors hover:border-emerald-400/30 hover:bg-emerald-500/10"
-                                                    >
-                                                        View Result
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            {filteredQuizzes.length === 0 && (
-                                <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 px-6 py-12 text-center">
-                                    <h3 className="text-xl font-semibold text-white">No quizzes found</h3>
-                                    <p className="mt-2 text-sm text-white/60">
-                                        Try a different topic, status, or search term.
-                                    </p>
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            setTopicFilter('all');
-                                            setStatusFilter('all');
-                                        }}
-                                        className="mt-5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-medium text-white"
+                                return (
+                                    <div
+                                        key={quiz._id}
+                                        className="bg-white rounded-lg border border-gray-200 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all duration-200 p-6"
                                     >
-                                        Clear Filters
-                                    </button>
-                                </div>
-                            )}
-                        </>
+                                        {/* Title & Status */}
+                                        <div className="flex justify-between items-start gap-3 mb-4">
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
+                                                    {quiz.title}
+                                                </h3>
+                                                <p className="text-sm text-gray-600">📚 {quiz.topic}</p>
+                                            </div>
+                                            {isAttempted && (
+                                                <span className={`px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap ${
+                                                    stats?.passed
+                                                        ? 'bg-green-100 text-green-700'
+                                                        : 'bg-amber-100 text-amber-700'
+                                                }`}>
+                                                    {stats?.passed ? '✓ Passed' : 'Attempted'}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Info Tags */}
+                                        <div className="flex flex-wrap gap-2 mb-4">
+                                            <span className="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded">
+                                                Pool: {getQuizPoolLabel(quiz)}
+                                            </span>
+                                            <span className="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded">
+                                                Questions: {quiz.attemptQuestionCount || 'Random'}
+                                            </span>
+                                            <span className="text-xs bg-gray-100 text-gray-700 px-2.5 py-1 rounded">
+                                                ⏱ {quiz.timeLimit}m
+                                            </span>
+                                        </div>
+
+                                        {/* Scores */}
+                                        {isAttempted && (
+                                            <div className="bg-gray-50 rounded p-3 mb-4 grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <p className="text-xs text-gray-600 font-medium">Latest</p>
+                                                    <p className="text-xl font-bold text-gray-900 mt-1">{stats.latestScore}%</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-xs text-gray-600 font-medium">Best</p>
+                                                    <p className="text-xl font-bold text-indigo-600 mt-1">{stats.bestScore}%</p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Buttons */}
+                                        <div className={`grid gap-2 ${isAttempted && stats.latestSubmissionId ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                            <button
+                                                onClick={() => handleStartQuiz(quiz._id)}
+                                                className="py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-sm"
+                                            >
+                                                {isAttempted ? 'Retake' : 'Start'}
+                                            </button>
+                                            {isAttempted && stats.latestSubmissionId && (
+                                                <button
+                                                    onClick={() => handleViewResult(stats.latestSubmissionId)}
+                                                    className="py-2.5 px-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-semibold rounded-lg transition-all duration-200 text-sm"
+                                                >
+                                                    Result
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     )}
                 </div>
             </div>

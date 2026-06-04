@@ -57,79 +57,87 @@ const InternshipAnalytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8">
-      <h1 className="text-3xl font-bold text-white mb-8">Internship Analytics</h1>
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Internship Analytics</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-300">Total</p>
-              <h3 className="text-3xl font-bold text-white mt-1">{stats.total}</h3>
+              <p className="text-xs font-semibold text-gray-600 uppercase">Total</p>
+              <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</h3>
             </div>
-            <Briefcase className="w-10 h-10 text-blue-400" />
+            <div className="p-3 bg-blue-100 rounded-lg">
+              <Briefcase className="w-6 h-6 text-blue-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-300">Active</p>
-              <h3 className="text-3xl font-bold text-green-400 mt-1">{stats.active}</h3>
+              <p className="text-xs font-semibold text-green-600 uppercase">Active</p>
+              <h3 className="text-3xl font-bold text-green-600 mt-2">{stats.active}</h3>
             </div>
-            <Clock className="w-10 h-10 text-green-400" />
+            <div className="p-3 bg-green-100 rounded-lg">
+              <Clock className="w-6 h-6 text-green-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-300">Completed</p>
-              <h3 className="text-3xl font-bold text-purple-400 mt-1">{stats.completed}</h3>
+              <p className="text-xs font-semibold text-purple-600 uppercase">Completed</p>
+              <h3 className="text-3xl font-bold text-purple-600 mt-2">{stats.completed}</h3>
             </div>
-            <CheckCircle className="w-10 h-10 text-purple-400" />
+            <div className="p-3 bg-purple-100 rounded-lg">
+              <CheckCircle className="w-6 h-6 text-purple-600" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-300">Pending</p>
-              <h3 className="text-3xl font-bold text-orange-400 mt-1">{stats.pending}</h3>
+              <p className="text-xs font-semibold text-amber-600 uppercase">Pending</p>
+              <h3 className="text-3xl font-bold text-amber-600 mt-2">{stats.pending}</h3>
             </div>
-            <XCircle className="w-10 h-10 text-orange-400" />
+            <div className="p-3 bg-amber-100 rounded-lg">
+              <XCircle className="w-6 h-6 text-amber-600" />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/10">
-        <h3 className="text-lg font-semibold text-white mb-4">Your Internships</h3>
-        <div className="space-y-4">
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-6">Your Internships</h3>
+        <div className="space-y-3">
           {internships.length > 0 ? (
             internships.map((internship, index) => (
-              <div key={index} className="p-4 bg-white/5 border border-white/10 rounded-lg hover:shadow-md transition-shadow">
+              <div key={index} className="p-4 bg-gray-50 border border-gray-100 rounded-lg hover:border-indigo-300 hover:shadow-sm transition-all">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h4 className="text-base font-semibold text-white">
+                    <h4 className="text-base font-semibold text-gray-900">
                       {internship.internshipTitle || 'Internship'}
                     </h4>
-                    <p className="text-sm text-gray-300 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       {internship.company || 'Company Name'}
                     </p>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-gray-500 mt-2">
                       Enrolled: {new Date(internship.enrolledAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    internship.status === 'completed' ? 'bg-green-900/50 text-green-300' :
-                    internship.status === 'active' ? 'bg-blue-900/50 text-blue-300' :
-                    'bg-orange-900/50 text-orange-300'
+                  <span className={`px-3 py-1 rounded text-xs font-bold ml-4 whitespace-nowrap ${
+                    internship.status === 'completed' ? 'bg-green-100 text-green-700' :
+                    internship.status === 'active' ? 'bg-blue-100 text-blue-700' :
+                    'bg-amber-100 text-amber-700'
                   }`}>
                     {internship.status}
                   </span>
@@ -137,7 +145,7 @@ const InternshipAnalytics = () => {
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-400 py-8">No internships enrolled yet</p>
+            <p className="text-center text-gray-600 py-8 font-medium">No internships enrolled yet</p>
           )}
         </div>
       </div>

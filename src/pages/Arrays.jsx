@@ -580,16 +580,16 @@ void vectorAlgorithms() {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Arrays & Dynamic Arrays
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Master the fundamental data structure - arrays, their operations, algorithms, and memory management techniques.
             </p>
           </div>
@@ -599,8 +599,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -608,8 +608,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("theory")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "theory"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Theory
@@ -617,8 +617,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("operations")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "operations"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Operations
@@ -626,8 +626,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("manipulation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "manipulation"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Manipulation
@@ -635,8 +635,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("algorithms")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "algorithms"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Algorithms
@@ -644,8 +644,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("multidim")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "multidim"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               2D Arrays
@@ -653,8 +653,8 @@ void vectorAlgorithms() {
             <button
               onClick={() => setActiveSection("dynamic")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "dynamic"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Dynamic Arrays
@@ -664,32 +664,32 @@ void vectorAlgorithms() {
           {/* Theory Section */}
           {activeSection === "theory" && (
             <div className="mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 text-center">Array Theory & Deep Concepts</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Array Theory & Deep Concepts</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Memory Layout & Cache Behavior */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-6">Memory Layout & Cache Behavior</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Memory Layout & Cache Behavior</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Contiguous Memory Allocation</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Contiguous Memory Allocation</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Arrays allocate memory as a contiguous block of bytes. This means:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-blue-400 mr-2">📍</span>
+                              <span className="text-indigo-600 mr-2">📍</span>
                               <span><strong>Sequential Addresses:</strong> Elements stored at consecutive memory addresses</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-blue-400 mr-2">⚡</span>
+                              <span className="text-indigo-600 mr-2">⚡</span>
                               <span><strong>Formula:</strong> Address of arr[i] = base_address + (i × element_size)</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-blue-400 mr-2">🎯</span>
+                              <span className="text-indigo-600 mr-2">🎯</span>
                               <span><strong>Pointer Arithmetic:</strong> arr[i] ≡ *(arr + i) in C/C++</span>
                             </li>
                           </ul>
@@ -697,22 +697,22 @@ void vectorAlgorithms() {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Cache Performance</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Cache Performance</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Arrays excel in modern computer architectures due to:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-green-400 mr-2">🚀</span>
+                              <span className="text-green-700 mr-2">🚀</span>
                               <span><strong>Spatial Locality:</strong> Accessing arr[i] loads nearby elements into cache</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-green-400 mr-2">💾</span>
+                              <span className="text-green-700 mr-2">💾</span>
                               <span><strong>Cache Lines:</strong> Multiple elements loaded together (typically 64 bytes)</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-green-400 mr-2">⚡</span>
+                              <span className="text-green-700 mr-2">⚡</span>
                               <span><strong>Prefetching:</strong> CPU predicts and loads sequential access patterns</span>
                             </li>
                           </ul>
@@ -720,20 +720,20 @@ void vectorAlgorithms() {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Cache Miss Analysis</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Cache Miss Analysis</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-green-400 font-medium mb-2">✅ Cache Hits (Good)</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-green-700 font-medium mb-2">✅ Cache Hits (Good)</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Sequential access: O(1) per element</li>
                             <li>• Local access patterns</li>
                             <li>• Small working sets</li>
                           </ul>
                         </div>
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-red-400 font-medium mb-2">❌ Cache Misses (Bad)</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-red-700 font-medium mb-2">❌ Cache Misses (Bad)</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Random access patterns</li>
                             <li>• Large stride jumps</li>
                             <li>• Sparse data access</li>
@@ -745,17 +745,17 @@ void vectorAlgorithms() {
                 </div>
 
                 {/* Array Bounds & Safety */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-6">Array Bounds Checking & Memory Safety</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Array Bounds Checking & Memory Safety</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Bounds Checking Trade-offs</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Bounds Checking Trade-offs</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Runtime Bounds Checking</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Runtime Bounds Checking</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Prevents buffer overflows</li>
                               <li>• Memory safety guarantee</li>
                               <li>• Performance overhead: O(1) per access</li>
@@ -763,9 +763,9 @@ void vectorAlgorithms() {
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-red-400 font-medium mb-2">No Bounds Checking</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-red-700 font-medium mb-2">No Bounds Checking</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Maximum performance</li>
                               <li>• Direct memory access</li>
                               <li>• Risk of undefined behavior</li>
@@ -776,24 +776,24 @@ void vectorAlgorithms() {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Memory Safety Issues</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Memory Safety Issues</h4>
                         <div className="space-y-4 text-gray-300">
-                          <div className="bg-red-900/20 border border-red-700/50 p-4 rounded-lg">
-                            <h5 className="text-red-400 font-medium mb-2">Buffer Overflow</h5>
+                          <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+                            <h5 className="text-red-700 font-medium mb-2">Buffer Overflow</h5>
                             <p className="text-sm mb-2">Writing beyond array bounds:</p>
-                            <pre className="bg-gray-900 text-red-300 p-2 rounded text-xs">
+                            <pre className="bg-gray-900 text-red-700 p-2 rounded text-xs border border-gray-700">
                               <code>int arr[5]; arr[10] = 42; // Undefined behavior</code>
                             </pre>
-                            <p className="text-xs text-gray-400">Can overwrite other variables, cause crashes, or security vulnerabilities</p>
+                            <p className="text-xs text-gray-600">Can overwrite other variables, cause crashes, or security vulnerabilities</p>
                           </div>
 
-                          <div className="bg-yellow-900/20 border border-yellow-700/50 p-4 rounded-lg">
-                            <h5 className="text-yellow-400 font-medium mb-2">Off-by-One Errors</h5>
+                          <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                            <h5 className="text-amber-700 font-medium mb-2">Off-by-One Errors</h5>
                             <p className="text-sm mb-2">Common indexing mistakes:</p>
-                            <pre className="bg-gray-900 text-yellow-300 p-2 rounded text-xs">
+                            <pre className="bg-gray-900 text-amber-700 p-2 rounded text-xs border border-gray-700">
                               <code>{`for(int i = 0; i <= n; i++) // Wrong: accesses arr[n]`}</code>
                             </pre>
-                            <p className="text-xs text-gray-400">Valid indices: 0 to n-1 for array of size n</p>
+                            <p className="text-xs text-gray-600">Valid indices: 0 to n-1 for array of size n</p>
                           </div>
                         </div>
                       </div>
@@ -802,86 +802,86 @@ void vectorAlgorithms() {
                 </div>
 
                 {/* Array vs Other Structures */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-6">Arrays vs Other Data Structures</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Arrays vs Other Data Structures</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Aspect</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Arrays</th>
-                            <th className="pb-4 text-green-400 text-lg font-bold">Linked Lists</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">Dynamic Arrays</th>
-                            <th className="pb-4 text-orange-400 text-lg font-bold">Hash Tables</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Aspect</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Arrays</th>
+                            <th className="pb-4 text-green-700 text-lg font-bold">Linked Lists</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">Dynamic Arrays</th>
+                            <th className="pb-4 text-orange-700 text-lg font-bold">Hash Tables</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Memory Layout</td>
-                            <td className="py-4 text-blue-400 font-medium">Contiguous</td>
-                            <td className="py-4 text-green-400 font-medium">Scattered</td>
-                            <td className="py-4 text-purple-400 font-medium">Contiguous (resizable)</td>
-                            <td className="py-4 text-orange-400 font-medium">Hash-based</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Memory Layout</td>
+                            <td className="py-4 text-blue-700 font-medium">Contiguous</td>
+                            <td className="py-4 text-green-700 font-medium">Scattered</td>
+                            <td className="py-4 text-purple-700 font-medium">Contiguous (resizable)</td>
+                            <td className="py-4 text-orange-700 font-medium">Hash-based</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Access Time</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)*</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Access Time</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)*</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Insert/Delete</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)/O(1)*</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)*</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Insert/Delete</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)/O(1)*</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)*</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Memory Overhead</td>
-                            <td className="py-4 text-green-400 font-medium">None</td>
-                            <td className="py-4 text-red-400 font-medium">High (pointers)</td>
-                            <td className="py-4 text-yellow-400 font-medium">Low (amortized)</td>
-                            <td className="py-4 text-yellow-400 font-medium">Medium</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Memory Overhead</td>
+                            <td className="py-4 text-green-700 font-medium">None</td>
+                            <td className="py-4 text-red-700 font-medium">High (pointers)</td>
+                            <td className="py-4 text-amber-700 font-medium">Low (amortized)</td>
+                            <td className="py-4 text-amber-700 font-medium">Medium</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Cache Performance</td>
-                            <td className="py-4 text-green-400 font-medium">Excellent</td>
-                            <td className="py-4 text-red-400 font-medium">Poor</td>
-                            <td className="py-4 text-green-400 font-medium">Good</td>
-                            <td className="py-4 text-yellow-400 font-medium">Varies</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Cache Performance</td>
+                            <td className="py-4 text-green-700 font-medium">Excellent</td>
+                            <td className="py-4 text-red-700 font-medium">Poor</td>
+                            <td className="py-4 text-green-700 font-medium">Good</td>
+                            <td className="py-4 text-amber-700 font-medium">Varies</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-blue-400 transition-all duration-300">Use Case</td>
-                            <td className="py-4 text-blue-400 font-medium">Fixed-size, random access</td>
-                            <td className="py-4 text-green-400 font-medium">Dynamic size, frequent inserts</td>
-                            <td className="py-4 text-purple-400 font-medium">Growing collections</td>
-                            <td className="py-4 text-orange-400 font-medium">Key-value lookups</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Use Case</td>
+                            <td className="py-4 text-blue-700 font-medium">Fixed-size, random access</td>
+                            <td className="py-4 text-green-700 font-medium">Dynamic size, frequent inserts</td>
+                            <td className="py-4 text-purple-700 font-medium">Growing collections</td>
+                            <td className="py-4 text-orange-700 font-medium">Key-value lookups</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
 
-                    <div className="mt-6 text-sm text-gray-400">
+                    <div className="mt-6 text-sm text-gray-600">
                       * Average case, amortized, or with good hash function
                     </div>
                   </div>
                 </div>
 
                 {/* Mathematical Analysis */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-6">Mathematical Analysis of Array Operations</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Mathematical Analysis of Array Operations</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Time Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Access Operation: O(1)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Access Operation: O(1)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Mathematical Basis:</strong></p>
                               <p>• Direct memory address calculation</p>
                               <p>• Address = base + (index × element_size)</p>
@@ -890,9 +890,9 @@ void vectorAlgorithms() {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-yellow-400 font-medium mb-2">Search Operation: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-amber-700 font-medium mb-2">Search Operation: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Worst Case:</strong> Element not found</p>
                               <p>• Must check all n elements</p>
                               <p>• Linear time proportional to size</p>
@@ -903,11 +903,11 @@ void vectorAlgorithms() {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Space Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Space Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-blue-400 font-medium mb-2">Static Arrays: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-indigo-600 font-medium mb-2">Static Arrays: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Space Usage:</strong></p>
                               <p>• Fixed size: n × element_size bytes</p>
                               <p>• No extra space for metadata</p>
@@ -916,9 +916,9 @@ void vectorAlgorithms() {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Dynamic Arrays: O(n) amortized</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Dynamic Arrays: O(n) amortized</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Space Analysis:</strong></p>
                               <p>• Capacity ≥ size, often 1.5-2× size</p>
                               <p>• Amortized O(1) space per element</p>
@@ -930,20 +930,20 @@ void vectorAlgorithms() {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Asymptotic Analysis Summary</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Asymptotic Analysis Summary</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="text-center">
                           <div className="text-green-400 font-bold text-lg mb-2">O(1) Operations</div>
-                          <div className="text-gray-300 text-sm">Access, Update, Push/Pop (end)</div>
+                          <div className="text-gray-700 text-sm">Access, Update, Push/Pop (end)</div>
                         </div>
                         <div className="text-center">
                           <div className="text-yellow-400 font-bold text-lg mb-2">O(n) Operations</div>
-                          <div className="text-gray-300 text-sm">Search, Insert, Delete, Traverse</div>
+                          <div className="text-gray-700 text-sm">Search, Insert, Delete, Traverse</div>
                         </div>
                         <div className="text-center">
                           <div className="text-blue-400 font-bold text-lg mb-2">O(log n) Operations</div>
-                          <div className="text-gray-300 text-sm">Binary search (sorted arrays)</div>
+                          <div className="text-gray-700 text-sm">Binary search (sorted arrays)</div>
                         </div>
                       </div>
                     </div>
@@ -951,35 +951,35 @@ void vectorAlgorithms() {
                 </div>
 
                 {/* Array Applications in Algorithms */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-blue-400 mb-6">Arrays in Algorithm Design</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Arrays in Algorithm Design</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Algorithmic Applications</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Algorithmic Applications</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Prefix Sum Arrays</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Prefix Sum Arrays</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• prefix[i] = sum of first i elements</p>
                               <p>• Range queries in O(1) time</p>
                               <p>• Used in: Range sum, equilibrium point</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Difference Arrays</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Difference Arrays</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Efficient range updates</p>
                               <p>• Add k to range [L,R] in O(1)</p>
                               <p>• Used in: Lazy propagation concepts</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Two Pointer Technique</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Two Pointer Technique</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Maintain two indices simultaneously</p>
                               <p>• O(n) time for many problems</p>
                               <p>• Used in: Palindrome, pair sum, etc.</p>
@@ -989,29 +989,29 @@ void vectorAlgorithms() {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Advanced Techniques</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Advanced Techniques</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Sliding Window</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Sliding Window</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Fixed/variable size windows</p>
                               <p>• O(n) time complexity</p>
                               <p>• Used in: Maximum sum, string problems</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Dutch National Flag</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Dutch National Flag</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• 3-way partitioning</p>
                               <p>• O(n) time, O(1) space</p>
                               <p>• Used in: Quick sort, 3-sum problems</p>
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Kadane's Algorithm</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Kadane's Algorithm</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Maximum subarray sum</p>
                               <p>• Dynamic programming approach</p>
                               <p>• O(n) time, O(1) space</p>
@@ -1021,12 +1021,12 @@ void vectorAlgorithms() {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-green-400 mb-4">Why Arrays are Fundamental</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-green-700 mb-4">Why Arrays are Fundamental</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Algorithm Building Blocks</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Algorithm Building Blocks</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Base for sorting algorithms</li>
                             <li>• Foundation for dynamic programming</li>
                             <li>• Core of graph representations</li>
@@ -1034,8 +1034,8 @@ void vectorAlgorithms() {
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">System-Level Importance</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">System-Level Importance</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Memory management understanding</li>
                             <li>• Cache behavior optimization</li>
                             <li>• Pointer arithmetic foundation</li>
@@ -1052,62 +1052,62 @@ void vectorAlgorithms() {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Arrays Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Arrays Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">What are Arrays?</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Arrays?</h3>
+                  <p className="text-gray-700 mb-6">
                     Arrays are contiguous blocks of memory that store elements of the same type.
                     They provide O(1) access time and are the foundation of most data structures
                     and algorithms. Understanding arrays is crucial for efficient programming.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-blue-400 mr-2">⚡</span>
+                      <span className="text-indigo-600 mr-2">⚡</span>
                       <span><strong>Fast Access:</strong> O(1) time for element access by index</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-blue-400 mr-2">📏</span>
+                      <span className="text-indigo-600 mr-2">📏</span>
                       <span><strong>Fixed Size:</strong> Size determined at creation (static arrays)</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-blue-400 mr-2">🔗</span>
+                      <span className="text-indigo-600 mr-2">🔗</span>
                       <span><strong>Contiguous Memory:</strong> Elements stored in adjacent memory locations</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-blue-400 mr-2">🎯</span>
+                      <span className="text-indigo-600 mr-2">🎯</span>
                       <span><strong>Cache Friendly:</strong> Excellent spatial locality for performance</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">Array Types</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Array Types</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Static Arrays</h4>
-                      <p className="text-gray-300">Fixed size, stack allocated, size known at compile time</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Static Arrays</h4>
+                      <p className="text-gray-700">Fixed size, stack allocated, size known at compile time</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>int arr[100]; // C++ fixed size</code>
                       </pre>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Dynamic Arrays</h4>
-                      <p className="text-gray-300">Resizable, heap allocated, automatic memory management</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Dynamic Arrays</h4>
+                      <p className="text-gray-700">Resizable, heap allocated, automatic memory management</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>std::vector&lt;int&gt; vec; // C++ dynamic array</code>
                       </pre>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Multi-dimensional</h4>
-                      <p className="text-gray-300">Arrays of arrays, matrices, tensors</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Multi-dimensional</h4>
+                      <p className="text-gray-700">Arrays of arrays, matrices, tensors</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>int matrix[3][4]; // 2D array</code>
                       </pre>
                     </div>
@@ -1116,9 +1116,9 @@ void vectorAlgorithms() {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border border-blue-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-blue-400 mb-3">Time Complexity</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Time Complexity</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Access: O(1)</li>
                     <li>• Search: O(n)</li>
                     <li>• Insert/Delete: O(n)</li>
@@ -1126,15 +1126,15 @@ void vectorAlgorithms() {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-teal-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
-                  <p className="text-gray-300">O(n) for elements</p>
-                  <p className="text-sm text-gray-400 mt-2">Plus O(1) overhead</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
+                  <p className="text-gray-700">O(n) for elements</p>
+                  <p className="text-sm text-gray-600 mt-2">Plus O(1) overhead</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Storing sequential data</li>
                     <li>• Implementing other DS</li>
                     <li>• Matrix operations</li>
@@ -1148,38 +1148,38 @@ void vectorAlgorithms() {
           {/* Operations Section */}
           {activeSection === "operations" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Array Operations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Array Operations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {operations.map((operation) => (
                   <div
                     key={operation.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{operation.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{operation.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                             Time: {operation.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 text-sm rounded-lg">
                             Space: {operation.complexity.space}
                           </span>
                         </div>
                       </div>
 
                       {operation.prerequisite && (
-                        <div className="bg-yellow-900/20 border border-yellow-700/50 p-3 rounded-lg mb-4">
-                          <p className="text-yellow-300 text-sm"><strong>Prerequisite:</strong> {operation.prerequisite}</p>
+                        <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg mb-4">
+                          <p className="text-amber-700 text-sm"><strong>Prerequisite:</strong> {operation.prerequisite}</p>
                         </div>
                       )}
 
-                      <p className="text-gray-300 mb-6">{operation.description}</p>
+                      <p className="text-gray-700 mb-6">{operation.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{operation.code}</code>
                         </pre>
                       </div>
@@ -1193,32 +1193,32 @@ void vectorAlgorithms() {
           {/* Manipulation Section */}
           {activeSection === "manipulation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Array Manipulation</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Array Manipulation</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {manipulation.map((operation) => (
                   <div
                     key={operation.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{operation.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{operation.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-red-900/50 text-red-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-red-100 text-red-700 text-sm rounded-lg">
                             Time: {operation.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-gray-900/50 text-gray-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-gray-900/50 text-gray-700 text-sm rounded-lg">
                             Space: {operation.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{operation.description}</p>
+                      <p className="text-gray-700 mb-6">{operation.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{operation.code}</code>
                         </pre>
                       </div>
@@ -1232,32 +1232,32 @@ void vectorAlgorithms() {
           {/* Algorithms Section */}
           {activeSection === "algorithms" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Array Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Array Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {algorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                             Time: {algorithm.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 text-sm rounded-lg">
                             Space: {algorithm.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-700 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1271,31 +1271,31 @@ void vectorAlgorithms() {
           {/* Multi-dimensional Arrays Section */}
           {activeSection === "multidim" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Multi-dimensional Arrays</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Multi-dimensional Arrays</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {multiDimArrays.map((arrayType) => (
                   <div
                     key={arrayType.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{arrayType.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{arrayType.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(arrayType.complexity).map(([key, value]) => (
-                            <span key={key} className="px-3 py-1 bg-yellow-900/50 text-yellow-300 text-sm rounded-lg">
+                            <span key={key} className="px-3 py-1 bg-amber-100 text-amber-700 border border-amber-200 text-sm rounded-lg">
                               {key.toUpperCase()}: {value}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{arrayType.description}</p>
+                      <p className="text-gray-700 mb-6">{arrayType.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{arrayType.code}</code>
                         </pre>
                       </div>
@@ -1309,31 +1309,31 @@ void vectorAlgorithms() {
           {/* Dynamic Arrays Section */}
           {activeSection === "dynamic" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Dynamic Arrays (Vectors)</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Dynamic Arrays (Vectors)</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {dynamicArrays.map((vectorType) => (
                   <div
                     key={vectorType.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{vectorType.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{vectorType.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(vectorType.complexity).map(([key, value]) => (
-                            <span key={key} className="px-3 py-1 bg-purple-900/50 text-purple-300 text-sm rounded-lg">
+                            <span key={key} className="px-3 py-1 bg-purple-100 text-purple-700 border border-purple-200 text-sm rounded-lg">
                               {key.toUpperCase()}: {value}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{vectorType.description}</p>
+                      <p className="text-gray-700 mb-6">{vectorType.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{vectorType.code}</code>
                         </pre>
                       </div>
@@ -1345,81 +1345,81 @@ void vectorAlgorithms() {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Array Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Array Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Remove Duplicates from Sorted Array</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Best Time to Buy and Sell Stock</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Contains Duplicate</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Single Number</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Array Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Array Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>3Sum</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Container With Most Water</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Next Permutation</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Trapping Rain Water</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Find Minimum in Rotated Sorted Array</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Array Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Array Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>First Missing Positive</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Median of Two Sorted Arrays</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Maximum Rectangle</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Sliding Window Maximum</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Largest Rectangle in Histogram</span>
                   </li>
                 </ul>
@@ -1427,22 +1427,22 @@ void vectorAlgorithms() {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                            'bg-red-900/50 text-red-300'
+                      <h4 className="text-indigo-600 font-semibold">{problem.name}</h4>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                          problem.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         {problem.difficulty}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-gray-700 text-sm mb-2">{problem.description}</p>
+                    <p className="text-xs text-gray-600 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1450,56 +1450,56 @@ void vectorAlgorithms() {
           </div>
 
           {/* Array Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Array Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-blue-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Access by index:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Access by index:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Linear search:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Linear search:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Binary search:</span>
-                    <span className="text-blue-400 font-mono">O(log n)</span>
+                    <span className="text-gray-700">Binary search:</span>
+                    <span className="text-indigo-600 font-mono">O(log n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Insert/Delete:</span>
-                    <span className="text-red-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Insert/Delete:</span>
+                    <span className="text-red-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Kadane's algorithm:</span>
-                    <span className="text-green-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Kadane's algorithm:</span>
+                    <span className="text-green-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-blue-400 mb-4">Common Patterns</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Common Patterns</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Two Pointers:</div>
-                    <div className="text-gray-400">→ Opposite ends, same direction</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Two Pointers:</div>
+                    <div className="text-gray-600">→ Opposite ends, same direction</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Sliding Window:</div>
-                    <div className="text-gray-400">→ Variable/fixed size windows</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Sliding Window:</div>
+                    <div className="text-gray-600">→ Variable/fixed size windows</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Prefix Sum:</div>
-                    <div className="text-gray-400">→ Range queries in O(1)</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Prefix Sum:</div>
+                    <div className="text-gray-600">→ Range queries in O(1)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Binary Search:</div>
-                    <div className="text-gray-400">→ Sorted arrays, decision problems</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Binary Search:</div>
+                    <div className="text-gray-600">→ Sorted arrays, decision problems</div>
                   </div>
                 </div>
               </div>

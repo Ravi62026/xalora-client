@@ -707,16 +707,16 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Tree Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master tree traversals, BST operations, and advanced tree algorithms for efficient tree manipulation and problem-solving.
             </p>
           </div>
@@ -726,8 +726,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -735,8 +735,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
             <button
               onClick={() => setActiveSection("traversal")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "traversal"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Traversals
@@ -744,8 +744,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
             <button
               onClick={() => setActiveSection("bst")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "bst"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               BST Operations
@@ -753,8 +753,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
             <button
               onClick={() => setActiveSection("properties")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "properties"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Properties
@@ -762,8 +762,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -772,20 +772,20 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Tree Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Tree Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">Tree Structure</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Tree Structure</h3>
                   <p className="text-gray-300 mb-6">
                     Trees are hierarchical data structures with a root node and child nodes.
                     Each node has at most two children in binary trees, making them ideal for
                     representing hierarchical relationships and enabling efficient operations.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">Key Concepts</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Concepts</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-orange-400 mr-2">🌳</span>
                       <span><strong>Root:</strong> Topmost node with no parent</span>
@@ -806,25 +806,25 @@ vector<int> boundaryTraversal(TreeNode* root) {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">Algorithm Categories</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Algorithm Categories</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Traversals</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Traversals</h4>
                       <p className="text-gray-300">Inorder, Preorder, Postorder, Level-order</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">BST Operations</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">BST Operations</h4>
                       <p className="text-gray-300">Insert, Delete, Search, Validate</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Tree Properties</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Tree Properties</h4>
                       <p className="text-gray-300">Height, Diameter, LCA, Balance</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Advanced</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Advanced</h4>
                       <p className="text-gray-300">Serialization, Views, Path sums</p>
                     </div>
                   </div>
@@ -832,27 +832,27 @@ vector<int> boundaryTraversal(TreeNode* root) {
               </div>
 
               {/* Tree Node Structure */}
-              <div className="mt-8 bg-gradient-to-r from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-orange-400 mb-4">Tree Node Structure</h3>
-                <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+              <div className="mt-8 bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Tree Node Structure</h3>
+                <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                   <code>{treeNode}</code>
                 </pre>
               </div>
 
               <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Time Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                   <p className="text-gray-300">Most operations: <strong className="text-white">O(n)</strong></p>
-                  <p className="text-sm text-gray-400 mt-2">BST operations: O(h) where h is height</p>
+                  <p className="text-sm text-gray-500 mt-2">BST operations: O(h) where h is height</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
                   <p className="text-gray-300">O(n) for storage</p>
-                  <p className="text-sm text-gray-400 mt-2">O(h) for recursion stack</p>
+                  <p className="text-sm text-gray-500 mt-2">O(h) for recursion stack</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Recursive traversal</li>
@@ -868,17 +868,17 @@ vector<int> boundaryTraversal(TreeNode* root) {
           {/* Traversals Section */}
           {activeSection === "traversal" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Tree Traversals</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Tree Traversals</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {traversals.map((traversal) => (
                   <div
                     key={traversal.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{traversal.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{traversal.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${traversal.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${traversal.complexity.space}`)}
@@ -887,9 +887,9 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
                       <p className="text-gray-300 mb-6">{traversal.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{traversal.code}</code>
                         </pre>
                       </div>
@@ -903,17 +903,17 @@ vector<int> boundaryTraversal(TreeNode* root) {
           {/* BST Operations Section */}
           {activeSection === "bst" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">BST Operations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">BST Operations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {bstOperations.map((operation) => (
                   <div
                     key={operation.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{operation.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{operation.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${operation.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${operation.complexity.space}`)}
@@ -922,9 +922,9 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
                       <p className="text-gray-300 mb-6">{operation.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{operation.code}</code>
                         </pre>
                       </div>
@@ -938,17 +938,17 @@ vector<int> boundaryTraversal(TreeNode* root) {
           {/* Properties Section */}
           {activeSection === "properties" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Tree Properties & Calculations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Tree Properties & Calculations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {treeProperties.map((property) => (
                   <div
                     key={property.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{property.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{property.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${property.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${property.complexity.space}`)}
@@ -957,9 +957,9 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
                       <p className="text-gray-300 mb-6">{property.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{property.code}</code>
                         </pre>
                       </div>
@@ -968,15 +968,15 @@ vector<int> boundaryTraversal(TreeNode* root) {
                 ))}
 
                 {/* Tree Views */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">Tree Views</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Tree Views</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {treeViews.map((view, idx) => (
-                      <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-2">{view.name}</h4>
+                      <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-2">{view.name}</h4>
                         <p className="text-gray-300 mb-2 text-sm">{view.description}</p>
-                        <pre className="bg-gray-900 text-gray-300 p-3 rounded text-xs overflow-x-auto">
+                        <pre className="bg-gray-900 text-gray-100 p-3 rounded text-xs overflow-x-auto">
                           <code>{view.code}</code>
                         </pre>
                       </div>
@@ -990,17 +990,17 @@ vector<int> boundaryTraversal(TreeNode* root) {
           {/* Advanced Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Tree Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Tree Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -1009,9 +1009,9 @@ vector<int> boundaryTraversal(TreeNode* root) {
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1023,15 +1023,15 @@ vector<int> boundaryTraversal(TreeNode* root) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Tree Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Easy Tree Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Maximum Depth of Binary Tree</span>
@@ -1052,8 +1052,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Tree Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Medium Tree Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Binary Tree Level Order Traversal</span>
@@ -1078,8 +1078,8 @@ vector<int> boundaryTraversal(TreeNode* root) {
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Tree Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Hard Tree Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Binary Tree Maximum Path Sum</span>
@@ -1120,7 +1120,7 @@ vector<int> boundaryTraversal(TreeNode* root) {
                       </span>
                     </div>
                     <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1128,14 +1128,14 @@ vector<int> boundaryTraversal(TreeNode* root) {
           </div>
 
           {/* Tree Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Tree Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-orange-400 mb-4">Traversal Patterns</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Traversal Patterns</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
                     <span className="text-gray-300">Inorder BST:</span>
@@ -1157,7 +1157,7 @@ vector<int> boundaryTraversal(TreeNode* root) {
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-orange-400 mb-4">BST Properties</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">BST Properties</h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-gray-800/50 p-3 rounded">
                     <div className="text-cyan-400 font-medium mb-1">Inorder Traversal:</div>

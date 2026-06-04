@@ -36,6 +36,17 @@ const isPublicBootstrapPath = (pathname = "/") => {
   );
 };
 
+const hasOAuthRedirectSignal = () => {
+  if (typeof window === "undefined") return false;
+
+  const searchParams = new URLSearchParams(window.location.search);
+  return (
+    searchParams.get("oauth") === "github" ||
+    searchParams.has("oauth_success") ||
+    searchParams.has("oauth_error")
+  );
+};
+
 export const initializeAuth = createAsyncThunk(
   "user/initializeAuth",
   async (_, { getState }) => {
@@ -52,7 +63,7 @@ export const initializeAuth = createAsyncThunk(
     authBootstrapPromise = (async () => {
       try {
         // Fast path: unauthenticated visitors on public routes should not block app startup.
-        if (!accessToken && !refreshToken && isPublicBootstrapPath(pathname)) {
+        if (!accessToken && !refreshToken && isPublicBootstrapPath(pathname) && !hasOAuthRedirectSignal()) {
           return null;
         }
 

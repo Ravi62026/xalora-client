@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* Ensure light theme on initial load */
+html, body, #root {
+  background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+  background-attachment: fixed;
+}
+
 .ai-interview-root {
   font-family: "Space Grotesk", "Manrope", sans-serif;
 }
@@ -411,22 +417,13 @@
   animation: scale-pulse 2s ease-in-out infinite;
 }
 
-/* Custom scrollbar with new theme */
+/* Scrollbar hidden */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-900;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gradient-to-b from-emerald-400 to-teal-400;
+* {
+  scrollbar-width: none;
 }
 
 /* Code editor error marker */
@@ -651,4 +648,44 @@ ditional animations for the new homepage */
 
 .animate-slideInRight {
   animation: slideInRight 0.5s ease-out;
+}
+
+/* ============================================
+   Xalora Theme 1 — Grid Indigo (Light Theme)
+   ============================================ */
+
+.xalora-grid-bg {
+  background:
+    linear-gradient(to right, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+    linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+  background-size: 24px 24px, 24px 24px, 100% 100%;
+  background-attachment: fixed;
+}
+
+/* Navbar link underline hover animation */
+.nav-link-ul {
+  position: relative;
+  text-decoration: none;
+  padding: 0.8rem 1.3rem;
+  font-size: 0.95rem;
+}
+.nav-link-ul::after {
+  content: '';
+  position: absolute;
+  bottom: 0.4rem;
+  left: 1.3rem;
+  right: 1.3rem;
+  height: 2px;
+  background: #4f46e5;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+.nav-link-ul:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.nav-link-ul.nav-is-active::after {
+  transform: scaleX(1);
 }

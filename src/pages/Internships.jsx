@@ -98,10 +98,10 @@ const Internships = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-900/30 text-green-400 border border-green-700';
-      case 'intermediate': return 'bg-yellow-900/30 text-yellow-400 border border-yellow-700';
-      case 'advanced': return 'bg-red-900/30 text-red-400 border border-red-700';
-      default: return 'bg-gray-900/30 text-gray-400 border border-gray-700';
+      case 'beginner': return 'bg-green-100 text-green-700';
+      case 'intermediate': return 'bg-amber-100 text-amber-700';
+      case 'advanced': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -110,16 +110,13 @@ const Internships = () => {
     'SQL', 'AWS', 'Docker', 'Git', 'HTML/CSS', 'Flutter'
   ];
 
-  const pageShell =
-    "min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_24%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#020617_100%)]";
-
   if (loading) {
     return (
       <Layout>
-        <div className={`${pageShell} flex items-center justify-center`}>
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto"></div>
-            <p className="mt-4 text-white/70">Loading internships...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 font-medium">Loading internships...</p>
           </div>
         </div>
       </Layout>
@@ -128,149 +125,135 @@ const Internships = () => {
 
   return (
     <Layout>
-      <div className={pageShell}>
+      <div className="min-h-screen xalora-grid-bg">
         {/* Header */}
-        <div className="border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div className="text-left">
-                <span className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">
-                  Internship Portal
-                </span>
-                <h1 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-semibold text-white">Discover and enroll in internships</h1>
-                <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-300">
-                  Browse project-based internships, track your enrollments, and submit work from one clean workspace.
-                </p>
+        <div className="border-b border-gray-200 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Internships</h1>
+                <p className="text-gray-600">Discover and enroll in project-based learning opportunities</p>
               </div>
-              <div className="flex space-x-4">
-                <Link
-                  to="/internships/enrolled"
-                  className="inline-flex items-center rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-medium text-white transition-all hover:border-cyan-400/20 hover:bg-white/[0.09]"
-                >
-                  <Users className="w-4 h-4 mr-2 text-cyan-400" />
-                  My Internships
-                </Link>
-              </div>
+              <Link
+                to="/internships/enrolled"
+                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 w-fit"
+              >
+                <Users className="w-4 h-4" />
+                My Internships
+              </Link>
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Filters */}
-          <div className="rounded-3xl border border-white/10 bg-white/[0.05] p-4 sm:p-6 mb-8 backdrop-blur-xl shadow-[0_24px_80px_rgba(2,6,23,0.25)]">
-            {/* Added onSubmit handler to prevent form submission */}
+          <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 sm:p-6 mb-8">
             <form onSubmit={(e) => e.preventDefault()} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-white/70" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search internships..."
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 pl-10 pr-4 py-3 text-white placeholder-slate-500 transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                  className="w-full rounded-lg border-b-2 border-gray-300 bg-transparent pl-10 pr-4 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-600 transition-all duration-200"
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
               </div>
 
               {/* Difficulty Filter */}
-              <div>
-                <select
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-                  value={filters.difficulty}
-                  onChange={(e) => handleFilterChange('difficulty', e.target.value)}
-                >
-                  <option value="all" className="bg-slate-950">All Difficulties</option>
-                  <option value="beginner" className="bg-slate-950">Beginner</option>
-                  <option value="intermediate" className="bg-slate-950">Intermediate</option>
-                  <option value="advanced" className="bg-slate-950">Advanced</option>
-                </select>
-              </div>
+              <select
+                className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                value={filters.difficulty}
+                onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+              >
+                <option value="all">All Difficulties</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
 
               {/* Tech Stack Filter */}
-              <div>
-                <select
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white transition-all duration-300 focus:border-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-                  value={filters.techStack}
-                  onChange={(e) => handleFilterChange('techStack', e.target.value)}
-                >
-                  <option value="" className="bg-slate-950">All Technologies</option>
-                  {techStackOptions.map(tech => (
-                    <option key={tech} value={tech} className="bg-slate-950">{tech}</option>
-                  ))}
-                </select>
-              </div>
+              <select
+                className="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                value={filters.techStack}
+                onChange={(e) => handleFilterChange('techStack', e.target.value)}
+              >
+                <option value="">All Technologies</option>
+                {techStackOptions.map(tech => (
+                  <option key={tech} value={tech}>{tech}</option>
+                ))}
+              </select>
 
               {/* Clear Filters */}
-              <div>
-                <button
-                  type="button"  // Added type="button" to prevent form submission
-                  onClick={() => setFilters({ difficulty: 'all', techStack: '', search: '', page: 1, limit: 12 })}
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 text-white transition-colors hover:bg-white/[0.09]"
-                >
-                  Clear Filters
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setFilters({ difficulty: 'all', techStack: '', search: '', page: 1, limit: 12 })}
+                className="rounded-lg border border-gray-200 bg-white text-gray-900 px-4 py-2.5 hover:bg-gray-50 transition-all duration-200 font-medium"
+              >
+                Reset
+              </button>
             </form>
           </div>
 
           {/* Internships Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {internships.map((internship) => (
               <div
                 key={internship._id}
-                className="rounded-3xl border border-white/10 bg-white/[0.05] shadow-[0_18px_60px_rgba(2,6,23,0.24)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/20 cursor-pointer"
+                className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden cursor-pointer"
                 onClick={() => navigate(`/internships/${internship._id}`)}
               >
-                <div className="p-5 sm:p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-lg sm:text-xl font-bold text-white line-clamp-1">{internship.title}</h3>
-                    <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(internship.difficulty)}`}>
+                <div className="p-6">
+                  <div className="flex justify-between items-start gap-3 mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 flex-1">{internship.title}</h3>
+                    <span className={`px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap ${getDifficultyColor(internship.difficulty)}`}>
                       {internship.difficulty}
                     </span>
                   </div>
 
-                  <p className="text-slate-300 mb-4 line-clamp-3 text-sm leading-relaxed">{internship.description}</p>
+                  <p className="text-gray-600 mb-4 line-clamp-2 text-sm">{internship.description}</p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
                     {internship.techStack?.slice(0, 3).map((tech, index) => (
-                      <span key={index} className="px-2 py-1 bg-emerald-900/30 text-emerald-300 text-xs rounded-full border border-emerald-700">
+                      <span key={index} className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs rounded font-medium">
                         {tech}
                       </span>
                     ))}
                     {internship.techStack?.length > 3 && (
-                      <span className="px-2 py-1 bg-gray-900/30 text-gray-300 text-xs rounded-full border border-gray-700">
+                      <span className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs rounded font-medium">
                         +{internship.techStack.length - 3} more
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center text-sm text-white/70 mb-4">
-                    <Calendar className="w-4 h-4 mr-2" />
+                  <div className="flex items-center text-sm text-gray-600 mb-4">
+                    <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                     <span>{internship.duration} days</span>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <div className="text-cyan-300 font-semibold text-sm sm:text-base">
+                    <div className="font-semibold text-indigo-600 text-sm">
                       {internship.stipend ? `₹${internship.stipend}/month` : 'Unpaid'}
                     </div>
                     <button
-                      className="flex items-center text-cyan-300 hover:text-cyan-200 transition-colors duration-300 text-sm sm:text-base"
+                      className="flex items-center text-indigo-600 hover:text-indigo-700 transition-colors duration-200 text-sm font-medium"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/internships/${internship._id}`);
                       }}
                     >
-                      View Details
+                      View
                       <ChevronRight className="w-4 h-4 ml-1" />
                     </button>
                   </div>
                 </div>
 
                 {enrolledInternships.has(internship._id) && (
-                  <div className="px-6 py-3 bg-cyan-500/10 border-t border-cyan-400/15">
-                    <div className="flex items-center text-cyan-300 text-sm">
-                      <Users className="w-4 h-4 mr-2 text-cyan-400" />
-                      <span>Enrolled</span>
+                  <div className="px-6 py-3 bg-green-50 border-t border-green-100">
+                    <div className="flex items-center text-green-700 text-sm font-medium">
+                      <Users className="w-4 h-4 mr-2" />
+                      <span>✓ Enrolled</span>
                     </div>
                   </div>
                 )}
@@ -285,10 +268,10 @@ const Internships = () => {
                 <button
                   onClick={() => handlePageChange(pagination.currentPage - 1)}
                   disabled={!pagination.hasPrevPage}
-                  className={`px-4 py-2 rounded-lg ${pagination.hasPrevPage
-                      ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                      : "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700"
-                    } transition-all duration-300`}
+                  className={`px-4 py-2.5 rounded-lg font-medium transition-all ${pagination.hasPrevPage
+                      ? "bg-white border border-gray-200 text-gray-900 hover:bg-gray-50"
+                      : "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                    }`}
                 >
                   Previous
                 </button>
@@ -298,10 +281,10 @@ const Internships = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-lg ${page === pagination.currentPage
-                          ? "bg-cyan-500 text-slate-950 border border-cyan-400"
-                          : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                        } transition-all duration-300`}
+                      className={`px-4 py-2.5 rounded-lg font-medium transition-all ${page === pagination.currentPage
+                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white border border-indigo-600"
+                          : "bg-white border border-gray-200 text-gray-900 hover:bg-gray-50"
+                        }`}
                     >
                       {page}
                     </button>
@@ -310,10 +293,10 @@ const Internships = () => {
                 <button
                   onClick={() => handlePageChange(pagination.currentPage + 1)}
                   disabled={!pagination.hasNextPage}
-                  className={`px-4 py-2 rounded-lg ${pagination.hasNextPage
-                      ? "bg-white/10 text-white hover:bg-white/20 border border-white/20"
-                      : "bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700"
-                    } transition-all duration-300`}
+                  className={`px-4 py-2.5 rounded-lg font-medium transition-all ${pagination.hasNextPage
+                      ? "bg-white border border-gray-200 text-gray-900 hover:bg-gray-50"
+                      : "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                    }`}
                 >
                   Next
                 </button>

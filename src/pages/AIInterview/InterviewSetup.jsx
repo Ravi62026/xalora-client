@@ -326,15 +326,12 @@ const InterviewSetup = () => {
     companyType: isCompanyCandidate ? 'product_based' : 'startup',
     interviewMode: isCompanyCandidate ? 'specific' : 'full',
     specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
-    selectedRole: '', // Dropdown value
-    customPosition: '', // Manual input if 'other'
-    companyType: isCompanyCandidate ? 'product_based' : 'startup',
-    interviewMode: isCompanyCandidate ? 'specific' : 'full',
-    specificRound: isCompanyCandidate && assignedRounds.length === 1 ? assignedRounds[0] : '',
     jobDescription: '',
     codingDifficulty: isCompanyCandidate ? 'medium' : 'auto',
     interviewStyle: 'manual', // 'manual' | 'conversational'
-    personality: 'professional' // 'professional' | 'mentoring' | 'challenging'
+    personality: 'professional', // 'professional' | 'mentoring' | 'challenging'
+    interviewTopic: '',
+    customTopic: ''
   });
   const [resumeFile, setResumeFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -413,6 +410,15 @@ const InterviewSetup = () => {
       return;
     }
 
+    // Validate topic selection
+    if (formData.interviewMode === 'topic') {
+      const resolvedTopic = formData.interviewTopic === 'other' ? formData.customTopic : formData.interviewTopic;
+      if (!resolvedTopic || !resolvedTopic.trim()) {
+        setError('Please select or specify a target topic for your interview');
+        return;
+      }
+    }
+
     setIsLoading(true);
     setError(null);
     setLoadingMessage('Uploading your resume...');
@@ -440,11 +446,20 @@ const InterviewSetup = () => {
       // Create FormData for file upload
       const submitData = new FormData();
       submitData.append('candidateName', formData.name);
-      submitData.append('interviewMode', formData.interviewMode);
+      
+      const actualInterviewMode = formData.interviewMode === 'topic' ? 'specific' : formData.interviewMode;
+      const actualSpecificRound = formData.interviewMode === 'topic' ? 'technical' : formData.specificRound;
+      
+      submitData.append('interviewMode', actualInterviewMode);
       submitData.append('codingDifficulty', formData.codingDifficulty);
       submitData.append('interviewStyle', formData.interviewStyle || 'manual');
       submitData.append('personality', formData.personality || 'professional');
-      if (formData.specificRound) submitData.append('specificRound', formData.specificRound);
+      if (actualSpecificRound) submitData.append('specificRound', actualSpecificRound);
+
+      if (formData.interviewMode === 'topic') {
+        const resolvedTopic = formData.interviewTopic === 'other' ? formData.customTopic : formData.interviewTopic;
+        submitData.append('interviewTopic', resolvedTopic || 'General Technology');
+      }
 
       // Simplified mode: only pass what's needed
       if (isResumeDeepDive) {
@@ -523,6 +538,11 @@ const InterviewSetup = () => {
 
         // Store session ID in localStorage
         localStorage.setItem('interviewSessionId', response.data.sessionId);
+        
+        const finalTopic = formData.interviewMode === 'topic'
+          ? (formData.interviewTopic === 'other' ? formData.customTopic : formData.interviewTopic)
+          : null;
+
         localStorage.setItem('interviewSessionData', JSON.stringify({
           sessionId: response.data.sessionId,
           userId: response.data.userId,
@@ -530,11 +550,16 @@ const InterviewSetup = () => {
           resumeAnalysis: response.data.resumeAnalysis,
           position: formData.position,
           companyType: formData.companyType,
-          interviewMode: formData.interviewMode,
-          specificRound: formData.specificRound,
+          interviewMode: formData.interviewMode === 'topic' ? 'specific' : formData.interviewMode,
+          specificRound: formData.interviewMode === 'topic' ? 'technical' : formData.specificRound,
           codingDifficulty: formData.codingDifficulty,
           interviewStyle: formData.interviewStyle,
-          personality: formData.personality
+          personality: formData.personality,
+          interviewTopic: finalTopic,
+          // Time-based duration for conversational mode
+          interviewDuration: formData.interviewStyle === 'conversational'
+            ? (formData.interviewMode === 'full' ? 1800 : 900)
+            : null
         }));
 
         // Mark all done
@@ -703,7 +728,11 @@ const InterviewSetup = () => {
                 <label className="relative group cursor-pointer">
                   <input type="radio" name="interviewStyle" value="manual"
                     checked={formData.interviewStyle === 'manual'}
-                    onChange={(e) => setFormData({ ...formData, interviewStyle: e.target.value })}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      interviewStyle: e.target.value,
+                      interviewMode: formData.interviewMode === 'topic' ? 'full' : formData.interviewMode
+                    })}
                     className="hidden" disabled={isLoading} />
                   <div className={`h-full p-5 rounded-2xl border-2 transition-all duration-300 ${formData.interviewStyle === 'manual' ? 'bg-blue-600/10 border-blue-500 shadow-lg shadow-blue-500/20' : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 hover:bg-slate-800'}`}>
                     <div className="flex justify-between items-start mb-3">
@@ -793,7 +822,7 @@ const InterviewSetup = () => {
                   <h2 className="text-lg font-semibold text-white">Interview Round</h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className={`grid grid-cols-1 ${formData.interviewStyle === 'conversational' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3`}>
                   {/* Full Interview */}
                   <label className="relative group cursor-pointer">
                     <input type="radio" name="interviewMode" value="full"
@@ -806,7 +835,11 @@ const InterviewSetup = () => {
                         <h3 className={`text-sm font-bold ${formData.interviewMode === 'full' ? 'text-white' : 'text-slate-300'}`}>Full Interview</h3>
                         {formData.interviewMode === 'full' && <div className="ml-auto w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
                       </div>
-                      <p className="text-xs text-slate-500 ml-9">All rounds: Formal → Technical → Coding → HR</p>
+                      <p className="text-xs text-slate-500 ml-9">
+                        {formData.interviewStyle === 'conversational'
+                          ? '30 min · All rounds in one seamless session'
+                          : 'All rounds: Formal → Technical → Coding → HR'}
+                      </p>
                     </div>
                   </label>
 
@@ -822,10 +855,86 @@ const InterviewSetup = () => {
                         <h3 className={`text-sm font-bold ${formData.interviewMode === 'specific' ? 'text-white' : 'text-slate-300'}`}>Practice a Round</h3>
                         {formData.interviewMode === 'specific' && <div className="ml-auto w-2 h-2 bg-purple-500 rounded-full animate-pulse" />}
                       </div>
-                      <p className="text-xs text-slate-500 ml-9">Focus on one specific interview round</p>
+                      <p className="text-xs text-slate-500 ml-9">
+                        {formData.interviewStyle === 'conversational'
+                          ? '15 min · One focused domain'
+                          : 'Focus on one specific interview round'}
+                      </p>
                     </div>
                   </label>
+
+                  {/* Topic-focused Practice (Conversational only) */}
+                  {formData.interviewStyle === 'conversational' && (
+                    <label className="relative group cursor-pointer">
+                      <input type="radio" name="interviewMode" value="topic"
+                        checked={formData.interviewMode === 'topic'}
+                        onChange={() => setFormData({ ...formData, interviewMode: 'topic', specificRound: 'technical', interviewTopic: 'javascript' })}
+                        className="hidden" disabled={isLoading} />
+                      <div className={`h-full p-4 rounded-2xl border-2 transition-all duration-200 ${formData.interviewMode === 'topic' ? 'bg-purple-600/10 border-purple-500 shadow-lg shadow-purple-500/10' : 'bg-slate-800/50 border-slate-700 hover:border-slate-500'}`}>
+                        <div className="flex items-center gap-3 mb-1">
+                          <span className="text-xl">🛠️</span>
+                          <h3 className={`text-sm font-bold ${formData.interviewMode === 'topic' ? 'text-white' : 'text-slate-300'}`}>Topic-wise Practice</h3>
+                          {formData.interviewMode === 'topic' && <div className="ml-auto w-2 h-2 bg-purple-500 rounded-full animate-pulse" />}
+                        </div>
+                        <p className="text-xs text-slate-500 ml-9">
+                          15 min · JS, TS, CPP, React, Java, Python, and more
+                        </p>
+                      </div>
+                    </label>
+                  )}
                 </div>
+
+                {/* Topic Selection for Topic-wise Practice */}
+                {formData.interviewMode === 'topic' && (
+                  <div className="mt-4 p-5 bg-purple-950/10 border border-purple-500/20 rounded-2xl animate-in zoom-in-95 duration-200">
+                    <label className="block text-sm font-semibold text-purple-300 mb-3">
+                      Choose a Technology / Topic <span className="text-red-400">*</span>
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      {[
+                        { value: 'javascript', label: 'JavaScript' },
+                        { value: 'typescript', label: 'TypeScript' },
+                        { value: 'cpp',        label: 'C++' },
+                        { value: 'java',       label: 'Java' },
+                        { value: 'python',     label: 'Python' },
+                        { value: 'react',      label: 'React.js' },
+                        { value: 'express',    label: 'Express.js' },
+                        { value: 'nodejs',     label: 'Node.js' },
+                        { value: 'nextjs',     label: 'Next.js' },
+                        { value: 'go',         label: 'Go (Golang)' },
+                        { value: 'sql',        label: 'SQL Databases' },
+                        { value: 'other',      label: 'Other Topic' }
+                      ].map(topic => (
+                        <label key={topic.value} className="cursor-pointer">
+                          <input type="radio" name="interviewTopic" value={topic.value}
+                            checked={formData.interviewTopic === topic.value}
+                            onChange={(e) => setFormData({ ...formData, interviewTopic: e.target.value })}
+                            className="hidden" disabled={isLoading} />
+                          <div className={`p-2.5 rounded-xl border text-center transition-all duration-200 text-xs font-semibold ${formData.interviewTopic === topic.value ? 'bg-purple-500/20 border-purple-500 text-purple-200 shadow shadow-purple-500/10' : 'bg-slate-800/40 border-slate-700/60 hover:border-slate-500 text-slate-300 hover:text-white'}`}>
+                            {topic.label}
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    
+                    {formData.interviewTopic === 'other' && (
+                      <div className="mt-4 animate-in slide-in-from-top-2 duration-200">
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                          Specify your Custom Topic <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.customTopic}
+                          onChange={(e) => setFormData({ ...formData, customTopic: e.target.value })}
+                          placeholder="e.g., Kubernetes, Django, Spring Boot, AWS, Docker"
+                          className="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                          disabled={isLoading}
+                          maxLength={50}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Specific Round Picker */}
                 {formData.interviewMode === 'specific' && (

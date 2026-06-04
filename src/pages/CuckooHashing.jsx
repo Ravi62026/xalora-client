@@ -891,16 +891,16 @@ struct PerformanceMetrics {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
               <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
                 Cuckoo Hashing
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Advanced collision resolution technique with worst-case O(1) guarantees.
               Master the elegant algorithm that provides high-performance hashing.
             </p>
@@ -912,7 +912,7 @@ struct PerformanceMetrics {
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -921,7 +921,7 @@ struct PerformanceMetrics {
               onClick={() => setActiveSection("implementation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementation"
                   ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Implementation
@@ -930,7 +930,7 @@ struct PerformanceMetrics {
               onClick={() => setActiveSection("mathematical")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "mathematical"
                   ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Mathematical Analysis
@@ -939,7 +939,7 @@ struct PerformanceMetrics {
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -948,20 +948,20 @@ struct PerformanceMetrics {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Cuckoo Hashing Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Cuckoo Hashing Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">What is Cuckoo Hashing?</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-pink-700 mb-4">What is Cuckoo Hashing?</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Cuckoo hashing is a collision resolution technique that uses two hash tables
                     and two hash functions. When a collision occurs, the existing key is "kicked out"
                     and moved to its alternative location, potentially causing a cascade of displacements
                     that resembles a cuckoo bird kicking other eggs out of a nest.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-pink-700 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
                       <span className="text-pink-400 mr-2">🐦</span>
@@ -983,26 +983,26 @@ struct PerformanceMetrics {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">How Cuckoo Hashing Works</h3>
+                  <h3 className="text-2xl font-semibold text-pink-700 mb-4">How Cuckoo Hashing Works</h3>
                   <div className="space-y-6">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-rose-400 mb-2">1. Hash Functions</h4>
-                      <p className="text-gray-300 text-sm">Each key has two possible locations using different hash functions</p>
+                      <p className="text-gray-700 text-sm">Each key has two possible locations using different hash functions</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-rose-400 mb-2">2. Insertion Process</h4>
-                      <p className="text-gray-300 text-sm">Try to place key in first location, evict existing key if occupied</p>
+                      <p className="text-gray-700 text-sm">Try to place key in first location, evict existing key if occupied</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-rose-400 mb-2">3. Displacement Chain</h4>
-                      <p className="text-gray-300 text-sm">Evicted key tries its alternative location, potentially evicting another</p>
+                      <p className="text-gray-700 text-sm">Evicted key tries its alternative location, potentially evicting another</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-rose-400 mb-2">4. Cycle Detection</h4>
-                      <p className="text-gray-300 text-sm">If chain becomes too long, rehash the entire table</p>
+                      <p className="text-gray-700 text-sm">If chain becomes too long, rehash the entire table</p>
                     </div>
                   </div>
                 </div>
@@ -1010,8 +1010,8 @@ struct PerformanceMetrics {
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-gradient-to-br from-pink-900/20 to-rose-900/20 border border-pink-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-pink-400 mb-3">Advantages</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                  <h4 className="text-xl font-semibold text-pink-700 mb-3">Advantages</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Worst-case O(1) lookups</li>
                     <li>• High space efficiency</li>
                     <li>• Good cache performance</li>
@@ -1019,9 +1019,9 @@ struct PerformanceMetrics {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Challenges</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Challenges</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Complex insertion logic</li>
                     <li>• Rehashing can be expensive</li>
                     <li>• Requires multiple hash functions</li>
@@ -1030,8 +1030,8 @@ struct PerformanceMetrics {
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-900/20 to-indigo-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Hardware caches</li>
                     <li>• Network routing</li>
                     <li>• Database systems</li>
@@ -1045,21 +1045,21 @@ struct PerformanceMetrics {
           {/* Implementation Section */}
           {activeSection === "implementation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Cuckoo Hashing Implementations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Cuckoo Hashing Implementations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Basic Cuckoo Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-pink-400 mb-4">Basic Cuckoo Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-pink-700 mb-4">Basic Cuckoo Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Fundamental cuckoo hashing with two tables and displacement-based collision resolution.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Two hash tables</li>
                           <li>• Displacement-based insertion</li>
                           <li>• Worst-case O(1) lookup</li>
@@ -1067,30 +1067,30 @@ struct PerformanceMetrics {
                           <li>• Simple deletion</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Complexity</h4>
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Complexity</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Lookup:</span>
+                            <span className="text-gray-700">Lookup:</span>
                             {renderComplexityBadge("O(1)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Insert (avg):</span>
+                            <span className="text-gray-700">Insert (avg):</span>
                             {renderComplexityBadge("O(1)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Insert (worst):</span>
+                            <span className="text-gray-700">Insert (worst):</span>
                             {renderComplexityBadge("O(n)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Space:</span>
+                            <span className="text-gray-700">Space:</span>
                             {renderComplexityBadge("O(n)")}
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{cuckooHashingImplementation.basic}</code>
                         </pre>
                       </div>
@@ -1099,17 +1099,17 @@ struct PerformanceMetrics {
                 </div>
 
                 {/* Optimized Cuckoo Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-pink-400 mb-4">Optimized Cuckoo Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-pink-700 mb-4">Optimized Cuckoo Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Advanced implementation with multiple hash functions and optimized displacement strategies.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Multiple hash functions</li>
                           <li>• Smart displacement choices</li>
                           <li>• Reduced rehashing</li>
@@ -1117,8 +1117,8 @@ struct PerformanceMetrics {
                           <li>• Configurable parameters</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Optimizations</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Optimizations</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Multiple placement choices</li>
                           <li>• Intelligent eviction</li>
                           <li>• Reduced worst-case chains</li>
@@ -1126,9 +1126,9 @@ struct PerformanceMetrics {
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{cuckooHashingImplementation.optimized}</code>
                         </pre>
                       </div>
@@ -1137,17 +1137,17 @@ struct PerformanceMetrics {
                 </div>
 
                 {/* Concurrent Cuckoo Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-pink-400 mb-4">Concurrent Cuckoo Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-pink-700 mb-4">Concurrent Cuckoo Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Thread-safe implementation with fine-grained locking for high-performance concurrent access.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Fine-grained locking</li>
                           <li>• Reader-writer locks</li>
                           <li>• Lock-free reads</li>
@@ -1155,8 +1155,8 @@ struct PerformanceMetrics {
                           <li>• High concurrency</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Concurrency Benefits</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Concurrency Benefits</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Multiple simultaneous readers</li>
                           <li>• Minimal lock contention</li>
                           <li>• Scalable performance</li>
@@ -1164,9 +1164,9 @@ struct PerformanceMetrics {
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{cuckooHashingImplementation.concurrent}</code>
                         </pre>
                       </div>
@@ -1180,21 +1180,21 @@ struct PerformanceMetrics {
           {/* Mathematical Analysis Section */}
           {activeSection === "mathematical" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Mathematical Analysis</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Mathematical Analysis</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {mathematicalAnalysis.map((analysis, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-pink-400 mb-4">{analysis.title}</h3>
-                      <p className="text-gray-300 mb-6">{analysis.explanation}</p>
+                      <h3 className="text-2xl font-bold text-pink-700 mb-4">{analysis.title}</h3>
+                      <p className="text-gray-700 mb-6">{analysis.explanation}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Mathematical Details</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Mathematical Details</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{analysis.content}</code>
                         </pre>
                       </div>
@@ -1203,56 +1203,56 @@ struct PerformanceMetrics {
                 ))}
 
                 {/* Comparison with Other Methods */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-pink-400 mb-6">Cuckoo Hashing vs Other Methods</h3>
+                    <h3 className="text-2xl font-bold text-pink-700 mb-6">Cuckoo Hashing vs Other Methods</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Aspect</th>
-                            <th className="pb-4 text-pink-400 text-lg font-bold">Cuckoo Hashing</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Separate Chaining</th>
-                            <th className="pb-4 text-green-400 text-lg font-bold">Linear Probing</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">Double Hashing</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Aspect</th>
+                            <th className="pb-4 text-pink-700 text-lg font-bold">Cuckoo Hashing</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Separate Chaining</th>
+                            <th className="pb-4 text-green-700 text-lg font-bold">Linear Probing</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">Double Hashing</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-pink-400 transition-all duration-300">Worst-case Lookup</td>
-                            <td className="py-4 text-green-400 font-medium">O(1)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-pink-400 transition-all duration-300">Worst-case Lookup</td>
+                            <td className="py-4 text-green-700 font-medium">O(1)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-pink-400 transition-all duration-300">Space Overhead</td>
-                            <td className="py-4 text-yellow-400 font-medium">2x</td>
-                            <td className="py-4 text-yellow-400 font-medium">1.5x</td>
-                            <td className="py-4 text-green-400 font-medium">1x</td>
-                            <td className="py-4 text-green-400 font-medium">1x</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-pink-400 transition-all duration-300">Space Overhead</td>
+                            <td className="py-4 text-amber-700 font-medium">2x</td>
+                            <td className="py-4 text-amber-700 font-medium">1.5x</td>
+                            <td className="py-4 text-green-700 font-medium">1x</td>
+                            <td className="py-4 text-green-700 font-medium">1x</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-pink-400 transition-all duration-300">Cache Performance</td>
-                            <td className="py-4 text-green-400 font-medium">Excellent</td>
-                            <td className="py-4 text-red-400 font-medium">Poor</td>
-                            <td className="py-4 text-green-400 font-medium">Good</td>
-                            <td className="py-4 text-green-400 font-medium">Good</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-pink-400 transition-all duration-300">Cache Performance</td>
+                            <td className="py-4 text-green-700 font-medium">Excellent</td>
+                            <td className="py-4 text-red-700 font-medium">Poor</td>
+                            <td className="py-4 text-green-700 font-medium">Good</td>
+                            <td className="py-4 text-green-700 font-medium">Good</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-pink-400 transition-all duration-300">Deletion Complexity</td>
-                            <td className="py-4 text-green-400 font-medium">Simple</td>
-                            <td className="py-4 text-yellow-400 font-medium">Complex</td>
-                            <td className="py-4 text-red-400 font-medium">Complex</td>
-                            <td className="py-4 text-red-400 font-medium">Complex</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-pink-400 transition-all duration-300">Deletion Complexity</td>
+                            <td className="py-4 text-green-700 font-medium">Simple</td>
+                            <td className="py-4 text-amber-700 font-medium">Complex</td>
+                            <td className="py-4 text-red-700 font-medium">Complex</td>
+                            <td className="py-4 text-red-700 font-medium">Complex</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-pink-400 transition-all duration-300">Implementation</td>
-                            <td className="py-4 text-red-400 font-medium">Complex</td>
-                            <td className="py-4 text-green-400 font-medium">Simple</td>
-                            <td className="py-4 text-yellow-400 font-medium">Medium</td>
-                            <td className="py-4 text-yellow-400 font-medium">Medium</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-pink-400 transition-all duration-300">Implementation</td>
+                            <td className="py-4 text-red-700 font-medium">Complex</td>
+                            <td className="py-4 text-green-700 font-medium">Simple</td>
+                            <td className="py-4 text-amber-700 font-medium">Medium</td>
+                            <td className="py-4 text-amber-700 font-medium">Medium</td>
                           </tr>
                         </tbody>
                       </table>
@@ -1266,22 +1266,22 @@ struct PerformanceMetrics {
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Cuckoo Hashing Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Cuckoo Hashing Applications</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-pink-400 mb-4">{app.name}</h3>
-                      <p className="text-gray-300 mb-4">{app.description}</p>
+                      <h3 className="text-2xl font-bold text-pink-700 mb-4">{app.name}</h3>
+                      <p className="text-gray-700 mb-4">{app.description}</p>
                       <p className="text-rose-300 mb-6"><strong>Example:</strong> {app.example}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-rose-400 mb-3">Code Example</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-rose-700 mb-3">Code Example</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{app.code}</code>
                         </pre>
                       </div>
@@ -1293,77 +1293,77 @@ struct PerformanceMetrics {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Basic Cuckoo Hashing Implementation</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Understanding Displacement Chains</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Hash Function Selection</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Cuckoo Hashing with Multiple Tables</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Load Factor Management</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Concurrent Cuckoo Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Rehashing Strategies</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Performance Optimization</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Advanced Cuckoo Hashing Variants</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Cuckoo Hashing for External Memory</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Concurrent Cuckoo Hashing with Optimistic Concurrency</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Cuckoo Hashing with Hardware Acceleration</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Theoretical Analysis of Cuckoo Graphs</span>
                   </li>
                 </ul>
@@ -1371,12 +1371,12 @@ struct PerformanceMetrics {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Fundamental Concepts</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Fundamental Concepts</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• How does cuckoo hashing work?</li>
                     <li>• What are the advantages over other collision resolution?</li>
                     <li>• How does the cuckoo displacement process work?</li>
@@ -1384,9 +1384,9 @@ struct PerformanceMetrics {
                     <li>• When would you choose cuckoo hashing?</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Implementation Details</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Implementation Details</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• How do you implement cuckoo hashing?</li>
                     <li>• What happens during rehashing?</li>
                     <li>• How do you handle concurrent access?</li>
@@ -1394,9 +1394,9 @@ struct PerformanceMetrics {
                     <li>• How do you choose hash functions?</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Performance Analysis</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Performance Analysis</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• What are the worst-case guarantees?</li>
                     <li>• How does cache performance compare?</li>
                     <li>• What are the concurrency implications?</li>
@@ -1404,9 +1404,9 @@ struct PerformanceMetrics {
                     <li>• Memory access patterns analysis</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Advanced Topics</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Advanced Topics</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Cuckoo hashing with multiple tables</li>
                     <li>• Hardware-assisted cuckoo hashing</li>
                     <li>• Cuckoo hashing for networking</li>
@@ -1419,60 +1419,60 @@ struct PerformanceMetrics {
           </div>
 
           {/* Cuckoo Hashing Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-rose-500 hover:shadow-2xl hover:shadow-rose-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Cuckoo Hashing Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-pink-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-pink-700 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Worst-case Lookup:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Worst-case Lookup:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Average-case Lookup:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Average-case Lookup:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Average-case Insert:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Average-case Insert:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Worst-case Insert:</span>
-                    <span className="text-red-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Worst-case Insert:</span>
+                    <span className="text-red-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Space Complexity:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Space Complexity:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-pink-400 mb-4">Key Concepts</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-pink-700 mb-4">Key Concepts</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-rose-400 font-medium mb-1">Two Hash Tables:</div>
-                    <div className="text-gray-400">Each key has two possible locations using different hash functions</div>
+                    <div className="text-gray-600">Each key has two possible locations using different hash functions</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-rose-400 font-medium mb-1">Cuckoo Displacement:</div>
-                    <div className="text-gray-400">Evicted keys move to their alternative location, potentially causing cascades</div>
+                    <div className="text-gray-600">Evicted keys move to their alternative location, potentially causing cascades</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-rose-400 font-medium mb-1">Worst-case O(1):</div>
-                    <div className="text-gray-400">Guaranteed constant-time lookups by checking at most two locations</div>
+                    <div className="text-gray-600">Guaranteed constant-time lookups by checking at most two locations</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-rose-400 font-medium mb-1">Load Factor Limit:</div>
-                    <div className="text-gray-400">Maximum load factor around 0.5-0.67 to guarantee insertion termination</div>
+                    <div className="text-gray-600">Maximum load factor around 0.5-0.67 to guarantee insertion termination</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-rose-400 font-medium mb-1">Rehashing:</div>
-                    <div className="text-gray-400">Resize and rebuild entire table when insertion chains become too long</div>
+                    <div className="text-gray-600">Resize and rebuild entire table when insertion chains become too long</div>
                   </div>
                 </div>
               </div>

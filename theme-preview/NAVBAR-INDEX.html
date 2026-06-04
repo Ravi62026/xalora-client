@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Navbars - Test & Compare</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            border-color: rgba(100, 150, 200, 0.5);
+            background: rgba(30, 41, 59, 1);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-number {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .card-link {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-align: center;
+        }
+
+        .card:hover .card-link {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .info {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .info h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .info p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .special {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .special:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 All Navbars - Test & Compare</h1>
+            <p>10 different navbar designs with same Theme 1 base design</p>
+        </div>
+
+        <div class="grid">
+            <!-- Navbar 1 -->
+            <a href="NAVBAR-1-Modern-Premium.html" class="card special">
+                <div class="card-badge">RECOMMENDED</div>
+                <div class="card-number">1</div>
+                <div class="card-title">Modern Premium</div>
+                <div class="card-desc">Center-aligned links with smooth underline animations</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 2 -->
+            <a href="NAVBAR-2-Minimal-Left.html" class="card">
+                <div class="card-badge">CLEAN</div>
+                <div class="card-number">2</div>
+                <div class="card-title">Minimal Left-Align</div>
+                <div class="card-desc">Simple, left-aligned links with minimal design</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 3 -->
+            <a href="NAVBAR-3-Bold-Accents.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">3</div>
+                <div class="card-title">Bold Accents</div>
+                <div class="card-desc">Bold typography with gradient background</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 4 -->
+            <a href="NAVBAR-4-Spread-Boxes.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">4</div>
+                <div class="card-title">Spread Boxes</div>
+                <div class="card-desc">Generous spacing with background boxes</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 5 -->
+            <a href="NAVBAR-5-Pill-Design.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">5</div>
+                <div class="card-title">Pill Design</div>
+                <div class="card-desc">Trendy pill-shaped buttons and links</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 6 -->
+            <a href="NAVBAR-6-Clean-Minimal.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">6</div>
+                <div class="card-title">Clean Minimal</div>
+                <div class="card-desc">Ultra-minimal with subtle colors</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 7 -->
+            <a href="NAVBAR-7-Gradient-BG.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">7</div>
+                <div class="card-title">Gradient BG</div>
+                <div class="card-desc">Full gradient background with white button</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 8 -->
+            <a href="NAVBAR-8-Spaced-Classic.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">8</div>
+                <div class="card-title">Spaced Classic</div>
+                <div class="card-desc">Elegant spacing with bottom border on hover</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- Navbar 9 -->
+            <a href="NAVBAR-9-Bold-Modern.html" class="card">
+                <div class="card-badge">COMPLETE</div>
+                <div class="card-number">9</div>
+                <div class="card-title">Bold Modern</div>
+                <div class="card-desc">Bold typography with thick colored border</div>
+                <div class="card-link">View →</div>
+            </a>
+
+            <!-- All 10 in One -->
+            <a href="ALL-NAVBARS-TEST.html" class="card special">
+                <div class="card-badge">COMPARE</div>
+                <div class="card-number">+</div>
+                <div class="card-title">All 10 Navbars</div>
+                <div class="card-desc">See all 10 navbar designs in one test page</div>
+                <div class="card-link">View →</div>
+            </a>
+        </div>
+
+        <div class="info">
+            <h2>📋 How It Works</h2>
+            <p>Each navbar file contains the same Theme 1 base design (hero, features, stats, footer)</p>
+            <p>Only the navbar styling is different - so you can easily compare all 10 options!</p>
+            <p style="font-size: 0.9rem; color: #999; margin-top: 1.5rem;">✅ Navbar 1-9: Complete | ✅ All 10 Test: Ready</p>
+        </div>
+    </div>
+</body>
+</html>

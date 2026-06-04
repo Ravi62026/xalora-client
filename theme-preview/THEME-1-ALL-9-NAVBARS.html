@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme 1 - All 9 Navbars</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1f2937;
+        }
+
+        .navbar-showcase {
+            border-bottom: 3px solid #ddd;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+        }
+
+        .navbar-label {
+            max-width: 1200px;
+            margin: 0 auto 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .navbar-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+
+        /* Navbar 1: Modern Premium */
+        .nav1 {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav1 .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            min-width: 100px;
+        }
+
+        .nav1 .links {
+            display: flex;
+            gap: 0;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav1 a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.8rem 1.3rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav1 a:hover {
+            color: #4f46e5;
+        }
+
+        .nav1 a::after {
+            content: '';
+            position: absolute;
+            bottom: 0.4rem;
+            left: 1.3rem;
+            right: 1.3rem;
+            height: 2px;
+            background: #4f46e5;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s;
+        }
+
+        .nav1 a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav1 .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.65rem 1.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav1 .btn:hover {
+            background: #3d35b7;
+            box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Navbar 2: Minimal Left */
+        .nav2 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #e5e5e5;
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav2 .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            min-width: 80px;
+        }
+
+        .nav2 .links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav2 a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav2 a:hover {
+            color: #333;
+        }
+
+        .nav2 .btn {
+            margin-left: auto;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .nav2 .btn:hover {
+            background: #111;
+        }
+
+        /* Navbar 3: Bold Accents */
+        .nav3 {
+            background: linear-gradient(90deg, #fafbfd 0%, #f5f7fb 100%);
+            border-bottom: 2px solid #4f46e5;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav3 .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #4f46e5;
+        }
+
+        .nav3 .links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav3 a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav3 a:hover {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .nav3 .btn {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .nav3 .btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        /* Navbar 4: Spread Boxes */
+        .nav4 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav4 .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a2332;
+            background: #f0f4ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+        }
+
+        .nav4 .links {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .nav4 a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav4 a:hover {
+            background: #f0f4ff;
+            color: #4f46e5;
+        }
+
+        .nav4 .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav4 .btn:hover {
+            background: #3d35b7;
+        }
+
+        /* Navbar 5: Pill Design */
+        .nav5 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(79, 70, 229, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav5 .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .nav5 .links {
+            display: flex;
+            gap: 0.5rem;
+            background: #f0f4ff;
+            padding: 0.4rem;
+            border-radius: 20px;
+        }
+
+        .nav5 a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .nav5 a:hover {
+            background: white;
+            color: #4f46e5;
+        }
+
+        .nav5 .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.65rem 1.6rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav5 .btn:hover {
+            background: #3d35b7;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Navbar 6: Clean Minimal */
+        .nav6 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #ddd;
+            padding: 1.4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav6 .logo {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #1a2332;
+        }
+
+        .nav6 .links {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav6 a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav6 a:hover {
+            color: #1a2332;
+        }
+
+        .nav6 .btn {
+            background: #1a2332;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .nav6 .btn:hover {
+            background: #0f0f0f;
+        }
+
+        /* Navbar 7: Gradient BG */
+        .nav7 {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav7 .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .nav7 .links {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav7 a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav7 a:hover {
+            color: white;
+        }
+
+        .nav7 .btn {
+            background: white;
+            color: #4f46e5;
+            border: none;
+            padding: 0.6rem 1.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .nav7 .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Navbar 8: Spaced Classic */
+        .nav8 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px solid #f0f0f0;
+            padding: 1.3rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .nav8 .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4f46e5;
+            flex-shrink: 0;
+        }
+
+        .nav8 .links {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav8 a {
+            color: #888;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav8 a:hover {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+        }
+
+        .nav8 .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+        .nav8 .btn:hover {
+            background: #3d35b7;
+        }
+
+        /* Navbar 9: Bold Modern */
+        .nav9 {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 3px solid #4f46e5;
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+        }
+
+        .nav9 .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #1a2332;
+        }
+
+        .nav9 .links {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav9 a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav9 a:hover {
+            color: #4f46e5;
+        }
+
+        .nav9 .btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav9 .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(79, 70, 229, 0.3);
+        }
+
+        .info {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .info h2 {
+            color: #1a2332;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .info p {
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+
+        .info strong {
+            color: #4f46e5;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar 1: Modern Premium -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">✨ Navbar 1: Modern Premium (Center Links + Smooth Underline)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav1">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 2: Minimal Left -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">📌 Navbar 2: Minimal Left-Align (Clean & Simple)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav2">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 3: Bold Accents -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">🎨 Navbar 3: Bold with Accents (Bold Typography + Gradient)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav3">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 4: Spread Boxes -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">📦 Navbar 4: Spread with Boxes (Generous Spacing)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav4">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 5: Pill Design -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">💊 Navbar 5: Pill Design (Trendy Rounded Buttons)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav5">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 6: Clean Minimal -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">🧹 Navbar 6: Clean Minimal (Ultra-Minimal Design)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav6">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 7: Gradient BG -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">🌈 Navbar 7: Gradient Background (Full Gradient)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav7">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 8: Spaced Classic -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">✨ Navbar 8: Spaced Classic (Elegant Bottom Border)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav8">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Navbar 9: Bold Modern -->
+    <div class="navbar-showcase">
+        <div class="navbar-label">💪 Navbar 9: Bold Modern (Bold Typography + Thick Border)</div>
+        <div class="navbar-wrapper">
+            <nav class="nav9">
+                <div class="logo">xalora</div>
+                <div class="links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#docs">Docs</a>
+                    <a href="#about">About</a>
+                </div>
+                <button class="btn">Get Started</button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="info">
+        <h2>🎯 Choose Your Favorite Navbar!</h2>
+        <p>Scroll through all 9 different navbar designs with <strong>Theme 1's base design</strong></p>
+        <p style="font-size: 0.95rem; color: #999; margin-top: 1.5rem;">Once you choose, I'll create individual files for each navbar + apply to all theme files!</p>
+    </div>
+</body>
+</html>

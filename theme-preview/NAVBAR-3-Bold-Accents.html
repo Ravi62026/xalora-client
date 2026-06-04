@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar 3 - Bold Accents</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to right, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+            background-attachment: fixed;
+            color: #1f2937;
+            min-height: 100vh;
+            letter-spacing: 0.3px;
+        }
+
+        nav {
+            background: linear-gradient(to right, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(150, 150, 150, 0.11) 1px, transparent 1px),
+                        linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+            background-attachment: fixed;
+            border-bottom: 2px solid #4f46e5;
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.8rem 1.3rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1a2332;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0.4rem;
+            left: 1.3rem;
+            right: 1.3rem;
+            height: 2px;
+            background: #4f46e5;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-primary {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .hero { max-width: 1150px; margin: 0 auto; padding: 5.5rem 2rem 4rem; text-align: center; }
+        .hero h1 { font-size: 3.4rem; font-weight: 700; margin-bottom: 1.3rem; color: #0f172a; line-height: 1.25; letter-spacing: -0.8px; }
+        .hero p { font-size: 1.15rem; color: #5a6b7d; margin-bottom: 2.5rem; max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+        .hero-buttons { display: flex; gap: 1.3rem; justify-content: center; margin-bottom: 3rem; }
+        .btn-secondary { background: white; color: #4f46e5; border: 1.5px solid #4f46e5; padding: 0.75rem 1.75rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1); }
+        .btn-secondary:hover { background: #f0f4ff; box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15); }
+
+        .features { max-width: 1150px; margin: 4rem auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.2rem; }
+        .feature-card { background: white; padding: 2.4rem; border-radius: 10px; border: 1px solid rgba(120, 119, 198, 0.15); transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1); box-shadow: 0 10px 28px rgba(79, 70, 229, 0.09); position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, rgba(79, 70, 229, 0.8), rgba(124, 58, 237, 0.3)); }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 48px rgba(79, 70, 229, 0.2); border-color: #4f46e5; }
+        .feature-icon { font-size: 2.6rem; margin-bottom: 1.2rem; display: block; }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 0.8rem; color: #0f172a; font-weight: 600; }
+        .feature-card p { color: #5a6b7d; line-height: 1.7; font-size: 0.95rem; }
+
+        .stats { max-width: 1150px; margin: 4rem auto; padding: 3.5rem 2rem; background: white; border-radius: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; box-shadow: 0 10px 32px rgba(79, 70, 229, 0.11); border: 1px solid rgba(120, 119, 198, 0.15); }
+        .stat { text-align: center; }
+        .stat-number { font-size: 2.8rem; font-weight: 700; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; }
+        .stat-label { color: #5a6b7d; font-weight: 600; margin-top: 0.6rem; font-size: 0.95rem; }
+
+        footer { background: rgba(255, 255, 255, 0.92); border-top: 1px solid rgba(120, 119, 198, 0.15); padding: 2.5rem; text-align: center; color: #5a6b7d; margin-top: 4rem; font-size: 0.9rem; }
+        footer a { color: #4f46e5; text-decoration: none; transition: color 0.3s; }
+        footer a:hover { color: #7c3aed; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">xalora</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#docs">Docs</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <button class="btn-primary">Get Started</button>
+    </nav>
+
+    <section class="hero">
+        <h1>Master Data Structures & Algorithms</h1>
+        <p>Learn DSA, practice coding, ace interviews, and land your dream job with Xalora</p>
+        <div class="hero-buttons">
+            <button class="btn-primary">Start Free</button>
+            <button class="btn-secondary">View Demo</button>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="feature-card"><div class="feature-icon">🎯</div><h3>Smart Problems</h3><p>1000+ curated DSA problems with detailed explanations and multiple solutions</p></div>
+        <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI Interview</h3><p>Practice real interviews with our AI interviewer with instant feedback</p></div>
+        <div class="feature-card"><div class="feature-icon">📊</div><h3>Analytics</h3><p>Track your progress with detailed analytics and performance insights</p></div>
+        <div class="feature-card"><div class="feature-icon">💼</div><h3>Resume AI</h3><p>Get AI-powered resume reviews and suggestions to stand out</p></div>
+    </section>
+
+    <section class="stats">
+        <div class="stat"><div class="stat-number">50K+</div><div class="stat-label">Active Users</div></div>
+        <div class="stat"><div class="stat-number">1000+</div><div class="stat-label">Problems</div></div>
+        <div class="stat"><div class="stat-number">98%</div><div class="stat-label">Success Rate</div></div>
+        <div class="stat"><div class="stat-number">24/7</div><div class="stat-label">Support</div></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Xalora. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms</a></p>
+    </footer>
+</body>
+</html>

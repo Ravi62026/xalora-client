@@ -10,7 +10,11 @@ const DataStructures = () => {
       id: "basic",
       name: "Basic Data Structures",
       description: "Foundational data structures that form the building blocks for complex structures.",
-      color: "emerald",
+      bgColor: "from-blue-50 to-cyan-50",
+      accentColor: "text-blue-700",
+      borderColor: "border-blue-200",
+      badgeBg: "bg-blue-100",
+      badgeText: "text-blue-700",
       structures: [
         "Variables",
         "Arrays",
@@ -23,7 +27,11 @@ const DataStructures = () => {
       id: "linear",
       name: "Linear Data Structures",
       description: "Sequential data structures where elements are arranged in a sequential manner.",
-      color: "blue",
+      bgColor: "from-indigo-50 to-blue-50",
+      accentColor: "text-indigo-700",
+      borderColor: "border-indigo-200",
+      badgeBg: "bg-indigo-100",
+      badgeText: "text-indigo-700",
       structures: [
         "Arrays",
         "Linked Lists",
@@ -40,7 +48,11 @@ const DataStructures = () => {
       id: "hash",
       name: "Hash-Based Structures",
       description: "Data structures that use hash functions for efficient data retrieval.",
-      color: "purple",
+      bgColor: "from-purple-50 to-pink-50",
+      accentColor: "text-purple-700",
+      borderColor: "border-purple-200",
+      badgeBg: "bg-purple-100",
+      badgeText: "text-purple-700",
       structures: [
         "Hash Tables",
         "Hash Maps",
@@ -55,7 +67,11 @@ const DataStructures = () => {
       id: "trees",
       name: "Tree Data Structures",
       description: "Hierarchical data structures with parent-child relationships.",
-      color: "cyan",
+      bgColor: "from-cyan-50 to-teal-50",
+      accentColor: "text-cyan-700",
+      borderColor: "border-cyan-200",
+      badgeBg: "bg-cyan-100",
+      badgeText: "text-cyan-700",
       structures: [
         "Binary Trees",
         "Binary Search Trees",
@@ -78,7 +94,11 @@ const DataStructures = () => {
       id: "graphs",
       name: "Graph Data Structures",
       description: "Non-linear data structures consisting of nodes and edges.",
-      color: "teal",
+      bgColor: "from-green-50 to-emerald-50",
+      accentColor: "text-green-700",
+      borderColor: "border-green-200",
+      badgeBg: "bg-green-100",
+      badgeText: "text-green-700",
       structures: [
         "Adjacency Matrix",
         "Adjacency List",
@@ -98,7 +118,11 @@ const DataStructures = () => {
       id: "advanced",
       name: "Advanced Data Structures",
       description: "Complex data structures for specialized use cases and optimization.",
-      color: "lime",
+      bgColor: "from-emerald-50 to-green-50",
+      accentColor: "text-emerald-700",
+      borderColor: "border-emerald-200",
+      badgeBg: "bg-emerald-100",
+      badgeText: "text-emerald-700",
       structures: [
         "Disjoint Set Union",
         "Suffix Arrays",
@@ -119,7 +143,11 @@ const DataStructures = () => {
       id: "string",
       name: "String Data Structures",
       description: "Specialized structures for efficient string processing and pattern matching.",
-      color: "yellow",
+      bgColor: "from-amber-50 to-orange-50",
+      accentColor: "text-amber-700",
+      borderColor: "border-amber-200",
+      badgeBg: "bg-amber-100",
+      badgeText: "text-amber-700",
       structures: [
         "Tries",
         "Suffix Arrays",
@@ -135,7 +163,11 @@ const DataStructures = () => {
       id: "probabilistic",
       name: "Probabilistic Data Structures",
       description: "Space-efficient data structures that allow for small error rates.",
-      color: "orange",
+      bgColor: "from-orange-50 to-amber-50",
+      accentColor: "text-orange-700",
+      borderColor: "border-orange-200",
+      badgeBg: "bg-orange-100",
+      badgeText: "text-orange-700",
       structures: [
         "Bloom Filters",
         "Count-Min Sketch",
@@ -149,7 +181,11 @@ const DataStructures = () => {
       id: "distributed",
       name: "Distributed Data Structures",
       description: "Data structures designed for distributed and concurrent environments.",
-      color: "red",
+      bgColor: "from-red-50 to-orange-50",
+      accentColor: "text-red-700",
+      borderColor: "border-red-200",
+      badgeBg: "bg-red-100",
+      badgeText: "text-red-700",
       structures: [
         "Distributed Hash Tables",
         "CRDTs (Conflict-free Replicated Data Types)",
@@ -163,7 +199,11 @@ const DataStructures = () => {
       id: "concurrent",
       name: "Concurrent Data Structures",
       description: "Thread-safe data structures for concurrent programming environments.",
-      color: "pink",
+      bgColor: "from-rose-50 to-pink-50",
+      accentColor: "text-rose-700",
+      borderColor: "border-rose-200",
+      badgeBg: "bg-rose-100",
+      badgeText: "text-rose-700",
       structures: [
         "Lock-Free Queues",
         "Lock-Free Stacks",
@@ -177,7 +217,11 @@ const DataStructures = () => {
       id: "functional",
       name: "Functional Data Structures",
       description: "Immutable data structures that support functional programming paradigms.",
-      color: "indigo",
+      bgColor: "from-violet-50 to-purple-50",
+      accentColor: "text-violet-700",
+      borderColor: "border-violet-200",
+      badgeBg: "bg-violet-100",
+      badgeText: "text-violet-700",
       structures: [
         "Persistent Lists",
         "Persistent Trees",
@@ -190,7 +234,11 @@ const DataStructures = () => {
       id: "specialized",
       name: "Specialized Data Structures",
       description: "Domain-specific structures for particular use cases and applications.",
-      color: "gray",
+      bgColor: "from-slate-50 to-gray-50",
+      accentColor: "text-slate-700",
+      borderColor: "border-slate-200",
+      badgeBg: "bg-slate-100",
+      badgeText: "text-slate-700",
       structures: [
         "LRU Cache",
         "LFU Cache",
@@ -205,150 +253,106 @@ const DataStructures = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="text-center mb-16 sm:mb-20">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Data Structures
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto transform transition-all duration-700 hover:text-gray-200">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Build a strong foundation with essential data structures for efficient problem solving
             </p>
           </div>
 
-          {/* Categories Grid - Enhanced UI */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+          {/* Categories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {dataStructureCategories.map((category) => (
-              <div
+              <button
                 key={category.id}
-                className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 transform hover:-translate-y-2 hover:scale-[1.02]"
+                onClick={() => {
+                  if (category.id === 'basic') navigate('/data-structures/basic');
+                  else if (category.id === 'linear') navigate('/data-structures/linear');
+                  else if (category.id === 'hash') navigate('/data-structures/hash-based');
+                }}
+                className={`bg-gradient-to-br ${category.bgColor} rounded-2xl border ${category.borderColor} overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-opacity-100 text-left p-6 sm:p-7`}
               >
-                <div className="p-6">
-                  <div className={`flex items-center mb-4`}>
-                    <div className={`bg-${category.color}-500/20 p-3 rounded-xl mr-4 transition-all duration-300 hover:scale-110`}>
-                      <svg className={`h-8 w-8 text-${category.color}-400`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-white transition-all duration-300 hover:text-emerald-400">{category.name}</h3>
+                <div className="flex items-start gap-3 mb-4">
+                  <div className={`${category.badgeBg} p-3 rounded-lg flex-shrink-0`}>
+                    <svg className={`h-6 w-6 ${category.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                    </svg>
                   </div>
-                  <p className="text-gray-300 mb-6 transition-all duration-300 hover:text-gray-200">{category.description}</p>
-
-                  {/* Structure List */}
-                  <div className="mb-6">
-                    <h4 className="text-gray-200 font-bold mb-3 transition-all duration-300 hover:text-white">Structures Covered:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {category.structures.slice(0, 5).map((structure, idx) => (
-                        <span
-                          key={idx}
-                          className={`px-3 py-2 bg-${category.color}-900/50 text-${category.color}-300 text-sm rounded-xl transition-all duration-300 hover:bg-${category.color}-700 hover:scale-105 hover:shadow-md border border-${category.color}-700/50`}
-                        >
-                          {structure}
-                        </span>
-                      ))}
-                      {category.structures.length > 5 && (
-                        <span className="px-3 py-2 bg-gray-700/50 text-gray-300 text-sm rounded-xl transition-all duration-300 hover:bg-gray-600 hover:scale-105 border border-gray-600">
-                          +{category.structures.length - 5} more
-                        </span>
-                      )}
-                    </div>
+                  <div>
+                    <h3 className={`text-xl font-bold ${category.accentColor}`}>{category.name}</h3>
+                    <p className="text-gray-600 text-sm mt-1">{category.description}</p>
                   </div>
-
-                  <button
-                    onClick={() => {
-                      // Navigate to specific data structure pages
-                      if (category.id === 'basic') {
-                        navigate('/data-structures/basic');
-                      } else if (category.id === 'linear') {
-                        navigate('/data-structures/linear');
-                      } else if (category.id === 'hash') {
-                        navigate('/data-structures/hash-based');
-                      }
-                      // For other categories, keep the button as is for now
-                    }}
-                    className={`w-full py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-${category.color}-600 to-${category.color}-500 rounded-xl font-bold text-white text-sm sm:text-base hover:from-${category.color}-500 hover:to-${category.color}-400 transition-all duration-500 transform hover:scale-105 hover:shadow-xl`}
-                    disabled={category.id !== 'basic' && category.id !== 'linear' && category.id !== 'hash'}
-                  >
-                    {category.id === 'basic' || category.id === 'linear' || category.id === 'hash' ? 'Start Learning' : 'Coming Soon'}
-                  </button>
                 </div>
-              </div>
+
+                {/* Structure List */}
+                <div className="mt-5 pt-5 border-t border-gray-200">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Includes:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {category.structures.slice(0, 4).map((structure, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-2.5 py-1 ${category.badgeBg} ${category.badgeText} text-xs rounded-full`}
+                      >
+                        {structure}
+                      </span>
+                    ))}
+                    {category.structures.length > 4 && (
+                      <span className="px-2.5 py-1 bg-gray-200 text-gray-700 text-xs rounded-full font-medium">
+                        +{category.structures.length - 4}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
 
-          {/* Time Complexity Comparison - Enhanced UI */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-gray-700 p-6 sm:p-10 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12 transition-all duration-300 hover:text-cyan-400">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Time Complexity Comparison
-              </span>
+          {/* Time Complexity Comparison */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-7 sm:p-9 shadow-sm">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10">
+              Data Structure Complexity Cheatsheet
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="pb-6 text-gray-200 text-lg font-bold transition-all duration-300 hover:text-white">Operation</th>
-                    <th className="pb-6 text-emerald-400 text-lg font-bold transition-all duration-300 hover:text-emerald-300">Array</th>
-                    <th className="pb-6 text-red-400 text-lg font-bold transition-all duration-300 hover:text-red-300">Linked List</th>
-                    <th className="pb-6 text-emerald-400 text-lg font-bold transition-all duration-300 hover:text-emerald-300">Hash Table</th>
-                    <th className="pb-6 text-yellow-400 text-lg font-bold transition-all duration-300 hover:text-yellow-300">BST</th>
-                    <th className="pb-6 text-emerald-400 text-lg font-bold transition-all duration-300 hover:text-emerald-300">Heap</th>
-                    <th className="pb-6 text-cyan-400 text-lg font-bold transition-all duration-300 hover:text-cyan-300">AVL Tree</th>
+                  <tr className="border-b border-gray-200">
+                    <th className="pb-4 text-gray-900 font-bold">Data Structure</th>
+                    <th className="pb-4 text-green-700 font-bold">Access</th>
+                    <th className="pb-4 text-blue-700 font-bold">Search</th>
+                    <th className="pb-4 text-orange-700 font-bold">Insertion</th>
+                    <th className="pb-4 text-red-700 font-bold">Deletion</th>
+                    <th className="pb-4 text-purple-700 font-bold">Space</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                    <td className="py-6 text-white font-medium group-hover:text-emerald-400 transition-all duration-300">Access</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)</td>
-                    <td className="py-6 text-red-400 font-medium group-hover:text-red-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)*</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-red-400 font-medium group-hover:text-red-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                  </tr>
-                  <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                    <td className="py-6 text-white font-medium group-hover:text-emerald-400 transition-all duration-300">Search</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)*</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                  </tr>
-                  <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                    <td className="py-6 text-white font-medium group-hover:text-emerald-400 transition-all duration-300">Insertion</td>
-                    <td className="py-6 text-red-400 font-medium group-hover:text-red-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)**</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)*</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                  </tr>
-                  <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                    <td className="py-6 text-white font-medium group-hover:text-emerald-400 transition-all duration-300">Deletion</td>
-                    <td className="py-6 text-red-400 font-medium group-hover:text-red-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)**</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(1)*</td>
-                    <td className="py-6 text-yellow-400 font-medium group-hover:text-yellow-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                    <td className="py-6 text-emerald-400 font-medium group-hover:text-emerald-300 transition-all duration-300">O(log n)</td>
-                  </tr>
-                  <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                    <td className="py-6 text-white font-medium group-hover:text-emerald-400 transition-all duration-300">Space</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                    <td className="py-6 text-cyan-400 font-medium group-hover:text-cyan-300 transition-all duration-300">O(n)</td>
-                  </tr>
+                  {[
+                    { name: "Array", access: "O(1)", search: "O(n)", insertion: "O(n)", deletion: "O(n)", space: "O(n)" },
+                    { name: "Linked List", access: "O(n)", search: "O(n)", insertion: "O(1)*", deletion: "O(1)*", space: "O(n)" },
+                    { name: "Hash Table", access: "O(1)**", search: "O(1)**", insertion: "O(1)**", deletion: "O(1)**", space: "O(n)" },
+                    { name: "Binary Search Tree", access: "O(log n)", search: "O(log n)", insertion: "O(log n)", deletion: "O(log n)", space: "O(n)" },
+                    { name: "AVL Tree", access: "O(log n)", search: "O(log n)", insertion: "O(log n)", deletion: "O(log n)", space: "O(n)" },
+                    { name: "Heap", access: "O(n)", search: "O(n)", insertion: "O(log n)", deletion: "O(log n)", space: "O(n)" },
+                  ].map((ds, idx) => (
+                    <tr key={idx} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${idx % 2 === 0 ? 'bg-gray-50/50' : ''}`}>
+                      <td className="py-4 text-gray-900 font-medium">{ds.name}</td>
+                      <td className="py-4 text-green-700">{ds.access}</td>
+                      <td className="py-4 text-blue-700">{ds.search}</td>
+                      <td className="py-4 text-orange-700">{ds.insertion}</td>
+                      <td className="py-4 text-red-700">{ds.deletion}</td>
+                      <td className="py-4 text-purple-700">{ds.space}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-              <div className="mt-6 text-sm text-gray-500 transition-all duration-300 hover:text-gray-400">
-                * Average case, ** At head/tail
+              <div className="mt-4 text-xs text-gray-600">
+                * At head/tail, ** Average case
               </div>
             </div>
           </div>

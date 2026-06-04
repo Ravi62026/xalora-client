@@ -578,16 +578,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Backtracking Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master the systematic exploration of solution spaces with pruning and constraint satisfaction techniques.
             </p>
           </div>
@@ -597,8 +597,8 @@ public:
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -606,8 +606,8 @@ public:
             <button
               onClick={() => setActiveSection("fundamentals")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "fundamentals"
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Fundamentals
@@ -615,8 +615,8 @@ public:
             <button
               onClick={() => setActiveSection("classic")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "classic"
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Classic Problems
@@ -624,8 +624,8 @@ public:
             <button
               onClick={() => setActiveSection("optimization")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "optimization"
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Optimization
@@ -633,8 +633,8 @@ public:
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -643,44 +643,44 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Backtracking Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Backtracking Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-violet-400 mb-4">What is Backtracking?</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What is Backtracking?</h3>
                   <p className="text-gray-300 mb-6">
                     Backtracking is a systematic way to explore all possible solutions to a problem
                     by incrementally building candidates and abandoning paths that fail to satisfy
                     the constraints. It's like trying all possibilities but with smart pruning.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-violet-400 mb-4">Core Principles</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Core Principles</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
-                      <span className="text-violet-400 mr-2">🔄</span>
+                      <span className="text-indigo-500 mr-2">🔄</span>
                       <span><strong>Incremental Construction:</strong> Build solution step by step</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-violet-400 mr-2">✂️</span>
+                      <span className="text-indigo-500 mr-2">✂️</span>
                       <span><strong>Constraint Checking:</strong> Validate partial solutions</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-violet-400 mr-2">↩️</span>
+                      <span className="text-indigo-500 mr-2">↩️</span>
                       <span><strong>Backtracking:</strong> Undo choices when stuck</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-violet-400 mr-2">🌳</span>
+                      <span className="text-indigo-500 mr-2">🌳</span>
                       <span><strong>State Space Tree:</strong> Search tree of all possibilities</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-violet-400 mb-4">When to Use Backtracking</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">When to Use Backtracking</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Problems Requiring:</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Problems Requiring:</h4>
                       <ul className="text-gray-300 text-sm space-y-1">
                         <li>• Exhaustive search with constraints</li>
                         <li>• Finding all possible solutions</li>
@@ -689,8 +689,8 @@ public:
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">vs Other Approaches:</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">vs Other Approaches:</h4>
                       <ul className="text-gray-300 text-sm space-y-1">
                         <li>• <strong>Brute Force:</strong> Backtracking prunes invalid paths</li>
                         <li>• <strong>DP:</strong> When state space is too large</li>
@@ -702,19 +702,19 @@ public:
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-violet-900/20 to-purple-900/20 border border-violet-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-violet-400 mb-3">Time Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                   <p className="text-gray-300">Often exponential: O(k^n)</p>
-                  <p className="text-sm text-gray-400 mt-2">But pruning makes it practical for small n</p>
+                  <p className="text-sm text-gray-500 mt-2">But pruning makes it practical for small n</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
                   <p className="text-gray-300">O(n) for recursion stack</p>
-                  <p className="text-sm text-gray-400 mt-2">Plus space for current solution</p>
+                  <p className="text-sm text-gray-500 mt-2">Plus space for current solution</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Key Techniques</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• State representation</li>
@@ -730,17 +730,17 @@ public:
           {/* Fundamentals Section */}
           {activeSection === "fundamentals" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Backtracking Fundamentals</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Backtracking Fundamentals</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {fundamentals.map((concept) => (
                   <div
                     key={concept.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{concept.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{concept.name}</h3>
                         <span className="px-3 py-1 bg-violet-900/50 text-violet-300 text-sm rounded-lg">
                           Core Concept
                         </span>
@@ -750,7 +750,7 @@ public:
 
                       {concept.keyConcepts && (
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-violet-400 mb-3">Key Concepts</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Key Concepts</h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {concept.keyConcepts.map((concept, idx) => (
                               <div key={idx} className="bg-gray-700/50 p-3 rounded-lg">
@@ -763,7 +763,7 @@ public:
 
                       {concept.applications && (
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-violet-400 mb-3">Applications</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Applications</h4>
                           <div className="flex flex-wrap gap-2">
                             {concept.applications.map((app, idx) => (
                               <span key={idx} className="px-3 py-1 bg-violet-900/50 text-violet-300 text-sm rounded-lg">
@@ -776,7 +776,7 @@ public:
 
                       {concept.vsOther && (
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-violet-400 mb-3">vs Other Approaches</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">vs Other Approaches</h4>
                           <div className="space-y-2">
                             {Object.entries(concept.vsOther).map(([key, value], idx) => (
                               <div key={idx} className="bg-gray-700/50 p-3 rounded-lg">
@@ -788,9 +788,9 @@ public:
                         </div>
                       )}
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Basic Template</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Basic Template</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{concept.code}</code>
                         </pre>
                       </div>
@@ -804,17 +804,17 @@ public:
           {/* Classic Problems Section */}
           {activeSection === "classic" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Classic Backtracking Problems</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Classic Backtracking Problems</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {classicProblems.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -823,9 +823,9 @@ public:
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -839,17 +839,17 @@ public:
           {/* Optimization Section */}
           {activeSection === "optimization" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Optimization Techniques</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Optimization Techniques</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {optimization.map((technique) => (
                   <div
                     key={technique.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{technique.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{technique.name}</h3>
                         <span className="px-3 py-1 bg-indigo-900/50 text-indigo-300 text-sm rounded-lg">
                           Optimization
                         </span>
@@ -860,10 +860,10 @@ public:
                       {technique.techniques && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {technique.techniques.map((tech, idx) => (
-                            <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-cyan-400 mb-2">{tech.name}</h4>
+                            <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                              <h4 className="text-md font-semibold text-indigo-600 mb-2">{tech.name}</h4>
                               <p className="text-gray-300 mb-2 text-sm">{tech.description}</p>
-                              <p className="text-xs text-gray-400 italic">{tech.example}</p>
+                              <p className="text-xs text-gray-500 italic">{tech.example}</p>
                             </div>
                           ))}
                         </div>
@@ -872,10 +872,10 @@ public:
                       {technique.methods && (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           {technique.methods.map((method, idx) => (
-                            <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-cyan-400 mb-2">{method.name}</h4>
+                            <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                              <h4 className="text-md font-semibold text-indigo-600 mb-2">{method.name}</h4>
                               <p className="text-gray-300 mb-2 text-sm">{method.description}</p>
-                              <p className="text-xs text-gray-400 italic">{method.example}</p>
+                              <p className="text-xs text-gray-500 italic">{method.example}</p>
                             </div>
                           ))}
                         </div>
@@ -890,17 +890,17 @@ public:
           {/* Advanced Problems Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Backtracking Problems</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Backtracking Problems</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedProblems.map((problem) => (
                   <div
                     key={problem.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{problem.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{problem.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${problem.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${problem.complexity.space}`)}
@@ -909,9 +909,9 @@ public:
 
                       <p className="text-gray-300 mb-6">{problem.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{problem.code}</code>
                         </pre>
                       </div>
@@ -923,15 +923,15 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Backtracking</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Easy Backtracking</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Subsets (all possible subsets)</span>
@@ -952,8 +952,8 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Backtracking</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Medium Backtracking</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Combination Sum II (no duplicates)</span>
@@ -978,8 +978,8 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Backtracking</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Hard Backtracking</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Word Search II (on board)</span>
@@ -1020,7 +1020,7 @@ public:
                       </span>
                     </div>
                     <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1028,14 +1028,14 @@ public:
           </div>
 
           {/* Backtracking Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Backtracking Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-violet-400 mb-4">Template Structure</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Template Structure</h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-gray-800/50 p-3 rounded">
                     <div className="text-cyan-400 font-medium mb-1">Base Case:</div>
@@ -1057,7 +1057,7 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-violet-400 mb-4">Common Patterns</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Common Patterns</h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-gray-800/50 p-3 rounded">
                     <div className="text-cyan-400 font-medium mb-1">Permutations:</div>

@@ -35,6 +35,8 @@ const RECONNECT_BASE_DELAY  = 1000; // ms
  * @param {string}   config.personality
  * @param {string}   config.candidateName
  * @param {string}   config.currentQuestion
+ * @param {string}   config.interviewMode      — "full" | "specific" | "practice"
+ * @param {number}   config.interviewDuration  — session seconds (900 = 15min, 1800 = 30min)
  * @param {boolean}  config.autoConnect
  * @param {Function} config.onFallbackToManual — called when Deepgram gives up
  */
@@ -45,6 +47,9 @@ export default function useConversationalInterview(config = {}) {
         personality      = "professional",
         candidateName    = "Candidate",
         currentQuestion  = "",
+        interviewMode    = "specific",
+        interviewDuration = 900,
+        interviewTopic   = null,
         autoConnect      = false,
         onFallbackToManual
     } = config;
@@ -71,18 +76,23 @@ export default function useConversationalInterview(config = {}) {
     );
     const [reconnectInfo, setReconnectInfo] = useState(null); // { attempt, delayMs }
     const [silenceWarning, setSilenceWarning] = useState(null); // "nudge" | "autopause"
+    // Full interview mode: current phase banner
+    const [currentPhase, setCurrentPhase]   = useState({ phase: "formal_qa", label: "Formal Q&A" });
 
     // ── Refs ──────────────────────────────────────────────────────
-    const socketRef       = useRef(null);
-    const audioContextRef = useRef(null);
-    const micStreamRef    = useRef(null);
-    const processorRef    = useRef(null);
-    const audioQueueRef   = useRef([]);
-    const isPlayingRef    = useRef(false);
-    const isMutedRef      = useRef(false);   // sync ref for AudioWorklet closure
-    const deepgramReadyRef = useRef(false);   // sync ref for AudioWorklet closure
+    const socketRef          = useRef(null);
+    const micAudioContextRef  = useRef(null);
+    const playbackAudioContextRef = useRef(null);
+    const activeSourceRef     = useRef(null);
+    const micStreamRef        = useRef(null);
+    const workletNodeRef      = useRef(null);  // AudioWorkletNode (replaces ScriptProcessor)
+    const processorRef        = useRef(null);  // fallback ScriptProcessor
+    const audioQueueRef       = useRef([]);
+    const isPlayingRef        = useRef(false);
+    const isMutedRef          = useRef(false);   // sync ref for audio thread closure
+    const deepgramReadyRef    = useRef(false);   // sync ref for audio thread closure
     const reconnectAttemptsRef = useRef(0);
-    const reconnectTimerRef    = useRef(null);
+    const reconnectTimerRef   = useRef(null);
     const lastSessionParamsRef = useRef({});  // for Deepgram reconnect
 
     // ── Network Monitoring ────────────────────────────────────────
@@ -258,6 +268,17 @@ export default function useConversationalInterview(config = {}) {
             setIsAgentSpeaking(false);
             audioQueueRef.current = [];          // barge-in: clear queued audio
             setSilenceWarning(null);
+
+            // Stop current playback for barge-in!
+            if (activeSourceRef.current) {
+                try {
+                    activeSourceRef.current.stop();
+                } catch (e) {
+                    // Ignore if already stopped
+                }
+                activeSourceRef.current = null;
+            }
+            isPlayingRef.current = false;
         });
 
         socket.on("deepgram:closed", (data) => {
@@ -312,6 +333,12 @@ export default function useConversationalInterview(config = {}) {
             }
         });
 
+        // ── Full Interview: Phase Change ──
+        socket.on("deepgram:phase-change", (data) => {
+            console.log(`🔀 [ConvHook] Phase change: ${data.phase} (${data.label})`);
+            setCurrentPhase({ phase: data.phase, label: data.label });
+        });
+
         socketRef.current = socket;
     }, [onFallbackToManual]);
 
@@ -325,6 +352,22 @@ export default function useConversationalInterview(config = {}) {
             socketRef.current = null;
         }
         stopMicrophone();
+
+        // Stop active TTS audio playback on disconnect
+        if (activeSourceRef.current) {
+            try {
+                activeSourceRef.current.stop();
+            } catch (e) { /* ignore */ }
+            activeSourceRef.current = null;
+        }
+        audioQueueRef.current = [];
+        isPlayingRef.current = false;
+
+        if (playbackAudioContextRef.current && playbackAudioContextRef.current.state !== "closed") {
+            playbackAudioContextRef.current.close().catch(() => {});
+        }
+        playbackAudioContextRef.current = null;
+
         setStatus("disconnected");
         setDeepgramReady(false);
         deepgramReadyRef.current = false;
@@ -384,7 +427,10 @@ export default function useConversationalInterview(config = {}) {
             candidateName,
             roundType,
             personality,
-            currentQuestion: question || currentQuestion
+            currentQuestion: question || currentQuestion,
+            interviewMode,
+            interviewDuration,
+            interviewTopic
         };
         lastSessionParamsRef.current = params;
 
@@ -404,7 +450,7 @@ export default function useConversationalInterview(config = {}) {
             console.error("❌ [ConvHook] Failed to start voice mode:", err);
             setError(err.message);
         }
-    }, [sessionId, candidateName, roundType, personality, currentQuestion]);
+    }, [sessionId, candidateName, roundType, personality, currentQuestion, interviewMode, interviewDuration]);
 
     const stopVoiceMode = useCallback(() => {
         socketRef.current?.emit("deepgram:stop", { sessionId });
@@ -446,29 +492,80 @@ export default function useConversationalInterview(config = {}) {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
-                    channelCount: 1,
-                    sampleRate:   16000,
+                    channelCount:     1,
+                    sampleRate:       16000,
                     echoCancellation: true,
                     noiseSuppression: true,
                     autoGainControl:  true
                 }
             });
 
-            micStreamRef.current    = stream;
-            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({
-                sampleRate: 16000
-            });
+            micStreamRef.current = stream;
 
-            const source    = audioContextRef.current.createMediaStreamSource(stream);
-            const processor = audioContextRef.current.createScriptProcessor(4096, 1, 1);
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            micAudioContextRef.current = new AudioCtx({ sampleRate: 16000 });
+
+            // Ensure context is not suspended by browser autoplay policy
+            if (micAudioContextRef.current.state === "suspended") {
+                await micAudioContextRef.current.resume();
+            }
+
+            const source = micAudioContextRef.current.createMediaStreamSource(stream);
+
+            // ── AudioWorklet path (modern, runs on audio thread) ──────────
+            if (micAudioContextRef.current.audioWorklet) {
+                try {
+                    // Load the processor module from /public
+                    await micAudioContextRef.current.audioWorklet.addModule("/mic-processor.js");
+
+                    const workletNode = new AudioWorkletNode(
+                        micAudioContextRef.current,
+                        "mic-processor",
+                        {
+                            processorOptions: {
+                                bufferSize: 2048  // ~128ms @ 16kHz — half of old ScriptProcessor
+                            },
+                            channelCount:          1,
+                            channelCountMode:      "explicit",
+                            channelInterpretation: "speakers"
+                        }
+                    );
+
+                    workletNodeRef.current = workletNode;
+
+                    // Audio thread → main thread (zero-copy transferable buffer)
+                    workletNode.port.onmessage = (e) => {
+                        if (e.data?.type !== "audio") return;
+                        // Guard: muted, socket not connected, or Deepgram not ready
+                        if (
+                            isMutedRef.current ||
+                            !socketRef.current?.connected ||
+                            !deepgramReadyRef.current
+                        ) return;
+
+                        socketRef.current.emit("deepgram:audio", e.data.buffer);
+                    };
+
+                    source.connect(workletNode);
+                    // Worklet does not need to connect to destination (we only capture)
+                    console.log("🎤 [ConvHook] Microphone started (AudioWorklet — audio thread ✅)");
+                    return;
+                } catch (workletErr) {
+                    // Worklet load failed (e.g. MIME type issue in dev) — fall through to legacy
+                    console.warn("⚠️ [ConvHook] AudioWorklet failed, falling back to ScriptProcessor:", workletErr.message);
+                }
+            }
+
+            // ── ScriptProcessor fallback (deprecated but universal) ───────
+            console.warn("⚠️ [ConvHook] AudioWorklet not supported — using ScriptProcessor (deprecated)");
+            const processor = micAudioContextRef.current.createScriptProcessor(2048, 1, 1);
             processorRef.current = processor;
 
             processor.onaudioprocess = (e) => {
-                // Use refs to avoid stale closure issues
                 if (isMutedRef.current || !socketRef.current?.connected || !deepgramReadyRef.current) return;
 
-                const inputData  = e.inputBuffer.getChannelData(0);
-                const int16Data  = new Int16Array(inputData.length);
+                const inputData = e.inputBuffer.getChannelData(0);
+                const int16Data = new Int16Array(inputData.length);
                 for (let i = 0; i < inputData.length; i++) {
                     const s       = Math.max(-1, Math.min(1, inputData[i]));
                     int16Data[i]  = s < 0 ? s * 0x8000 : s * 0x7FFF;
@@ -477,27 +574,38 @@ export default function useConversationalInterview(config = {}) {
             };
 
             source.connect(processor);
-            processor.connect(audioContextRef.current.destination);
-
-            console.log("🎤 [ConvHook] Microphone started");
+            processor.connect(micAudioContextRef.current.destination);
+            console.log("🎤 [ConvHook] Microphone started (ScriptProcessor fallback)");
         } catch (err) {
-            console.error("❌ [ConvHook] Microphone error:", err);
+            console.error("❌ [ConvHook] Failed to start microphone:", err);
             setError("Microphone access denied. Please allow microphone access.");
             throw err;
         }
     }, []);
 
     const stopMicrophone = useCallback(() => {
-        processorRef.current?.disconnect();
-        processorRef.current = null;
+        // Stop AudioWorklet node
+        if (workletNodeRef.current) {
+            try {
+                workletNodeRef.current.port.postMessage({ type: "stop" });
+                workletNodeRef.current.disconnect();
+            } catch { /* ignore */ }
+            workletNodeRef.current = null;
+        }
+
+        // Stop legacy ScriptProcessor (fallback)
+        if (processorRef.current) {
+            processorRef.current.disconnect();
+            processorRef.current = null;
+        }
 
         micStreamRef.current?.getTracks().forEach(t => t.stop());
         micStreamRef.current = null;
 
-        if (audioContextRef.current?.state !== "closed") {
-            audioContextRef.current?.close();
+        if (micAudioContextRef.current?.state !== "closed") {
+            micAudioContextRef.current?.close().catch(() => {});
         }
-        audioContextRef.current = null;
+        micAudioContextRef.current = null;
         console.log("🎤 [ConvHook] Microphone stopped");
     }, []);
 
@@ -514,24 +622,48 @@ export default function useConversationalInterview(config = {}) {
 
         try {
             // Create/reuse a 24kHz context for TTS output
-            if (!audioContextRef.current || audioContextRef.current.state === "closed") {
-                audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({
+            if (!playbackAudioContextRef.current || playbackAudioContextRef.current.state === "closed") {
+                playbackAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({
                     sampleRate: 24000
                 });
             }
 
-            const int16Array   = new Int16Array(audioData);
+            // Resume if suspended by browser
+            if (playbackAudioContextRef.current.state === "suspended") {
+                await playbackAudioContextRef.current.resume();
+            }
+
+            // Safely convert audioData (which could be ArrayBuffer or Uint8Array/Buffer) to Int16Array
+            let buffer;
+            if (audioData instanceof ArrayBuffer) {
+                buffer = audioData;
+            } else if (ArrayBuffer.isView(audioData)) {
+                buffer = audioData.buffer.slice(
+                    audioData.byteOffset,
+                    audioData.byteOffset + audioData.byteLength
+                );
+            } else if (audioData && audioData.type === "Buffer" && Array.isArray(audioData.data)) {
+                buffer = new Uint8Array(audioData.data).buffer;
+            } else {
+                buffer = new Uint8Array(audioData).buffer;
+            }
+
+            const int16Array   = new Int16Array(buffer);
             const float32Array = new Float32Array(int16Array.length);
             for (let i = 0; i < int16Array.length; i++) {
                 float32Array[i] = int16Array[i] / 32768.0;
             }
 
-            const audioBuffer = audioContextRef.current.createBuffer(1, float32Array.length, 24000);
+            const audioBuffer = playbackAudioContextRef.current.createBuffer(1, float32Array.length, 24000);
             audioBuffer.getChannelData(0).set(float32Array);
 
-            const source = audioContextRef.current.createBufferSource();
+            const source = playbackAudioContextRef.current.createBufferSource();
             source.buffer = audioBuffer;
-            source.connect(audioContextRef.current.destination);
+            source.connect(playbackAudioContextRef.current.destination);
+
+            // Store the active source to allow barge-in interruption!
+            activeSourceRef.current = source;
+
             source.onended = () => {
                 isPlayingRef.current = false;
                 if (audioQueueRef.current.length > 0) {
@@ -620,6 +752,9 @@ export default function useConversationalInterview(config = {}) {
 
         // Phase 7
         silenceWarning,
+
+        // Full interview mode
+        currentPhase,
 
         // Helpers
         clearTranscript: useCallback(() => setTranscript([]), []),

@@ -698,16 +698,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
               <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Hash Tables
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-lg text-gray-600 max-w-3xl mx-auto">
               Master the fundamental data structure for O(1) average-time operations.
               Understand hash functions, collision resolution, and performance optimization.
             </p>
@@ -719,7 +719,7 @@ public:
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -728,7 +728,7 @@ public:
               onClick={() => setActiveSection("hash-functions")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "hash-functions"
                   ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Hash Functions
@@ -737,7 +737,7 @@ public:
               onClick={() => setActiveSection("collision-resolution")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "collision-resolution"
                   ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Collision Resolution
@@ -746,7 +746,7 @@ public:
               onClick={() => setActiveSection("analysis")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "analysis"
                   ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Performance Analysis
@@ -755,7 +755,7 @@ public:
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-purple-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -764,45 +764,45 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Hash Tables Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Hash Tables Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">What are Hash Tables?</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-purple-700 mb-4">What are Hash Tables?</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Hash tables are data structures that provide average O(1) time complexity for
                     insertions, deletions, and lookups. They use a hash function to map keys to
                     indices in an array, enabling extremely fast access to stored values.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">Core Components</h3>
+                  <h3 className="text-2xl font-semibold text-purple-700 mb-4">Core Components</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-purple-400 mr-2">🔢</span>
+                      <span className="text-purple-700 mr-2">🔢</span>
                       <span><strong>Hash Function:</strong> Maps keys to array indices</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-purple-400 mr-2">📊</span>
+                      <span className="text-purple-700 mr-2">📊</span>
                       <span><strong>Array/Table:</strong> Stores key-value pairs</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-purple-400 mr-2">💥</span>
+                      <span className="text-purple-700 mr-2">💥</span>
                       <span><strong>Collision Resolution:</strong> Handles multiple keys mapping to same index</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-purple-400 mr-2">📏</span>
+                      <span className="text-purple-700 mr-2">📏</span>
                       <span><strong>Load Factor:</strong> Ratio of elements to table size</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-purple-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-purple-700 mb-4">Key Characteristics</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">Average Case Performance</h4>
-                      <ul className="text-gray-300 text-sm space-y-1">
+                      <ul className="text-gray-700 text-sm space-y-1">
                         <li>• Insert: O(1)</li>
                         <li>• Search: O(1)</li>
                         <li>• Delete: O(1)</li>
@@ -810,9 +810,9 @@ public:
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">Worst Case Performance</h4>
-                      <ul className="text-gray-300 text-sm space-y-1">
+                      <ul className="text-gray-700 text-sm space-y-1">
                         <li>• Insert: O(n)</li>
                         <li>• Search: O(n)</li>
                         <li>• Delete: O(n)</li>
@@ -820,9 +820,9 @@ public:
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-cyan-400 mb-2">Trade-offs</h4>
-                      <ul className="text-gray-300 text-sm space-y-1">
+                      <ul className="text-gray-700 text-sm space-y-1">
                         <li>• Fast operations vs memory usage</li>
                         <li>• Deterministic vs probabilistic</li>
                         <li>• Simple vs complex collision handling</li>
@@ -833,22 +833,22 @@ public:
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Hash Function Quality</h4>
-                  <p className="text-gray-300">Determines distribution and collision rate</p>
-                  <p className="text-sm text-gray-400 mt-2">Critical for performance</p>
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Hash Function Quality</h4>
+                  <p className="text-gray-700">Determines distribution and collision rate</p>
+                  <p className="text-sm text-gray-600 mt-2">Critical for performance</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Load Factor Management</h4>
-                  <p className="text-gray-300">Controls when to resize the table</p>
-                  <p className="text-sm text-gray-400 mt-2">Balances time and space</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Load Factor Management</h4>
+                  <p className="text-gray-700">Controls when to resize the table</p>
+                  <p className="text-sm text-gray-600 mt-2">Balances time and space</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Collision Handling</h4>
-                  <p className="text-gray-300">Strategy for hash conflicts</p>
-                  <p className="text-sm text-gray-400 mt-2">Affects worst-case behavior</p>
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Collision Handling</h4>
+                  <p className="text-gray-700">Strategy for hash conflicts</p>
+                  <p className="text-sm text-gray-600 mt-2">Affects worst-case behavior</p>
                 </div>
               </div>
             </div>
@@ -857,17 +857,17 @@ public:
           {/* Hash Functions Section */}
           {activeSection === "hash-functions" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Hash Function Design</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Hash Function Design</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {hashFunctions.map((hashFunc, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
                       <div className="flex justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{hashFunc.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{hashFunc.name}</h3>
                         <div className="bg-purple-900/50 px-4 py-2 rounded-lg">
                           <code className="text-purple-300 font-mono text-sm">{hashFunc.formula}</code>
                         </div>
@@ -875,15 +875,15 @@ public:
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">Advantages</h4>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Advantages</h4>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             {hashFunc.advantages.map((adv, i) => (
                               <li key={i}>• {adv}</li>
                             ))}
                           </ul>
 
-                          <h4 className="text-lg font-semibold text-red-400 mt-4 mb-3">Disadvantages</h4>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h4 className="text-lg font-semibold text-red-700 mt-4 mb-3">Disadvantages</h4>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             {hashFunc.disadvantages.map((dis, i) => (
                               <li key={i}>• {dis}</li>
                             ))}
@@ -891,8 +891,8 @@ public:
                         </div>
 
                         <div>
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                          <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                             <code>{hashFunc.code}</code>
                           </pre>
                         </div>
@@ -907,24 +907,24 @@ public:
           {/* Collision Resolution Section */}
           {activeSection === "collision-resolution" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Collision Resolution Techniques</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Collision Resolution Techniques</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {collisionResolution.map((technique) => (
                   <div
                     key={technique.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
                       <h3 className="text-2xl font-bold text-white mb-4">{technique.name}</h3>
-                      <p className="text-gray-300 mb-6">{technique.description}</p>
+                      <p className="text-gray-700 mb-6">{technique.description}</p>
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div>
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">Time Complexity</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                           <div className="space-y-2">
                             {Object.entries(technique.complexity).map(([op, comp]) => (
-                              <div key={op} className="flex justify-between items-center bg-gray-700/50 p-2 rounded">
+                              <div key={op} className="flex justify-between items-center bg-gray-100 p-2 rounded">
                                 <span className="text-gray-300 capitalize">{op}:</span>
                                 {renderComplexityBadge(comp)}
                               </div>
@@ -933,8 +933,8 @@ public:
                         </div>
 
                         <div>
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">Advantages</h4>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Advantages</h4>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             {technique.advantages.map((adv, i) => (
                               <li key={i}>• {adv}</li>
                             ))}
@@ -943,8 +943,8 @@ public:
                       </div>
 
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-red-400 mb-3">Disadvantages</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-red-700 mb-3">Disadvantages</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           {technique.disadvantages.map((dis, i) => (
                             <li key={i}>• {dis}</li>
                           ))}
@@ -952,17 +952,17 @@ public:
                       </div>
 
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-yellow-400 mb-3">Use Cases</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-amber-700 mb-3">Use Cases</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           {technique.useCases.map((use, i) => (
                             <li key={i}>• {use}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{technique.code}</code>
                         </pre>
                       </div>
@@ -976,28 +976,28 @@ public:
           {/* Performance Analysis Section */}
           {activeSection === "analysis" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Performance Analysis & Optimization</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Performance Analysis & Optimization</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Performance Metrics */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-purple-400 mb-6">Key Performance Metrics</h3>
+                    <h3 className="text-2xl font-bold text-purple-700 mb-6">Key Performance Metrics</h3>
 
                     <div className="grid grid-cols-1 gap-6">
                       {performanceAnalysis.map((metric, idx) => (
-                        <div key={idx} className="bg-gray-700/50 p-6 rounded-xl">
-                          <h4 className="text-xl font-semibold text-cyan-400 mb-3">{metric.metric}</h4>
+                        <div key={idx} className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                          <h4 className="text-xl font-semibold text-indigo-600 mb-3">{metric.metric}</h4>
                           <p className="text-gray-300 mb-3">{metric.description}</p>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <h5 className="text-yellow-400 font-medium mb-2">Impact</h5>
-                              <p className="text-gray-300 text-sm">{metric.impact}</p>
+                              <h5 className="text-amber-700 font-medium mb-2">Impact</h5>
+                              <p className="text-gray-700 text-sm">{metric.impact}</p>
                             </div>
                             <div>
-                              <h5 className="text-green-400 font-medium mb-2">Optimal Range</h5>
-                              <p className="text-gray-300 text-sm">{metric.optimal}</p>
+                              <h5 className="text-green-700 font-medium mb-2">Optimal Range</h5>
+                              <p className="text-gray-700 text-sm">{metric.optimal}</p>
                             </div>
                           </div>
                         </div>
@@ -1007,12 +1007,12 @@ public:
                 </div>
 
                 {/* Load Factor Analysis */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-purple-400 mb-6">Load Factor Impact Analysis</h3>
+                    <h3 className="text-2xl font-bold text-purple-700 mb-6">Load Factor Impact Analysis</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      <div className="bg-gray-700/50 p-6 rounded-xl">
+                      <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
                         <h4 className="text-cyan-400 mb-4">Separate Chaining</h4>
                         <div className="space-y-3 text-sm text-gray-300">
                           <p>• Load factor can exceed 1.0</p>
@@ -1023,7 +1023,7 @@ public:
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-6 rounded-xl">
+                      <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
                         <h4 className="text-cyan-400 mb-4">Open Addressing</h4>
                         <div className="space-y-3 text-sm text-gray-300">
                           <p>• Load factor must stay &lt; 1.0</p>
@@ -1035,7 +1035,7 @@ public:
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
                       <h4 className="text-yellow-400 mb-4">Mathematical Analysis</h4>
                       <div className="space-y-3 text-sm text-gray-300">
                         <p><strong>Expected Probe Length (Linear Probing):</strong></p>
@@ -1053,63 +1053,63 @@ public:
                 </div>
 
                 {/* Hash Table vs Other Structures */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-purple-400 mb-6">Hash Tables vs Other Data Structures</h3>
+                    <h3 className="text-2xl font-bold text-purple-700 mb-6">Hash Tables vs Other Data Structures</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Operation</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">Hash Table</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Balanced BST</th>
-                            <th className="pb-4 text-green-400 text-lg font-bold">Sorted Array</th>
-                            <th className="pb-4 text-orange-400 text-lg font-bold">Skip List</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Operation</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">Hash Table</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Balanced BST</th>
+                            <th className="pb-4 text-green-700 text-lg font-bold">Sorted Array</th>
+                            <th className="pb-4 text-orange-700 text-lg font-bold">Skip List</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Search</td>
-                            <td className="py-4 text-green-400 font-medium">O(1) avg</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n) avg</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Search</td>
+                            <td className="py-4 text-green-700 font-medium">O(1) avg</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n) avg</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Insert</td>
-                            <td className="py-4 text-green-400 font-medium">O(1) avg</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n) avg</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Insert</td>
+                            <td className="py-4 text-green-700 font-medium">O(1) avg</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n) avg</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Delete</td>
-                            <td className="py-4 text-green-400 font-medium">O(1) avg</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n) avg</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Delete</td>
+                            <td className="py-4 text-green-700 font-medium">O(1) avg</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n) avg</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Space</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
-                            <td className="py-4 text-green-400 font-medium">O(n)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n log n)</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Space</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
+                            <td className="py-4 text-green-700 font-medium">O(n)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n log n)</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Ordered Ops</td>
-                            <td className="py-4 text-red-400 font-medium">No</td>
-                            <td className="py-4 text-green-400 font-medium">Yes</td>
-                            <td className="py-4 text-green-400 font-medium">Yes</td>
-                            <td className="py-4 text-green-400 font-medium">Yes</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Ordered Ops</td>
+                            <td className="py-4 text-red-700 font-medium">No</td>
+                            <td className="py-4 text-green-700 font-medium">Yes</td>
+                            <td className="py-4 text-green-700 font-medium">Yes</td>
+                            <td className="py-4 text-green-700 font-medium">Yes</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-purple-400 transition-all duration-300">Worst Case</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
-                            <td className="py-4 text-red-400 font-medium">O(n)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(n)</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium group-hover:text-purple-400 transition-all duration-300">Worst Case</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
+                            <td className="py-4 text-red-700 font-medium">O(n)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(n)</td>
                           </tr>
                         </tbody>
                       </table>
@@ -1123,17 +1123,17 @@ public:
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Hash Table Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Hash Table Applications</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="mb-4">
-                      <h3 className="text-xl font-bold text-purple-400 mb-2">{app.name}</h3>
-                      <p className="text-gray-300 text-sm mb-3">{app.description}</p>
+                      <h3 className="text-xl font-bold text-purple-700 mb-2">{app.name}</h3>
+                      <p className="text-gray-700 text-sm mb-3">{app.description}</p>
                       <div className="bg-purple-900/20 border border-purple-700/50 p-3 rounded-lg">
                         <p className="text-purple-300 text-sm"><strong>Use Case:</strong> {app.useCase}</p>
                       </div>
@@ -1145,89 +1145,89 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Hash Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Hash Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Two Sum</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Contains Duplicate</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Single Number</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Intersection of Two Arrays</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Happy Number</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Hash Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Hash Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Group Anagrams</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Valid Anagram</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Top K Frequent Elements</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>4Sum II</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Subarray Sum Equals K</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Longest Consecutive Sequence</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Hash Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Hash Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Minimum Window Substring</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Substring with Concatenation of All Words</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Maximum Size Subarray Sum Equals k</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Count of Subarrays with Sum Divisible by K</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Longest Substring Without Repeating Characters</span>
                   </li>
                 </ul>
@@ -1235,12 +1235,12 @@ public:
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Hash Table Design</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Hash Table Design</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• How would you implement a hash table?</li>
                     <li>• Explain collision resolution strategies</li>
                     <li>• Design a hash function for strings</li>
@@ -1248,9 +1248,9 @@ public:
                     <li>• Thread-safe hash table design</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Performance & Analysis</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Performance & Analysis</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Average vs worst case complexity</li>
                     <li>• Impact of load factor on performance</li>
                     <li>• Compare with other data structures</li>
@@ -1258,18 +1258,18 @@ public:
                     <li>• Cache performance considerations</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Advanced Concepts</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Advanced Concepts</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Universal hashing properties</li>
                     <li>• Cuckoo hashing advantages</li>
                     <li>• Perfect hashing applications</li>
                     <li>• Consistent hashing in distributed systems</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Real-World Applications</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Real-World Applications</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Database indexing strategies</li>
                     <li>• Compiler symbol table implementation</li>
                     <li>• Cache replacement policies</li>
@@ -1281,60 +1281,60 @@ public:
           </div>
 
           {/* Hash Table Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Hash Table Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-purple-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-purple-700 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Average Insert:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Average Insert:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Average Search:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Average Search:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Average Delete:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Average Delete:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Worst Case (all operations):</span>
-                    <span className="text-red-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Worst Case (all operations):</span>
+                    <span className="text-red-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Space Complexity:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Space Complexity:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-purple-400 mb-4">Key Concepts</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-purple-700 mb-4">Key Concepts</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Hash Function:</div>
-                    <div className="text-gray-400">Maps keys to array indices uniformly</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Hash Function:</div>
+                    <div className="text-gray-600">Maps keys to array indices uniformly</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Load Factor:</div>
-                    <div className="text-gray-400">n/m ratio, triggers resizing (0.75 typical)</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Load Factor:</div>
+                    <div className="text-gray-600">n/m ratio, triggers resizing (0.75 typical)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Collision Resolution:</div>
-                    <div className="text-gray-400">Separate chaining, linear/quadratic/double hashing</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Collision Resolution:</div>
+                    <div className="text-gray-600">Separate chaining, linear/quadratic/double hashing</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Universal Hashing:</div>
-                    <div className="text-gray-400">Randomized hash functions with guarantees</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Universal Hashing:</div>
+                    <div className="text-gray-600">Randomized hash functions with guarantees</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Rehashing:</div>
-                    <div className="text-gray-400">Resize table and redistribute elements</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Rehashing:</div>
+                    <div className="text-gray-600">Resize table and redistribute elements</div>
                   </div>
                 </div>
               </div>

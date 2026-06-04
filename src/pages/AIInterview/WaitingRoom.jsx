@@ -20,7 +20,7 @@ const WaitingRoom = () => {
   const [hasRequestedPermissions, setHasRequestedPermissions] = useState(false);
   const [screenShareStatus, setScreenShareStatus] = useState('pending'); // pending | granted | denied
   const [screenShareError, setScreenShareError] = useState('');
-  const [isDevMode, setIsDevMode] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(import.meta.env.DEV);
 
   // Check if session is already completed — redirect to report
   useEffect(() => {

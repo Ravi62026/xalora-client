@@ -128,16 +128,16 @@ const LoadingMessage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%)' }}>
       <div className="text-center">
         <div className="relative">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto"></div>
-          <div className="absolute top-0 left-0 w-full h-full rounded-full animate-ping opacity-20 border-4 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 mx-auto" style={{ borderTopColor: '#4f46e5', borderBottomColor: '#4f46e5' }}></div>
+          <div className="absolute top-0 left-0 w-full h-full rounded-full animate-ping opacity-20 border-4" style={{ borderColor: '#4f46e5' }}></div>
         </div>
-        <p className="mt-6 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+        <p className="mt-6 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
           {getPageLoadingMessage()}
         </p>
-        <p className="mt-2 text-gray-400 animate-pulse">Please wait while we prepare your experience</p>
+        <p className="mt-2 text-gray-500 animate-pulse">Please wait while we prepare your experience</p>
       </div>
     </div>
   );
@@ -282,6 +282,11 @@ const AppContent = () => {
     location.pathname.startsWith("/org/join/") ||
     location.pathname.startsWith("/org/setup/");
 
+  const hasOAuthRedirectSignal =
+    new URLSearchParams(location.search).get("oauth") === "github" ||
+    new URLSearchParams(location.search).has("oauth_success") ||
+    new URLSearchParams(location.search).has("oauth_error");
+
   // Use a ref to track if we've already initialized
   const hasInitialized = React.useRef(false);
   const hasStoredAuthSession = Boolean(getAccessToken() || getRefreshToken());
@@ -318,7 +323,11 @@ const AppContent = () => {
   }, [location.pathname, location.search]);
 
   // Show loading screen while checking authentication
-  if (isInitializing && !user && (!isPublicBootstrapPath || hasStoredAuthSession)) {
+  if (
+    isInitializing &&
+    !user &&
+    (!isPublicBootstrapPath || hasStoredAuthSession || hasOAuthRedirectSignal)
+  ) {
     return <LoadingMessage />;
   }
 

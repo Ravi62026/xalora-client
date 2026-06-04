@@ -484,11 +484,11 @@ int singleNumber(vector<int>& nums) {
     }
 
     let color = "bg-gray-100 text-gray-800";
-    if (complexity.includes("log")) color = "bg-blue-100 text-blue-800";
-    if (complexity === "O(1)") color = "bg-green-100 text-green-800";
-    if (complexity.includes("n") && !complexity.includes("log")) color = "bg-yellow-100 text-yellow-800";
-    if (complexity.includes("n²") || complexity.includes("n^2")) color = "bg-red-100 text-red-800";
-    if (complexity.includes("2^")) color = "bg-purple-100 text-purple-800";
+    if (complexity.includes("log")) color = "bg-blue-50 text-blue-700";
+    if (complexity === "O(1)") color = "bg-green-50 text-green-700";
+    if (complexity.includes("n") && !complexity.includes("log")) color = "bg-amber-50 text-amber-700";
+    if (complexity.includes("n²") || complexity.includes("n^2")) color = "bg-red-50 text-red-700";
+    if (complexity.includes("2^")) color = "bg-purple-50 text-purple-700";
 
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${color}`}>
@@ -499,27 +499,27 @@ int singleNumber(vector<int>& nums) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="text-center mb-12 sm:mb-16">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Algorithm Fundamentals
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Master the essential concepts and techniques that form the foundation of computer science and algorithmic problem-solving.
             </p>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 sm:mb-16">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              className={`px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -527,8 +527,8 @@ int singleNumber(vector<int>& nums) {
             <button
               onClick={() => setActiveSection("complexity")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "complexity"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Complexity Analysis
@@ -536,8 +536,8 @@ int singleNumber(vector<int>& nums) {
             <button
               onClick={() => setActiveSection("recursion")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "recursion"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Recursion
@@ -545,8 +545,8 @@ int singleNumber(vector<int>& nums) {
             <button
               onClick={() => setActiveSection("techniques")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "techniques"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Problem Solving
@@ -555,53 +555,53 @@ int singleNumber(vector<int>& nums) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Why Fundamentals Matter</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mb-8 sm:mb-12 shadow-sm">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Why Fundamentals Matter</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">The Foundation</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">The Foundation</h3>
+                  <p className="text-gray-600 mb-6">
                     Before diving into complex algorithms, you need to master these fundamental concepts.
                     They are the building blocks that make advanced algorithms possible and help you
                     analyze and optimize your solutions.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">Key Areas</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Areas</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">•</span>
+                      <span className="text-indigo-600 mr-2">•</span>
                       <span><strong>Complexity Analysis:</strong> Big O, Big Ω, Big Θ notation and time/space analysis</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">•</span>
+                      <span className="text-indigo-600 mr-2">•</span>
                       <span><strong>Recursion:</strong> Understanding recursive functions, call stack, and optimization</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">•</span>
+                      <span className="text-indigo-600 mr-2">•</span>
                       <span><strong>Problem Solving:</strong> Divide & conquer, two pointers, sliding window, bit manipulation</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">•</span>
+                      <span className="text-indigo-600 mr-2">•</span>
                       <span><strong>Analysis Skills:</strong> Breaking down problems, identifying patterns, optimization</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">Interview Perspective</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Interview Perspective</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Why Interviewers Ask</h4>
-                      <p className="text-gray-300">
+                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                      <h4 className="text-lg font-semibold text-indigo-700 mb-2">Why Interviewers Ask</h4>
+                      <p className="text-gray-700">
                         These concepts test your understanding of algorithmic thinking, not just memorization.
                         They reveal how you approach problems and optimize solutions.
                       </p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Common Pitfalls</h4>
-                      <ul className="text-gray-300 text-sm space-y-2">
+                    <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                      <h4 className="text-lg font-semibold text-amber-700 mb-2">Common Pitfalls</h4>
+                      <ul className="text-gray-700 text-sm space-y-2">
                         <li>• Not understanding Big O vs actual runtime</li>
                         <li>• Confusing recursion with iteration</li>
                         <li>• Missing edge cases in recursive solutions</li>
@@ -609,9 +609,9 @@ int singleNumber(vector<int>& nums) {
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Learning Approach</h4>
-                      <p className="text-gray-300 text-sm">
+                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                      <h4 className="text-lg font-semibold text-blue-700 mb-2">Learning Approach</h4>
+                      <p className="text-gray-700 text-sm">
                         Master one concept at a time. Practice implementing each technique,
                         then analyze your solution's complexity. Compare different approaches.
                       </p>
@@ -625,35 +625,35 @@ int singleNumber(vector<int>& nums) {
           {/* Complexity Analysis Section */}
           {activeSection === "complexity" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Complexity Analysis</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Complexity Analysis</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {complexityTopics.map((topic) => (
                   <div
                     key={topic.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg shadow-sm"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{topic.name}</h3>
-                        <span className="px-3 py-1 bg-emerald-900/50 text-emerald-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{topic.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg font-medium">
                           Foundation
                         </span>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{topic.description}</p>
+                      <p className="text-gray-600 mb-6">{topic.description}</p>
 
                       {topic.id === "asymptotic" && (
                         <div className="space-y-6">
                           {topic.content.concepts.map((concept, idx) => (
-                            <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-lg font-semibold text-cyan-400 mb-2">{concept.name}</h4>
-                              <p className="text-gray-300 mb-3">{concept.description}</p>
+                            <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                              <h4 className="text-lg font-semibold text-indigo-600 mb-2">{concept.name}</h4>
+                              <p className="text-gray-700 mb-3">{concept.description}</p>
                               <div className="mb-3">
-                                <h5 className="text-sm font-medium text-gray-400 mb-2">Examples:</h5>
+                                <h5 className="text-sm font-medium text-gray-600 mb-2">Examples:</h5>
                                 <div className="flex flex-wrap gap-2">
                                   {concept.examples.map((ex, i) => (
-                                    <span key={i} className="px-2 py-1 bg-emerald-900/50 text-emerald-300 text-xs rounded">
+                                    <span key={i} className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded border border-indigo-100">
                                       {ex}
                                     </span>
                                   ))}
@@ -661,8 +661,8 @@ int singleNumber(vector<int>& nums) {
                               </div>
                               {concept.code && (
                                 <div>
-                                  <h5 className="text-sm font-medium text-gray-400 mb-2">Code Example:</h5>
-                                  <pre className="bg-gray-900 text-gray-300 p-3 rounded-lg overflow-x-auto text-sm">
+                                  <h5 className="text-sm font-medium text-gray-600 mb-2">Code Example:</h5>
+                                  <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto text-sm border border-gray-700">
                                     <code>{concept.code}</code>
                                   </pre>
                                 </div>
@@ -670,12 +670,12 @@ int singleNumber(vector<int>& nums) {
                             </div>
                           ))}
 
-                          <div className="bg-red-900/20 border border-red-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-red-400 mb-3">Common Mistakes to Avoid</h4>
-                            <ul className="space-y-2 text-gray-300">
+                          <div className="bg-red-50 border border-red-200 p-4 rounded-xl">
+                            <h4 className="text-lg font-semibold text-red-700 mb-3">Common Mistakes to Avoid</h4>
+                            <ul className="space-y-2 text-gray-700">
                               {topic.content.commonMistakes.map((mistake, idx) => (
                                 <li key={idx} className="flex items-start">
-                                  <span className="text-red-400 mr-2">⚠️</span>
+                                  <span className="text-red-600 mr-2">⚠️</span>
                                   <span>{mistake}</span>
                                 </li>
                               ))}
@@ -688,12 +688,12 @@ int singleNumber(vector<int>& nums) {
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {topic.content.rules.map((rule, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-lg font-semibold text-cyan-400 mb-2">{rule.name}</h4>
-                                <p className="text-gray-300 mb-3 text-sm">{rule.description}</p>
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-lg font-semibold text-indigo-600 mb-2">{rule.name}</h4>
+                                <p className="text-gray-700 mb-3 text-sm">{rule.description}</p>
                                 <div className="space-y-1">
                                   {rule.examples.map((ex, i) => (
-                                    <div key={i} className="text-xs bg-gray-800/50 p-2 rounded text-gray-400">
+                                    <div key={i} className="text-xs bg-indigo-50 p-2 rounded text-gray-700 border border-indigo-100">
                                       {ex}
                                     </div>
                                   ))}
@@ -703,12 +703,12 @@ int singleNumber(vector<int>& nums) {
                           </div>
 
                           <div>
-                            <h4 className="text-lg font-semibold text-emerald-400 mb-4">Practical Examples</h4>
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-4">Practical Examples</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {topic.content.examples.map((example, idx) => (
-                                <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                  <h5 className="text-md font-semibold text-white mb-2">{example.name}</h5>
-                                  <pre className="bg-gray-900 text-gray-300 p-3 rounded-lg overflow-x-auto text-sm mb-2">
+                                <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                  <h5 className="text-md font-semibold text-gray-900 mb-2">{example.name}</h5>
+                                  <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto text-sm mb-2 border border-gray-700">
                                     <code>{example.code}</code>
                                   </pre>
                                 </div>
@@ -716,29 +716,29 @@ int singleNumber(vector<int>& nums) {
                             </div>
                           </div>
 
-                          <div className="bg-blue-900/20 border border-blue-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-blue-400 mb-3">Amortized Analysis</h4>
-                            <p className="text-gray-300 mb-2">{topic.content.amortised.description}</p>
-                            <p className="text-sm text-gray-400">{topic.content.amortised.example}</p>
+                          <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl">
+                            <h4 className="text-lg font-semibold text-blue-700 mb-3">Amortized Analysis</h4>
+                            <p className="text-gray-700 mb-2">{topic.content.amortised.description}</p>
+                            <p className="text-sm text-gray-600">{topic.content.amortised.example}</p>
                           </div>
                         </div>
                       )}
 
                       {topic.id === "space-complexity" && (
                         <div className="space-y-6">
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Key Concept</h4>
-                            <p className="text-gray-300">{topic.content.auxiliary}</p>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Key Concept</h4>
+                            <p className="text-gray-700">{topic.content.auxiliary}</p>
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {topic.content.examples.map((example, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-white mb-2">{example.name}</h4>
-                                <p className="text-gray-300 mb-3 text-sm">{example.description}</p>
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-gray-900 mb-2">{example.name}</h4>
+                                <p className="text-gray-700 mb-3 text-sm">{example.description}</p>
                                 <div className="space-y-1">
                                   {example.examples.map((ex, i) => (
-                                    <div key={i} className="text-xs bg-gray-800/50 p-2 rounded text-gray-400">
+                                    <div key={i} className="text-xs bg-indigo-50 p-2 rounded text-gray-700 border border-indigo-100">
                                       {ex}
                                     </div>
                                   ))}
@@ -748,14 +748,14 @@ int singleNumber(vector<int>& nums) {
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="bg-yellow-900/20 border border-yellow-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-yellow-400 mb-2">Recursion Stack</h4>
-                              <p className="text-gray-300 text-sm">{topic.content.recursion}</p>
+                            <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl">
+                              <h4 className="text-md font-semibold text-amber-700 mb-2">Recursion Stack</h4>
+                              <p className="text-gray-700 text-sm">{topic.content.recursion}</p>
                             </div>
 
-                            <div className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-cyan-400 mb-2">Code Examples</h4>
-                              <pre className="bg-gray-900 text-gray-300 p-3 rounded-lg overflow-x-auto text-xs">
+                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                              <h4 className="text-md font-semibold text-indigo-600 mb-2">Code Examples</h4>
+                              <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto text-xs border border-gray-700">
                                 <code>{topic.content.code}</code>
                               </pre>
                             </div>
@@ -772,37 +772,37 @@ int singleNumber(vector<int>& nums) {
           {/* Recursion Section */}
           {activeSection === "recursion" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Recursion Mastery</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Recursion Mastery</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {recursionTopics.map((topic) => (
                   <div
                     key={topic.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg shadow-sm"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{topic.name}</h3>
-                        <span className="px-3 py-1 bg-emerald-900/50 text-emerald-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{topic.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg font-medium">
                           Core Concept
                         </span>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{topic.description}</p>
+                      <p className="text-gray-600 mb-6">{topic.description}</p>
 
                       {topic.id === "recursion-basics" && (
                         <div className="space-y-6">
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Definition</h4>
-                            <p className="text-gray-300">{topic.content.definition}</p>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Definition</h4>
+                            <p className="text-gray-700">{topic.content.definition}</p>
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {topic.content.components.map((component, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-white mb-2">{component.name}</h4>
-                                <p className="text-gray-300 mb-2 text-sm">{component.description}</p>
-                                <div className="bg-gray-800/50 p-2 rounded text-xs text-gray-400">
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-gray-900 mb-2">{component.name}</h4>
+                                <p className="text-gray-700 mb-2 text-sm">{component.description}</p>
+                                <div className="bg-indigo-50 p-2 rounded text-xs text-gray-700 border border-indigo-100">
                                   {component.example}
                                 </div>
                               </div>
@@ -811,18 +811,18 @@ int singleNumber(vector<int>& nums) {
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {topic.content.examples.map((example, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-cyan-400 mb-2">{example.name}</h4>
-                                <pre className="bg-gray-900 text-gray-300 p-3 rounded-lg overflow-x-auto text-sm">
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-indigo-600 mb-2">{example.name}</h4>
+                                <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto text-sm border border-gray-700">
                                   <code>{example.code}</code>
                                 </pre>
                               </div>
                             ))}
                           </div>
 
-                          <div className="bg-blue-900/20 border border-blue-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-blue-400 mb-3">Call Stack Visualization</h4>
-                            <p className="text-gray-300">{topic.content.callStack}</p>
+                          <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl">
+                            <h4 className="text-lg font-semibold text-blue-700 mb-3">Call Stack Visualization</h4>
+                            <p className="text-gray-700">{topic.content.callStack}</p>
                           </div>
                         </div>
                       )}
@@ -830,29 +830,29 @@ int singleNumber(vector<int>& nums) {
                       {topic.id === "recursion-advanced" && (
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-green-400 mb-2">{topic.content.tailRecursion.name}</h4>
-                              <p className="text-gray-300 mb-2 text-sm">{topic.content.tailRecursion.description}</p>
-                              <p className="text-xs text-gray-400 mb-3">{topic.content.tailRecursion.advantage}</p>
-                              <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs overflow-x-auto">
+                            <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+                              <h4 className="text-md font-semibold text-green-700 mb-2">{topic.content.tailRecursion.name}</h4>
+                              <p className="text-gray-700 mb-2 text-sm">{topic.content.tailRecursion.description}</p>
+                              <p className="text-xs text-gray-600 mb-3">{topic.content.tailRecursion.advantage}</p>
+                              <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto border border-gray-700">
                                 <code>{topic.content.tailRecursion.example}</code>
                               </pre>
                             </div>
 
-                            <div className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-purple-400 mb-2">{topic.content.memoization.name}</h4>
-                              <p className="text-gray-300 mb-2 text-sm">{topic.content.memoization.description}</p>
-                              <p className="text-xs text-gray-400 mb-3">Turns O(2^n) to O(n)</p>
-                              <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs overflow-x-auto">
+                            <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                              <h4 className="text-md font-semibold text-purple-700 mb-2">{topic.content.memoization.name}</h4>
+                              <p className="text-gray-700 mb-2 text-sm">{topic.content.memoization.description}</p>
+                              <p className="text-xs text-gray-600 mb-3">Turns O(2^n) to O(n)</p>
+                              <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs overflow-x-auto border border-gray-700">
                                 <code>{topic.content.memoization.example}</code>
                               </pre>
                             </div>
 
-                            <div className="bg-gray-700/50 p-4 rounded-xl">
-                              <h4 className="text-md font-semibold text-orange-400 mb-2">{topic.content.backtracking.name}</h4>
-                              <p className="text-gray-300 mb-2 text-sm">{topic.content.backtracking.description}</p>
-                              <p className="text-xs text-gray-400">Explores solution space systematically</p>
-                              <p className="text-xs text-gray-400 mt-2">{topic.content.backtracking.example}</p>
+                            <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                              <h4 className="text-md font-semibold text-orange-700 mb-2">{topic.content.backtracking.name}</h4>
+                              <p className="text-gray-700 mb-2 text-sm">{topic.content.backtracking.description}</p>
+                              <p className="text-xs text-gray-600">Explores solution space systematically</p>
+                              <p className="text-xs text-gray-600 mt-2">{topic.content.backtracking.example}</p>
                             </div>
                           </div>
                         </div>
@@ -867,35 +867,35 @@ int singleNumber(vector<int>& nums) {
           {/* Problem Solving Techniques Section */}
           {activeSection === "techniques" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Problem Solving Techniques</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Problem Solving Techniques</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {techniques.map((technique) => (
                   <div
                     key={technique.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg shadow-sm"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{technique.name}</h3>
-                        <span className="px-3 py-1 bg-emerald-900/50 text-emerald-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{technique.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg font-medium">
                           Technique
                         </span>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{technique.description}</p>
+                      <p className="text-gray-600 mb-6">{technique.description}</p>
 
                       {technique.id === "divide-conquer" && (
                         <div className="space-y-6">
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Three Steps</h4>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Three Steps</h4>
                             <div className="grid grid-cols-3 gap-4">
                               {technique.content.steps.map((step, idx) => (
                                 <div key={idx} className="text-center">
-                                  <div className="bg-emerald-900/50 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
-                                    <span className="text-emerald-300 font-bold">{idx + 1}</span>
+                                  <div className="bg-indigo-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span className="text-indigo-700 font-bold">{idx + 1}</span>
                                   </div>
-                                  <p className="text-white font-medium">{step}</p>
+                                  <p className="text-gray-900 font-medium">{step}</p>
                                 </div>
                               ))}
                             </div>
@@ -903,19 +903,19 @@ int singleNumber(vector<int>& nums) {
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {technique.content.examples.map((example, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-white mb-2">{example.name}</h4>
-                                <p className="text-gray-300 mb-2 text-sm">{example.description}</p>
-                                <span className="text-xs bg-emerald-900/50 text-emerald-300 px-2 py-1 rounded">
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-gray-900 mb-2">{example.name}</h4>
+                                <p className="text-gray-700 mb-2 text-sm">{example.description}</p>
+                                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded border border-indigo-200">
                                   {example.complexity}
                                 </span>
                               </div>
                             ))}
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Code Example</h4>
-                            <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Code Example</h4>
+                            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                               <code>{technique.content.code}</code>
                             </pre>
                           </div>
@@ -924,11 +924,11 @@ int singleNumber(vector<int>& nums) {
 
                       {technique.id === "two-pointers" && (
                         <div className="space-y-6">
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Common Applications</h4>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Common Applications</h4>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                               {technique.content.applications.map((app, idx) => (
-                                <span key={idx} className="px-3 py-1 bg-cyan-900/50 text-cyan-300 text-xs rounded-lg">
+                                <span key={idx} className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-lg border border-indigo-200">
                                   {app}
                                 </span>
                               ))}
@@ -937,19 +937,19 @@ int singleNumber(vector<int>& nums) {
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {technique.content.patterns.map((pattern, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-white mb-2">{pattern.name}</h4>
-                                <p className="text-gray-300 mb-2 text-sm">{pattern.description}</p>
-                                <span className="text-xs bg-purple-900/50 text-purple-300 px-2 py-1 rounded">
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-gray-900 mb-2">{pattern.name}</h4>
+                                <p className="text-gray-700 mb-2 text-sm">{pattern.description}</p>
+                                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded border border-purple-200">
                                   {pattern.example}
                                 </span>
                               </div>
                             ))}
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation Examples</h4>
-                            <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation Examples</h4>
+                            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                               <code>{technique.content.code}</code>
                             </pre>
                           </div>
@@ -960,31 +960,31 @@ int singleNumber(vector<int>& nums) {
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {technique.content.types.map((type, idx) => (
-                              <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                                <h4 className="text-md font-semibold text-white mb-2">{type.name}</h4>
-                                <p className="text-gray-300 mb-2 text-sm">{type.description}</p>
-                                <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-1 rounded">
+                              <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 className="text-md font-semibold text-gray-900 mb-2">{type.name}</h4>
+                                <p className="text-gray-700 mb-2 text-sm">{type.description}</p>
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">
                                   {type.example}
                                 </span>
                               </div>
                             ))}
                           </div>
 
-                          <div className="bg-emerald-900/20 border border-emerald-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-emerald-400 mb-3">Advantages</h4>
-                            <ul className="space-y-2 text-gray-300">
+                          <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
+                            <h4 className="text-lg font-semibold text-green-700 mb-3">Advantages</h4>
+                            <ul className="space-y-2 text-gray-700">
                               {technique.content.advantages.map((advantage, idx) => (
                                 <li key={idx} className="flex items-start">
-                                  <span className="text-emerald-400 mr-2">✓</span>
+                                  <span className="text-green-600 mr-2">✓</span>
                                   <span>{advantage}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation Examples</h4>
-                            <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation Examples</h4>
+                            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                               <code>{technique.content.code}</code>
                             </pre>
                           </div>
@@ -993,26 +993,26 @@ int singleNumber(vector<int>& nums) {
 
                       {technique.id === "bit-manipulation" && (
                         <div className="space-y-6">
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Bitwise Operators</h4>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Bitwise Operators</h4>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                               {technique.content.operators.map((op, idx) => (
-                                <div key={idx} className="bg-gray-800/50 p-3 rounded-lg text-center">
-                                  <div className="text-lg font-mono text-white">{op.op}</div>
-                                  <div className="text-xs text-gray-400">{op.name}</div>
+                                <div key={idx} className="bg-white p-3 rounded-lg text-center border border-gray-200">
+                                  <div className="text-lg font-mono text-gray-900">{op.op}</div>
+                                  <div className="text-xs text-gray-600">{op.name}</div>
                                   <div className="text-xs text-gray-500">{op.desc}</div>
                                 </div>
                               ))}
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-purple-400 mb-3">Common Tricks</h4>
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-purple-600 mb-3">Common Tricks</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                               {technique.content.tricks.map((trick, idx) => (
-                                <div key={idx} className="bg-gray-800/50 p-3 rounded-lg">
-                                  <h5 className="text-sm font-medium text-white mb-1">{trick.name}</h5>
-                                  <div className="text-xs bg-gray-900 p-2 rounded text-gray-300 font-mono">
+                                <div key={idx} className="bg-white p-3 rounded-lg border border-gray-200">
+                                  <h5 className="text-sm font-medium text-gray-900 mb-1">{trick.name}</h5>
+                                  <div className="text-xs bg-gray-900 p-2 rounded text-gray-100 font-mono border border-gray-700">
                                     {trick.code}
                                   </div>
                                 </div>
@@ -1020,20 +1020,20 @@ int singleNumber(vector<int>& nums) {
                             </div>
                           </div>
 
-                          <div className="bg-emerald-900/20 border border-emerald-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-emerald-400 mb-3">Applications</h4>
+                          <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
+                            <h4 className="text-lg font-semibold text-green-700 mb-3">Applications</h4>
                             <div className="flex flex-wrap gap-2">
                               {technique.content.applications.map((app, idx) => (
-                                <span key={idx} className="px-3 py-1 bg-emerald-900/50 text-emerald-300 text-sm rounded-lg">
+                                <span key={idx} className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-lg border border-green-200">
                                   {app}
                                 </span>
                               ))}
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-xl">
-                            <h4 className="text-lg font-semibold text-cyan-400 mb-3">Implementation Examples</h4>
-                            <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation Examples</h4>
+                            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                               <code>{technique.content.code}</code>
                             </pre>
                           </div>
@@ -1047,73 +1047,73 @@ int singleNumber(vector<int>& nums) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Complexity Analysis</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-green-50 p-6 rounded-xl border border-green-200">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Complexity Analysis</h3>
+                <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-600 mr-2">•</span>
                     <span>Analyze time/space complexity of given code</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-600 mr-2">•</span>
                     <span>Compare algorithms with different complexities</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-600 mr-2">•</span>
                     <span>Find best/worst/average cases</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-600 mr-2">•</span>
                     <span>Explain amortized analysis</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Recursion Practice</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Recursion Practice</h3>
+                <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-600 mr-2">•</span>
                     <span>Implement factorial, fibonacci recursively</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-600 mr-2">•</span>
                     <span>Convert recursive to iterative</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-600 mr-2">•</span>
                     <span>Add memoization to recursive solutions</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-600 mr-2">•</span>
                     <span>Debug recursive stack overflow</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Technique Application</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-red-50 p-6 rounded-xl border border-red-200">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Technique Application</h3>
+                <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-600 mr-2">•</span>
                     <span>Two pointers: sum, palindrome, container with most water</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-600 mr-2">•</span>
                     <span>Sliding window: maximum sum, longest substring</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-600 mr-2">•</span>
                     <span>Bit manipulation: count bits, single number</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-600 mr-2">•</span>
                     <span>Divide & conquer: merge sort, binary search</span>
                   </li>
                 </ul>
@@ -1121,21 +1121,21 @@ int singleNumber(vector<int>& nums) {
             </div>
 
             {/* Interview Tips */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Tips</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <h3 className="text-xl font-semibold text-purple-600 mb-4">💡 Interview Tips</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Analysis Questions</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Analysis Questions</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• "What's the time complexity of this code?"</li>
                     <li>• "Can you optimize this further?"</li>
                     <li>• "Explain Big O vs Big Θ vs Big Ω"</li>
                     <li>• "When is recursive solution better?"</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Technique Recognition</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Technique Recognition</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• "This looks like a two pointers problem"</li>
                     <li>• "Sliding window could work here"</li>
                     <li>• "This needs divide and conquer"</li>
@@ -1147,64 +1147,64 @@ int singleNumber(vector<int>& nums) {
           </div>
 
           {/* Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Fundamentals Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-emerald-400 mb-4">Time Complexity Hierarchy</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexity Hierarchy</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(1)</span>
-                    <span className="text-green-400">Constant - Instant</span>
+                    <span className="text-gray-700">O(1)</span>
+                    <span className="text-green-600 font-medium">Constant - Instant</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(log n)</span>
-                    <span className="text-blue-400">Logarithmic - Very fast</span>
+                    <span className="text-gray-700">O(log n)</span>
+                    <span className="text-blue-600 font-medium">Logarithmic - Very fast</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(n)</span>
-                    <span className="text-yellow-400">Linear - Acceptable</span>
+                    <span className="text-gray-700">O(n)</span>
+                    <span className="text-amber-600 font-medium">Linear - Acceptable</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(n log n)</span>
-                    <span className="text-orange-400">Quasilinear - Good</span>
+                    <span className="text-gray-700">O(n log n)</span>
+                    <span className="text-orange-600 font-medium">Quasilinear - Good</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(n²)</span>
-                    <span className="text-red-400">Quadratic - Slow</span>
+                    <span className="text-gray-700">O(n²)</span>
+                    <span className="text-red-600 font-medium">Quadratic - Slow</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-300">O(2^n)</span>
-                    <span className="text-red-600">Exponential - Unusable</span>
+                    <span className="text-gray-700">O(2^n)</span>
+                    <span className="text-red-700 font-medium">Exponential - Unusable</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-emerald-400 mb-4">Technique Selection Guide</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Technique Selection Guide</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Sorted Array Search</div>
-                    <div className="text-gray-400">→ Binary Search O(log n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Sorted Array Search</div>
+                    <div className="text-gray-600">→ Binary Search O(log n)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Find Pair with Sum</div>
-                    <div className="text-gray-400">→ Two Pointers O(n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Find Pair with Sum</div>
+                    <div className="text-gray-600">→ Two Pointers O(n)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Maximum Subarray</div>
-                    <div className="text-gray-400">→ Sliding Window O(n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Maximum Subarray</div>
+                    <div className="text-gray-600">→ Sliding Window O(n)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Bit Operations</div>
-                    <div className="text-gray-400">→ Bit Manipulation O(1)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Bit Operations</div>
+                    <div className="text-gray-600">→ Bit Manipulation O(1)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Large Problem</div>
-                    <div className="text-gray-400">→ Divide & Conquer O(n log n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Large Problem</div>
+                    <div className="text-gray-600">→ Divide & Conquer O(n log n)</div>
                   </div>
                 </div>
               </div>

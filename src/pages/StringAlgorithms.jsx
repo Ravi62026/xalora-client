@@ -729,16 +729,16 @@ string longestRepeatedSubstring(string s) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 String Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master efficient string processing, pattern matching, and manipulation algorithms for text analysis and search problems.
             </p>
           </div>
@@ -748,8 +748,8 @@ string longestRepeatedSubstring(string s) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -757,8 +757,8 @@ string longestRepeatedSubstring(string s) {
             <button
               onClick={() => setActiveSection("pattern")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "pattern"
-                  ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Pattern Matching
@@ -766,8 +766,8 @@ string longestRepeatedSubstring(string s) {
             <button
               onClick={() => setActiveSection("manipulation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "manipulation"
-                  ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Manipulation
@@ -775,8 +775,8 @@ string longestRepeatedSubstring(string s) {
             <button
               onClick={() => setActiveSection("hashing")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "hashing"
-                  ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Hashing
@@ -784,8 +784,8 @@ string longestRepeatedSubstring(string s) {
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-pink-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -794,20 +794,20 @@ string longestRepeatedSubstring(string s) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">String Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">String Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">Why String Algorithms Matter</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Why String Algorithms Matter</h3>
                   <p className="text-gray-300 mb-6">
                     Strings are fundamental data structures in programming. Efficient string algorithms
                     are crucial for text processing, search engines, data compression, bioinformatics,
                     and many real-world applications involving text analysis.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">Algorithm Categories</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Algorithm Categories</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-pink-400 mr-2">🔍</span>
                       <span><strong>Pattern Matching:</strong> Find patterns in text efficiently</span>
@@ -828,20 +828,20 @@ string longestRepeatedSubstring(string s) {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-pink-400 mb-4">Common Challenges</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Common Challenges</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Time Complexity Issues</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Time Complexity Issues</h4>
                       <p className="text-gray-300">Naive approaches often O(n²) - need efficient algorithms</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Space Constraints</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Space Constraints</h4>
                       <p className="text-gray-300">Large texts require O(1) or O(min(n,m)) space solutions</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Edge Cases</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Edge Cases</h4>
                       <p className="text-gray-300">Empty strings, unicode, case sensitivity, overlapping patterns</p>
                     </div>
                   </div>
@@ -849,14 +849,14 @@ string longestRepeatedSubstring(string s) {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-pink-900/20 to-rose-900/20 border border-pink-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-pink-400 mb-3">Performance</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Performance</h4>
                   <p className="text-gray-300">From O(n²) naive to O(n) optimal</p>
-                  <p className="text-sm text-gray-400 mt-2">KMP, Z-algorithm achieve linear time</p>
+                  <p className="text-sm text-gray-500 mt-2">KMP, Z-algorithm achieve linear time</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Real Applications</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Real Applications</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Text editors (search/replace)</li>
                     <li>• Search engines</li>
@@ -865,7 +865,7 @@ string longestRepeatedSubstring(string s) {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-indigo-900/20 border border-purple-700/50 p-6 rounded-xl">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Key Techniques</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Prefix/Suffix arrays</li>
@@ -881,17 +881,17 @@ string longestRepeatedSubstring(string s) {
           {/* Pattern Matching Section */}
           {activeSection === "pattern" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Pattern Matching Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Pattern Matching Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {patternMatching.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -900,9 +900,9 @@ string longestRepeatedSubstring(string s) {
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -916,17 +916,17 @@ string longestRepeatedSubstring(string s) {
           {/* String Manipulation Section */}
           {activeSection === "manipulation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">String Manipulation Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">String Manipulation Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {stringManipulation.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-rose-500 hover:shadow-2xl hover:shadow-rose-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-rose-500 hover:shadow-2xl hover:shadow-rose-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -935,9 +935,9 @@ string longestRepeatedSubstring(string s) {
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -951,17 +951,17 @@ string longestRepeatedSubstring(string s) {
           {/* String Hashing Section */}
           {activeSection === "hashing" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">String Hashing Techniques</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">String Hashing Techniques</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {stringHashing.map((technique) => (
                   <div
                     key={technique.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{technique.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{technique.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${technique.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${technique.complexity.space}`)}
@@ -970,9 +970,9 @@ string longestRepeatedSubstring(string s) {
 
                       <p className="text-gray-300 mb-6">{technique.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{technique.code}</code>
                         </pre>
                       </div>
@@ -986,17 +986,17 @@ string longestRepeatedSubstring(string s) {
           {/* Advanced Algorithms Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced String Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced String Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -1005,9 +1005,9 @@ string longestRepeatedSubstring(string s) {
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1019,15 +1019,15 @@ string longestRepeatedSubstring(string s) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-pink-500 hover:shadow-2xl hover:shadow-pink-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy String Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Easy String Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Reverse String (in-place)</span>
@@ -1047,9 +1047,9 @@ string longestRepeatedSubstring(string s) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium String Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Medium String Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Longest Palindromic Substring</span>
@@ -1073,9 +1073,9 @@ string longestRepeatedSubstring(string s) {
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard String Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Hard String Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Regular Expression Matching</span>
@@ -1101,11 +1101,11 @@ string longestRepeatedSubstring(string s) {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
               <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
                       <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
@@ -1116,7 +1116,7 @@ string longestRepeatedSubstring(string s) {
                       </span>
                     </div>
                     <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1124,14 +1124,14 @@ string longestRepeatedSubstring(string s) {
           </div>
 
           {/* String Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               String Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-pink-400 mb-4">Pattern Matching</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Pattern Matching</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
                     <span className="text-gray-300">Naive:</span>
@@ -1153,7 +1153,7 @@ string longestRepeatedSubstring(string s) {
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-pink-400 mb-4">Common Problems</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Common Problems</h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-gray-800/50 p-3 rounded">
                     <div className="text-cyan-400 font-medium mb-1">Anagrams:</div>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xalora Theme Preview - Choose Your Theme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .theme-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-card:hover {
+            border-color: rgba(100, 150, 200, 0.5);
+            background: rgba(30, 41, 59, 1);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-desc {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .theme-specs {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .spec-tag {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+        }
+
+        .theme-card:nth-child(1) .spec-tag {
+            background: rgba(79, 70, 229, 0.2);
+            color: #c4b5fd;
+        }
+
+        .theme-card:nth-child(2) .spec-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        .theme-card:nth-child(3) .spec-tag {
+            background: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+        }
+
+        .theme-card:nth-child(4) .spec-tag {
+            background: rgba(249, 115, 22, 0.2);
+            color: #fed7aa;
+        }
+
+        .theme-card:nth-child(5) .spec-tag {
+            background: rgba(13, 148, 136, 0.2);
+            color: #99f6e4;
+        }
+
+        .view-btn {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 0.7rem 1.4rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .theme-card:hover .view-btn {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .info-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(100, 150, 200, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-section h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .info-section p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            color: #93c5fd;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Xalora Theme Preview</h1>
+        <p class="subtitle">Select a theme to preview the home page design</p>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h2>📋 About These Themes</h2>
+            <p>Here are 5 completely different light theme designs for Xalora. Each has:</p>
+            <div class="features-list">
+                <div class="feature-item">✓ Full Home Page Design</div>
+                <div class="feature-item">✓ Navbar + Hero Section</div>
+                <div class="feature-item">✓ Features Grid</div>
+                <div class="feature-item">✓ Stats Section</div>
+                <div class="feature-item">✓ Footer</div>
+                <div class="feature-item">✓ Responsive Design</div>
+            </div>
+            <p style="margin-top: 1rem;"><strong>Note:</strong> Once you choose a theme, we'll refactor the entire codebase (80+ pages, 50+ components) to match it. So review carefully! 🚀</p>
+        </div>
+
+        <!-- Themes Grid -->
+        <div class="themes-grid">
+            <!-- Theme 1 -->
+            <a href="1-grid-indigo.html" class="theme-card" target="_blank">
+                <div class="theme-number">1</div>
+                <div class="theme-name">Grid + Indigo</div>
+                <div class="theme-desc">Modern professional look with subtle grid pattern background and indigo accent colors. Perfect for a premium learning platform.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Grid Pattern</span>
+                    <span class="spec-tag">Indigo Accent</span>
+                    <span class="spec-tag">Professional</span>
+                </div>
+                <a href="1-grid-indigo.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 2 -->
+            <a href="2-gradient-noise-blue.html" class="theme-card" target="_blank">
+                <div class="theme-number">2</div>
+                <div class="theme-name">Gradient + Noise</div>
+                <div class="theme-desc">Premium feel with soft gradient background and subtle noise texture. Blue accents create a trustworthy, corporate vibe.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Gradient BG</span>
+                    <span class="spec-tag">Noise Texture</span>
+                    <span class="spec-tag">Premium</span>
+                </div>
+                <a href="2-gradient-noise-blue.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 3 -->
+            <a href="3-glassmorphism-purple.html" class="theme-card" target="_blank">
+                <div class="theme-number">3</div>
+                <div class="theme-name">Glassmorphism</div>
+                <div class="theme-desc">Trendy glassmorphism design with frosted glass effects and purple accents. Modern, elegant, and very Instagram-worthy.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Glassmorphism</span>
+                    <span class="spec-tag">Purple Accent</span>
+                    <span class="spec-tag">Trendy</span>
+                </div>
+                <a href="3-glassmorphism-purple.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 4 -->
+            <a href="4-warm-orange.html" class="theme-card" target="_blank">
+                <div class="theme-number">4</div>
+                <div class="theme-name">Warm Orange</div>
+                <div class="theme-desc">Friendly and approachable with warm orange gradients. Great for community-focused platforms, feels welcoming and energetic.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Warm Tones</span>
+                    <span class="spec-tag">Orange Accent</span>
+                    <span class="spec-tag">Friendly</span>
+                </div>
+                <a href="4-warm-orange.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 5 -->
+            <a href="5-minimal-teal.html" class="theme-card" target="_blank">
+                <div class="theme-number">5</div>
+                <div class="theme-name">Minimal Teal</div>
+                <div class="theme-desc">Ultra-clean and minimal with dot grid pattern and teal accent. Tech-forward, distraction-free, perfect for developers.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Minimal Design</span>
+                    <span class="spec-tag">Dot Grid</span>
+                    <span class="spec-tag">Developer-Friendly</span>
+                </div>
+                <a href="5-minimal-teal.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 6 -->
+            <a href="6-neutral-sage.html" class="theme-card" target="_blank">
+                <div class="theme-number">6</div>
+                <div class="theme-name">Neutral Sage</div>
+                <div class="theme-desc">Sophisticated neutral palette with muted sage green accents. Earthy, calming, and professional. Inspired by premium SaaS products.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Earthy Tones</span>
+                    <span class="spec-tag">Sage Green</span>
+                    <span class="spec-tag">Sophisticated</span>
+                </div>
+                <a href="6-neutral-sage.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 7 -->
+            <a href="7-cream-charcoal.html" class="theme-card" target="_blank">
+                <div class="theme-number">7</div>
+                <div class="theme-name">Cream Charcoal</div>
+                <div class="theme-desc">Warm cream background with elegant charcoal accents. Refined and timeless. Perfect for engineers who value substance over flash.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Warm & Refined</span>
+                    <span class="spec-tag">Charcoal Accents</span>
+                    <span class="spec-tag">Elegant</span>
+                </div>
+                <a href="7-cream-charcoal.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 8 -->
+            <a href="8-navy-gold.html" class="theme-card" target="_blank">
+                <div class="theme-number">8</div>
+                <div class="theme-name">Navy Gold</div>
+                <div class="theme-desc">Understated luxury with deep navy and gold accents. Premium feel without being flashy. Sophisticated and aspirational.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Premium Feel</span>
+                    <span class="spec-tag">Navy + Gold</span>
+                    <span class="spec-tag">Aspirational</span>
+                </div>
+                <a href="8-navy-gold.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+
+            <!-- Theme 9 -->
+            <a href="9-monochrome-slate.html" class="theme-card" target="_blank">
+                <div class="theme-number">9</div>
+                <div class="theme-name">Monochrome Slate</div>
+                <div class="theme-desc">Pure monochromatic design with grays and blacks. Minimalist to the extreme. Like Notion - honest, functional, timeless.</div>
+                <div class="theme-specs">
+                    <span class="spec-tag">Monochrome</span>
+                    <span class="spec-tag">Ultra Minimal</span>
+                    <span class="spec-tag">Timeless</span>
+                </div>
+                <a href="9-monochrome-slate.html" class="view-btn" target="_blank">View Theme →</a>
+            </a>
+        </div>
+
+        <!-- Quick Comparison -->
+        <div class="info-section">
+            <h2>🔍 Quick Comparison</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.2);">
+                        <th style="text-align: left; padding: 0.8rem; color: #93c5fd;">Theme</th>
+                        <th style="text-align: left; padding: 0.8rem; color: #93c5fd;">Style</th>
+                        <th style="text-align: left; padding: 0.8rem; color: #93c5fd;">Vibe</th>
+                        <th style="text-align: left; padding: 0.8rem; color: #93c5fd;">Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>1. Grid Indigo</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Grid Pattern</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Professional</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Enterprises</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>2. Gradient Noise</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Soft Gradient</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Premium</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Premium Products</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>3. Glassmorphism</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Frosted Glass</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Modern</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Trendsetters</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>4. Warm Orange</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Gradient</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Warm & Friendly</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Communities</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>5. Minimal Teal</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Dot Grid</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Clean & Minimal</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Developers</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>6. Neutral Sage</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Neutral Palette</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Sophisticated</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Premium Products</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>7. Cream Charcoal</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Warm Cream BG</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Refined</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Professionals</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(100, 150, 200, 0.1);">
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>8. Navy Gold</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Navy + Gold</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Premium</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Elite Users</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.8rem; color: #cbd5e1;"><strong>9. Monochrome</strong></td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Monochrome BW</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Ultra Minimal</td>
+                        <td style="padding: 0.8rem; color: #cbd5e1;">Notion Fans</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-section" style="text-align: center;">
+            <p style="color: #60a5fa; font-size: 1.1rem; margin-bottom: 1rem;">👉 <strong>Which theme do you like the most?</strong></p>
+            <p style="color: #cbd5e1;">Let me know your favorite (1-5), and I'll refactor the entire xalora-client codebase to match! 🚀</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -69,14 +69,21 @@ export default function ConversationalInterview({
     sessionId, roundType, personality = "professional",
     candidateName = "Candidate", currentQuestionData = null,
     questionNumber = 1, maxQuestions = 5,
+    interviewMode = "specific",
+    interviewDuration = 900,
+    interviewTopic = null,
     onRoundComplete, onFallbackToManual, onFetchNextQuestion, userId,
 }) {
-    const [phase, setPhase] = useState("active"); // Skipping mic_check as permissions are given in setup
+    const [phase, setPhase] = useState("active");
     const [showEndConfirm, setShowEndConfirm] = useState(false);
     const [showEvaluation, setShowEvaluation] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(interviewDuration);
     const transcriptEndRef = useRef(null);
     const voiceStartedRef = useRef(false);
     const handledNextStepRef = useRef(false);
+    const timerEndedRef = useRef(false);
+
+    const isFullInterview = interviewMode === "full";
 
     const {
         connect, disconnect, status, error, mode,
@@ -85,9 +92,13 @@ export default function ConversationalInterview({
         deepgramReady, mute, unmute, isMuted,
         transcript, isAgentSpeaking, isUserSpeaking, evaluation, turnInfo, intent,
         clearError, silenceWarning, networkStatus, reconnectInfo, reconnectVoice,
+        currentPhase,
     } = useConversationalInterview({
         sessionId, roundType, personality, candidateName,
         currentQuestion: currentQuestionData?.text || "",
+        interviewMode,
+        interviewDuration,
+        interviewTopic,
         autoConnect: true, onFallbackToManual,
     });
 
@@ -143,13 +154,40 @@ export default function ConversationalInterview({
         if (deepgramReady && currentQuestionData?.text) updateQuestion(currentQuestionData.text, questionNumber - 1);
     }, [currentQuestionData?.text, deepgramReady]);
 
-    // Auto next question
+    // Countdown timer — auto-ends session when time is up
     useEffect(() => {
+        if (phase !== "active" || status === "paused") return;
+        const id = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearInterval(id);
+                    if (!timerEndedRef.current) {
+                        timerEndedRef.current = true;
+                        endSession();
+                        setTimeout(() => onRoundComplete?.(), 600);
+                    }
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(id);
+    }, [phase, status]);
+
+    const formatTime = (s) => {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${m}:${String(sec).padStart(2, "0")}`;
+    };
+
+    // Auto next question (specific round only)
+    useEffect(() => {
+        if (isFullInterview) return;
         if (turnInfo?.nextStep !== "next_question") { handledNextStepRef.current = false; return; }
         if (handledNextStepRef.current) return;
         handledNextStepRef.current = true;
         onFetchNextQuestion?.();
-    }, [turnInfo?.nextStep, onFetchNextQuestion]);
+    }, [turnInfo?.nextStep, onFetchNextQuestion, isFullInterview]);
 
     // Evaluation reveal
     useEffect(() => {
@@ -208,22 +246,60 @@ export default function ConversationalInterview({
                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                     <span className="text-sm font-semibold text-white">Live Interview</span>
                     <span className="text-xs text-slate-500">·</span>
-                    <span className="text-xs text-slate-400 capitalize">{roundType?.replace(/_/g, " ")}</span>
+                    {isFullInterview ? (
+                        // Full interview: show current phase
+                        <span className="text-xs text-violet-300 font-medium capitalize">{currentPhase?.label || "Formal Q&A"}</span>
+                    ) : interviewTopic ? (
+                        <span className="text-xs text-violet-300 font-medium">Topic: {interviewTopic}</span>
+                    ) : (
+                        <span className="text-xs text-slate-400 capitalize">{roundType?.replace(/_/g, " ")}</span>
+                    )}
                 </div>
                 <div className="flex items-center gap-3">
-                    {/* Progress pills */}
-                    <div className="flex gap-1.5">
-                        {Array.from({ length: maxQuestions }).map((_, i) => (
-                            <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${
-                                i < questionNumber - 1 ? "w-6 bg-violet-500" :
-                                i === questionNumber - 1 ? "w-8 bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.6)]" :
-                                "w-6 bg-white/10"
-                            }`} />
-                        ))}
-                    </div>
-                    <span className="text-xs text-slate-500">Q{questionNumber}/{maxQuestions}</span>
+                    {isFullInterview ? (
+                        // Full interview: show countdown timer
+                        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-mono font-bold transition-all ${
+                            timeLeft <= 300
+                                ? "bg-red-500/15 border-red-500/30 text-red-400"
+                                : timeLeft <= 600
+                                    ? "bg-amber-500/15 border-amber-500/30 text-amber-400"
+                                    : "bg-white/[0.05] border-white/10 text-slate-300"
+                        }`}>
+                            <span>⏱</span>
+                            <span>{formatTime(timeLeft)}</span>
+                        </div>
+                    ) : (
+                        // Specific round: show question progress + time
+                        <>
+                            <div className="flex gap-1.5">
+                                {Array.from({ length: maxQuestions }).map((_, i) => (
+                                    <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${
+                                        i < questionNumber - 1 ? "w-6 bg-violet-500" :
+                                        i === questionNumber - 1 ? "w-8 bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.6)]" :
+                                        "w-6 bg-white/10"
+                                    }`} />
+                                ))}
+                            </div>
+                            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs font-mono font-bold ${
+                                timeLeft <= 120
+                                    ? "bg-red-500/15 border-red-500/30 text-red-400"
+                                    : "bg-white/[0.05] border-white/10 text-slate-400"
+                            }`}>
+                                {formatTime(timeLeft)}
+                            </div>
+                        </>
+                    )}
                 </div>
             </header>
+
+
+            {/* ── Phase Transition Banner (full interview only) ── */}
+            {isFullInterview && currentPhase?.phase !== "formal_qa" && (
+                <div className="mx-6 mt-3 p-2.5 bg-violet-500/10 border border-violet-500/25 rounded-xl flex items-center gap-2">
+                    <span className="text-violet-400">🔀</span>
+                    <span className="text-xs text-violet-300 font-semibold">Now covering: {currentPhase?.label}</span>
+                </div>
+            )}
 
             {/* ── Banners ── */}
             {error && (
@@ -244,6 +320,7 @@ export default function ConversationalInterview({
                     <p className="text-xs text-amber-300 text-center">Take your time — the interviewer is listening whenever you're ready.</p>
                 </div>
             )}
+
 
             {/* ── Main panel: two-column on large, stacked on small ── */}
             <div className="flex-1 flex flex-col lg:flex-row gap-0 overflow-hidden">
@@ -284,8 +361,8 @@ export default function ConversationalInterview({
                         {/* Status label */}
                         <p className={`text-sm font-medium transition-all ${statusColor}`}>{statusLabel}</p>
 
-                        {/* Current question card */}
-                        {currentQuestionData?.text && (
+                        {/* Current question card — only for specific round (full interview generates its own) */}
+                        {!isFullInterview && currentQuestionData?.text && (
                             <div className="max-w-xs w-full bg-white/[0.04] border border-white/8 rounded-2xl p-4 backdrop-blur">
                                 <p className="text-[10px] text-violet-400 font-semibold uppercase tracking-wider mb-2">Current Question</p>
                                 <p className="text-sm text-slate-200 leading-relaxed">{currentQuestionData.text}</p>
@@ -468,7 +545,12 @@ export default function ConversationalInterview({
                     {showEndConfirm ? (
                         <div className="flex items-center gap-2">
                             <span className="text-xs text-slate-400">End interview?</span>
-                            <button onClick={() => { endSession(); onRoundComplete?.(); }}
+                            <button onClick={() => {
+                                timerEndedRef.current = true;
+                                endSession();
+                                disconnect();
+                                onRoundComplete?.();
+                            }}
                                 className="px-3 py-2 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-xl transition-all">
                                 Yes, End
                             </button>

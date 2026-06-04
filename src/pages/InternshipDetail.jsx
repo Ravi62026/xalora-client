@@ -136,10 +136,10 @@ const InternshipDetail = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto"></div>
-            <p className="mt-4 text-white/70">Loading internship details...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 font-medium">Loading internship details...</p>
           </div>
         </div>
       </Layout>
@@ -149,11 +149,11 @@ const InternshipDetail = () => {
   if (!internship) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-          <div className="text-center">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
+          <div className="text-center bg-white p-8 rounded-2xl border border-gray-100 shadow-sm max-w-md">
             <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Internship Not Found</h2>
-            <p className="text-gray-400">The internship you're looking for doesn't exist.</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Internship Not Found</h2>
+            <p className="text-gray-600">The internship you're looking for doesn't exist.</p>
           </div>
         </div>
       </Layout>
@@ -162,43 +162,43 @@ const InternshipDetail = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black">
+      <div className="min-h-screen xalora-grid-bg">
         {/* Header */}
-        <div className="bg-white/5 backdrop-blur-md border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <button
               onClick={() => navigate('/internships')}
-              className="flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
+              className="flex items-center text-indigo-600 hover:text-indigo-700 mb-6 transition-colors font-medium"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Internships
             </button>
 
-            <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-              <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3">{internship.title}</h1>
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(internship.difficulty).replace('bg-gray-100', 'bg-gray-800').replace('text-gray-800', 'text-gray-300 border-gray-700')}`}>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+              <div className="flex-1">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{internship.title}</h1>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className={`px-3 py-1 rounded text-xs font-semibold ${getDifficultyColor(internship.difficulty)}`}>
                     {internship.difficulty}
                   </span>
-                  <div className="flex items-center text-gray-300 text-sm">
-                    <Clock className="w-4 h-4 mr-1.5 text-emerald-500" />
+                  <div className="flex items-center text-gray-600 text-sm font-medium">
+                    <Clock className="w-4 h-4 mr-2" />
                     {internship.duration} days
                   </div>
                 </div>
               </div>
 
               {enrollmentStatus && (
-                <div className="w-full md:w-auto text-left md:text-right bg-white/5 md:bg-transparent p-4 md:p-0 rounded-lg md:rounded-none">
-                  <div className="flex items-center md:justify-end gap-2 mb-1">
-                    <span className="text-gray-400 text-sm">Status:</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(enrollmentStatus.status)}`}>
+                <div className="w-full sm:w-auto text-left sm:text-right">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-gray-600 text-sm font-medium">Status:</span>
+                    <span className={`px-3 py-1 rounded text-xs font-bold ${getStatusColor(enrollmentStatus.status)}`}>
                       {enrollmentStatus.status.charAt(0).toUpperCase() + enrollmentStatus.status.slice(1)}
                     </span>
                   </div>
                   {enrollmentStatus.status === 'enrolled' && (
-                    <p className="text-sm text-gray-400 mt-1">
-                      Deadline: <span className="text-white">{new Date(enrollmentStatus.deadline).toLocaleDateString()}</span>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Deadline: <span className="text-gray-900 font-semibold">{new Date(enrollmentStatus.deadline).toLocaleDateString()}</span>
                     </p>
                   )}
                 </div>
@@ -210,17 +210,17 @@ const InternshipDetail = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Subscription Error Message */}
           {subscriptionError && (
-            <div className="bg-red-900/20 border-l-4 border-red-500 p-4 mb-8 backdrop-blur-sm">
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-lg">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <Lock className="h-5 w-5 text-red-500" />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-red-200">
+                  <p className="text-sm text-red-800">
                     {subscriptionError}{' '}
                     <button
                       onClick={() => navigate('/pricing')}
-                      className="font-medium underline hover:text-white transition-colors"
+                      className="font-semibold underline hover:text-red-900 transition-colors"
                     >
                       Upgrade your plan
                     </button>{' '}
@@ -235,19 +235,19 @@ const InternshipDetail = () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6 sm:space-y-8">
               {/* Description */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
-                <h2 className="text-xl font-bold text-white mb-4">About This Internship</h2>
-                <p className="text-gray-300 leading-relaxed">{internship.description}</p>
+              <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">About This Internship</h2>
+                <p className="text-gray-600 leading-relaxed">{internship.description}</p>
               </div>
 
               {/* Tech Stack */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
-                <h2 className="text-xl font-bold text-white mb-4">Technologies</h2>
+              <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Technologies</h2>
                 <div className="flex flex-wrap gap-2">
                   {internship.techStack.map((tech, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-emerald-900/30 text-emerald-300 border border-emerald-500/30 rounded-full text-sm"
+                      className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded text-sm font-medium"
                     >
                       {tech}
                     </span>
@@ -257,18 +257,18 @@ const InternshipDetail = () => {
 
               {/* Project Requirements */}
               {internship.projectRequirementsPdf && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
-                  <h2 className="text-xl font-bold text-white mb-4">Project Requirements</h2>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-black/20 rounded-xl gap-4">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Project Requirements</h2>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg gap-4 border border-gray-100">
                     <div className="flex items-center">
-                      <div className="p-2 bg-purple-500/20 rounded-lg mr-3">
-                        <BookOpen className="w-5 h-5 text-purple-400" />
+                      <div className="p-2 bg-purple-100 rounded-lg mr-3">
+                        <BookOpen className="w-5 h-5 text-purple-600" />
                       </div>
-                      <span className="text-gray-200 font-medium">Project Requirements Document</span>
+                      <span className="text-gray-900 font-semibold">Project Requirements Document</span>
                     </div>
                     <button
                       onClick={() => downloadPdf(internship.projectRequirementsPdf, 'project-requirements.pdf')}
-                      className="w-full sm:w-auto flex items-center justify-center text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors"
+                      className="w-full sm:w-auto flex items-center justify-center text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-4 py-2.5 rounded-lg transition-all font-semibold"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download
@@ -279,18 +279,18 @@ const InternshipDetail = () => {
 
               {/* HLD Document */}
               {internship.hldPdf && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
-                  <h2 className="text-xl font-bold text-white mb-4">High-Level Design</h2>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-black/20 rounded-xl gap-4">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">High-Level Design</h2>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg gap-4 border border-gray-100">
                     <div className="flex items-center">
-                      <div className="p-2 bg-blue-500/20 rounded-lg mr-3">
-                        <BookOpen className="w-5 h-5 text-blue-400" />
+                      <div className="p-2 bg-blue-100 rounded-lg mr-3">
+                        <BookOpen className="w-5 h-5 text-blue-600" />
                       </div>
-                      <span className="text-gray-200 font-medium">HLD Document</span>
+                      <span className="text-gray-900 font-semibold">HLD Document</span>
                     </div>
                     <button
                       onClick={() => downloadPdf(internship.hldPdf, 'hld-document.pdf')}
-                      className="w-full sm:w-auto flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                      className="w-full sm:w-auto flex items-center justify-center text-white bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-4 py-2.5 rounded-lg transition-all font-semibold"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download
@@ -303,63 +303,63 @@ const InternshipDetail = () => {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Enrollment Card */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 shadow-xl">
-                <h3 className="text-lg font-bold text-white mb-6 flex items-center">
-                  <span className="bg-emerald-500/10 p-2 rounded-lg mr-3">
-                    <Users className="w-5 h-5 text-emerald-400" />
+              <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+                  <span className="bg-green-100 p-2 rounded-lg mr-3">
+                    <Users className="w-5 h-5 text-green-600" />
                   </span>
                   Enrollment
                 </h3>
 
                 {!user ? (
                   <div className="text-center">
-                    <p className="text-gray-400 mb-6">Login to enroll in this internship</p>
+                    <p className="text-gray-600 mb-6 font-medium">Login to enroll in this internship</p>
                     <button
                       onClick={() => navigate('/login')}
-                      className="w-full bg-emerald-600 text-white py-3 px-4 rounded-xl hover:bg-emerald-500 transition-all font-semibold shadow-lg shadow-emerald-900/20"
+                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 px-4 rounded-lg transition-all font-semibold shadow-md hover:shadow-lg"
                     >
                       Login to Enroll
                     </button>
                   </div>
                 ) : subscriptionError ? (
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Lock className="w-8 h-8 text-red-500" />
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Lock className="w-8 h-8 text-red-600" />
                     </div>
-                    <p className="text-gray-300 mb-6">Premium subscription required</p>
+                    <p className="text-gray-900 mb-6 font-semibold">Premium subscription required</p>
                     <button
                       onClick={() => navigate('/pricing')}
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all font-semibold shadow-lg shadow-purple-900/20"
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all font-semibold shadow-md hover:shadow-lg"
                     >
                       Upgrade Plan
                     </button>
                   </div>
                 ) : enrollmentStatus ? (
                   <div>
-                    <div className="flex items-center bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 mb-6">
-                      <CheckCircle className="w-6 h-6 text-emerald-400 mr-3 flex-shrink-0" />
-                      <span className="font-medium text-emerald-100">You are enrolled!</span>
+                    <div className="flex items-center bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                      <CheckCircle className="w-6 h-6 text-green-600 mr-3 flex-shrink-0" />
+                      <span className="font-semibold text-green-700">You are enrolled!</span>
                     </div>
                     <div className="space-y-4 text-sm mb-6">
-                      <div className="flex justify-between text-gray-400">
-                        <span>Status</span>
-                        <span className={`font-medium ${enrollmentStatus.status === 'completed' ? 'text-green-400' : 'text-white'}`}>
+                      <div className="flex justify-between text-gray-600">
+                        <span className="font-medium">Status</span>
+                        <span className={`font-semibold ${enrollmentStatus.status === 'completed' ? 'text-green-600' : 'text-gray-900'}`}>
                           {enrollmentStatus.status.charAt(0).toUpperCase() + enrollmentStatus.status.slice(1)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-gray-400">
-                        <span>Enrolled on</span>
-                        <span className="text-white">{new Date(enrollmentStatus.createdAt).toLocaleDateString()}</span>
+                      <div className="flex justify-between text-gray-600">
+                        <span className="font-medium">Enrolled on</span>
+                        <span className="text-gray-900 font-semibold">{new Date(enrollmentStatus.createdAt).toLocaleDateString()}</span>
                       </div>
-                      <div className="flex justify-between text-gray-400">
-                        <span>Deadline</span>
-                        <span className="text-white">{new Date(enrollmentStatus.deadline).toLocaleDateString()}</span>
+                      <div className="flex justify-between text-gray-600">
+                        <span className="font-medium">Deadline</span>
+                        <span className="text-gray-900 font-semibold">{new Date(enrollmentStatus.deadline).toLocaleDateString()}</span>
                       </div>
                     </div>
                     {enrollmentStatus.status === 'enrolled' && (
                       <button
                         onClick={() => navigate(`/internships/submit/${enrollmentStatus._id}`)}
-                        className="w-full bg-emerald-600 text-white py-3 px-4 rounded-xl hover:bg-emerald-500 transition-all font-semibold shadow-lg shadow-emerald-900/20 flex items-center justify-center group"
+                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all font-semibold shadow-md hover:shadow-lg flex items-center justify-center group"
                       >
                         Submit Project
                         <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -368,13 +368,13 @@ const InternshipDetail = () => {
                   </div>
                 ) : (
                   <div>
-                    <p className="text-gray-400 text-sm mb-6 text-center">
+                    <p className="text-gray-600 text-sm mb-6 text-center font-medium">
                       Enroll now to start working on this project. You'll get access to all resources instantly.
                     </p>
                     <button
                       onClick={handleEnroll}
                       disabled={enrolling}
-                      className="w-full bg-emerald-600 text-white py-3 px-4 rounded-xl hover:bg-emerald-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg shadow-emerald-900/20 flex items-center justify-center"
+                      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 px-4 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-md hover:shadow-lg flex items-center justify-center"
                     >
                       {enrolling ? (
                         <>
@@ -390,20 +390,20 @@ const InternshipDetail = () => {
               </div>
 
               {/* Internship Details */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 shadow-xl">
-                <h3 className="text-lg font-bold text-white mb-4">Quick Details</h3>
+              <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Details</h3>
                 <div className="space-y-4">
-                  <div className="flex items-center text-gray-300">
-                    <div className="p-2 bg-blue-500/10 rounded-lg mr-3">
-                      <Calendar className="w-4 h-4 text-blue-400" />
+                  <div className="flex items-center text-gray-600">
+                    <div className="p-2 bg-blue-100 rounded-lg mr-3">
+                      <Calendar className="w-4 h-4 text-blue-600" />
                     </div>
-                    <span>Duration: <span className="text-white font-medium">{internship.duration} days</span></span>
+                    <span className="text-sm">Duration: <span className="text-gray-900 font-semibold">{internship.duration} days</span></span>
                   </div>
-                  <div className="flex items-center text-gray-300">
-                    <div className="p-2 bg-purple-500/10 rounded-lg mr-3">
-                      <Users className="w-4 h-4 text-purple-400" />
+                  <div className="flex items-center text-gray-600">
+                    <div className="p-2 bg-purple-100 rounded-lg mr-3">
+                      <Users className="w-4 h-4 text-purple-600" />
                     </div>
-                    <span>Difficulty: <span className="text-white font-medium capitalize">{internship.difficulty}</span></span>
+                    <span className="text-sm">Difficulty: <span className="text-gray-900 font-semibold capitalize">{internship.difficulty}</span></span>
                   </div>
                 </div>
               </div>

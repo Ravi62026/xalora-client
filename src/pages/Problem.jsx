@@ -1017,7 +1017,7 @@ public class Solution {
         <div className="min-h-[calc(100vh-4rem)] w-full p-2 sm:p-3">
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             {/* Left Column - Problem Description */}
-            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
               <div className="border-b border-slate-200 p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -1059,21 +1059,21 @@ public class Solution {
 
                   <Link
                     to="/problems"
-                    className="whitespace-nowrap rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs text-slate-700 transition hover:bg-slate-100 sm:text-sm"
+                    className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-50 sm:text-sm font-medium"
                   >
                     Back
                   </Link>
                 </div>
               </div>
               {/* Tabs */}
-              <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+              <div className="sticky top-0 z-10 border-b border-slate-200 bg-white">
                 <div>
                   <nav className="flex">
                     <button
                       onClick={() => setLeftActiveTab("description")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         leftActiveTab === "description"
-                          ? "border-cyan-500 text-cyan-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
@@ -1083,7 +1083,7 @@ public class Solution {
                       onClick={() => setLeftActiveTab("submissions")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         leftActiveTab === "submissions"
-                          ? "border-cyan-500 text-cyan-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
@@ -1112,17 +1112,17 @@ public class Solution {
                             {problem.constraints}
                           </p>
                           {problem.structuredConstraints && (
-                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mt-3">
-                              <h4 className="text-sm font-medium text-purple-800 mb-2">
+                            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mt-3">
+                              <h4 className="text-sm font-medium text-indigo-800 mb-2">
                                 Limits
                               </h4>
-                              <div className="flex flex-wrap gap-3 text-sm text-purple-700">
+                              <div className="flex flex-wrap gap-3 text-sm text-indigo-700">
                                 {formatConstraints(
                                   problem.structuredConstraints
                                 )?.map((constraint, index) => (
                                   <span
                                     key={index}
-                                    className="px-2 py-1 bg-purple-100 rounded"
+                                    className="px-2 py-1 bg-indigo-100 rounded"
                                   >
                                     {constraint}
                                   </span>
@@ -1239,7 +1239,7 @@ public class Solution {
                                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <button
                                       onClick={() => handleViewCode(submission)}
-                                      className="text-purple-600 hover:text-purple-900"
+                                      className="text-indigo-600 hover:text-indigo-900"
                                     >
                                       View Code
                                     </button>
@@ -1261,16 +1261,16 @@ public class Solution {
             </div>
 
             {/* Right Column - Code Editor */}
-            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
               <div className="flex min-h-0 flex-1 flex-col">
                 {/* Code Editor Tabs */}
-                <div className="border-b border-slate-200 bg-white/95 backdrop-blur">
+                <div className="border-b border-slate-200 bg-white">
                   <nav className="flex">
                     <button
                       onClick={() => setRightActiveTab("code")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "code"
-                          ? "border-cyan-500 text-cyan-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
@@ -1280,7 +1280,7 @@ public class Solution {
                       onClick={() => setRightActiveTab("result")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "result"
-                          ? "border-cyan-500 text-cyan-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
@@ -1290,7 +1290,7 @@ public class Solution {
                       onClick={() => setRightActiveTab("review")}
                       className={`px-4 py-3 text-sm font-medium border-b-2 ${
                         rightActiveTab === "review"
-                          ? "border-cyan-500 text-cyan-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-500 hover:text-slate-700"
                       }`}
                     >
@@ -1309,7 +1309,7 @@ public class Solution {
                           </label>
                           <button
                             onClick={handleLoadTemplate}
-                            className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded transition-colors"
+                            className="text-xs border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded-lg transition-colors font-medium"
                             title="Load template for selected language"
                           >
                             Load Template
@@ -1318,7 +1318,7 @@ public class Solution {
                         <select
                           value={selectedLanguage}
                           onChange={(e) => setSelectedLanguage(e.target.value)}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 text-gray-900"
                         >
                           {languages.map((lang) => (
                             <option key={lang.value} value={lang.value}>
@@ -1556,8 +1556,8 @@ public class Solution {
 
                           {/* Verdict Description */}
                           {executionResult.verdict && (
-                            <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                              <p className="text-sm text-purple-700">
+                            <div className="mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+                              <p className="text-sm text-indigo-700">
                                 <strong>What this means:</strong>{" "}
                                 {getVerdictDescription(executionResult.verdict)}
                               </p>
@@ -1910,7 +1910,7 @@ public class Solution {
                                   // Custom styling for headings
                                   h1: ({ ...props }) => (
                                     <h1
-                                      className="text-2xl font-bold text-purple-800 border-b-2 border-purple-200 pb-2 mt-6 mb-4"
+                                      className="text-2xl font-bold text-indigo-800 border-b-2 border-purple-200 pb-2 mt-6 mb-4"
                                       {...props}
                                     />
                                   ),
@@ -1992,7 +1992,7 @@ public class Solution {
                             <div className="flex flex-wrap gap-2">
                               <button
                                 onClick={insertAICodeIntoEditor}
-                                className="bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm"
+                                className="bg-purple-100 hover:bg-purple-200 text-indigo-700 font-medium py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

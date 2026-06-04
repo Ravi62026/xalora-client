@@ -94,10 +94,10 @@ const Linear = () => {
     if (!complexity) return null;
 
     let color = "bg-gray-100 text-gray-800";
-    if (complexity.includes("O(1)")) color = "bg-green-100 text-green-800";
-    if (complexity.includes("O(log n)")) color = "bg-blue-100 text-blue-800";
-    if (complexity.includes("O(n)") && !complexity.includes("n log")) color = "bg-yellow-100 text-yellow-800";
-    if (complexity.includes("O(n²)") || complexity.includes("O(n log n)")) color = "bg-red-100 text-red-800";
+    if (complexity.includes("O(1)")) color = "bg-green-50 text-green-700";
+    if (complexity.includes("O(log n)")) color = "bg-blue-50 text-blue-700";
+    if (complexity.includes("O(n)") && !complexity.includes("n log")) color = "bg-amber-50 text-amber-700";
+    if (complexity.includes("O(n²)") || complexity.includes("O(n log n)")) color = "bg-red-50 text-red-700";
 
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${color}`}>
@@ -108,28 +108,28 @@ const Linear = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="text-center mb-12 sm:mb-16">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Linear Data Structures
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Sequential data structures where elements are arranged in a linear manner.
               Master the fundamental building blocks of data organization.
             </p>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 sm:mb-16">
             <button
               onClick={() => setActiveSection("overview")}
-              className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              className={`px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -137,8 +137,8 @@ const Linear = () => {
             <button
               onClick={() => setActiveSection("structures")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "structures"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Structures
@@ -146,8 +146,8 @@ const Linear = () => {
             <button
               onClick={() => setActiveSection("comparison")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "comparison"
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Comparison
@@ -156,21 +156,21 @@ const Linear = () => {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">What are Linear Data Structures?</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mb-8 sm:mb-12 shadow-sm">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">What are Linear Data Structures?</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">Definition</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Definition</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     {overviewContent.definition}
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">Key Characteristics</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
+                  <ul className="space-y-3 text-gray-700">
                     {overviewContent.characteristics.map((char, idx) => (
                       <li key={idx} className="flex items-start">
-                        <span className="text-blue-400 mr-2">•</span>
+                        <span className="text-indigo-600 mr-2">•</span>
                         <span>{char}</span>
                       </li>
                     ))}
@@ -178,26 +178,26 @@ const Linear = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-blue-400 mb-4">Types of Linear Structures</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Types of Linear Structures</h3>
                   <div className="space-y-6">
                     {overviewContent.types.map((type, idx) => (
-                      <div key={idx} className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-2">{type.name}</h4>
-                        <div className="text-sm text-gray-400 mb-2">
+                      <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-2">{type.name}</h4>
+                        <div className="text-sm text-gray-600 mb-2">
                           <strong>Structures:</strong> {type.structures.join(", ")}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                           <div>
-                            <span className="text-green-400 font-medium">Pros:</span>
-                            <ul className="text-gray-300 ml-2">
+                            <span className="text-green-700 font-medium">Pros:</span>
+                            <ul className="text-gray-700 ml-2">
                               {type.pros.map((pro, i) => (
                                 <li key={i}>• {pro}</li>
                               ))}
                             </ul>
                           </div>
                           <div>
-                            <span className="text-red-400 font-medium">Cons:</span>
-                            <ul className="text-gray-300 ml-2">
+                            <span className="text-red-700 font-medium">Cons:</span>
+                            <ul className="text-gray-700 ml-2">
                               {type.cons.map((con, i) => (
                                 <li key={i}>• {con}</li>
                               ))}
@@ -211,22 +211,22 @@ const Linear = () => {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border border-blue-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-blue-400 mb-3">Sequential Access</h4>
-                  <p className="text-gray-300">Elements arranged in order</p>
-                  <p className="text-sm text-gray-400 mt-2">One after another</p>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Sequential Access</h4>
+                  <p className="text-gray-700">Elements arranged in order</p>
+                  <p className="text-sm text-gray-600 mt-2">One after another</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-teal-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Memory Layout</h4>
-                  <p className="text-gray-300">Contiguous or linked</p>
-                  <p className="text-sm text-gray-400 mt-2">Physical vs logical order</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-blue-600 mb-3">Memory Layout</h4>
+                  <p className="text-gray-700">Contiguous or linked</p>
+                  <p className="text-sm text-gray-600 mt-2">Physical vs logical order</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Traversal</h4>
-                  <p className="text-gray-300">Linear time operations</p>
-                  <p className="text-sm text-gray-400 mt-2">Visit each element once</p>
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-600 mb-3">Traversal</h4>
+                  <p className="text-gray-700">Linear time operations</p>
+                  <p className="text-sm text-gray-600 mt-2">Visit each element once</p>
                 </div>
               </div>
             </div>
@@ -235,30 +235,30 @@ const Linear = () => {
           {/* Structures Section */}
           {activeSection === "structures" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Linear Data Structures</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Linear Data Structures</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {linearStructures.map((structure) => (
                   <div
                     key={structure.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg shadow-sm"
                   >
                     <div className="p-6">
                       <div className="flex items-center mb-4">
                         <span className="text-4xl mr-4">{structure.icon}</span>
                         <div>
-                          <h3 className="text-2xl font-bold text-white mb-1">{structure.name}</h3>
-                          <p className="text-gray-300 text-sm">{structure.description}</p>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-1">{structure.name}</h3>
+                          <p className="text-gray-600 text-sm">{structure.description}</p>
                         </div>
                       </div>
 
                       {/* Complexity Table */}
-                      <div className="bg-gray-700/50 p-4 rounded-xl mb-6">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Time Complexity</h4>
+                      <div className="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           {Object.entries(structure.complexity).map(([op, comp]) => (
                             <div key={op} className="flex justify-between items-center">
-                              <span className="text-gray-300 capitalize">{op}:</span>
+                              <span className="text-gray-700 capitalize">{op}:</span>
                               {renderComplexityBadge(comp)}
                             </div>
                           ))}
@@ -267,10 +267,10 @@ const Linear = () => {
 
                       {/* Features */}
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">Key Features</h4>
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Key Features</h4>
                         <div className="flex flex-wrap gap-2">
                           {structure.features.map((feature, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                            <span key={idx} className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-lg border border-green-200">
                               {feature}
                             </span>
                           ))}
@@ -279,7 +279,7 @@ const Linear = () => {
 
                       <button
                         onClick={() => navigate(structure.route)}
-                        className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl font-bold text-white hover:from-blue-500 hover:to-cyan-400 transition-all duration-500 transform hover:scale-105 hover:shadow-xl"
+                        className="w-full py-2 px-4 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
                       >
                         Learn {structure.name}
                       </button>
@@ -292,38 +292,38 @@ const Linear = () => {
 
           {/* Comparison Section */}
           {activeSection === "comparison" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8">
-              <h2 className="text-3xl font-bold text-white text-center mb-8">
+            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
                 Linear Data Structures Comparison
               </h2>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left">
+                <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="pb-6 text-gray-200 text-lg font-bold">Operation</th>
-                      <th className="pb-6 text-blue-400 text-lg font-bold">Arrays</th>
-                      <th className="pb-6 text-green-400 text-lg font-bold">Linked Lists</th>
-                      <th className="pb-6 text-orange-400 text-lg font-bold">Stacks</th>
-                      <th className="pb-6 text-purple-400 text-lg font-bold">Queues</th>
+                    <tr className="border-b border-gray-200">
+                      <th className="pb-4 text-gray-900 font-bold">Operation</th>
+                      <th className="pb-4 text-blue-700 font-bold">Arrays</th>
+                      <th className="pb-4 text-green-700 font-bold">Linked Lists</th>
+                      <th className="pb-4 text-orange-700 font-bold">Stacks</th>
+                      <th className="pb-4 text-purple-700 font-bold">Queues</th>
                     </tr>
                   </thead>
                   <tbody>
                     {comparisonData.map((row, idx) => (
-                      <tr key={idx} className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                        <td className="py-6 text-white font-medium group-hover:text-blue-400 transition-all duration-300">
+                      <tr key={idx} className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${idx % 2 === 0 ? 'bg-gray-50/50' : ''}`}>
+                        <td className="py-4 text-gray-900 font-medium">
                           {row.operation}
                         </td>
-                        <td className="py-6 text-blue-400 font-medium group-hover:text-blue-300 transition-all duration-300">
+                        <td className="py-4 text-blue-700 font-medium">
                           {row.arrays}
                         </td>
-                        <td className="py-6 text-green-400 font-medium group-hover:text-green-300 transition-all duration-300">
+                        <td className="py-4 text-green-700 font-medium">
                           {row.linkedLists}
                         </td>
-                        <td className="py-6 text-orange-400 font-medium group-hover:text-orange-300 transition-all duration-300">
+                        <td className="py-4 text-orange-700 font-medium">
                           {row.stacks}
                         </td>
-                        <td className="py-6 text-purple-400 font-medium group-hover:text-purple-300 transition-all duration-300">
+                        <td className="py-4 text-purple-700 font-medium">
                           {row.queues}
                         </td>
                       </tr>
@@ -332,15 +332,15 @@ const Linear = () => {
                 </table>
               </div>
 
-              <div className="mt-6 text-sm text-gray-500 transition-all duration-300 hover:text-gray-400">
+              <div className="mt-4 text-sm text-gray-600">
                 * Amortized for dynamic arrays | N/A = Not Applicable
               </div>
             </div>
           )}
 
           {/* Quick Navigation */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 mt-12">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8 mt-12 shadow-sm">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Choose Your Learning Path
             </h2>
 
@@ -349,16 +349,16 @@ const Linear = () => {
                 <button
                   key={structure.id}
                   onClick={() => navigate(structure.route)}
-                  className="bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600 hover:border-blue-500 p-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl group"
+                  className="bg-gray-50 hover:bg-white border border-gray-200 hover:border-indigo-300 p-6 rounded-xl transition-all duration-300 hover:shadow-md group"
                 >
                   <div className="text-center">
                     <span className="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-300">
                       {structure.icon}
                     </span>
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors duration-300">
                       {structure.name}
                     </h3>
-                    <p className="text-gray-300 text-sm group-hover:text-gray-200 transition-colors duration-300">
+                    <p className="text-gray-600 text-sm group-hover:text-gray-700 transition-colors duration-300">
                       {structure.description}
                     </p>
                   </div>

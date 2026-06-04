@@ -691,16 +691,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-lime-400 to-green-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Graph Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master the fundamental algorithms for traversing, searching, and optimizing graphs.
               From traversals to advanced flow networks.
             </p>
@@ -711,8 +711,8 @@ public:
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -720,8 +720,8 @@ public:
             <button
               onClick={() => setActiveSection("representation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "representation"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Representation
@@ -729,8 +729,8 @@ public:
             <button
               onClick={() => setActiveSection("traversal")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "traversal"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Traversal
@@ -738,8 +738,8 @@ public:
             <button
               onClick={() => setActiveSection("shortest-path")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "shortest-path"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Shortest Path
@@ -747,8 +747,8 @@ public:
             <button
               onClick={() => setActiveSection("mst")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "mst"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               MST
@@ -756,8 +756,8 @@ public:
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-lime-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Advanced
@@ -766,20 +766,20 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Graph Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Graph Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-lime-400 mb-4">What are Graphs?</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Graphs?</h3>
                   <p className="text-gray-300 mb-6">
                     Graphs are fundamental data structures consisting of vertices (nodes) connected by edges.
                     They model relationships between objects and are used to solve real-world problems in
                     networking, social networks, transportation, and many other domains.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-lime-400 mb-4">Graph Types</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Graph Types</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
                       <span className="text-lime-400 mr-2">📍</span>
                       <span><strong>Directed:</strong> Edges have direction (one-way)</span>
@@ -800,25 +800,25 @@ public:
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-lime-400 mb-4">Algorithm Categories</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Algorithm Categories</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Traversal & Search</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Traversal & Search</h4>
                       <p className="text-gray-300">BFS, DFS - explore graph structure</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Shortest Paths</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Shortest Paths</h4>
                       <p className="text-gray-300">Dijkstra, Bellman-Ford, Floyd-Warshall</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Spanning Trees</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Spanning Trees</h4>
                       <p className="text-gray-300">Kruskal, Prim - minimum cost subgraphs</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Advanced Topics</h4>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Advanced Topics</h4>
                       <p className="text-gray-300">Flow networks, matching, connectivity</p>
                     </div>
                   </div>
@@ -826,19 +826,19 @@ public:
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-lime-900/20 to-green-900/20 border border-lime-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-lime-400 mb-3">Time Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                   <p className="text-gray-300">Most graph algorithms: <strong className="text-white">O(V + E)</strong></p>
-                  <p className="text-sm text-gray-400 mt-2">V = vertices, E = edges</p>
+                  <p className="text-sm text-gray-500 mt-2">V = vertices, E = edges</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
                   <p className="text-gray-300">Adjacency list: <strong className="text-white">O(V + E)</strong></p>
-                  <p className="text-sm text-gray-400 mt-2">Matrix: O(V²)</p>
+                  <p className="text-sm text-gray-500 mt-2">Matrix: O(V²)</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Patterns</h4>
                   <ul className="text-gray-300 text-sm space-y-1">
                     <li>• Visited arrays</li>
@@ -854,18 +854,18 @@ public:
           {/* Graph Representation Section */}
           {activeSection === "representation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Graph Representations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Graph Representations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {representations.map((rep, idx) => (
                   <div
                     key={idx}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-lime-500 hover:shadow-2xl hover:shadow-lime-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{rep.name}</h3>
-                        <span className="px-3 py-1 bg-lime-900/50 text-lime-300 text-sm rounded-lg">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{rep.name}</h3>
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                           Representation
                         </span>
                       </div>
@@ -874,7 +874,7 @@ public:
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                          <h4 className="text-lg font-semibold text-lime-400 mb-3">Time Complexity</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">Time Complexity</h4>
                           <div className="space-y-2">
                             <div className="flex justify-between">
                               <span className="text-gray-300">Space:</span>
@@ -895,8 +895,8 @@ public:
                           </div>
                         </div>
 
-                        <div className="bg-gray-700/50 p-4 rounded-xl">
-                          <h4 className="text-lg font-semibold text-cyan-400 mb-3">When to Use</h4>
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                          <h4 className="text-lg font-semibold text-indigo-600 mb-3">When to Use</h4>
                           <ul className="text-gray-300 text-sm space-y-1">
                             <li>• {rep.name === "Adjacency Matrix" ? "Dense graphs, quick edge checks" : "Sparse graphs, traversal algorithms"}</li>
                             <li>• {rep.name === "Adjacency Matrix" ? "Small number of vertices" : "Large sparse graphs"}</li>
@@ -905,9 +905,9 @@ public:
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{rep.code}</code>
                         </pre>
                       </div>
@@ -921,17 +921,17 @@ public:
           {/* Traversal Section */}
           {activeSection === "traversal" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Graph Traversal Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Graph Traversal Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {traversals.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-green-500 hover:shadow-2xl hover:shadow-green-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -941,19 +941,19 @@ public:
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
                       <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-green-400 mb-3">Applications</h4>
+                        <h4 className="text-lg font-semibold text-green-600 mb-3">Applications</h4>
                         <div className="flex flex-wrap gap-2">
                           {algorithm.applications.map((app, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                            <span key={idx} className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-lg border border-green-200">
                               {app}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -967,22 +967,22 @@ public:
           {/* Shortest Path Section */}
           {activeSection === "shortest-path" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Shortest Path Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Shortest Path Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {shortestPaths.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                             Time: {algorithm.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-cyan-900/50 text-cyan-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-lg border border-indigo-200">
                             Space: {algorithm.complexity.space}
                           </span>
                         </div>
@@ -990,9 +990,9 @@ public:
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1006,17 +1006,17 @@ public:
           {/* MST Section */}
           {activeSection === "mst" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Minimum Spanning Tree Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Minimum Spanning Tree Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {mstAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -1025,9 +1025,9 @@ public:
 
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1041,17 +1041,17 @@ public:
           {/* Advanced Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Graph Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Graph Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-lg hover:border-indigo-200"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {renderComplexityBadge(`Time: ${algorithm.complexity.time}`)}
                           {renderComplexityBadge(`Space: ${algorithm.complexity.space}`)}
@@ -1061,14 +1061,14 @@ public:
                       <p className="text-gray-300 mb-6">{algorithm.description}</p>
 
                       {algorithm.prerequisite && (
-                        <div className="bg-yellow-900/20 border border-yellow-700/50 p-3 rounded-lg mb-4">
+                        <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg mb-4">
                           <p className="text-yellow-300 text-sm"><strong>Prerequisite:</strong> {algorithm.prerequisite}</p>
                         </div>
                       )}
 
                       {algorithm.applications && (
                         <div className="mb-6">
-                          <h4 className="text-lg font-semibold text-red-400 mb-3">Applications</h4>
+                          <h4 className="text-lg font-semibold text-red-600 mb-3">Applications</h4>
                           <div className="flex flex-wrap gap-2">
                             {algorithm.applications.map((app, idx) => (
                               <span key={idx} className="px-3 py-1 bg-red-900/50 text-red-300 text-sm rounded-lg">
@@ -1085,9 +1085,9 @@ public:
                         </div>
                       )}
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1099,15 +1099,15 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-lime-500 hover:shadow-2xl hover:shadow-lime-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-lime-500 hover:shadow-2xl hover:shadow-lime-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Graph Traversal</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-green-600 mb-3">🟢 Graph Traversal</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Number of islands (DFS/BFS)</span>
@@ -1128,8 +1128,8 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Shortest Paths</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-amber-600 mb-3">🟡 Shortest Paths</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Network delay time (Dijkstra)</span>
@@ -1150,8 +1150,8 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Advanced Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <h3 className="text-xl font-semibold text-red-600 mb-3">🔴 Advanced Problems</h3>
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Critical connections (articulation points)</span>
@@ -1221,14 +1221,14 @@ public:
           </div>
 
           {/* Graph Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Graph Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-lime-400 mb-4">Algorithm Complexity</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Algorithm Complexity</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
                     <span className="text-gray-300">BFS/DFS:</span>
@@ -1254,7 +1254,7 @@ public:
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-lime-400 mb-4">When to Use Which Algorithm</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">When to Use Which Algorithm</h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-gray-800/50 p-3 rounded">
                     <div className="text-cyan-400 font-medium mb-1">Unweighted shortest path:</div>

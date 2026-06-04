@@ -532,16 +532,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
               <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                 Perfect Hashing
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-lg text-gray-600 max-w-3xl mx-auto">
               Advanced hashing techniques that guarantee O(1) worst-case lookup time.
               Master static, dynamic, and minimal perfect hash functions.
             </p>
@@ -553,7 +553,7 @@ public:
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
                   ? "bg-indigo-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -562,7 +562,7 @@ public:
               onClick={() => setActiveSection("implementation")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementation"
                   ? "bg-indigo-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Implementation
@@ -571,7 +571,7 @@ public:
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
                   ? "bg-indigo-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -580,19 +580,19 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Perfect Hashing Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Perfect Hashing Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-indigo-400 mb-4">What is Perfect Hashing?</h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What is Perfect Hashing?</h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Perfect hashing is a technique that constructs hash functions with no collisions,
                     guaranteeing O(1) worst-case lookup time. Unlike standard hashing which provides
                     average-case performance, perfect hashing provides worst-case guarantees.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-indigo-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
                       <span className="text-indigo-400 mr-2">🎯</span>
@@ -614,32 +614,32 @@ public:
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-indigo-400 mb-4">Types of Perfect Hashing</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Types of Perfect Hashing</h3>
                   <div className="space-y-6">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-purple-400 mb-2">Static Perfect Hashing</h4>
-                      <p className="text-gray-300 text-sm">Fixed key set, precomputed hash function</p>
-                      <ul className="text-gray-400 text-xs mt-2 space-y-1">
+                      <p className="text-gray-700 text-sm">Fixed key set, precomputed hash function</p>
+                      <ul className="text-gray-600 text-xs mt-2 space-y-1">
                         <li>• FKS scheme (Fredman, Komlos, Szemeredi)</li>
                         <li>• Two-level hashing</li>
                         <li>• O(1) query, O(n) space</li>
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-purple-400 mb-2">Dynamic Perfect Hashing</h4>
-                      <p className="text-gray-300 text-sm">Supports insertions and deletions</p>
-                      <ul className="text-gray-400 text-xs mt-2 space-y-1">
+                      <p className="text-gray-700 text-sm">Supports insertions and deletions</p>
+                      <ul className="text-gray-600 text-xs mt-2 space-y-1">
                         <li>• Directory-based approach</li>
                         <li>• Automatic resizing</li>
                         <li>• O(1) amortized operations</li>
                       </ul>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <h4 className="text-purple-400 mb-2">Minimal Perfect Hashing</h4>
-                      <p className="text-gray-300 text-sm">No empty slots in hash table</p>
-                      <ul className="text-gray-400 text-xs mt-2 space-y-1">
+                      <p className="text-gray-700 text-sm">No empty slots in hash table</p>
+                      <ul className="text-gray-600 text-xs mt-2 space-y-1">
                         <li>• Maps to range [0, n-1]</li>
                         <li>• Optimal space usage</li>
                         <li>• Perfect mapping</li>
@@ -651,8 +651,8 @@ public:
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border border-indigo-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-indigo-400 mb-3">Advantages</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Advantages</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Guaranteed O(1) worst-case</li>
                     <li>• No collision handling needed</li>
                     <li>• Predictable performance</li>
@@ -660,9 +660,9 @@ public:
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Limitations</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Limitations</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Preprocessing required</li>
                     <li>• Static key sets</li>
                     <li>• Complex construction</li>
@@ -670,9 +670,9 @@ public:
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Compiler symbol tables</li>
                     <li>• Database indexing</li>
                     <li>• Router lookup tables</li>
@@ -686,21 +686,21 @@ public:
           {/* Implementation Section */}
           {activeSection === "implementation" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Perfect Hashing Implementations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Perfect Hashing Implementations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* Static Perfect Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-indigo-400 mb-4">Static Perfect Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Static Perfect Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       FKS scheme implementation for static key sets with guaranteed O(1) lookup time.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Two-level hash functions</li>
                           <li>• Zero collision guarantee</li>
                           <li>• O(n) preprocessing time</li>
@@ -708,26 +708,26 @@ public:
                           <li>• Worst-case O(1) lookup</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Complexity</h4>
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Complexity</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Construction:</span>
+                            <span className="text-gray-700">Construction:</span>
                             {renderComplexityBadge("O(n)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Query:</span>
+                            <span className="text-gray-700">Query:</span>
                             {renderComplexityBadge("O(1)")}
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">Space:</span>
+                            <span className="text-gray-700">Space:</span>
                             {renderComplexityBadge("O(n)")}
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{perfectHashingImplementation.static}</code>
                         </pre>
                       </div>
@@ -736,17 +736,17 @@ public:
                 </div>
 
                 {/* Dynamic Perfect Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-indigo-400 mb-4">Dynamic Perfect Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Dynamic Perfect Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Directory-based approach that supports insertions and deletions while maintaining perfect hashing properties.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Supports insertions/deletions</li>
                           <li>• Automatic resizing</li>
                           <li>• Directory of buckets</li>
@@ -754,8 +754,8 @@ public:
                           <li>• Maintains perfect hashing</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Benefits</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Benefits</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Dynamic key sets</li>
                           <li>• Worst-case guarantees</li>
                           <li>• Automatic optimization</li>
@@ -763,9 +763,9 @@ public:
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{perfectHashingImplementation.dynamic}</code>
                         </pre>
                       </div>
@@ -774,17 +774,17 @@ public:
                 </div>
 
                 {/* Minimal Perfect Hashing */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-indigo-400 mb-4">Minimal Perfect Hashing</h3>
-                    <p className="text-gray-300 mb-6">
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-4">Minimal Perfect Hashing</h3>
+                    <p className="text-gray-700 mb-6">
                       Maps keys to consecutive integers [0, n-1] with no empty slots in the hash table.
                     </p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Features</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Features</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• No empty slots</li>
                           <li>• Maps to [0, n-1]</li>
                           <li>• Optimal space usage</li>
@@ -792,8 +792,8 @@ public:
                           <li>• O(n) construction</li>
                         </ul>
 
-                        <h4 className="text-lg font-semibold text-green-400 mt-4 mb-3">Advantages</h4>
-                        <ul className="text-gray-300 text-sm space-y-1">
+                        <h4 className="text-lg font-semibold text-green-700 mt-4 mb-3">Advantages</h4>
+                        <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Minimal space</li>
                           <li>• Perfect utilization</li>
                           <li>• Fast construction</li>
@@ -801,9 +801,9 @@ public:
                         </ul>
                       </div>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700 max-h-96">
                           <code>{perfectHashingImplementation.minimal}</code>
                         </pre>
                       </div>
@@ -817,22 +817,22 @@ public:
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Perfect Hashing Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Perfect Hashing Applications</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
                   >
                     <div className="p-8">
-                      <h3 className="text-2xl font-bold text-indigo-400 mb-4">{app.name}</h3>
-                      <p className="text-gray-300 mb-4">{app.description}</p>
+                      <h3 className="text-2xl font-bold text-indigo-600 mb-4">{app.name}</h3>
+                      <p className="text-gray-700 mb-4">{app.description}</p>
                       <p className="text-blue-300 mb-6"><strong>Example:</strong> {app.example}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-blue-400 mb-3">Code Example</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">Code Example</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{app.code}</code>
                         </pre>
                       </div>
@@ -844,77 +844,77 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Implement Basic Perfect Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Minimal Perfect Hash Functions</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Static Dictionary Implementation</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>FKS Perfect Hashing Construction</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Dynamic Perfect Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Perfect Hashing for Compiler Symbols</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Minimal Perfect Hashing Algorithms</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Perfect Hashing with Precomputed Tables</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Optimal Perfect Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Perfect Hashing for Large Datasets</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Concurrent Perfect Hashing</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Perfect Hashing with Cryptographic Properties</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>External Memory Perfect Hashing</span>
                   </li>
                 </ul>
@@ -922,12 +922,12 @@ public:
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Fundamental Concepts</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Fundamental Concepts</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• What is perfect hashing?</li>
                     <li>• How does it differ from regular hashing?</li>
                     <li>• Explain FKS perfect hashing</li>
@@ -935,9 +935,9 @@ public:
                     <li>• When would you use perfect hashing?</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Advanced Topics</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Advanced Topics</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Implement a perfect hash function</li>
                     <li>• Handle dynamic key sets</li>
                     <li>• Minimal perfect hashing algorithms</li>
@@ -945,9 +945,9 @@ public:
                     <li>• Perfect hashing in databases</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">System Design</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">System Design</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Design a perfect hash table for a compiler</li>
                     <li>• Implement perfect hashing for IP routing</li>
                     <li>• Perfect hashing in memory-constrained systems</li>
@@ -955,9 +955,9 @@ public:
                     <li>• Perfect hashing for distributed systems</li>
                   </ul>
                 </div>
-                <div className="bg-gray-800/50 p-4 rounded-lg">
-                  <h4 className="text-cyan-400 font-semibold mb-2">Mathematical Analysis</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <h4 className="text-indigo-600 font-semibold mb-2">Mathematical Analysis</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Analyze perfect hashing construction time</li>
                     <li>• Calculate space overhead</li>
                     <li>• Probability analysis of hash function selection</li>
@@ -970,60 +970,60 @@ public:
           </div>
 
           {/* Perfect Hashing Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Perfect Hashing Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-indigo-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Static Construction:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Static Construction:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Query (Static):</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Query (Static):</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Dynamic Operations:</span>
-                    <span className="text-blue-400 font-mono">O(1) amortized</span>
+                    <span className="text-gray-700">Dynamic Operations:</span>
+                    <span className="text-indigo-600 font-mono">O(1) amortized</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Minimal Perfect Hash:</span>
-                    <span className="text-green-400 font-mono">O(n) construction, O(1) query</span>
+                    <span className="text-gray-700">Minimal Perfect Hash:</span>
+                    <span className="text-green-700 font-mono">O(n) construction, O(1) query</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Space Complexity:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Space Complexity:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-indigo-400 mb-4">Key Concepts</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Key Concepts</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Zero Collisions:</div>
-                    <div className="text-gray-400">Guaranteed no hash collisions for the given key set</div>
+                    <div className="text-gray-600">Guaranteed no hash collisions for the given key set</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Worst-Case O(1):</div>
-                    <div className="text-gray-400">Constant time lookups even in worst case</div>
+                    <div className="text-gray-600">Constant time lookups even in worst case</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Precomputed:</div>
-                    <div className="text-gray-400">Hash function built specifically for the key set</div>
+                    <div className="text-gray-600">Hash function built specifically for the key set</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">FKS Scheme:</div>
-                    <div className="text-gray-400">Two-level perfect hashing by Fredman, Komlos, Szemeredi</div>
+                    <div className="text-gray-600">Two-level perfect hashing by Fredman, Komlos, Szemeredi</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="bg-gray-100 p-3 rounded">
                     <div className="text-blue-400 font-medium mb-1">Minimal Perfect:</div>
-                    <div className="text-gray-400">Maps to consecutive integers [0, n-1] with no gaps</div>
+                    <div className="text-gray-600">Maps to consecutive integers [0, n-1] with no gaps</div>
                   </div>
                 </div>
               </div>

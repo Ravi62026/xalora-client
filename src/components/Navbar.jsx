@@ -31,7 +31,6 @@ const getWorkspaceRoleLabel = (workspace) => {
         .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-// Dropdown component with click-outside handling
 const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -50,30 +49,30 @@ const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
         <div ref={dropdownRef} className="relative flex items-center h-full">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center gap-1.5 text-base font-medium transition-colors duration-200 ${isActive ? "text-emerald-400" : "text-gray-300 hover:text-emerald-400"}`}
+                className={`nav-link-ul flex items-center gap-1.5 font-medium transition-colors duration-200 ${
+                    isActive ? "text-indigo-600 nav-is-active" : "text-gray-500 hover:text-gray-900"
+                }`}
             >
                 {label}
                 <ChevronDown className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
             </button>
 
             {isOpen && (
-                <div className="absolute top-16 left-0 mt-2 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-black/60 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-16 left-0 mt-2 w-60 bg-white rounded-xl border border-indigo-100 shadow-xl shadow-gray-200/60 py-2 z-50">
                     {items.map((item, index) => {
+                        const itemClass = "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-150";
+
                         if (item.action) {
                             return (
                                 <button
                                     key={`dropdown-action-${index}`}
-                                    onClick={() => {
-                                        item.action();
-                                        setIsOpen(false);
-                                        closeMobileMenu?.();
-                                    }}
-                                    className="flex items-center gap-3 px-4 py-2.5 w-full text-left text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                    onClick={() => { item.action(); setIsOpen(false); closeMobileMenu?.(); }}
+                                    className={`${itemClass} w-full text-left`}
                                 >
                                     <span className="text-xl">{item.icon}</span>
                                     <div>
                                         <div className="font-medium">{item.label}</div>
-                                        {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                        {item.desc && <div className="text-xs text-gray-400 mt-0.5">{item.desc}</div>}
                                     </div>
                                 </button>
                             );
@@ -84,16 +83,13 @@ const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
                                 <a
                                     key={item.href || item.to}
                                     href={item.href || item.to}
-                                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
-                                    onClick={() => {
-                                        setIsOpen(false);
-                                        closeMobileMenu?.();
-                                    }}
+                                    className={itemClass}
+                                    onClick={() => { setIsOpen(false); closeMobileMenu?.(); }}
                                 >
                                     <span className="text-xl">{item.icon}</span>
                                     <div>
                                         <div className="font-medium">{item.label}</div>
-                                        {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                        {item.desc && <div className="text-xs text-gray-400 mt-0.5">{item.desc}</div>}
                                     </div>
                                 </a>
                             );
@@ -103,16 +99,13 @@ const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
                             <Link
                                 key={item.to}
                                 to={item.to}
-                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
-                                onClick={() => {
-                                    setIsOpen(false);
-                                    closeMobileMenu?.();
-                                }}
+                                className={itemClass}
+                                onClick={() => { setIsOpen(false); closeMobileMenu?.(); }}
                             >
                                 <span className="text-xl">{item.icon}</span>
                                 <div>
                                     <div className="font-medium">{item.label}</div>
-                                    {item.desc && <div className="text-xs text-gray-500 mt-0.5">{item.desc}</div>}
+                                    {item.desc && <div className="text-xs text-gray-400 mt-0.5">{item.desc}</div>}
                                 </div>
                             </Link>
                         );
@@ -135,13 +128,11 @@ const Navbar = () => {
     const profileRef = useRef(null);
     const workspaceChooserShownRef = useRef(false);
 
-    // Close mobile menu on route change
     useEffect(() => {
         setIsMobileMenuOpen(false);
         setIsProfileMenuOpen(false);
     }, [location.pathname]);
 
-    // Click outside for profile dropdown
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -157,13 +148,9 @@ const Navbar = () => {
             document.body.style.overflow = "";
             return;
         }
-
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
-
-        return () => {
-            document.body.style.overflow = previousOverflow;
-        };
+        return () => { document.body.style.overflow = previousOverflow; };
     }, [isMobileMenuOpen]);
 
     useEffect(() => {
@@ -181,15 +168,11 @@ const Navbar = () => {
         if (!hasMultipleWorkspaces) {
             workspaceChooserShownRef.current = false;
             setIsWorkspaceChooserOpen(false);
-            if (pendingWorkspaceChoice) {
-                sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
-            }
+            if (pendingWorkspaceChoice) sessionStorage.removeItem(PENDING_WORKSPACE_CHOICE_KEY);
             return;
         }
 
-        const shouldOpenChooser =
-            pendingWorkspaceChoice && !workspaceChooserShownRef.current;
-
+        const shouldOpenChooser = pendingWorkspaceChoice && !workspaceChooserShownRef.current;
         if (shouldOpenChooser) {
             workspaceChooserShownRef.current = true;
             setIsWorkspaceChooserOpen(true);
@@ -200,11 +183,7 @@ const Navbar = () => {
         if (!pendingWorkspaceChoice && !isWorkspaceChooserOpen) {
             setIsWorkspaceChooserOpen(false);
         }
-    }, [
-        isAuthenticated,
-        isWorkspaceChooserOpen,
-        user?.workspaces?.length,
-    ]);
+    }, [isAuthenticated, isWorkspaceChooserOpen, user?.workspaces?.length]);
 
     const handleLogout = async () => {
         await dispatch(logoutUser());
@@ -224,17 +203,11 @@ const Navbar = () => {
     const availableWorkspaces = user?.workspaces || [];
     const activeWorkspaceId = user?.activeWorkspace?.workspaceId || "";
 
-    const getDashboardRoute = () => {
-        return getWorkspaceDashboardRoute(user);
-    };
-
-    const getDashboardRouteForUser = (currentUser) => {
-        return getWorkspaceDashboardRoute(currentUser);
-    };
+    const getDashboardRoute = () => getWorkspaceDashboardRoute(user);
+    const getDashboardRouteForUser = (currentUser) => getWorkspaceDashboardRoute(currentUser);
 
     const handleWorkspaceChange = async (nextWorkspaceId) => {
         if (!nextWorkspaceId || nextWorkspaceId === activeWorkspaceId) return;
-
         setIsSwitchingWorkspace(true);
         try {
             const nextUser = await dispatch(switchWorkspace(nextWorkspaceId)).unwrap();
@@ -255,23 +228,19 @@ const Navbar = () => {
         setIsWorkspaceChooserOpen(false);
     };
 
-    // Check if path is active
     const isActive = (path) => {
         if (path === "/") return location.pathname === "/";
         return location.pathname.startsWith(path);
     };
 
-    const isDropdownActive = (items) => {
-        return items.some(item => item.to && location.pathname.startsWith(item.to));
-    };
+    const isDropdownActive = (items) =>
+        items.some((item) => item.to && location.pathname.startsWith(item.to));
 
     const navLinkClass = (path) =>
-        `flex items-center text-base font-medium h-full transition-colors duration-200 ${isActive(path)
-            ? "text-emerald-400"
-            : "text-gray-300 hover:text-emerald-400"
+        `nav-link-ul flex items-center font-medium h-full transition-colors duration-200 ${
+            isActive(path) ? "text-indigo-600 nav-is-active" : "text-gray-500 hover:text-gray-900"
         }`;
 
-    // Navigation groups
     const practiceItems = [
         { to: "/problems", icon: "💻", label: "Problems", desc: "DSA problem bank" },
         { to: "/quiz", icon: "🧠", label: "Quizzes", desc: "Test your knowledge" },
@@ -310,22 +279,16 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="bg-gradient-to-r from-gray-900 via-slate-900 to-black backdrop-blur-lg shadow-2xl border border-emerald-500/20 sticky top-4 z-50 mx-auto w-[95%] md:w-[90%] max-w-6xl rounded-2xl">
-            <div className="px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+        <nav className="xalora-grid-bg sticky top-0 z-50 w-full">
+            {/* Max-width container — border-bottom here so the indigo line is contained, not edge-to-edge */}
+            <div className="max-w-[1200px] mx-auto flex items-center justify-between border-b-2 border-indigo-600" style={{ padding: '1.2rem 2rem' }}>
                     {/* Logo */}
                     <Link to="/" className="flex items-center shrink-0" onClick={closeMobileMenu}>
-                        <img
-                            src="/logo_xalora.png"
-                            alt="Xalora"
-                            width={40}
-                            height={40}
-                            className="h-10 w-auto object-contain"
-                        />
+                        <span className="font-extrabold text-[1.3rem]" style={{ color: '#4f46e5' }}>xalora</span>
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden lg:flex items-center h-full gap-8">
+                    <div className="hidden lg:flex items-center gap-4">
                         <Link to="/" className={navLinkClass("/")}>Home</Link>
 
                         {!isOrgTeam && !isCompanyCandidate && (
@@ -356,24 +319,24 @@ const Navbar = () => {
                             <div ref={profileRef} className="relative mt-2">
                                 <button
                                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                                    className="flex items-center gap-2.5 pl-2.5 pr-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all duration-200"
+                                    className="flex items-center gap-2.5 pl-2.5 pr-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-all duration-200"
                                 >
                                     {user?.avatar ? (
                                         <img
                                             src={user.avatar}
                                             alt={user?.name || "User"}
-                                            className="w-8 h-8 rounded-full ring-2 ring-emerald-500/30"
+                                            className="w-8 h-8 rounded-full ring-2 ring-indigo-200"
                                         />
                                     ) : (
-                                        <div className="w-8 h-8 rounded-full ring-2 ring-emerald-500/30 bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-sm font-semibold">
+                                        <div className="w-8 h-8 rounded-full ring-2 ring-indigo-200 bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-semibold">
                                             {avatarInitial}
                                         </div>
                                     )}
                                     <div className="text-left hidden xl:block">
-                                        <div className="text-sm font-medium text-white max-w-[120px] truncate">
+                                        <div className="text-sm font-medium text-gray-900 max-w-[120px] truncate">
                                             {user?.name || user?.username}
                                         </div>
-                                        <div className="text-xs text-emerald-400">
+                                        <div className="text-xs text-indigo-500">
                                             {user?.role === "setter" ? "Problem Setter" : "User"}
                                         </div>
                                     </div>
@@ -381,13 +344,13 @@ const Navbar = () => {
                                 </button>
 
                                 {isProfileMenuOpen && (
-                                    <div className="absolute right-0 mt-3 w-56 bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-black/40 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div className="absolute right-0 mt-3 w-60 bg-white rounded-xl border border-indigo-100 shadow-xl shadow-gray-200/60 py-1.5 z-50">
                                         {/* User info header */}
-                                        <div className="px-4 py-3 border-b border-emerald-500/20">
-                                            <div className="text-sm font-medium text-white truncate">{user?.name || user?.username}</div>
-                                            <div className="text-xs text-gray-400 truncate">{user?.email}</div>
+                                        <div className="px-4 py-3 border-b border-gray-100">
+                                            <div className="text-sm font-semibold text-gray-900 truncate">{user?.name || user?.username}</div>
+                                            <div className="text-xs text-gray-500 truncate">{user?.email}</div>
                                             {user && typeof user.jbpCoins === "number" && (
-                                        <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md w-fit">
+                                                <div className="flex items-center gap-1.5 mt-2 text-xs text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-fit">
                                                     <span>🪙</span>
                                                     <span className="font-medium">{user.jbpCoins} JBP Coins</span>
                                                 </div>
@@ -395,37 +358,37 @@ const Navbar = () => {
                                         </div>
 
                                         {availableWorkspaces.length > 1 && (
-                                            <div className="px-4 py-3 border-t border-emerald-500/20">
-                                                <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/80">
+                                            <div className="px-4 py-3 border-b border-gray-100">
+                                                <div className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-indigo-500">
                                                     Workspaces
                                                 </div>
                                                 <div className="space-y-1.5">
                                                     {availableWorkspaces.map((workspace) => {
-                                                        const isActive = workspace.workspaceId === activeWorkspaceId;
+                                                        const active = workspace.workspaceId === activeWorkspaceId;
                                                         return (
                                                             <button
                                                                 key={workspace.workspaceId}
                                                                 onClick={() => handleWorkspaceChange(workspace.workspaceId)}
                                                                 disabled={isSwitchingWorkspace}
                                                                 className={`w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-200 disabled:opacity-60 ${
-                                                                    isActive
-                                                                        ? "border-emerald-400/60 bg-emerald-500/15"
-                                                                        : "border-white/10 bg-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/10"
+                                                                    active
+                                                                        ? "border-indigo-300 bg-indigo-50"
+                                                                        : "border-gray-200 bg-gray-50 hover:border-indigo-200 hover:bg-indigo-50"
                                                                 }`}
                                                             >
                                                                 <div className="flex items-start justify-between gap-2">
                                                                     <div className="min-w-0">
                                                                         <div className="flex items-center gap-2">
-                                                                            <div className="truncate text-sm font-medium text-white">
+                                                                            <div className="truncate text-sm font-medium text-gray-800">
                                                                                 {workspace.name}
                                                                             </div>
-                                                                            {isActive && (
-                                                                                <span className="rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                                                                            {active && (
+                                                                                <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-600">
                                                                                     Current
                                                                                 </span>
                                                                             )}
                                                                         </div>
-                                                                        <div className="mt-1 text-xs text-gray-400">
+                                                                        <div className="mt-1 text-xs text-gray-500">
                                                                             {getWorkspaceTypeLabel(workspace)}
                                                                             {" • "}
                                                                             {getWorkspaceRoleLabel(workspace)}
@@ -442,32 +405,32 @@ const Navbar = () => {
 
                                         <Link
                                             to="/profile"
-                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-150"
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         >
                                             <span>👤</span> Profile
                                         </Link>
                                         <Link
                                             to={getDashboardRoute()}
-                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
+                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-150"
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         >
                                             <span>📊</span> Dashboard
                                         </Link>
                                         {!isCompanyCandidate && (
-                                        <Link
-                                            to="/pricing"
-                                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-emerald-500/10 transition-colors duration-150"
-                                            onClick={() => setIsProfileMenuOpen(false)}
-                                        >
-                                            <span>💎</span> Subscription
-                                        </Link>
+                                            <Link
+                                                to="/pricing"
+                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-150"
+                                                onClick={() => setIsProfileMenuOpen(false)}
+                                            >
+                                                <span>💎</span> Subscription
+                                            </Link>
                                         )}
 
-                                        <div className="border-t border-emerald-500/20 mt-1.5 pt-1.5">
+                                        <div className="border-t border-gray-100 mt-1.5 pt-1.5">
                                             <button
                                                 onClick={handleLogout}
-                                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors duration-150"
+                                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors duration-150"
                                             >
                                                 <span>🚪</span> Sign out
                                             </button>
@@ -479,15 +442,18 @@ const Navbar = () => {
                             <div className="flex items-center gap-3">
                                 <Link
                                     to="/login"
-                                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200"
+                                    className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors duration-200"
                                 >
                                     Log in
                                 </Link>
                                 <Link
                                     to="/signup"
-                                    className="text-sm font-medium text-white px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 transition-all duration-200 shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)]"
+                                    className="text-sm font-bold text-white px-5 py-2.5 rounded-full transition-all duration-200 shadow-lg hover:-translate-y-0.5"
+                                    style={{ background: '#7c3aed' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = '#4f46e5'}
+                                    onMouseLeave={e => e.currentTarget.style.background = '#7c3aed'}
                                 >
-                                    Sign up
+                                    Get Started
                                 </Link>
                             </div>
                         )}
@@ -497,7 +463,7 @@ const Navbar = () => {
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                        className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white transition-colors duration-200"
+                        className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
                     >
                         {isMobileMenuOpen ? (
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -514,28 +480,23 @@ const Navbar = () => {
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
                     <div
-                        className="lg:hidden fixed inset-0 z-[90] bg-black/60 backdrop-blur-[2px]"
+                        className="lg:hidden fixed inset-0 z-[90] bg-gray-800/30 backdrop-blur-[2px]"
                         onClick={closeMobileMenu}
                     >
                         <div
-                            className="h-[100dvh] w-[86vw] max-w-sm overflow-y-auto border-r border-emerald-500/25 bg-gradient-to-b from-gray-950 via-slate-950 to-black shadow-[0_0_40px_rgba(0,0,0,0.65)] animate-in slide-in-from-left duration-200"
-                            onClick={(event) => event.stopPropagation()}
+                            className="h-[100dvh] w-[86vw] max-w-sm overflow-y-auto border-r border-indigo-100 bg-white shadow-xl shadow-gray-300/40"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <div className="min-h-full">
-                                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-emerald-500/20 bg-gray-950/95 px-5 py-4 backdrop-blur-xl">
-                                    <Link to="/" className="flex items-center shrink-0" onClick={closeMobileMenu}>
-                                        <img
-                                            src="/logo_xalora.png"
-                                            alt="Xalora"
-                                            width={40}
-                                            height={40}
-                                            className="h-10 w-auto object-contain"
-                                        />
+                                {/* Mobile header */}
+                                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-indigo-100 bg-white/95 px-5 py-4">
+                                    <Link to="/" className="flex items-center" onClick={closeMobileMenu}>
+                                        <span className="font-black text-indigo-600 text-xl tracking-tight">xalora</span>
                                     </Link>
                                     <button
                                         onClick={closeMobileMenu}
                                         aria-label="Close menu"
-                                        className="rounded-lg p-2 text-gray-400 hover:text-white transition-colors duration-200"
+                                        className="rounded-lg p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
                                     >
                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -544,183 +505,182 @@ const Navbar = () => {
                                 </div>
 
                                 <div className="px-4 pb-6 pt-4">
-                        <div className="space-y-1">
-                            <Link to="/" className="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                Home
-                            </Link>
-
-                            {!isOrgTeam && !isCompanyCandidate && (
-                                <>
-                                    {/* Practice Section */}
-                                    <div className="pt-4 pb-2 px-4">
-                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Practice</div>
-                                    </div>
-                                    {practiceItems.map((item) => (
-                                        <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                            <span className="text-xl">{item.icon}</span> {item.label}
+                                    <div className="space-y-1">
+                                        <Link to="/" className="block px-4 py-3 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                            Home
                                         </Link>
-                                    ))}
 
-                                    {/* AI Tools Section */}
-                                    <div className="pt-4 pb-2 px-4">
-                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">AI Tools</div>
-                                    </div>
-                                    {aiToolsItems.map((item, index) => {
-                                        if (item.action) {
-                                            return (
-                                                <button key={`mob-action-${index}`} onClick={() => { item.action(); closeMobileMenu(); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
-                                                    <span className="text-xl">{item.icon}</span> <span className="text-left w-full">{item.label}</span>
-                                                </button>
-                                            );
-                                        }
-                                        return (
-                                            <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                                <span className="text-xl">{item.icon}</span> {item.label}
-                                            </Link>
-                                        );
-                                    })}
+                                        {!isOrgTeam && !isCompanyCandidate && (
+                                            <>
+                                                <div className="pt-4 pb-2 px-4">
+                                                    <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Practice</div>
+                                                </div>
+                                                {practiceItems.map((item) => (
+                                                    <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                        <span className="text-xl">{item.icon}</span> {item.label}
+                                                    </Link>
+                                                ))}
 
-                                    {/* Learn Section */}
-                                    <div className="pt-4 pb-2 px-4">
-                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Learn</div>
-                                    </div>
-                                    {learnItems.map((item) => (
-                                        <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                            <span className="text-xl">{item.icon}</span> {item.label}
-                                        </Link>
-                                    ))}
-                                </>
-                            )}
-
-                            {isCompanyCandidate && (
-                                <>
-                                    <div className="pt-4 pb-2 px-4">
-                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Interview</div>
-                                    </div>
-                                    <Link to="/ai-interview/setup" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                        <span className="text-xl">🎥</span> AI Interview
-                                    </Link>
-                                    <Link to="/my-interviews" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                        <span className="text-xl">📋</span> My Interviews
-                                    </Link>
-                                </>
-                            )}
-
-                            {isAuthenticated && (
-                                <>
-                                    <div className="pt-4 pb-2 px-4">
-                                        <div className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">Personal</div>
-                                    </div>
-                                    <Link to={getDashboardRoute()} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                        <span className="text-xl">📊</span> Dashboard
-                                    </Link>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Mobile User Section */}
-                        <div className="border-t border-emerald-500/20 mt-4 pt-4">
-                            {isAuthenticated ? (
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg bg-emerald-500/5 mx-2 border border-emerald-500/10">
-                                        {user?.avatar ? (
-                                            <img src={user.avatar} alt={user?.name || "User"} className="w-10 h-10 rounded-full ring-2 ring-emerald-500/50" />
-                                        ) : (
-                                            <div className="w-10 h-10 rounded-full ring-2 ring-emerald-500/50 bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-lg font-semibold">
-                                                {avatarInitial}
-                                            </div>
-                                        )}
-                                        <div>
-                                            <div className="text-sm font-medium text-white">{user?.name || user?.username}</div>
-                                            <div className="text-xs text-gray-400">{user?.email}</div>
-                                        </div>
-                                        {user && typeof user.jbpCoins === "number" && (
-                                            <div className="ml-auto flex items-center gap-1 text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1.5 rounded-lg">
-                                                <span>🪙</span> {user.jbpCoins}
-                                            </div>
-                                        )}
-                                    </div>
-                                    {availableWorkspaces.length > 1 && (
-                                        <div className="px-4 pb-2">
-                                            <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/80">
-                                                Workspaces
-                                            </div>
-                                            <div className="space-y-2">
-                                                {availableWorkspaces.map((workspace) => {
-                                                    const isActive = workspace.workspaceId === activeWorkspaceId;
+                                                <div className="pt-4 pb-2 px-4">
+                                                    <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">AI Tools</div>
+                                                </div>
+                                                {aiToolsItems.map((item, index) => {
+                                                    if (item.action) {
+                                                        return (
+                                                            <button key={`mob-action-${index}`} onClick={() => { item.action(); closeMobileMenu(); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                                                                <span className="text-xl">{item.icon}</span>
+                                                                <span className="text-left w-full">{item.label}</span>
+                                                            </button>
+                                                        );
+                                                    }
                                                     return (
-                                                        <button
-                                                            key={workspace.workspaceId}
-                                                            onClick={() => handleWorkspaceChange(workspace.workspaceId)}
-                                                            disabled={isSwitchingWorkspace}
-                                                            className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 disabled:opacity-60 ${
-                                                                isActive
-                                                                    ? "border-emerald-400/60 bg-emerald-500/15"
-                                                                    : "border-white/10 bg-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/10"
-                                                            }`}
-                                                        >
-                                                            <div className="flex items-center justify-between gap-3">
-                                                                <div className="min-w-0">
-                                                                    <div className="truncate text-sm font-medium text-white">
-                                                                        {workspace.name}
-                                                                    </div>
-                                                                    <div className="mt-1 text-xs text-gray-400">
-                                                                        {getWorkspaceTypeLabel(workspace)} • {getWorkspaceRoleLabel(workspace)}
-                                                                        {workspace.requiresPassword ? " • Protected" : ""}
-                                                                    </div>
-                                                                </div>
-                                                                {isActive && (
-                                                                    <span className="rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
-                                                                        Current
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </button>
+                                                        <Link key={item.to || item.href} to={item.to} href={item.href} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                            <span className="text-xl">{item.icon}</span> {item.label}
+                                                        </Link>
                                                     );
                                                 })}
+
+                                                <div className="pt-4 pb-2 px-4">
+                                                    <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Learn</div>
+                                                </div>
+                                                {learnItems.map((item) => (
+                                                    <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                        <span className="text-xl">{item.icon}</span> {item.label}
+                                                    </Link>
+                                                ))}
+                                            </>
+                                        )}
+
+                                        {isCompanyCandidate && (
+                                            <>
+                                                <div className="pt-4 pb-2 px-4">
+                                                    <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Interview</div>
+                                                </div>
+                                                <Link to="/ai-interview/setup" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                    <span className="text-xl">🎥</span> AI Interview
+                                                </Link>
+                                                <Link to="/my-interviews" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                    <span className="text-xl">📋</span> My Interviews
+                                                </Link>
+                                            </>
+                                        )}
+
+                                        {isAuthenticated && (
+                                            <>
+                                                <div className="pt-4 pb-2 px-4">
+                                                    <div className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">Personal</div>
+                                                </div>
+                                                <Link to={getDashboardRoute()} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                    <span className="text-xl">📊</span> Dashboard
+                                                </Link>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* Mobile User Section */}
+                                    <div className="border-t border-gray-100 mt-4 pt-4">
+                                        {isAuthenticated ? (
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-indigo-50 border border-indigo-100 mx-2">
+                                                    {user?.avatar ? (
+                                                        <img src={user.avatar} alt={user?.name || "User"} className="w-10 h-10 rounded-full ring-2 ring-indigo-200" />
+                                                    ) : (
+                                                        <div className="w-10 h-10 rounded-full ring-2 ring-indigo-200 bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-semibold">
+                                                            {avatarInitial}
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        <div className="text-sm font-semibold text-gray-900">{user?.name || user?.username}</div>
+                                                        <div className="text-xs text-gray-500">{user?.email}</div>
+                                                    </div>
+                                                    {user && typeof user.jbpCoins === "number" && (
+                                                        <div className="ml-auto flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1.5 rounded-lg">
+                                                            <span>🪙</span> {user.jbpCoins}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {availableWorkspaces.length > 1 && (
+                                                    <div className="px-4 pb-2">
+                                                        <div className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-indigo-500">
+                                                            Workspaces
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            {availableWorkspaces.map((workspace) => {
+                                                                const active = workspace.workspaceId === activeWorkspaceId;
+                                                                return (
+                                                                    <button
+                                                                        key={workspace.workspaceId}
+                                                                        onClick={() => handleWorkspaceChange(workspace.workspaceId)}
+                                                                        disabled={isSwitchingWorkspace}
+                                                                        className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 disabled:opacity-60 ${
+                                                                            active
+                                                                                ? "border-indigo-300 bg-indigo-50"
+                                                                                : "border-gray-200 bg-gray-50 hover:border-indigo-200 hover:bg-indigo-50"
+                                                                        }`}
+                                                                    >
+                                                                        <div className="flex items-center justify-between gap-3">
+                                                                            <div className="min-w-0">
+                                                                                <div className="truncate text-sm font-medium text-gray-800">{workspace.name}</div>
+                                                                                <div className="mt-1 text-xs text-gray-500">
+                                                                                    {getWorkspaceTypeLabel(workspace)} • {getWorkspaceRoleLabel(workspace)}
+                                                                                    {workspace.requiresPassword ? " • Protected" : ""}
+                                                                                </div>
+                                                                            </div>
+                                                                            {active && (
+                                                                                <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-600">
+                                                                                    Current
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                    <span className="text-xl">👤</span> Profile
+                                                </Link>
+                                                {!isCompanyCandidate && (
+                                                    <Link to="/pricing" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onClick={closeMobileMenu}>
+                                                        <span className="text-xl">💎</span> Subscription
+                                                    </Link>
+                                                )}
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="flex items-center gap-3 w-full mt-2 px-4 py-3 text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                >
+                                                    <span className="text-xl">🚪</span> Sign out
+                                                </button>
                                             </div>
-                                        </div>
-                                    )}
-                                    <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                        <span className="text-xl">👤</span> Profile
-                                    </Link>
-                                    {!isCompanyCandidate && (
-                                    <Link to="/pricing" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg" onClick={closeMobileMenu}>
-                                        <span className="text-xl">💎</span> Subscription
-                                    </Link>
-                                    )}
-                                    <button
-                                        onClick={handleLogout}
-                                        className="flex items-center gap-3 w-full mt-2 px-4 py-3 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors duration-150"
-                                    >
-                                        <span className="text-xl">🚪</span> Sign out
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex flex-col gap-3 px-4 mt-2">
-                                    <Link
-                                        to="/login"
-                                        className="text-center text-sm font-medium text-gray-300 hover:text-white px-4 py-3 rounded-xl border border-white/10 hover:bg-white/[0.06] transition-all duration-200"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Log in
-                                    </Link>
-                                    <Link
-                                        to="/signup"
-                                        className="text-center text-sm font-medium text-white px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition-all duration-200 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Sign up
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                                        ) : (
+                                            <div className="flex flex-col gap-3 px-4 mt-2">
+                                                <Link
+                                                    to="/login"
+                                                    className="text-center text-sm font-medium text-gray-700 hover:text-indigo-600 px-4 py-3 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all duration-200"
+                                                    onClick={closeMobileMenu}
+                                                >
+                                                    Log in
+                                                </Link>
+                                                <Link
+                                                    to="/signup"
+                                                    className="text-center text-sm font-bold text-white px-4 py-3 rounded-xl transition-all duration-200 shadow-lg"
+                                                    style={{ background: '#7c3aed' }}
+                                                    onClick={closeMobileMenu}
+                                                >
+                                                    Get Started
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
-            </div>
+
             <WorkspaceChooserModal
                 isOpen={isWorkspaceChooserOpen && isAuthenticated && availableWorkspaces.length > 1}
                 workspaces={availableWorkspaces}

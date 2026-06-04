@@ -91,9 +91,9 @@ const InterviewRound = () => {
   const [warningMessage, setWarningMessage] = useState('');
   const [warningType, setWarningType] = useState('tab_switch');
   const [screenShareStream, setScreenShareStream] = useState(null);
-  const [isDevMode, setIsDevMode] = useState(true);
-  const [isScreenSharing, setIsScreenSharing] = useState(isDevMode);
-  const [showScreenSharePrompt, setShowScreenSharePrompt] = useState(!isDevMode);
+  const [isDevMode, setIsDevMode] = useState(import.meta.env.DEV);
+  const [isScreenSharing, setIsScreenSharing] = useState(import.meta.env.DEV);
+  const [showScreenSharePrompt, setShowScreenSharePrompt] = useState(!import.meta.env.DEV);
   const [screenShareError, setScreenShareError] = useState('');
   const [mediaReady, setMediaReady] = useState(false);
   const maxWarnings = 3;
@@ -200,7 +200,7 @@ const InterviewRound = () => {
 
   const { faceStatus, isReady: faceDetectionReady } = useFaceProctoring(
     videoRef,
-    !isComplete && isVideoOn && !showScreenSharePrompt,
+    !isComplete && isVideoOn && !showScreenSharePrompt && !isDevMode,
     handleFaceViolation
   );
 
@@ -1617,7 +1617,7 @@ const InterviewRound = () => {
       });
 
       // Track camera OFF violations (only if turning OFF during active interview)
-      if (!newVideoState && currentQuestion) {
+      if (!newVideoState && currentQuestion && !isDevMode) {
         const newCount = cameraOffCountRef.current + 1;
         cameraOffCountRef.current = newCount;
         setCameraOffCount(newCount);
@@ -1849,6 +1849,16 @@ const InterviewRound = () => {
     };
     const resolvedUserId = resolveUserId();
 
+    // Full interview mode in conversational: single 30-min session, no round navigation.
+    // The AI covers all domains autonomously using timed phase transitions.
+    const isFullConversational = sessionData?.interviewMode === 'full';
+    const convInterviewMode    = isFullConversational ? 'full' : 'specific';
+    // Prefer duration saved by InterviewSetup; fall back to mode-based default
+    const convInterviewDuration = sessionData?.interviewDuration
+      || (isFullConversational ? 1800 : 900);
+    // For full interview, always start from formal_qa — AI transitions itself.
+    const convRoundType = isFullConversational ? 'formal_qa' : roundConfig.type;
+
     return (
       <Layout showNavbar={false} showFooter={false}>
         <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100 p-4">
@@ -1863,12 +1873,15 @@ const InterviewRound = () => {
           </button>
           <ConversationalInterview
             sessionId={paramSessionId}
-            roundType={roundConfig.type}
+            roundType={convRoundType}
             personality={sessionData?.personality || 'professional'}
             candidateName={sessionData?.candidateInfo?.name || 'Candidate'}
-            currentQuestionData={currentQuestion}
+            currentQuestionData={isFullConversational ? null : currentQuestion}
             questionNumber={questionNumber}
-            maxQuestions={roundConfig.maxQuestions}
+            maxQuestions={isFullConversational ? 0 : roundConfig.maxQuestions}
+            interviewMode={convInterviewMode}
+            interviewDuration={convInterviewDuration}
+            interviewTopic={sessionData?.interviewTopic || null}
             onRoundComplete={() => {
               setIsComplete(true);
               navigate(`/ai-interview/${paramSessionId}/report`);
@@ -1878,7 +1891,7 @@ const InterviewRound = () => {
               localStorage.setItem('interviewSessionData', JSON.stringify(updated));
               setSessionData(updated);
             }}
-            onFetchNextQuestion={fetchQuestion}
+            onFetchNextQuestion={isFullConversational ? undefined : fetchQuestion}
             userId={resolvedUserId}
           />
         </div>

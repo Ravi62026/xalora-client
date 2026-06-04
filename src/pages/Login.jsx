@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Layout } from "../components";
 import { loginUser, googleLoginUser } from "../store/slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
+import { Github } from "lucide-react";
+import ApiRoutes from "../routes/routes";
 import api from "../utils/axios";
 
 const PENDING_WORKSPACE_CHOICE_KEY = "xalora_pending_workspace_choice";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -27,6 +30,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orgCreated = searchParams.get("org") === "created";
+    const oauthError = searchParams.get("oauth_error");
 
     const features = [
         {
@@ -163,47 +167,50 @@ const Login = () => {
         }
     };
 
+    const handleGithubLogin = () => {
+        window.location.href = new URL(ApiRoutes.auth.githubLogin, API_BASE_URL).toString();
+    };
+
     return (
         <Layout showNavbar={false}>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+            <div className="min-h-screen xalora-grid-bg flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     {/* Left side - Features */}
-                    <div className="hidden lg:block">
+                    <div className="hidden lg:flex flex-col">
                         {/* Logo Section */}
                         <div className="text-center mb-12">
                             <Link to="/" className="inline-block mb-8 group">
                                 <div className="flex items-center justify-center space-x-4">
-                                    <div className="relative">
+                                    <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg group-hover:shadow-lg transition-shadow duration-300">
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora Logo"
-                                            className="h-20 w-auto group-hover:scale-110 transition-transform duration-300"
+                                            className="h-12 w-auto"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
                                     </div>
-                                    <span className="text-4xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
+                                    <span className="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                         XALORA
                                     </span>
                                 </div>
                             </Link>
-                            <h1 className="text-3xl font-black mb-4 text-white">
+                            <h1 className="text-4xl font-black mb-4 text-gray-900">
                                 Welcome Back
                             </h1>
-                            <p className="text-xl text-white/70">
+                            <p className="text-xl text-gray-600">
                                 Continue your coding journey with our AI-powered platform
                             </p>
                         </div>
 
                         {/* Feature showcase */}
-                        <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 shadow-2xl">
+                        <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8 shadow-sm hover:shadow-md transition-shadow duration-300">
                             <div className="text-center">
                                 <div className="text-6xl mb-6 animate-bounce">
                                     {features[currentFeature].icon}
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">
+                                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                                     {features[currentFeature].title}
                                 </h3>
-                                <p className="text-white/70 text-lg leading-relaxed">
+                                <p className="text-gray-600 text-lg leading-relaxed">
                                     {features[currentFeature].description}
                                 </p>
                             </div>
@@ -216,8 +223,8 @@ const Login = () => {
                                     key={index}
                                     onClick={() => setCurrentFeature(index)}
                                     className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentFeature
-                                        ? 'bg-emerald-400 scale-125'
-                                        : 'bg-white/30 hover:bg-white/50'
+                                        ? 'bg-indigo-600 scale-125'
+                                        : 'bg-gray-300 hover:bg-gray-400'
                                         }`}
                                 />
                             ))}
@@ -226,16 +233,16 @@ const Login = () => {
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-6 mt-12">
                             <div className="text-center">
-                                <div className="text-2xl font-black text-emerald-400 mb-1">100K+</div>
-                                <div className="text-white/70 text-sm">Developers</div>
+                                <div className="text-2xl font-black text-indigo-600 mb-1">100K+</div>
+                                <div className="text-gray-600 text-sm">Developers</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-teal-400 mb-1">5M+</div>
-                                <div className="text-white/70 text-sm">Solutions</div>
+                                <div className="text-2xl font-black text-purple-600 mb-1">5M+</div>
+                                <div className="text-gray-600 text-sm">Solutions</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-cyan-400 mb-1">30+</div>
-                                <div className="text-white/70 text-sm">Languages</div>
+                                <div className="text-2xl font-black text-blue-600 mb-1">30+</div>
+                                <div className="text-gray-600 text-sm">Languages</div>
                             </div>
                         </div>
                     </div>
@@ -243,81 +250,81 @@ const Login = () => {
                     {/* Right side - Login Form */}
                     <div className="max-w-md w-full mx-auto">
                         {/* Header */}
-                        <div className="text-center mb-6 sm:mb-8">
-                            <Link to="/" className="inline-block mb-4 sm:mb-6 lg:hidden group">
-                                <div className="flex items-center justify-center space-x-2 sm:space-x-3">
-                                    <div className="relative">
+                        <div className="text-center mb-8">
+                            <Link to="/" className="inline-block mb-6 lg:hidden group">
+                                <div className="flex items-center justify-center space-x-3">
+                                    <div className="p-2.5 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg">
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora Logo"
-                                            className="h-10 sm:h-12 w-auto group-hover:scale-110 transition-transform duration-300"
+                                            className="h-10 w-auto"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
                                     </div>
-                                    <span className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
+                                    <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                         XALORA
                                     </span>
                                 </div>
                             </Link>
-                            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-2">
+                            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
                                 Welcome back
                             </h2>
-                            <p className="text-sm sm:text-base text-white/70">
+                            <div className="h-1 w-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mx-auto mb-4"></div>
+                            <p className="text-base text-gray-600">
                                 Sign in to continue your coding journey
                             </p>
                         </div>
 
                         {/* Login Form */}
-                        <div className="bg-white/10 backdrop-blur-sm py-6 sm:py-8 px-4 sm:px-6 shadow-2xl rounded-xl sm:rounded-2xl border border-white/20">
+                        <div className="bg-white py-8 px-6 shadow-sm rounded-2xl border border-gray-100">
                             {orgCreated && (
-                                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs sm:text-sm flex items-center">
-                                    <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <div className="mb-6 p-4 bg-green-50 border-l-4 border-l-green-500 border border-green-200 text-green-800 rounded-lg text-sm flex items-start gap-3">
+                                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Organization created successfully! Sign in to access your admin dashboard.
+                                    <span>Organization created successfully! Sign in to access your admin dashboard.</span>
                                 </div>
                             )}
                             {orgSetupMessage && (
-                                <div className="mb-4 sm:mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                                <div className="mb-6 p-4 bg-amber-50 border-l-4 border-l-amber-500 border border-amber-200 rounded-lg">
                                     <div className="flex items-start gap-3">
                                         <svg className="w-5 h-5 mt-0.5 text-yellow-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                         </svg>
                                         <div className="flex-1">
-                                            <p className="text-yellow-300 font-medium text-sm mb-1">Organization Setup Required</p>
-                                            <p className="text-yellow-300/70 text-xs mb-3">{orgSetupMessage}</p>
+                                            <p className="text-amber-900 font-semibold text-sm mb-1">Organization Setup Required</p>
+                                            <p className="text-amber-700 text-xs mb-3">{orgSetupMessage}</p>
                                             <button
                                                 onClick={handleResendOrgSetup}
                                                 disabled={resendLoading}
-                                                className="px-4 py-1.5 text-xs font-medium rounded-md bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 hover:bg-yellow-500/30 transition-all duration-200 disabled:opacity-50"
+                                                className="px-4 py-1.5 text-xs font-medium rounded-md bg-amber-100 border border-amber-300 text-amber-700 hover:bg-amber-200 transition-all duration-200 disabled:opacity-50"
                                             >
                                                 {resendLoading ? "Sending..." : "Resend Setup Email"}
                                             </button>
                                             {resendSuccess && (
-                                                <p className="text-emerald-400 text-xs mt-2">{resendSuccess}</p>
+                                                <p className="text-green-700 text-xs mt-2">✓ {resendSuccess}</p>
                                             )}
                                             {resendError && (
-                                                <p className="text-red-400 text-xs mt-2">{resendError}</p>
+                                                <p className="text-red-700 text-xs mt-2">✕ {resendError}</p>
                                             )}
                                         </div>
                                     </div>
                                 </div>
                             )}
-                            {error && !orgSetupMessage && (
-                                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-xs sm:text-sm flex items-center">
-                                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            {(oauthError || error) && !orgSetupMessage && (
+                                <div className="mb-6 p-4 bg-red-50 border-l-4 border-l-red-500 border border-red-200 text-red-800 rounded-lg text-sm flex items-start gap-3">
+                                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                     </svg>
-                                    {error}
+                                    <span>{oauthError || error}</span>
                                 </div>
                             )}
-                            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+                            <form className="space-y-6" onSubmit={handleSubmit}>
                                 <div>
                                     <label
                                         htmlFor="email"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Email Address
+                                        📧 Email Address
                                     </label>
                                     <input
                                         id="email"
@@ -327,16 +334,16 @@ const Login = () => {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
-                                        placeholder="Enter your email"
+                                        className="w-full px-0 py-2.5 text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200"
+                                        placeholder="name@example.com"
                                     />
                                 </div>
                                 <div>
                                     <label
                                         htmlFor="password"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Password
+                                        🔒 Password
                                     </label>
                                     <div className="relative">
                                         <input
@@ -347,13 +354,13 @@ const Login = () => {
                                             required
                                             value={formData.password}
                                             onChange={handleChange}
-                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300 pr-10 sm:pr-12"
+                                            className="w-full px-0 py-2.5 text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200 pr-10"
                                             placeholder="Enter your password"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200"
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200"
                                             aria-label={showPassword ? "Hide password" : "Show password"}
                                         >
                                             {showPassword ? (
@@ -368,16 +375,6 @@ const Login = () => {
                                             )}
                                         </button>
                                     </div>
-                                    <div className="mt-1 text-xs text-gray-400 flex items-center">
-                                        <span className="cursor-pointer hover:text-white transition-colors duration-200" onClick={() => setShowPassword(!showPassword)}>
-                                            {showPassword ? "Hide password" : "Show password"}
-                                        </span>
-                                        {showPassword && (
-                                            <span className="ml-2 px-2 py-1 bg-emerald-900/30 text-emerald-400 rounded text-xs">
-                                                Visible
-                                            </span>
-                                        )}
-                                    </div>
                                 </div>
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                                     <div className="flex items-center">
@@ -385,11 +382,11 @@ const Login = () => {
                                             id="remember-me"
                                             name="remember-me"
                                             type="checkbox"
-                                            className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-700 rounded bg-gray-900"
+                                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded bg-white"
                                         />
                                         <label
                                             htmlFor="remember-me"
-                                            className="ml-2 block text-sm text-white/80"
+                                            className="ml-2 block text-sm text-gray-700"
                                         >
                                             Remember me
                                         </label>
@@ -397,9 +394,9 @@ const Login = () => {
                                     <div className="text-sm">
                                         <Link
                                             to="/forgot-password"
-                                            className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                                            className="font-medium text-indigo-600 hover:text-indigo-700 transition-colors duration-300"
                                         >
-                                            Forgot your password?
+                                            Forgot password?
                                         </Link>
                                     </div>
                                 </div>
@@ -407,12 +404,12 @@ const Login = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                                        className="w-full py-3.5 flex items-center justify-center gap-2 border border-transparent rounded-lg text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                                     >
                                         {loading ? (
                                             <>
                                                 <svg
-                                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                                    className="animate-spin h-5 w-5 text-white"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
                                                     viewBox="0 0 24 24"
@@ -431,45 +428,62 @@ const Login = () => {
                                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                                     ></path>
                                                 </svg>
-                                                Signing in...
+                                                <span>Signing in...</span>
                                             </>
                                         ) : (
-                                            "Sign in"
+                                            <>
+                                                <span>Sign in</span>
+                                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                </svg>
+                                            </>
                                         )}
                                     </button>
                                 </div>
                             </form>
-                            <div className="mt-6">
+                            <div className="mt-8">
                                 <div className="relative">
                                     <div className="absolute inset-0 flex items-center">
-                                        <div className="w-full border-t border-gray-700" />
+                                        <div className="w-full border-t border-gray-200" />
                                     </div>
                                     <div className="relative flex justify-center text-sm">
-                                        <span className="px-2 bg-transparent text-white/70">
-                                            Or continue with
+                                        <span className="px-2 bg-white text-gray-500">
+                                        Or continue with
                                         </span>
                                     </div>
                                 </div>
-                                <div className="mt-6 flex justify-center">
-                                    <GoogleLogin
-                                        onSuccess={handleGoogleSuccess}
-                                        onError={() => {
-                                            console.log('Login Failed');
-                                        }}
-                                        theme="filled_black"
-                                        shape="pill"
-                                        width="350px"
-                                    />
+                                <div className="mt-6 flex items-center justify-center gap-4">
+                                    <div className="shrink-0 w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center">
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleSuccess}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                            type="icon"
+                                            theme="outline"
+                                            shape="circle"
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={handleGithubLogin}
+                                        className="shrink-0 w-[40px] h-[40px] inline-flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50 shadow-sm transition-all duration-200"
+                                    >
+                                        <Github className="h-5 w-5 text-gray-700" />
+                                    </button>
+                                    <p className="absolute -left-[9999px]">
+                                        GitHub login is available for individual accounts only.
+                                    </p>
                                 </div>
                             </div>
-                            <div className="mt-6 text-center">
-                                <p className="text-sm text-white/70">
+                            <div className="mt-8 pt-8 border-t border-gray-200 text-center">
+                                <p className="text-sm text-gray-600">
                                     Don't have an account?{" "}
                                     <Link
                                         to="/signup"
-                                        className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                                        className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors duration-300"
                                     >
-                                        Sign up
+                                        Create one →
                                     </Link>
                                 </p>
                             </div>

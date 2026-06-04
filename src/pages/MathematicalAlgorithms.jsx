@@ -691,16 +691,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Mathematical Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Master the mathematical foundations of algorithms including number theory, combinatorics, and numerical methods.
             </p>
           </div>
@@ -710,8 +710,8 @@ public:
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Overview
@@ -719,8 +719,8 @@ public:
             <button
               onClick={() => setActiveSection("number-theory")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "number-theory"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Number Theory
@@ -728,8 +728,8 @@ public:
             <button
               onClick={() => setActiveSection("combinatorics")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "combinatorics"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Combinatorics
@@ -737,8 +737,8 @@ public:
             <button
               onClick={() => setActiveSection("numerical")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "numerical"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Numerical
@@ -746,8 +746,8 @@ public:
             <button
               onClick={() => setActiveSection("advanced")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "advanced"
-                  ? "bg-emerald-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Advanced
@@ -756,76 +756,76 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Mathematical Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Mathematical Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">Why Mathematical Algorithms Matter</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Why Mathematical Algorithms Matter</h3>
+                  <p className="text-gray-600 mb-6">
                     Mathematical algorithms form the foundation of computer science. They solve problems
                     involving numbers, counting, optimization, and computational mathematics that appear
                     frequently in coding interviews and real-world applications.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">Key Areas</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Areas</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">🔢</span>
+                      <span className="text-indigo-600 mr-2">🔢</span>
                       <span><strong>Number Theory:</strong> Primes, GCD, modular arithmetic</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">📊</span>
+                      <span className="text-indigo-600 mr-2">📊</span>
                       <span><strong>Combinatorics:</strong> Permutations, combinations, counting</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">⚡</span>
+                      <span className="text-indigo-600 mr-2">⚡</span>
                       <span><strong>Efficient Computation:</strong> Fast exponentiation, matrix operations</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-emerald-400 mr-2">🔬</span>
+                      <span className="text-indigo-600 mr-2">🔬</span>
                       <span><strong>Advanced Math:</strong> FFT, linear algebra, numerical methods</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-emerald-400 mb-4">Common Applications</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Common Applications</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Cryptography</h4>
-                      <p className="text-gray-300">RSA encryption, modular arithmetic, primality testing</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Cryptography</h4>
+                      <p className="text-gray-600">RSA encryption, modular arithmetic, primality testing</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Competitive Programming</h4>
-                      <p className="text-gray-300">Fast computation, combinatorial problems, optimization</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Competitive Programming</h4>
+                      <p className="text-gray-600">Fast computation, combinatorial problems, optimization</p>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Data Science</h4>
-                      <p className="text-gray-300">Statistical computations, matrix operations, signal processing</p>
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Data Science</h4>
+                      <p className="text-gray-600">Statistical computations, matrix operations, signal processing</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border border-emerald-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-emerald-400 mb-3">Time Complexity</h4>
-                  <p className="text-gray-300">Often O(log n) or O(n)</p>
-                  <p className="text-sm text-gray-400 mt-2">Some advanced algorithms: O(n log n)</p>
+                <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Time Complexity</h4>
+                  <p className="text-gray-600">Often O(log n) or O(n)</p>
+                  <p className="text-sm text-gray-500 mt-2">Some advanced algorithms: O(n log n)</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
-                  <p className="text-gray-300">Usually O(1) or O(n)</p>
-                  <p className="text-sm text-gray-400 mt-2">Matrices may require O(n²)</p>
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-600 mb-3">Space Complexity</h4>
+                  <p className="text-gray-600">Usually O(1) or O(n)</p>
+                  <p className="text-sm text-gray-500 mt-2">Matrices may require O(n²)</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Key Techniques</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-blue-600 mb-3">Key Techniques</h4>
+                  <ul className="text-gray-600 text-sm space-y-1">
                     <li>• Modular arithmetic</li>
                     <li>• Matrix operations</li>
                     <li>• Bit manipulation</li>
@@ -839,17 +839,17 @@ public:
           {/* Number Theory Section */}
           {activeSection === "number-theory" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Number Theory Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Number Theory Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {numberTheory.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
                             <span key={key}>
@@ -859,10 +859,10 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
                         <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
@@ -877,17 +877,17 @@ public:
           {/* Combinatorics Section */}
           {activeSection === "combinatorics" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Combinatorics Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Combinatorics Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {combinatorics.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-teal-500 hover:shadow-2xl hover:shadow-teal-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
                             <span key={key}>
@@ -897,10 +897,10 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
                         <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
@@ -915,17 +915,17 @@ public:
           {/* Numerical Algorithms Section */}
           {activeSection === "numerical" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Numerical Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Numerical Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {numericalAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
                             <span key={key}>
@@ -935,10 +935,10 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
                         <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
@@ -953,17 +953,17 @@ public:
           {/* Advanced Algorithms Section */}
           {activeSection === "advanced" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Advanced Mathematical Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Mathematical Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {advancedMath.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
                             <span key={key}>
@@ -973,10 +973,10 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
                         <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
@@ -989,7 +989,7 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/10">
+          <div className="bg-white rounded-3xl border border-gray-200 p-8 transition-all duration-500 hover:border-indigo-300 hover:shadow-lg">
             <h2 className="text-3xl font-bold text-white text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
@@ -997,7 +997,7 @@ public:
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Math Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Happy Number</span>
@@ -1019,7 +1019,7 @@ public:
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Math Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Divide Two Integers (without division)</span>
@@ -1045,7 +1045,7 @@ public:
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Math Problems</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Median of Two Sorted Arrays</span>
@@ -1071,22 +1071,22 @@ public:
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <h3 className="text-xl font-semibold text-indigo-600 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                            'bg-red-900/50 text-red-300'
+                      <h4 className="text-indigo-600 font-semibold">{problem.name}</h4>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                          problem.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         {problem.difficulty}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-gray-600 text-sm mb-2">{problem.description}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1094,52 +1094,52 @@ public:
           </div>
 
           {/* Mathematical Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-3xl border border-gray-200 p-8 transition-all duration-500 hover:border-indigo-300 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Mathematical Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-emerald-400 mb-4">Key Formulas & Identities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Key Formulas & Identities</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">GCD(a,b) × LCM(a,b):</span>
-                    <span className="text-green-400 font-mono">= a × b</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">GCD(a,b) × LCM(a,b):</span>
+                    <span className="text-green-600 font-mono">= a × b</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Euler's Totient:</span>
-                    <span className="text-blue-400 font-mono">φ(n) = n × ∏(1 - 1/p)</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Euler's Totient:</span>
+                    <span className="text-blue-600 font-mono">φ(n) = n × ∏(1 - 1/p)</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Fermat's Little:</span>
-                    <span className="text-purple-400 font-mono">a^(p-1) ≡ 1 (mod p)</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Fermat's Little:</span>
+                    <span className="text-purple-600 font-mono">a^(p-1) ≡ 1 (mod p)</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Chinese Remainder:</span>
-                    <span className="text-cyan-400 font-mono">Solve x ≡ a_i (mod m_i)</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Chinese Remainder:</span>
+                    <span className="text-indigo-600 font-mono">Solve x ≡ a_i (mod m_i)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-emerald-400 mb-4">Complexity Classes</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Complexity Classes</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Primality Testing:</div>
-                    <div className="text-gray-400">Trial: O(√n), Miller-Rabin: O(k × log³n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Primality Testing:</div>
+                    <div className="text-gray-600">Trial: O(√n), Miller-Rabin: O(k × log³n)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Exponentiation:</div>
-                    <div className="text-gray-400">Binary: O(log exp), Matrix: O(log n)</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Exponentiation:</div>
+                    <div className="text-gray-600">Binary: O(log exp), Matrix: O(log n)</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">FFT:</div>
-                    <div className="text-gray-400">O(n log n) for polynomial multiplication</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">FFT:</div>
+                    <div className="text-gray-600">O(n log n) for polynomial multiplication</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Gaussian Elimination:</div>
-                    <div className="text-gray-400">O(n³) for linear systems</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Gaussian Elimination:</div>
+                    <div className="text-gray-600">O(n³) for linear systems</div>
                   </div>
                 </div>
               </div>

@@ -5,8 +5,12 @@ import { useDispatch } from "react-redux";
 import authService from "../services/authService";
 import { googleLoginUser } from "../store/slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
+import { Github } from "lucide-react";
 import { useApiCall } from "../hooks";
+import ApiRoutes from "../routes/routes";
 import { Layout } from "../components";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 const Signup = () => {
     const [accountType, setAccountType] = useState("individual"); // individual or organization
@@ -45,6 +49,10 @@ const Signup = () => {
                 navigate("/");
             }
         }
+    };
+
+    const handleGithubSignup = () => {
+        window.location.href = new URL(ApiRoutes.auth.githubLogin, API_BASE_URL).toString();
     };
 
     const features = [
@@ -143,9 +151,9 @@ const Signup = () => {
             {toast.show && (
                 <div className="fixed top-4 right-4 z-50 animate-in fade-in slide-in-from-top-4 max-w-sm">
                     <div className={`p-4 rounded-lg shadow-lg flex items-start gap-3 ${
-                        toast.type === "success" 
-                            ? "bg-emerald-500/20 border border-emerald-500/30 text-emerald-300"
-                            : "bg-red-500/20 border border-red-500/30 text-red-300"
+                        toast.type === "success"
+                            ? "bg-green-50 border border-green-200 text-green-800"
+                            : "bg-red-50 border border-red-200 text-red-800"
                     }`}>
                         {toast.type === "success" ? (
                             <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -169,78 +177,80 @@ const Signup = () => {
             )}
             {/* Email Confirmation Screen */}
             {signupSuccess && (
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+                <div className="min-h-screen xalora-grid-bg flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-md w-full text-center">
                         <Link to="/" className="inline-block mb-8 group">
                             <div className="flex items-center justify-center space-x-3">
-                                <div className="relative">
-                                    <img src="/logo_xalora.png" alt="Xalora Logo" className="h-14 w-auto group-hover:scale-110 transition-transform duration-300" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
+                                <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg">
+                                    <img src="/logo_xalora.png" alt="Xalora Logo" className="h-10 w-auto" />
                                 </div>
-                                <span className="text-3xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">XALORA</span>
+                                <span className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">XALORA</span>
                             </div>
                         </Link>
 
-                        <div className="bg-white/10 backdrop-blur-sm p-8 sm:p-10 shadow-2xl rounded-2xl border border-white/20">
+                        <div className="bg-white p-10 shadow-sm rounded-2xl border border-gray-100">
                             {/* Email Icon */}
-                            <div className="mx-auto w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
-                                <svg className="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="mx-auto w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                                <svg className="w-10 h-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                                 </svg>
                             </div>
 
-                            <h2 className="text-2xl font-bold text-white mb-3">Check Your Email</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-3">Check Your Email</h2>
 
                             {signupSuccess.type === "organization" ? (
                                 <>
-                                    <p className="text-white/70 mb-4">
-                                        We've sent an <span className="text-emerald-400 font-medium">organization setup link</span> to
+                                    <p className="text-gray-600 mb-4">
+                                        We've sent an <span className="text-indigo-600 font-semibold">organization setup link</span> to
                                     </p>
-                                    <p className="text-white font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
+                                    <p className="text-gray-900 font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
                                     <div className="text-left space-y-3 mb-6">
-                                        <div className="flex items-start gap-3 bg-white/5 p-3 rounded-lg">
-                                            <svg className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <div className="flex items-start gap-3 bg-green-50 p-3 rounded-lg border border-green-200">
+                                            <svg className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <div>
-                                                <p className="text-white font-medium text-sm">Account Created Successfully</p>
-                                                <p className="text-white/60 text-xs">Your account is ready. No email verification needed.</p>
+                                                <p className="text-gray-900 font-medium text-sm">Account Created Successfully</p>
+                                                <p className="text-gray-600 text-xs">Your account is ready. No email verification needed.</p>
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3 bg-white/5 p-3 rounded-lg">
-                                            <svg className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <div className="flex items-start gap-3 bg-amber-50 p-3 rounded-lg border border-amber-200">
+                                            <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                                             </svg>
                                             <div>
-                                                <p className="text-white font-medium text-sm">Complete Organization Setup</p>
-                                                <p className="text-white/60 text-xs">Click the setup link in your email to configure your organization, or login and we'll guide you.</p>
+                                                <p className="text-gray-900 font-medium text-sm">Complete Organization Setup</p>
+                                                <p className="text-gray-600 text-xs">Click the setup link in your email to configure your organization, or login and we'll guide you.</p>
                                             </div>
                                         </div>
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <p className="text-white/70 mb-4">
+                                    <p className="text-gray-600 mb-4">
                                         We've sent a verification email to
                                     </p>
-                                    <p className="text-white font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
-                                    <p className="text-white/60 text-sm mb-6">
+                                    <p className="text-gray-900 font-semibold text-lg mb-6 break-all">{signupSuccess.email}</p>
+                                    <p className="text-gray-600 text-sm mb-6">
                                         Click the verification link in the email to activate your account. The link expires in 24 hours.
                                     </p>
                                 </>
                             )}
 
-                            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-6">
-                                <p className="text-yellow-300/90 text-xs">
-                                    Don't see the email? Check your spam/junk folder. It may take a minute to arrive.
+                            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+                                <p className="text-amber-800 text-xs">
+                                    💡 Don't see the email? Check your spam/junk folder. It may take a minute to arrive.
                                 </p>
                             </div>
 
                             <Link
                                 to="/login"
-                                className="inline-flex items-center justify-center w-full py-3 px-4 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
+                                className="inline-flex items-center justify-center w-full py-3.5 px-4 rounded-lg text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg gap-2"
                             >
                                 Go to Login
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
                             </Link>
                         </div>
                     </div>
@@ -249,7 +259,7 @@ const Signup = () => {
 
             {/* Signup Form */}
             {!signupSuccess && (
-                        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+                        <div className="min-h-screen xalora-grid-bg flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     {/* Left side - Features */}
                     <div className="hidden lg:block">
@@ -257,37 +267,36 @@ const Signup = () => {
                         <div className="text-center mb-12">
                             <Link to="/" className="inline-block mb-8 group">
                                 <div className="flex items-center justify-center space-x-4">
-                                    <div className="relative">
+                                    <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg">
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora Logo"
-                                            className="h-20 w-auto group-hover:scale-110 transition-transform duration-300"
+                                            className="h-12 w-auto group-hover:scale-110 transition-transform duration-300"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
                                     </div>
-                                    <span className="text-4xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
+                                    <span className="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                         XALORA
                                     </span>
                                 </div>
                             </Link>
-                            <h1 className="text-3xl font-black mb-4 text-white">
+                            <h1 className="text-4xl font-bold mb-4 text-gray-900">
                                 Join the Revolution
                             </h1>
-                            <p className="text-xl text-white/70">
+                            <p className="text-xl text-gray-600">
                                 Transform your coding skills with our AI-powered platform
                             </p>
                         </div>
 
                         {/* Feature showcase */}
-                        <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 shadow-2xl">
+                        <div className="bg-white rounded-3xl border border-gray-100 p-8 mb-8 shadow-sm hover:shadow-md transition-shadow duration-300">
                             <div className="text-center">
                                 <div className="text-6xl mb-6 animate-bounce">
                                     {features[currentFeature].icon}
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">
+                                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                                     {features[currentFeature].title}
                                 </h3>
-                                <p className="text-white/70 text-lg leading-relaxed">
+                                <p className="text-gray-600 text-lg leading-relaxed">
                                     {features[currentFeature].description}
                                 </p>
                             </div>
@@ -300,8 +309,8 @@ const Signup = () => {
                                     key={index}
                                     onClick={() => setCurrentFeature(index)}
                                     className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentFeature
-                                        ? 'bg-emerald-400 scale-125'
-                                        : 'bg-white/30 hover:bg-white/50'
+                                        ? 'bg-indigo-600 scale-125'
+                                        : 'bg-gray-300 hover:bg-gray-400'
                                         }`}
                                 />
                             ))}
@@ -310,16 +319,16 @@ const Signup = () => {
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-6 mt-12">
                             <div className="text-center">
-                                <div className="text-2xl font-black text-emerald-400 mb-1">100K+</div>
-                                <div className="text-white/70 text-sm">Developers</div>
+                                <div className="text-2xl font-black text-indigo-600 mb-1">100K+</div>
+                                <div className="text-gray-600 text-sm">Developers</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-teal-400 mb-1">5M+</div>
-                                <div className="text-white/70 text-sm">Solutions</div>
+                                <div className="text-2xl font-black text-purple-600 mb-1">5M+</div>
+                                <div className="text-gray-600 text-sm">Solutions</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-black text-cyan-400 mb-1">30+</div>
-                                <div className="text-white/70 text-sm">Languages</div>
+                                <div className="text-2xl font-black text-blue-600 mb-1">30+</div>
+                                <div className="text-gray-600 text-sm">Languages</div>
                             </div>
                         </div>
                     </div>
@@ -330,33 +339,32 @@ const Signup = () => {
                         <div className="text-center mb-6 sm:mb-8">
                             <Link to="/" className="inline-block mb-4 sm:mb-6 lg:hidden group">
                                 <div className="flex items-center justify-center space-x-2 sm:space-x-3">
-                                    <div className="relative">
+                                    <div className="p-2.5 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg">
                                         <img
                                             src="/logo_xalora.png"
                                             alt="Xalora Logo"
-                                            className="h-10 sm:h-12 w-auto group-hover:scale-110 transition-transform duration-300"
+                                            className="h-8 sm:h-10 w-auto group-hover:scale-110 transition-transform duration-300"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-full blur-lg animate-pulse"></div>
                                     </div>
-                                    <span className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:from-white group-hover:to-emerald-200 transition-all duration-300">
+                                    <span className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
                                         XALORA
                                     </span>
                                 </div>
                             </Link>
-                            <h2 className="text-xl sm:text-2xl font-semibold text-white mb-2">
+                            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
                                 Create your account
                             </h2>
-                            <p className="text-sm sm:text-base text-white/70">
+                            <p className="text-sm sm:text-base text-gray-600">
                                 Join thousands of developers improving their coding skills
                             </p>
                         </div>
 
                         {/* Signup Form */}
-                        <div className="bg-white/10 backdrop-blur-sm py-6 sm:py-8 px-4 sm:px-6 shadow-2xl rounded-xl sm:rounded-2xl border border-white/20">
+                        <div className="bg-white py-6 sm:py-8 px-4 sm:px-6 shadow-sm rounded-2xl border border-gray-100">
                             {/* Account Type Selector */}
                             <div className="mb-6 sm:mb-8">
-                                <label className="block text-sm font-medium text-white/90 mb-3">
-                                    Account Type
+                                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                    👤 Account Type
                                 </label>
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
@@ -364,29 +372,29 @@ const Signup = () => {
                                         onClick={() => setAccountType("individual")}
                                         className={`p-4 rounded-lg border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
                                             accountType === "individual"
-                                                ? "border-emerald-500 bg-emerald-500/10"
-                                                : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                                ? "border-indigo-600 bg-indigo-50"
+                                                : "border-gray-200 bg-gray-50 hover:border-gray-300"
                                         }`}
                                     >
                                         <span className="text-2xl">👤</span>
-                                        <span className="text-sm font-medium text-white">Individual</span>
-                                        <span className="text-xs text-gray-400">For students</span>
+                                        <span className="text-sm font-medium text-gray-900">Individual</span>
+                                        <span className="text-xs text-gray-600">For students</span>
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setAccountType("organization")}
                                         className={`p-4 rounded-lg border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
                                             accountType === "organization"
-                                                ? "border-emerald-500 bg-emerald-500/10"
-                                                : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                                ? "border-indigo-600 bg-indigo-50"
+                                                : "border-gray-200 bg-gray-50 hover:border-gray-300"
                                         }`}
                                     >
                                         <span className="text-2xl">🏢</span>
-                                        <span className="text-sm font-medium text-white">Organization</span>
-                                        <span className="text-xs text-gray-400">For colleges/teams</span>
+                                        <span className="text-sm font-medium text-gray-900">Organization</span>
+                                        <span className="text-xs text-gray-600">For colleges/teams</span>
                                     </button>
                                 </div>
-                                <p className="text-xs text-gray-500 mt-3">
+                                <p className="text-xs text-gray-600 mt-3">
                                     {accountType === "organization"
                                         ? "✓ Create your account, then set up your organization, define academic structure, and import students"
                                         : "✓ Create your account and start solving problems immediately"}
@@ -394,20 +402,20 @@ const Signup = () => {
                             </div>
                             
                             {error && (
-                                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-xs sm:text-sm flex items-center">
-                                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-l-4 border-l-red-500 border border-red-200 text-red-800 rounded-lg text-xs sm:text-sm flex items-start gap-3">
+                                    <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                     </svg>
-                                    {error}
+                                    <span>{error}</span>
                                 </div>
                             )}
                             <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                                 <div>
                                     <label
                                         htmlFor="fullName"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Full Name
+                                        👤 Full Name
                                     </label>
                                     <input
                                         id="fullName"
@@ -416,16 +424,16 @@ const Signup = () => {
                                         required
                                         value={formData.fullName}
                                         onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-0 py-2.5 text-sm sm:text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200"
                                         placeholder="Enter your full name"
                                     />
                                 </div>
                                 <div>
                                     <label
                                         htmlFor="username"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Username
+                                        💻 Username
                                     </label>
                                     <input
                                         id="username"
@@ -434,16 +442,16 @@ const Signup = () => {
                                         required
                                         value={formData.username}
                                         onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-0 py-2.5 text-sm sm:text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200"
                                         placeholder="Choose a username"
                                     />
                                 </div>
                                 <div>
                                     <label
                                         htmlFor="email"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Email Address
+                                        📧 Email Address
                                     </label>
                                     <input
                                         id="email"
@@ -453,16 +461,16 @@ const Signup = () => {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300"
+                                        className="w-full px-0 py-2.5 text-sm sm:text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200"
                                         placeholder="Enter your email"
                                     />
                                 </div>
                                 <div>
                                     <label
                                         htmlFor="password"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Password
+                                        🔒 New Password
                                     </label>
                                     <div className="relative">
                                         <input
@@ -472,13 +480,13 @@ const Signup = () => {
                                             required
                                             value={formData.password}
                                             onChange={handleChange}
-                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300 pr-10 sm:pr-12"
+                                            className="w-full px-0 py-2.5 text-sm sm:text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200 pr-10"
                                             placeholder="Create a password"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
                                             aria-label={showPassword ? "Hide password" : "Show password"}
                                         >
                                             {showPassword ? (
@@ -494,29 +502,29 @@ const Signup = () => {
                                         </button>
                                     </div>
                                     {formData.password && (
-                                        <div className="mt-2 space-y-1 bg-gray-800/50 p-3 rounded-lg border border-gray-700">
-                                            <p className="text-xs text-white/50 mb-2 font-medium">Password Requirements:</p>
+                                        <div className="mt-3 space-y-1 bg-transparent p-0">
+                                            <p className="text-xs text-gray-600 mb-2 font-medium">Password Requirements:</p>
                                             <div className="grid grid-cols-2 gap-2">
-                                                <div className={`flex items-center text-xs ${formData.password.length >= 8 ? 'text-emerald-400' : 'text-gray-400'}`}>
-                                                    <span className={`mr-1.5 ${formData.password.length >= 8 ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                <div className={`flex items-center text-xs ${formData.password.length >= 8 ? 'text-indigo-600' : 'text-gray-500'}`}>
+                                                    <span className={`mr-1.5 ${formData.password.length >= 8 ? 'text-indigo-600' : 'text-gray-400'}`}>
                                                         {formData.password.length >= 8 ? '✓' : '○'}
                                                     </span>
                                                     8+ Characters
                                                 </div>
-                                                <div className={`flex items-center text-xs ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
-                                                    <span className={`mr-1.5 ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                <div className={`flex items-center text-xs ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-indigo-600' : 'text-gray-500'}`}>
+                                                    <span className={`mr-1.5 ${/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? 'text-indigo-600' : 'text-gray-400'}`}>
                                                         {/[A-Z]/.test(formData.password) && /[a-z]/.test(formData.password) ? '✓' : '○'}
                                                     </span>
                                                     Upper & Lower case
                                                 </div>
-                                                <div className={`flex items-center text-xs ${/\d/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
-                                                    <span className={`mr-1.5 ${/\d/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                <div className={`flex items-center text-xs ${/\d/.test(formData.password) ? 'text-indigo-600' : 'text-gray-500'}`}>
+                                                    <span className={`mr-1.5 ${/\d/.test(formData.password) ? 'text-indigo-600' : 'text-gray-400'}`}>
                                                         {/\d/.test(formData.password) ? '✓' : '○'}
                                                     </span>
                                                     One Number
                                                 </div>
-                                                <div className={`flex items-center text-xs ${/[\W_]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-400'}`}>
-                                                    <span className={`mr-1.5 ${/[\W_]/.test(formData.password) ? 'text-emerald-400' : 'text-gray-600'}`}>
+                                                <div className={`flex items-center text-xs ${/[\W_]/.test(formData.password) ? 'text-indigo-600' : 'text-gray-500'}`}>
+                                                    <span className={`mr-1.5 ${/[\W_]/.test(formData.password) ? 'text-indigo-600' : 'text-gray-400'}`}>
                                                         {/[\W_]/.test(formData.password) ? '✓' : '○'}
                                                     </span>
                                                     Special Character
@@ -528,9 +536,9 @@ const Signup = () => {
                                 <div>
                                     <label
                                         htmlFor="confirmPassword"
-                                        className="block text-sm font-medium text-white/90 mb-2"
+                                        className="block text-sm font-semibold text-gray-700 mb-2.5"
                                     >
-                                        Confirm Password
+                                        ✓ Confirm Password
                                     </label>
                                     <div className="relative">
                                         <input
@@ -540,13 +548,13 @@ const Signup = () => {
                                             required
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
-                                            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-500 transition-all duration-300 pr-10 sm:pr-12"
+                                            className="w-full px-0 py-2.5 text-sm sm:text-base bg-transparent border-b-2 border-gray-300 rounded-none focus:outline-none focus:border-indigo-600 text-gray-900 placeholder-gray-500 transition-all duration-200 pr-10"
                                             placeholder="Confirm your password"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors duration-200"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 transition-colors duration-200"
                                             aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                                         >
                                             {showConfirmPassword ? (
@@ -568,23 +576,23 @@ const Signup = () => {
                                         name="terms"
                                         type="checkbox"
                                         required
-                                        className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-700 rounded bg-gray-900"
+                                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded bg-white"
                                     />
                                     <label
                                         htmlFor="terms"
-                                        className="ml-2 block text-sm text-white/80"
+                                        className="ml-2 block text-sm text-gray-700"
                                     >
                                         I agree to the{" "}
                                         <a
                                             href="#"
-                                            className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                                            className="text-indigo-600 hover:text-indigo-700 transition-colors duration-300"
                                         >
                                             Terms of Service
                                         </a>{" "}
                                         and{" "}
                                         <a
                                             href="#"
-                                            className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                                            className="text-indigo-600 hover:text-indigo-700 transition-colors duration-300"
                                         >
                                             Privacy Policy
                                         </a>
@@ -594,36 +602,29 @@ const Signup = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                                        className="w-full py-3.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-md hover:shadow-lg disabled:opacity-60 disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
                                     >
                                         {loading ? (
                                             <>
-                                                <svg
-                                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <circle
-                                                        className="opacity-25"
-                                                        cx="12"
-                                                        cy="12"
-                                                        r="10"
-                                                        stroke="currentColor"
-                                                        strokeWidth="4"
-                                                    ></circle>
-                                                    <path
-                                                        className="opacity-75"
-                                                        fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                                    ></path>
+                                                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                                 </svg>
-                                                {accountType === "organization" ? "Creating organization..." : "Creating account..."}
+                                                {accountType === "organization" ? "Creating..." : "Creating..."}
                                             </>
                                         ) : accountType === "organization" ? (
-                                            "Create organization"
+                                            <>
+                                                Create organization
+                                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                </svg>
+                                            </>
                                         ) : (
-                                            "Create account"
+                                            <>
+                                                Create account
+                                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                                </svg>
+                                            </>
                                         )}
                                     </button>
                                 </div>
@@ -633,36 +634,47 @@ const Signup = () => {
                                 <div className="mt-6">
                                     <div className="relative">
                                         <div className="absolute inset-0 flex items-center">
-                                            <div className="w-full border-t border-gray-700" />
+                                            <div className="w-full border-t border-gray-200" />
                                         </div>
                                         <div className="relative flex justify-center text-sm">
-                                            <span className="px-2 bg-transparent text-white/70">
-                                                Or sign up with
+                                            <span className="px-2 bg-white text-gray-500">
+                                        Or sign up with
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="mt-6 flex justify-center">
-                                        <GoogleLogin
-                                            onSuccess={handleGoogleSuccess}
-                                            onError={() => {
-                                                console.log('Login Failed');
-                                            }}
-                                            theme="filled_black"
-                                            shape="pill"
-                                            width="350px"
-                                            text="signup_with"
-                                        />
+                                    <div className="mt-6 flex items-center justify-center gap-4">
+                                        <div className="shrink-0 w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center">
+                                            <GoogleLogin
+                                                onSuccess={handleGoogleSuccess}
+                                                onError={() => {
+                                                    console.log('Login Failed');
+                                                }}
+                                                type="icon"
+                                                theme="outline"
+                                                shape="circle"
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleGithubSignup}
+                                            className="shrink-0 w-[40px] h-[40px] inline-flex items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50 shadow-sm transition-all duration-200"
+                                        >
+                                            <Github className="h-5 w-5 text-gray-700" />
+                                        </button>
+                                        <p className="absolute -left-[9999px]">
+                                            GitHub signup creates an individual account only.
+                                        </p>
                                     </div>
                                 </div>
                             )}
-                            <div className="mt-6 text-center">
-                                <p className="text-sm text-white/70">
+                            <div className="mt-8 pt-8 border-t border-gray-200 text-center">
+                                <p className="text-gray-600">
                                     Already have an account?{" "}
                                     <Link
                                         to="/login"
-                                        className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors duration-300"
+                                        className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
                                     >
-                                        Sign in
+                                        Sign in →
                                     </Link>
                                 </p>
                             </div>

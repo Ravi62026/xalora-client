@@ -702,16 +702,16 @@ public:
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-slate-400 to-gray-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Randomized Algorithms
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Explore algorithms that use randomness to achieve efficiency, probabilistic guarantees, and elegant solutions to complex problems.
             </p>
           </div>
@@ -721,8 +721,8 @@ public:
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-slate-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Overview
@@ -730,8 +730,8 @@ public:
             <button
               onClick={() => setActiveSection("monte-carlo")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "monte-carlo"
-                  ? "bg-slate-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Monte Carlo
@@ -739,8 +739,8 @@ public:
             <button
               onClick={() => setActiveSection("las-vegas")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "las-vegas"
-                  ? "bg-slate-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Las Vegas
@@ -748,8 +748,8 @@ public:
             <button
               onClick={() => setActiveSection("probabilistic")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "probabilistic"
-                  ? "bg-slate-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Probabilistic
@@ -757,8 +757,8 @@ public:
             <button
               onClick={() => setActiveSection("randomized")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "randomized"
-                  ? "bg-slate-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-gray-900 shadow-lg"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300"
                 }`}
             >
               Randomized
@@ -767,55 +767,55 @@ public:
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 sm:p-8 mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Randomized Algorithms Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Randomized Algorithms Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-slate-400 mb-4">What are Randomized Algorithms?</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Randomized Algorithms?</h3>
+                  <p className="text-gray-600 mb-6">
                     Randomized algorithms use randomness as a tool to achieve better performance,
                     simpler implementation, or probabilistic guarantees. They make random choices
                     during execution and can be classified by their correctness guarantees.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-slate-400 mb-4">Algorithm Types</h3>
-                  <ul className="space-y-3 text-gray-300">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Algorithm Types</h3>
+                  <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
-                      <span className="text-slate-400 mr-2">🎲</span>
+                      <span className="text-indigo-600 mr-2">🎲</span>
                       <span><strong>Las Vegas:</strong> Always correct, running time varies</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-slate-400 mr-2">🎯</span>
+                      <span className="text-indigo-600 mr-2">🎯</span>
                       <span><strong>Monte Carlo:</strong> Fixed time, probabilistic correctness</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-slate-400 mr-2">⚡</span>
+                      <span className="text-indigo-600 mr-2">⚡</span>
                       <span><strong>Probabilistic:</strong> Use randomness for efficiency</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-slate-400 mr-2">🔄</span>
+                      <span className="text-indigo-600 mr-2">🔄</span>
                       <span><strong>Randomized Data Structures:</strong> Use randomness for balance</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-slate-400 mb-4">Advantages & Applications</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Advantages & Applications</h3>
                   <div className="space-y-4">
                     <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Speed</h4>
-                      <p className="text-gray-300">Expected O(n) vs worst-case O(n²)</p>
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Speed</h4>
+                      <p className="text-gray-600">Expected O(n) vs worst-case O(n²)</p>
                     </div>
 
                     <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Simplicity</h4>
-                      <p className="text-gray-300">Often simpler than deterministic alternatives</p>
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Simplicity</h4>
+                      <p className="text-gray-600">Often simpler than deterministic alternatives</p>
                     </div>
 
                     <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Real Applications</h4>
-                      <ul className="text-gray-300 text-sm space-y-1">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Real Applications</h4>
+                      <ul className="text-gray-600 text-sm space-y-1">
                         <li>• Primality testing (Miller-Rabin)</li>
                         <li>• Load balancing</li>
                         <li>• Cryptography</li>
@@ -827,21 +827,21 @@ public:
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-slate-900/20 to-gray-900/20 border border-slate-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-slate-400 mb-3">Expected vs Worst Case</h4>
-                  <p className="text-gray-300">Often O(n) expected time</p>
-                  <p className="text-sm text-gray-400 mt-2">vs O(n²) worst case for deterministic</p>
+                <div className="bg-gradient-to-br bg-gray-50 border border-gray-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Expected vs Worst Case</h4>
+                  <p className="text-gray-600">Often O(n) expected time</p>
+                  <p className="text-sm text-gray-500 mt-2">vs O(n²) worst case for deterministic</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Probabilistic Guarantees</h4>
-                  <p className="text-gray-300">High probability of correctness</p>
-                  <p className="text-sm text-gray-400 mt-2">Can be made arbitrarily high</p>
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Probabilistic Guarantees</h4>
+                  <p className="text-gray-600">High probability of correctness</p>
+                  <p className="text-sm text-gray-500 mt-2">Can be made arbitrarily high</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
                   <h4 className="text-xl font-semibold text-purple-400 mb-3">Randomness Sources</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                  <ul className="text-gray-600 text-sm space-y-1">
                     <li>• System time</li>
                     <li>• Hardware entropy</li>
                     <li>• Pseudorandom generators</li>
@@ -854,32 +854,32 @@ public:
           {/* Monte Carlo Section */}
           {activeSection === "monte-carlo" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Monte Carlo Methods</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Monte Carlo Methods</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {monteCarlo.map((method) => (
                   <div
                     key={method.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-slate-500 hover:shadow-2xl hover:shadow-slate-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{method.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{method.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           <span className="px-3 py-1 bg-slate-900/50 text-slate-300 text-sm rounded-lg">
                             Time: {method.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-gray-900/50 text-gray-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-lg">
                             Space: {method.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{method.description}</p>
+                      <p className="text-gray-600 mb-6">{method.description}</p>
 
                       <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-600 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{method.code}</code>
                         </pre>
                       </div>
@@ -893,31 +893,31 @@ public:
           {/* Las Vegas Section */}
           {activeSection === "las-vegas" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Las Vegas Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Las Vegas Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {lasVegas.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-gray-500 hover:shadow-2xl hover:shadow-gray-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-300 hover:shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
-                            <span key={key} className="px-3 py-1 bg-gray-900/50 text-gray-300 text-sm rounded-lg">
+                            <span key={key} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-lg">
                               {key.toUpperCase()}: {value}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
                       <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-600 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -931,17 +931,17 @@ public:
           {/* Probabilistic Algorithms Section */}
           {activeSection === "probabilistic" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Probabilistic Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Probabilistic Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {probabilisticAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(algorithm.complexity).map(([key, value]) => (
                             <span key={key}>
@@ -951,11 +951,11 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
                       <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-600 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -964,14 +964,14 @@ public:
                 ))}
 
                 {/* Randomized Data Structures */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-6">Randomized Data Structures</h3>
+                <div className="bg-white rounded-2xl border border-gray-200 p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Randomized Data Structures</h3>
 
                   <div className="grid grid-cols-1 gap-6">
                     {randomizedDataStructures.map((structure) => (
                       <div key={structure.id} className="bg-gray-700/50 p-4 rounded-xl">
                         <div className="flex flex-wrap justify-between items-start mb-4">
-                          <h4 className="text-lg font-semibold text-cyan-400">{structure.name}</h4>
+                          <h4 className="text-lg font-semibold text-indigo-600">{structure.name}</h4>
                           <div className="flex flex-wrap gap-2">
                             {Object.entries(structure.complexity).map(([key, value]) => (
                               <span key={key}>
@@ -980,8 +980,8 @@ public:
                             ))}
                           </div>
                         </div>
-                        <p className="text-gray-300 mb-4 text-sm">{structure.description}</p>
-                        <pre className="bg-gray-900 text-gray-300 p-3 rounded text-xs overflow-x-auto">
+                        <p className="text-gray-600 mb-4 text-sm">{structure.description}</p>
+                        <pre className="bg-gray-900 text-gray-600 p-3 rounded text-xs overflow-x-auto">
                           <code>{structure.code}</code>
                         </pre>
                       </div>
@@ -995,17 +995,17 @@ public:
           {/* Randomized Algorithms Section */}
           {activeSection === "randomized" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Randomized Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Randomized Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {randomizedAlgorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           <span className="px-3 py-1 bg-red-900/50 text-red-300 text-sm rounded-lg">
                             Time: {algorithm.complexity.time}
@@ -1016,11 +1016,11 @@ public:
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-600 mb-6">{algorithm.description}</p>
 
                       <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-600 p-4 rounded-lg overflow-x-auto text-sm">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1032,15 +1032,15 @@ public:
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-slate-500 hover:shadow-2xl hover:shadow-slate-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-gradient-to-br white rounded-3xl border border-gray-200 p-8 transition-all duration-500 hover:border-indigo-300 hover:shadow-lg">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Randomized</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-green-400 mr-2">•</span>
                     <span>Random Pick Index</span>
@@ -1062,7 +1062,7 @@ public:
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Randomized</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-yellow-400 mr-2">•</span>
                     <span>Random Pick with Weight</span>
@@ -1088,7 +1088,7 @@ public:
 
               <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
                 <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Advanced Randomized</h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <span className="text-red-400 mr-2">•</span>
                     <span>Karger's Min-Cut Algorithm</span>
@@ -1118,9 +1118,9 @@ public:
               <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
+                      <h4 className="text-indigo-600 font-semibold">{problem.name}</h4>
                       <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
                           problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
                             'bg-red-900/50 text-red-300'
@@ -1128,8 +1128,8 @@ public:
                         {problem.difficulty}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-gray-600 text-sm mb-2">{problem.description}</p>
+                    <p className="text-xs text-gray-500 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1137,52 +1137,52 @@ public:
           </div>
 
           {/* Randomized Algorithms Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-200 p-8 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Randomized Algorithms Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-slate-400 mb-4">Algorithm Classification</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Algorithm Classification</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Las Vegas:</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Las Vegas:</span>
                     <span className="text-green-400 font-mono">Always correct, variable time</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Monte Carlo:</span>
-                    <span className="text-blue-400 font-mono">Fixed time, probabilistic</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Monte Carlo:</span>
+                    <span className="text-indigo-600 font-mono">Fixed time, probabilistic</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Probabilistic:</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Probabilistic:</span>
                     <span className="text-purple-400 font-mono">Uses randomness for efficiency</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Expected Case:</span>
-                    <span className="text-cyan-400 font-mono">Average performance over randomness</span>
+                  <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                    <span className="text-gray-600">Expected Case:</span>
+                    <span className="text-indigo-600 font-mono">Average performance over randomness</span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-slate-400 mb-4">Common Techniques</h3>
+                <h3 className="text-xl font-semibold text-indigo-600 mb-4">Common Techniques</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Randomized Partitioning:</div>
-                    <div className="text-gray-400">→ Quickselect, Quicksort</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Randomized Partitioning:</div>
+                    <div className="text-gray-500">→ Quickselect, Quicksort</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Reservoir Sampling:</div>
-                    <div className="text-gray-400">→ Sample k from stream</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Reservoir Sampling:</div>
+                    <div className="text-gray-500">→ Sample k from stream</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Random Priorities:</div>
-                    <div className="text-gray-400">→ Treaps, Skip Lists</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Random Priorities:</div>
+                    <div className="text-gray-500">→ Treaps, Skip Lists</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Monte Carlo Sampling:</div>
-                    <div className="text-gray-400">→ π estimation, integration</div>
+                  <div className="bg-white p-3 rounded border border-gray-200">
+                    <div className="text-indigo-600 font-medium mb-1">Monte Carlo Sampling:</div>
+                    <div className="text-gray-500">→ π estimation, integration</div>
                   </div>
                 </div>
               </div>

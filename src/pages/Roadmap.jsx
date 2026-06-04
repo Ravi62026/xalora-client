@@ -1212,10 +1212,10 @@ const Roadmap = () => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case 'completed': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500';
-      case 'in-progress': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
-      case 'pending': return 'bg-gray-500/20 text-gray-400 border-gray-500';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500';
+      case 'completed': return 'bg-green-100 text-green-700 border-green-300';
+      case 'in-progress': return 'bg-amber-100 text-amber-700 border-amber-300';
+      case 'pending': return 'bg-gray-100 text-gray-500 border-gray-300';
+      default: return 'bg-gray-100 text-gray-500 border-gray-300';
     }
   };
 
@@ -1245,21 +1245,21 @@ const Roadmap = () => {
   
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
-              <span className={`bg-gradient-to-r ${currentTrack.color} bg-clip-text text-transparent`}>
+          <div className="text-center mb-16 sm:mb-20">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Learning Roadmaps
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto transform transition-all duration-700 hover:text-gray-200">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Comprehensive learning paths for different technology domains
             </p>
           </div>
 
-          {/* Technology Track Selection - Enhanced UI */}
+          {/* Technology Track Selection */}
           <div className="flex flex-wrap justify-center gap-3 mb-6">
             {Object.entries(roadmapTracks).map(([key, track]) => (
               <button
@@ -1268,37 +1268,34 @@ const Roadmap = () => {
                   setActiveTrack(key);
                   setActiveLevel("beginner");
                 }}
-                className={`relative px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-500 transform hover:scale-105 overflow-hidden group ${
+                className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                   activeTrack === key
-                    ? `bg-gradient-to-r ${track.color} text-white shadow-2xl shadow-${track.color.split(' ')[0].replace('from-', '')}/30`
-                    : "bg-gray-800/50 text-gray-300 border border-gray-700 hover:border-gray-600"
+                    ? "bg-indigo-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}
               >
-                <span className="relative z-10">{track.name}</span>
-                {activeTrack === key && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                )}
+                {track.name}
               </button>
             ))}
           </div>
 
           {/* Track Description */}
           <div className="text-center mb-12">
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
+            <p className="text-base text-gray-600 max-w-3xl mx-auto bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
               {currentTrack.description}
             </p>
           </div>
 
-          {/* Level Selection - Enhanced UI */}
+          {/* Level Selection */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             {["beginner", "intermediate", "advanced"].map((level) => (
               <button
                 key={level}
                 onClick={() => setActiveLevel(level)}
-                className={`px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-500 transform hover:scale-105 ${
+                className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                   activeLevel === level
-                    ? `bg-gradient-to-r ${currentTrack.color} text-white shadow-2xl shadow-${currentTrack.color.split(' ')[0].replace('from-', '')}/30`
-                    : "bg-gray-800/50 text-gray-300 border border-gray-700 hover:border-gray-600"
+                    ? "bg-indigo-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}
               >
                 {level.charAt(0).toUpperCase() + level.slice(1)} Path
@@ -1308,9 +1305,9 @@ const Roadmap = () => {
 
           {/* Flow-based Roadmap Visualization with Animation */}
           <div className="relative mb-20" ref={flowRef}>
-            {/* Animated flow line with gradient and moving effect */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 via-cyan-400 to-purple-500 transform -translate-x-1/2 rounded-full animate-pulse overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-full bg-gradient-to-b from-transparent via-white/30 to-transparent animate-flow"></div>
+            {/* Animated flow line */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-300 via-indigo-500 to-purple-400 transform -translate-x-1/2 rounded-full overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-full bg-gradient-to-b from-transparent via-white/40 to-transparent animate-flow"></div>
             </div>
             
             {/* Modules in flow format with animation */}
@@ -1326,13 +1323,12 @@ const Roadmap = () => {
                     index % 2 === 0 ? "justify-start" : "justify-end"
                   }`}
                 >
-                  {/* Animated flow node with enhanced effects */}
-                  <div className={`absolute left-1/2 w-8 h-8 rounded-full bg-gradient-to-r ${currentTrack.color} border-4 border-gray-900 z-10 transform -translate-x-1/2 transition-all duration-500 hover:scale-125 flow-node pulse-glow node-pulse ${
+                  {/* Flow node */}
+                  <div className={`absolute left-1/2 w-7 h-7 rounded-full bg-indigo-600 border-4 border-white z-10 transform -translate-x-1/2 transition-all duration-500 shadow-md flow-node ${
                     animatedNodes.includes(index) ? 'animate-bounce' : ''
                   }`}>
-                    {/* Pulsing effect for active node */}
                     {animatedNodes.includes(index) && (
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-70 animate-ping"></div>
+                      <div className="absolute inset-0 rounded-full bg-indigo-400 opacity-50 animate-ping"></div>
                     )}
                   </div>
                   
@@ -1360,27 +1356,27 @@ const Roadmap = () => {
                   
                   {/* Module card */}
                   <div className={`w-full md:w-5/12 ${index % 2 === 0 ? "mr-auto" : "ml-auto"}`}>
-                    <div 
-                      className="bg-gray-800/50 backdrop-blur-xl rounded-xl border border-gray-700 p-4 transition-all duration-500 hover:border-cyan-500 hover:shadow-xl hover:shadow-cyan-500/10 transform hover:-translate-y-1 cursor-pointer fade-in-up"
+                    <div
+                      className="bg-white rounded-xl border border-gray-200 p-5 transition-all duration-300 hover:border-indigo-300 hover:shadow-lg cursor-pointer fade-in-up"
                       onClick={() => setSelectedModule(selectedModule === module.id ? null : module.id)}
                     >
                       <div className="flex flex-wrap justify-between items-start mb-3">
-                        <h3 className="text-xl font-bold text-white transition-all duration-300 hover:text-cyan-400">{module.title}</h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold border transition-all duration-300 ${getStatusClass(module.status)}`}>
+                        <h3 className="text-lg font-bold text-gray-900">{module.title}</h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold border ${getStatusClass(module.status)}`}>
                           {getStatusText(module.status)}
                         </span>
                       </div>
-                      <p className="text-gray-300 mb-4 text-sm transition-all duration-300 hover:text-gray-200">{module.description}</p>
-                      <div className="flex flex-wrap justify-between items-center mb-4">
-                        <span className="text-cyan-400 font-bold text-sm transition-all duration-300 hover:text-cyan-300">{module.duration}</span>
+                      <p className="text-gray-600 mb-3 text-sm">{module.description}</p>
+                      <div className="flex flex-wrap justify-between items-center mb-3">
+                        <span className="text-indigo-600 font-semibold text-sm">{module.duration}</span>
                       </div>
                       <div className="mb-4">
-                        <h4 className="text-gray-200 font-bold mb-2 text-sm transition-all duration-300 hover:text-white">Key Topics:</h4>
+                        <h4 className="text-gray-700 font-semibold mb-2 text-sm">Key Topics:</h4>
                         <div className="flex flex-wrap gap-1">
                           {module.topics.map((topic, topicIndex) => (
-                            <span 
-                              key={topicIndex} 
-                              className="px-2 py-1 bg-gray-700/50 text-gray-300 text-xs rounded-lg transition-all duration-300 hover:bg-gray-600 hover:scale-105 hover:shadow-md border border-gray-600"
+                            <span
+                              key={topicIndex}
+                              className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-lg border border-indigo-100"
                             >
                               {topic}
                             </span>
@@ -1390,139 +1386,139 @@ const Roadmap = () => {
                       
                       {/* Expandable Resources Section */}
                       {selectedModule === module.id && (
-                        <div className="border-t border-gray-700 pt-4 mt-4 animate-fadeIn">
-                          <h4 className="text-gray-200 font-bold mb-3 transition-all duration-300 hover:text-white">Learning Resources:</h4>
+                        <div className="border-t border-gray-200 pt-4 mt-4 animate-fadeIn">
+                          <h4 className="text-gray-700 font-semibold mb-3 text-sm">Learning Resources:</h4>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div className="bg-emerald-900/20 rounded-lg p-3 border border-emerald-700/30 transition-all duration-300 hover:border-emerald-500">
+                            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200 transition-all duration-300 hover:border-emerald-400">
                               <div className="flex justify-between items-center mb-2">
-                                <h5 className="text-emerald-400 font-semibold text-sm flex items-center">
+                                <h5 className="text-emerald-700 font-semibold text-sm flex items-center">
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                                   </svg>
                                   Books
                                 </h5>
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'books');
                                   }}
-                                  className="text-emerald-400 hover:text-emerald-300"
+                                  className="text-emerald-600 hover:text-emerald-800"
                                 >
-                                  <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-books`] ? 'rotate-180' : ''}`} 
-                                    viewBox="0 0 20 20" 
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-books`] ? 'rotate-180' : ''}`}
+                                    viewBox="0 0 20 20"
                                     fill="currentColor"
                                   >
                                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                   </svg>
                                 </button>
                               </div>
-                              <ul className={`text-gray-300 text-xs space-y-1 ${expandedResources[`${module.id}-books`] ? '' : 'max-h-20 overflow-hidden'}`}>
+                              <ul className={`text-gray-600 text-xs space-y-1 ${expandedResources[`${module.id}-books`] ? '' : 'max-h-20 overflow-hidden'}`}>
                                 {module.resources.books.map((book, i) => (
-                                  <li key={i} className="flex items-start group">
-                                    <span className="text-emerald-400 mr-2 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
-                                    <span className="group-hover:text-emerald-300 transition-colors duration-300">{book}</span>
+                                  <li key={i} className="flex items-start">
+                                    <span className="text-emerald-600 mr-2 mt-1">•</span>
+                                    <span>{book}</span>
                                   </li>
                                 ))}
                               </ul>
                               {module.resources.books.length > 3 && !expandedResources[`${module.id}-books`] && (
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'books');
                                   }}
-                                  className="text-emerald-400 text-xs mt-1 hover:text-emerald-300"
+                                  className="text-emerald-600 text-xs mt-1 hover:text-emerald-800"
                                 >
                                   Show more...
                                 </button>
                               )}
                             </div>
-                            <div className="bg-blue-900/20 rounded-lg p-3 border border-blue-700/30 transition-all duration-300 hover:border-blue-500">
+                            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200 transition-all duration-300 hover:border-blue-400">
                               <div className="flex justify-between items-center mb-2">
-                                <h5 className="text-blue-400 font-semibold text-sm flex items-center">
+                                <h5 className="text-blue-700 font-semibold text-sm flex items-center">
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                   </svg>
                                   Courses
                                 </h5>
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'courses');
                                   }}
-                                  className="text-blue-400 hover:text-blue-300"
+                                  className="text-blue-600 hover:text-blue-800"
                                 >
-                                  <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-courses`] ? 'rotate-180' : ''}`} 
-                                    viewBox="0 0 20 20" 
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-courses`] ? 'rotate-180' : ''}`}
+                                    viewBox="0 0 20 20"
                                     fill="currentColor"
                                   >
                                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                   </svg>
                                 </button>
                               </div>
-                              <ul className={`text-gray-300 text-xs space-y-1 ${expandedResources[`${module.id}-courses`] ? '' : 'max-h-20 overflow-hidden'}`}>
+                              <ul className={`text-gray-600 text-xs space-y-1 ${expandedResources[`${module.id}-courses`] ? '' : 'max-h-20 overflow-hidden'}`}>
                                 {module.resources.courses.map((course, i) => (
-                                  <li key={i} className="flex items-start group">
-                                    <span className="text-blue-400 mr-2 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
-                                    <span className="group-hover:text-blue-300 transition-colors duration-300">{course}</span>
+                                  <li key={i} className="flex items-start">
+                                    <span className="text-blue-600 mr-2 mt-1">•</span>
+                                    <span>{course}</span>
                                   </li>
                                 ))}
                               </ul>
                               {module.resources.courses.length > 3 && !expandedResources[`${module.id}-courses`] && (
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'courses');
                                   }}
-                                  className="text-blue-400 text-xs mt-1 hover:text-blue-300"
+                                  className="text-blue-600 text-xs mt-1 hover:text-blue-800"
                                 >
                                   Show more...
                                 </button>
                               )}
                             </div>
-                            <div className="bg-purple-900/20 rounded-lg p-3 border border-purple-700/30 transition-all duration-300 hover:border-purple-500">
+                            <div className="bg-purple-50 rounded-lg p-3 border border-purple-200 transition-all duration-300 hover:border-purple-400">
                               <div className="flex justify-between items-center mb-2">
-                                <h5 className="text-purple-400 font-semibold text-sm flex items-center">
+                                <h5 className="text-purple-700 font-semibold text-sm flex items-center">
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                   </svg>
                                   Platforms
                                 </h5>
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'platforms');
                                   }}
-                                  className="text-purple-400 hover:text-purple-300"
+                                  className="text-purple-600 hover:text-purple-800"
                                 >
-                                  <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-platforms`] ? 'rotate-180' : ''}`} 
-                                    viewBox="0 0 20 20" 
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`h-4 w-4 transform transition-transform ${expandedResources[`${module.id}-platforms`] ? 'rotate-180' : ''}`}
+                                    viewBox="0 0 20 20"
                                     fill="currentColor"
                                   >
                                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                   </svg>
                                 </button>
                               </div>
-                              <ul className={`text-gray-300 text-xs space-y-1 ${expandedResources[`${module.id}-platforms`] ? '' : 'max-h-20 overflow-hidden'}`}>
+                              <ul className={`text-gray-600 text-xs space-y-1 ${expandedResources[`${module.id}-platforms`] ? '' : 'max-h-20 overflow-hidden'}`}>
                                 {module.resources.platforms.map((platform, i) => (
-                                  <li key={i} className="flex items-start group">
-                                    <span className="text-purple-400 mr-2 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
-                                    <span className="group-hover:text-purple-300 transition-colors duration-300">{platform}</span>
+                                  <li key={i} className="flex items-start">
+                                    <span className="text-purple-600 mr-2 mt-1">•</span>
+                                    <span>{platform}</span>
                                   </li>
                                 ))}
                               </ul>
                               {module.resources.platforms.length > 3 && !expandedResources[`${module.id}-platforms`] && (
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleResourceExpansion(module.id, 'platforms');
                                   }}
-                                  className="text-purple-400 text-xs mt-1 hover:text-purple-300"
+                                  className="text-purple-600 text-xs mt-1 hover:text-purple-800"
                                 >
                                   Show more...
                                 </button>
@@ -1530,24 +1526,24 @@ const Roadmap = () => {
                             </div>
                           </div>
                           
-                          {/* Detailed Module Progress */}
-                          <div className="mt-4 bg-gray-700/30 rounded-lg p-3 border border-gray-600">
-                            <h5 className="text-gray-200 font-semibold mb-2 text-sm">Module Progress Tracker</h5>
+                          {/* Module Progress */}
+                          <div className="mt-4 bg-gray-50 rounded-lg p-3 border border-gray-200">
+                            <h5 className="text-gray-700 font-semibold mb-2 text-sm">Module Progress Tracker</h5>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-gray-300 text-xs">Completion Status</span>
-                              <span className="text-cyan-400 text-xs font-bold">45%</span>
+                              <span className="text-gray-600 text-xs">Completion Status</span>
+                              <span className="text-indigo-600 text-xs font-bold">45%</span>
                             </div>
-                            <div className="w-full bg-gray-600 rounded-full h-1.5">
-                              <div 
-                                className="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full transition-all duration-1000 ease-out"
+                            <div className="w-full bg-gray-200 rounded-full h-1.5">
+                              <div
+                                className="bg-indigo-600 h-1.5 rounded-full transition-all duration-1000 ease-out"
                                 style={{ width: '45%' }}
                               ></div>
                             </div>
                             <div className="flex justify-between mt-3">
-                              <button className="px-3 py-1.5 bg-gray-600 text-gray-300 rounded-md text-xs hover:bg-gray-500 transition-colors">
+                              <button className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md text-xs hover:bg-gray-200 transition-colors border border-gray-300">
                                 Mark as Completed
                               </button>
-                              <button className="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-md text-xs hover:from-cyan-500 hover:to-blue-500 transition-all">
+                              <button className="px-3 py-1.5 bg-indigo-600 text-white rounded-md text-xs hover:bg-indigo-700 transition-colors">
                                 Continue Learning
                               </button>
                             </div>
@@ -1557,18 +1553,18 @@ const Roadmap = () => {
                       
                       {/* Toggle Button */}
                       <div className="flex justify-center mt-4">
-                        <button 
-                          className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors duration-300"
+                        <button
+                          className="text-indigo-600 hover:text-indigo-800 flex items-center text-sm transition-colors duration-300"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedModule(selectedModule === module.id ? null : module.id);
                           }}
                         >
                           {selectedModule === module.id ? 'Show Less' : 'Show Resources'}
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            className={`h-5 w-5 ml-1 transition-transform duration-300 ${selectedModule === module.id ? 'rotate-180' : ''}`} 
-                            viewBox="0 0 20 20" 
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`h-4 w-4 ml-1 transition-transform duration-300 ${selectedModule === module.id ? 'rotate-180' : ''}`}
+                            viewBox="0 0 20 20"
                             fill="currentColor"
                           >
                             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -1582,114 +1578,112 @@ const Roadmap = () => {
             </div>
           </div>
 
-          {/* Enhanced Resources Section */}
-          <div className="mt-20 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-10 transition-all duration-500 hover:border-cyan-500 hover:shadow-2xl hover:shadow-cyan-500/10">
-            <h2 className="text-4xl font-bold text-white text-center mb-12 transition-all duration-300 hover:text-cyan-400">
-              <span className={`bg-gradient-to-r ${currentTrack.color} bg-clip-text text-transparent`}>
-                Recommended Resources
-              </span>
+          {/* Resources Section */}
+          <div className="mt-16 bg-white rounded-3xl border border-gray-200 p-8 sm:p-10 shadow-sm">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10">
+              Recommended Resources
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-2xl p-8 border border-emerald-500/20 transition-all duration-500 hover:border-emerald-500 hover:shadow-2xl hover:shadow-emerald-500/20 transform hover:-translate-y-2">
-                <div className="text-emerald-400 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 transition-all duration-300 hover:border-emerald-400 hover:shadow-md">
+                <div className="text-emerald-600 mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4 transition-all duration-300 hover:text-emerald-400">Books</h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-emerald-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Books</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-emerald-600 mr-3 mt-1">•</span>
                     <span>Introduction to Algorithms by Cormen</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-emerald-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-emerald-600 mr-3 mt-1">•</span>
                     <span>Clean Code by Robert Martin</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-emerald-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-emerald-600 mr-3 mt-1">•</span>
                     <span>Designing Data-Intensive Applications</span>
                   </li>
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-8 border border-blue-500/20 transition-all duration-500 hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/20 transform hover:-translate-y-2">
-                <div className="text-blue-400 mb-4">
+              <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200 transition-all duration-300 hover:border-blue-400 hover:shadow-md">
+                <div className="text-blue-600 mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4 transition-all duration-300 hover:text-blue-400">Online Platforms</h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-blue-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Online Platforms</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-3 mt-1">•</span>
                     <span>LeetCode</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-blue-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-3 mt-1">•</span>
                     <span>HackerRank</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-blue-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-3 mt-1">•</span>
                     <span>GeeksforGeeks</span>
                   </li>
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 rounded-2xl p-8 border border-purple-500/20 transition-all duration-500 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20 transform hover:-translate-y-2">
-                <div className="text-purple-400 mb-4">
+              <div className="bg-purple-50 rounded-2xl p-6 border border-purple-200 transition-all duration-300 hover:border-purple-400 hover:shadow-md">
+                <div className="text-purple-600 mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4 transition-all duration-300 hover:text-purple-400">Courses</h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-purple-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Courses</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-3 mt-1">•</span>
                     <span>MIT 6.006 Introduction to Algorithms</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-purple-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-3 mt-1">•</span>
                     <span>Stanford Algorithms Specialization</span>
                   </li>
-                  <li className="flex items-start transition-all duration-300 hover:text-gray-200 group">
-                    <span className="text-purple-400 mr-3 mt-1 transform group-hover:scale-125 transition-transform duration-300">•</span>
+                  <li className="flex items-start">
+                    <span className="text-purple-600 mr-3 mt-1">•</span>
                     <span>Xalora Masterclass</span>
                   </li>
                 </ul>
               </div>
             </div>
             
-            {/* Additional Resources Section */}
-            <div className="mt-12 pt-8 border-t border-gray-700">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">Community & Support</h3>
+            {/* Community Section */}
+            <div className="mt-10 pt-8 border-t border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Community & Support</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:border-indigo-300 transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center mb-4">
-                    <div className="bg-cyan-500/20 p-3 rounded-lg mr-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="bg-indigo-100 p-3 rounded-lg mr-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                       </svg>
                     </div>
-                    <h4 className="text-lg font-bold text-white">Discussion Forums</h4>
+                    <h4 className="text-lg font-bold text-gray-900">Discussion Forums</h4>
                   </div>
-                  <p className="text-gray-300 mb-4">Join our community to discuss concepts, ask questions, and share knowledge with fellow learners.</p>
-                  <button className="text-cyan-400 hover:text-cyan-300 font-medium flex items-center">
+                  <p className="text-gray-600 mb-4">Join our community to discuss concepts, ask questions, and share knowledge with fellow learners.</p>
+                  <button className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center text-sm transition-colors">
                     Join Community
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </button>
                 </div>
-                <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition-all duration-300">
+                <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center mb-4">
-                    <div className="bg-purple-500/20 p-3 rounded-lg mr-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="bg-purple-100 p-3 rounded-lg mr-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                       </svg>
                     </div>
-                    <h4 className="text-lg font-bold text-white">Mentorship Program</h4>
+                    <h4 className="text-lg font-bold text-gray-900">Mentorship Program</h4>
                   </div>
-                  <p className="text-gray-300 mb-4">Get personalized guidance from industry experts to accelerate your learning journey.</p>
-                  <button className="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                  <p className="text-gray-600 mb-4">Get personalized guidance from industry experts to accelerate your learning journey.</p>
+                  <button className="text-purple-600 hover:text-purple-800 font-medium flex items-center text-sm transition-colors">
                     Find a Mentor
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />

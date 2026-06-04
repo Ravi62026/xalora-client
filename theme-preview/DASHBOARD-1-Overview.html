@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard 1 - Classic Overview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to right, rgba(150,150,150,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(150,150,150,0.1) 1px, transparent 1px),
+                        linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+            background-attachment: fixed;
+            color: #1f2937;
+            min-height: 100vh;
+            letter-spacing: 0.3px;
+            display: flex;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid rgba(120,119,198,0.12);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: 0 0 24px rgba(79,70,229,0.06);
+        }
+
+        .sidebar-logo {
+            padding: 1.8rem 1.6rem;
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.8px;
+            border-bottom: 1px solid rgba(120,119,198,0.1);
+        }
+
+        .sidebar-nav { padding: 1.2rem 0.8rem; flex: 1; }
+
+        .nav-section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.8rem 0.8rem 0.4rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0.9rem;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.15rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .nav-item:hover { background: rgba(79,70,229,0.06); color: #4f46e5; }
+        .nav-item.active { background: linear-gradient(135deg, rgba(79,70,229,0.12), rgba(124,58,237,0.08)); color: #4f46e5; }
+        .nav-item.active .nav-icon { color: #4f46e5; }
+
+        .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #4f46e5;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.15rem 0.45rem;
+            border-radius: 20px;
+        }
+
+        .sidebar-user {
+            padding: 1.2rem 1.2rem;
+            border-top: 1px solid rgba(120,119,198,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.8rem; color: white;
+            flex-shrink: 0;
+        }
+
+        .user-name { font-weight: 700; font-size: 0.85rem; color: #0f172a; }
+        .user-role { font-size: 0.75rem; color: #9ca3af; }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            min-height: 100vh;
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            background: linear-gradient(to right, rgba(150,150,150,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(150,150,150,0.1) 1px, transparent 1px),
+                        linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+            background-size: 24px 24px, 24px 24px, 100% 100%;
+            border-bottom: 1px solid rgba(120,119,198,0.12);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-left h1 { font-size: 1.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+        .topbar-left p { font-size: 0.82rem; color: #6b7280; margin-top: 0.1rem; }
+
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
+
+        .topbar-btn {
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white; border: none; border-radius: 8px;
+            font-weight: 700; font-size: 0.82rem; cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(79,70,229,0.25);
+        }
+
+        .topbar-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,70,229,0.35); }
+
+        .topbar-icon {
+            width: 36px; height: 36px;
+            border-radius: 9px;
+            background: white;
+            border: 1px solid rgba(120,119,198,0.15);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .topbar-icon:hover { border-color: #4f46e5; background: #f5f3ff; }
+
+        /* ===== PAGE CONTENT ===== */
+        .content { padding: 2rem; }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.4rem;
+            border: 1px solid rgba(120,119,198,0.12);
+            box-shadow: 0 4px 16px rgba(79,70,229,0.06);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(79,70,229,0.12); }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+
+        .stat-card.indigo::before { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+        .stat-card.green::before { background: linear-gradient(90deg, #10b981, #059669); }
+        .stat-card.orange::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+        .stat-card.blue::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+
+        .stat-card-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card.indigo .stat-card-icon { background: rgba(79,70,229,0.1); }
+        .stat-card.green .stat-card-icon { background: rgba(16,185,129,0.1); }
+        .stat-card.orange .stat-card-icon { background: rgba(245,158,11,0.1); }
+        .stat-card.blue .stat-card-icon { background: rgba(59,130,246,0.1); }
+
+        .stat-card-value { font-size: 2rem; font-weight: 800; color: #0f172a; letter-spacing: -1px; }
+        .stat-card-label { font-size: 0.82rem; color: #6b7280; font-weight: 500; margin-top: 0.2rem; }
+        .stat-card-change { font-size: 0.75rem; font-weight: 700; margin-top: 0.6rem; }
+        .stat-card-change.up { color: #10b981; }
+        .stat-card-change.down { color: #ef4444; }
+
+        /* Grid layout */
+        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.2rem; margin-bottom: 1.8rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; margin-bottom: 1.8rem; }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid rgba(120,119,198,0.12);
+            box-shadow: 0 4px 16px rgba(79,70,229,0.06);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.2rem 1.4rem;
+            border-bottom: 1px solid rgba(120,119,198,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title { font-size: 0.95rem; font-weight: 800; color: #0f172a; }
+        .card-subtitle { font-size: 0.78rem; color: #9ca3af; margin-top: 0.1rem; }
+
+        .card-action {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #4f46e5;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .card-action:hover { color: #7c3aed; }
+
+        .card-body { padding: 1.4rem; }
+
+        /* Activity heatmap */
+        .heatmap { display: flex; gap: 3px; flex-wrap: wrap; }
+        .heatmap-cell {
+            width: 11px; height: 11px;
+            border-radius: 2px;
+            background: #e5e7eb;
+            transition: all 0.2s;
+        }
+        .heatmap-cell:hover { transform: scale(1.3); }
+        .heatmap-cell.l1 { background: rgba(79,70,229,0.2); }
+        .heatmap-cell.l2 { background: rgba(79,70,229,0.45); }
+        .heatmap-cell.l3 { background: rgba(79,70,229,0.7); }
+        .heatmap-cell.l4 { background: #4f46e5; }
+
+        /* Progress bars */
+        .topic-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .topic-name { font-size: 0.82rem; font-weight: 600; color: #374151; width: 90px; flex-shrink: 0; }
+        .topic-bar-bg { flex: 1; height: 6px; background: #f3f4f6; border-radius: 3px; }
+        .topic-bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #4f46e5, #7c3aed); transition: width 0.6s ease; }
+        .topic-count { font-size: 0.78rem; font-weight: 700; color: #6b7280; width: 40px; text-align: right; flex-shrink: 0; }
+
+        /* Difficulty rings */
+        .difficulty-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .diff-item { text-align: center; }
+
+        .diff-ring {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; font-weight: 800;
+            margin: 0 auto 0.5rem;
+            position: relative;
+        }
+
+        .diff-ring.easy { background: conic-gradient(#10b981 0% 72%, #e5e7eb 72% 100%); }
+        .diff-ring.medium { background: conic-gradient(#f59e0b 0% 55%, #e5e7eb 55% 100%); }
+        .diff-ring.hard { background: conic-gradient(#ef4444 0% 35%, #e5e7eb 35% 100%); }
+
+        .diff-ring-inner {
+            width: 44px; height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 800; color: #0f172a;
+        }
+
+        .diff-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; }
+        .diff-total { font-size: 0.68rem; color: #9ca3af; }
+
+        /* Recent submissions */
+        .submission-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(120,119,198,0.07);
+        }
+
+        .submission-item:last-child { border-bottom: none; }
+
+        .submission-status {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .submission-status.accepted { background: #10b981; }
+        .submission-status.wrong { background: #ef4444; }
+
+        .submission-name { font-size: 0.85rem; font-weight: 600; color: #0f172a; flex: 1; }
+        .submission-meta { font-size: 0.75rem; color: #9ca3af; }
+
+        .sub-tag {
+            font-size: 0.68rem; font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .sub-tag.easy { background: rgba(16,185,129,0.1); color: #059669; }
+        .sub-tag.medium { background: rgba(245,158,11,0.1); color: #d97706; }
+        .sub-tag.hard { background: rgba(239,68,68,0.1); color: #dc2626; }
+
+        /* Streak card */
+        .streak-number { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, #4f46e5, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -2px; }
+        .streak-label { font-size: 0.85rem; color: #6b7280; margin-top: 0.2rem; }
+        .streak-days { display: flex; gap: 0.4rem; margin-top: 1.2rem; }
+        .streak-day { width: 28px; height: 28px; border-radius: 6px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #9ca3af; }
+        .streak-day.done { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; }
+        .streak-day.today { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; box-shadow: 0 4px 10px rgba(79,70,229,0.4); }
+
+        /* Leaderboard */
+        .lb-item {
+            display: flex; align-items: center; gap: 0.9rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(120,119,198,0.07);
+        }
+
+        .lb-item:last-child { border-bottom: none; }
+
+        .lb-rank { font-size: 0.82rem; font-weight: 800; color: #9ca3af; width: 20px; text-align: center; }
+        .lb-rank.top { color: #f59e0b; }
+
+        .lb-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.7rem; color: white; flex-shrink: 0;
+        }
+
+        .lb-name { font-size: 0.83rem; font-weight: 700; color: #0f172a; flex: 1; }
+        .lb-score { font-size: 0.8rem; font-weight: 800; color: #4f46e5; }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-logo">xalora</div>
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item active"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a class="nav-item"><span class="nav-icon">🎯</span> Problems <span class="nav-badge">1K+</span></a>
+        <a class="nav-item"><span class="nav-icon">🤖</span> AI Interview</a>
+        <a class="nav-item"><span class="nav-icon">📊</span> Analytics</a>
+        <div class="nav-section-label">Learn</div>
+        <a class="nav-item"><span class="nav-icon">📚</span> Study Plans</a>
+        <a class="nav-item"><span class="nav-icon">🏆</span> Contests</a>
+        <a class="nav-item"><span class="nav-icon">💼</span> Resume AI</a>
+        <div class="nav-section-label">Account</div>
+        <a class="nav-item"><span class="nav-icon">👤</span> Profile</a>
+        <a class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-user">
+        <div class="user-avatar">RK</div>
+        <div>
+            <div class="user-name">Rahul Kumar</div>
+            <div class="user-role">Individual · Pro</div>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Good morning, Rahul 👋</h1>
+            <p>Tuesday, 27 May 2026 · Keep the streak going!</p>
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-btn">+ Practice Now</button>
+            <div class="topbar-icon">🔔</div>
+            <div class="topbar-icon">⚙️</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card indigo">
+                <div class="stat-card-icon">🎯</div>
+                <div class="stat-card-value">342</div>
+                <div class="stat-card-label">Problems Solved</div>
+                <div class="stat-card-change up">↑ +12 this week</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-card-icon">🔥</div>
+                <div class="stat-card-value">28</div>
+                <div class="stat-card-label">Day Streak</div>
+                <div class="stat-card-change up">↑ Personal best!</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-card-icon">⚡</div>
+                <div class="stat-card-value">84%</div>
+                <div class="stat-card-label">Acceptance Rate</div>
+                <div class="stat-card-change down">↓ -2% vs last month</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-card-icon">🏅</div>
+                <div class="stat-card-value">#1,204</div>
+                <div class="stat-card-label">Global Rank</div>
+                <div class="stat-card-change up">↑ +340 this month</div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="grid-2">
+            <!-- Activity Heatmap -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Activity Heatmap</div>
+                        <div class="card-subtitle">342 problems solved in the past year</div>
+                    </div>
+                    <span class="card-action">View all →</span>
+                </div>
+                <div class="card-body">
+                    <div class="heatmap" id="heatmap"></div>
+                    <div style="display:flex; gap:0.4rem; align-items:center; margin-top:1rem; font-size:0.72rem; color:#9ca3af;">
+                        <span>Less</span>
+                        <div style="width:10px;height:10px;border-radius:2px;background:#e5e7eb;"></div>
+                        <div style="width:10px;height:10px;border-radius:2px;background:rgba(79,70,229,0.2);"></div>
+                        <div style="width:10px;height:10px;border-radius:2px;background:rgba(79,70,229,0.5);"></div>
+                        <div style="width:10px;height:10px;border-radius:2px;background:#4f46e5;"></div>
+                        <span>More</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streak -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Current Streak</div>
+                        <div class="card-subtitle">This week's progress</div>
+                    </div>
+                    <span>🔥</span>
+                </div>
+                <div class="card-body">
+                    <div class="streak-number">28</div>
+                    <div class="streak-label">days in a row</div>
+                    <div class="streak-days">
+                        <div class="streak-day done">M</div>
+                        <div class="streak-day done">T</div>
+                        <div class="streak-day done">W</div>
+                        <div class="streak-day done">T</div>
+                        <div class="streak-day done">F</div>
+                        <div class="streak-day today">S</div>
+                        <div class="streak-day">S</div>
+                    </div>
+                    <div style="margin-top:1.2rem; padding:0.9rem; background:rgba(79,70,229,0.06); border-radius:8px; font-size:0.8rem; color:#4f46e5; font-weight:600;">
+                        🎉 28-day streak! You're in the top 5%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="grid-3">
+            <!-- Topics Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Topics Progress</div>
+                    <span class="card-action">Details →</span>
+                </div>
+                <div class="card-body">
+                    <div class="topic-row"><span class="topic-name">Arrays</span><div class="topic-bar-bg"><div class="topic-bar" style="width:78%"></div></div><span class="topic-count">78/100</span></div>
+                    <div class="topic-row"><span class="topic-name">Linked Lists</span><div class="topic-bar-bg"><div class="topic-bar" style="width:55%"></div></div><span class="topic-count">55/100</span></div>
+                    <div class="topic-row"><span class="topic-name">Trees</span><div class="topic-bar-bg"><div class="topic-bar" style="width:42%"></div></div><span class="topic-count">42/100</span></div>
+                    <div class="topic-row"><span class="topic-name">DP</span><div class="topic-bar-bg"><div class="topic-bar" style="width:30%"></div></div><span class="topic-count">30/100</span></div>
+                    <div class="topic-row"><span class="topic-name">Graphs</span><div class="topic-bar-bg"><div class="topic-bar" style="width:22%"></div></div><span class="topic-count">22/100</span></div>
+                    <div class="topic-row"><span class="topic-name">Strings</span><div class="topic-bar-bg"><div class="topic-bar" style="width:65%"></div></div><span class="topic-count">65/100</span></div>
+                </div>
+            </div>
+
+            <!-- Difficulty Breakdown -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Difficulty Breakdown</div>
+                </div>
+                <div class="card-body">
+                    <div class="difficulty-row">
+                        <div class="diff-item">
+                            <div class="diff-ring easy"><div class="diff-ring-inner">156</div></div>
+                            <div class="diff-label">Easy</div>
+                            <div class="diff-total">of 215</div>
+                        </div>
+                        <div class="diff-item">
+                            <div class="diff-ring medium"><div class="diff-ring-inner">132</div></div>
+                            <div class="diff-label">Medium</div>
+                            <div class="diff-total">of 240</div>
+                        </div>
+                        <div class="diff-item">
+                            <div class="diff-ring hard"><div class="diff-ring-inner">54</div></div>
+                            <div class="diff-label">Hard</div>
+                            <div class="diff-total">of 155</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:1.2rem; text-align:center; font-size:0.8rem; color:#6b7280;">
+                        342 of 610 total problems solved
+                    </div>
+                    <div style="margin-top:0.8rem; background:#f3f4f6; border-radius:6px; height:8px; overflow:hidden;">
+                        <div style="height:100%; width:56%; background:linear-gradient(90deg,#4f46e5,#7c3aed); border-radius:6px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Leaderboard</div>
+                    <span class="card-action">Full →</span>
+                </div>
+                <div class="card-body">
+                    <div class="lb-item">
+                        <span class="lb-rank top">🥇</span>
+                        <div class="lb-avatar">AK</div>
+                        <span class="lb-name">Arjun K.</span>
+                        <span class="lb-score">892 pts</span>
+                    </div>
+                    <div class="lb-item">
+                        <span class="lb-rank top">🥈</span>
+                        <div class="lb-avatar">PS</div>
+                        <span class="lb-name">Priya S.</span>
+                        <span class="lb-score">841 pts</span>
+                    </div>
+                    <div class="lb-item">
+                        <span class="lb-rank top">🥉</span>
+                        <div class="lb-avatar">MR</div>
+                        <span class="lb-name">Mihir R.</span>
+                        <span class="lb-score">820 pts</span>
+                    </div>
+                    <div class="lb-item" style="background:rgba(79,70,229,0.04); border-radius:8px; padding:0.75rem 0.5rem; margin-top:0.4rem; border:none;">
+                        <span class="lb-rank" style="color:#4f46e5;">#1204</span>
+                        <div class="lb-avatar">RK</div>
+                        <span class="lb-name" style="color:#4f46e5; font-weight:800;">You</span>
+                        <span class="lb-score">342 pts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Submissions -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Recent Submissions</div>
+                    <div class="card-subtitle">Your last 5 attempts</div>
+                </div>
+                <span class="card-action">View all →</span>
+            </div>
+            <div class="card-body">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 2rem;">
+                    <div>
+                        <div class="submission-item"><div class="submission-status accepted"></div><span class="submission-name">Two Sum</span><span class="sub-tag easy">Easy</span><span class="submission-meta" style="margin-left:auto;">2h ago</span></div>
+                        <div class="submission-item"><div class="submission-status accepted"></div><span class="submission-name">LRU Cache</span><span class="sub-tag medium">Medium</span><span class="submission-meta" style="margin-left:auto;">Yesterday</span></div>
+                        <div class="submission-item"><div class="submission-status wrong"></div><span class="submission-name">Word Break II</span><span class="sub-tag hard">Hard</span><span class="submission-meta" style="margin-left:auto;">2d ago</span></div>
+                    </div>
+                    <div>
+                        <div class="submission-item"><div class="submission-status accepted"></div><span class="submission-name">Valid Parentheses</span><span class="sub-tag easy">Easy</span><span class="submission-meta" style="margin-left:auto;">2d ago</span></div>
+                        <div class="submission-item"><div class="submission-status accepted"></div><span class="submission-name">Merge Intervals</span><span class="sub-tag medium">Medium</span><span class="submission-meta" style="margin-left:auto;">3d ago</span></div>
+                        <div class="submission-item"><div class="submission-status wrong"></div><span class="submission-name">N-Queens</span><span class="sub-tag hard">Hard</span><span class="submission-meta" style="margin-left:auto;">4d ago</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Generate heatmap
+    const heatmap = document.getElementById('heatmap');
+    const levels = ['', 'l1', 'l2', 'l3', 'l4'];
+    for (let i = 0; i < 182; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        const rand = Math.random();
+        if (rand > 0.6) cell.classList.add(levels[Math.floor(Math.random() * 4) + 1]);
+        heatmap.appendChild(cell);
+    }
+</script>
+
+</body>
+</html>

@@ -575,16 +575,16 @@ int applyOperation(int a, int b, char op) {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Stacks
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Master Last-In-First-Out (LIFO) data structures and their powerful algorithms for efficient problem solving.
             </p>
           </div>
@@ -594,8 +594,8 @@ int applyOperation(int a, int b, char op) {
             <button
               onClick={() => setActiveSection("overview")}
               className={`px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg transition-all duration-300 ${activeSection === "overview"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Overview
@@ -603,8 +603,8 @@ int applyOperation(int a, int b, char op) {
             <button
               onClick={() => setActiveSection("theory")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "theory"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Theory
@@ -612,8 +612,8 @@ int applyOperation(int a, int b, char op) {
             <button
               onClick={() => setActiveSection("implementations")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "implementations"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Implementations
@@ -621,8 +621,8 @@ int applyOperation(int a, int b, char op) {
             <button
               onClick={() => setActiveSection("algorithms")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "algorithms"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Algorithms
@@ -630,8 +630,8 @@ int applyOperation(int a, int b, char op) {
             <button
               onClick={() => setActiveSection("applications")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${activeSection === "applications"
-                  ? "bg-orange-600 text-white shadow-lg"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-indigo-200 hover:text-indigo-600"
                 }`}
             >
               Applications
@@ -641,32 +641,32 @@ int applyOperation(int a, int b, char op) {
           {/* Theory Section */}
           {activeSection === "theory" && (
             <div className="mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 text-center">Stack Theory & Mathematical Foundations</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Stack Theory & Mathematical Foundations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {/* LIFO Principle & Abstract Data Type */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-orange-400 mb-6">LIFO Principle & Abstract Data Type</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">LIFO Principle & Abstract Data Type</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">LIFO (Last-In-First-Out) Semantics</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">LIFO (Last-In-First-Out) Semantics</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Stack operations follow strict temporal ordering:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">📚</span>
+                              <span className="text-orange-700 mr-2">📚</span>
                               <span><strong>Temporal Ordering:</strong> Most recently added item is removed first</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">⏰</span>
+                              <span className="text-orange-700 mr-2">⏰</span>
                               <span><strong>Time-based Priority:</strong> Recency determines access order</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">🎯</span>
+                              <span className="text-orange-700 mr-2">🎯</span>
                               <span><strong>Single Access Point:</strong> All operations through one end</span>
                             </li>
                           </ul>
@@ -674,22 +674,22 @@ int applyOperation(int a, int b, char op) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Abstract Data Type Definition</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Abstract Data Type Definition</h4>
                         <div className="space-y-4 text-gray-300">
                           <p>
                             Stack as an ADT with well-defined interface:
                           </p>
                           <ul className="space-y-2 ml-4">
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">🔧</span>
+                              <span className="text-orange-700 mr-2">🔧</span>
                               <span><strong>Operations:</strong> push, pop, peek, isEmpty, size</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">📋</span>
+                              <span className="text-orange-700 mr-2">📋</span>
                               <span><strong>Contract:</strong> Well-defined behavior for each operation</span>
                             </li>
                             <li className="flex items-start">
-                              <span className="text-orange-400 mr-2">🔒</span>
+                              <span className="text-orange-700 mr-2">🔒</span>
                               <span><strong>Encapsulation:</strong> Implementation details hidden</span>
                             </li>
                           </ul>
@@ -697,21 +697,21 @@ int applyOperation(int a, int b, char op) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Stack Invariants</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Stack Invariants</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-green-400 font-medium mb-2">✅ Always True</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-green-700 font-medium mb-2">✅ Always True</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Top element is most recently pushed</li>
                             <li>• Size reflects number of elements</li>
                             <li>• Empty stack has no elements</li>
                             <li>• Operations maintain LIFO order</li>
                           </ul>
                         </div>
-                        <div className="bg-gray-800/50 p-4 rounded-lg">
-                          <h5 className="text-red-400 font-medium mb-2">❌ Never True</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                        <div className="bg-white p-4 rounded-lg border border-gray-200">
+                          <h5 className="text-red-700 font-medium mb-2">❌ Never True</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Random access to middle elements</li>
                             <li>• Pop from empty stack</li>
                             <li>• Peek on empty stack</li>
@@ -724,56 +724,56 @@ int applyOperation(int a, int b, char op) {
                 </div>
 
                 {/* Stack vs Other ADTs */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-orange-400 mb-6">Stack vs Other Abstract Data Types</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Stack vs Other Abstract Data Types</h3>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700">
-                            <th className="pb-4 text-gray-200 text-lg font-bold">Aspect</th>
-                            <th className="pb-4 text-orange-400 text-lg font-bold">Stack (LIFO)</th>
-                            <th className="pb-4 text-yellow-400 text-lg font-bold">Queue (FIFO)</th>
-                            <th className="pb-4 text-purple-400 text-lg font-bold">Deque</th>
-                            <th className="pb-4 text-blue-400 text-lg font-bold">Priority Queue</th>
+                          <tr className="border-b border-gray-200">
+                            <th className="pb-4 text-gray-700 text-lg font-bold">Aspect</th>
+                            <th className="pb-4 text-orange-700 text-lg font-bold">Stack (LIFO)</th>
+                            <th className="pb-4 text-amber-700 text-lg font-bold">Queue (FIFO)</th>
+                            <th className="pb-4 text-purple-700 text-lg font-bold">Deque</th>
+                            <th className="pb-4 text-indigo-600 text-lg font-bold">Priority Queue</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-orange-400 transition-all duration-300">Access Pattern</td>
-                            <td className="py-4 text-orange-400 font-medium">Most recent only</td>
-                            <td className="py-4 text-yellow-400 font-medium">Oldest first</td>
-                            <td className="py-4 text-purple-400 font-medium">Both ends</td>
-                            <td className="py-4 text-blue-400 font-medium">Highest priority</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Access Pattern</td>
+                            <td className="py-4 text-orange-700 font-medium">Most recent only</td>
+                            <td className="py-4 text-amber-700 font-medium">Oldest first</td>
+                            <td className="py-4 text-purple-700 font-medium">Both ends</td>
+                            <td className="py-4 text-blue-700 font-medium">Highest priority</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-orange-400 transition-all duration-300">Ordering</td>
-                            <td className="py-4 text-orange-400 font-medium">Temporal (time-based)</td>
-                            <td className="py-4 text-yellow-400 font-medium">Temporal (arrival)</td>
-                            <td className="py-4 text-purple-400 font-medium">User controlled</td>
-                            <td className="py-4 text-blue-400 font-medium">Priority-based</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Ordering</td>
+                            <td className="py-4 text-orange-700 font-medium">Temporal (time-based)</td>
+                            <td className="py-4 text-amber-700 font-medium">Temporal (arrival)</td>
+                            <td className="py-4 text-purple-700 font-medium">User controlled</td>
+                            <td className="py-4 text-blue-700 font-medium">Priority-based</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-orange-400 transition-all duration-300">Use Cases</td>
-                            <td className="py-4 text-orange-400 font-medium">Function calls, undo</td>
-                            <td className="py-4 text-yellow-400 font-medium">BFS, scheduling</td>
-                            <td className="py-4 text-purple-400 font-medium">Sliding windows</td>
-                            <td className="py-4 text-blue-400 font-medium">Task priority</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Use Cases</td>
+                            <td className="py-4 text-orange-700 font-medium">Function calls, undo</td>
+                            <td className="py-4 text-amber-700 font-medium">BFS, scheduling</td>
+                            <td className="py-4 text-purple-700 font-medium">Sliding windows</td>
+                            <td className="py-4 text-blue-700 font-medium">Task priority</td>
                           </tr>
-                          <tr className="border-b border-gray-700 group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-orange-400 transition-all duration-300">Operations</td>
-                            <td className="py-4 text-orange-400 font-medium">Push, pop, peek</td>
-                            <td className="py-4 text-yellow-400 font-medium">Enqueue, dequeue</td>
-                            <td className="py-4 text-purple-400 font-medium">Push/pop both ends</td>
-                            <td className="py-4 text-blue-400 font-medium">Insert, extract-max</td>
+                          <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Operations</td>
+                            <td className="py-4 text-orange-700 font-medium">Push, pop, peek</td>
+                            <td className="py-4 text-amber-700 font-medium">Enqueue, dequeue</td>
+                            <td className="py-4 text-purple-700 font-medium">Push/pop both ends</td>
+                            <td className="py-4 text-blue-700 font-medium">Insert, extract-max</td>
                           </tr>
-                          <tr className="group hover:bg-gray-700/30 transition-all duration-300">
-                            <td className="py-4 text-white font-medium group-hover:text-orange-400 transition-all duration-300">Complexity</td>
-                            <td className="py-4 text-green-400 font-medium">All O(1)</td>
-                            <td className="py-4 text-green-400 font-medium">All O(1)</td>
-                            <td className="py-4 text-green-400 font-medium">All O(1)</td>
-                            <td className="py-4 text-yellow-400 font-medium">O(log n)</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 text-gray-900 font-medium">Complexity</td>
+                            <td className="py-4 text-green-700 font-medium">All O(1)</td>
+                            <td className="py-4 text-green-700 font-medium">All O(1)</td>
+                            <td className="py-4 text-green-700 font-medium">All O(1)</td>
+                            <td className="py-4 text-amber-700 font-medium">O(log n)</td>
                           </tr>
                         </tbody>
                       </table>
@@ -782,17 +782,17 @@ int applyOperation(int a, int b, char op) {
                 </div>
 
                 {/* Stack in Computer Science */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-orange-400 mb-6">Stack in Computer Science Theory</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Stack in Computer Science Theory</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Runtime Stack (Call Stack)</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Runtime Stack (Call Stack)</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Function Call Mechanism</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Function Call Mechanism</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Each function call pushes activation record</li>
                               <li>• Local variables, parameters, return address</li>
                               <li>• Stack overflow when recursion too deep</li>
@@ -800,9 +800,9 @@ int applyOperation(int a, int b, char op) {
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Recursion Implementation</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Recursion Implementation</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Each recursive call creates new stack frame</li>
                               <li>• Unwinding on base case reached</li>
                               <li>• Tail recursion optimization possible</li>
@@ -813,11 +813,11 @@ int applyOperation(int a, int b, char op) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Expression Evaluation</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Expression Evaluation</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Infix to Postfix Conversion</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Infix to Postfix Conversion</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Operators pushed based on precedence</li>
                               <li>• Left parenthesis has lowest precedence</li>
                               <li>• Right parenthesis triggers popping</li>
@@ -825,9 +825,9 @@ int applyOperation(int a, int b, char op) {
                             </ul>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Postfix Evaluation</h5>
-                            <ul className="text-gray-300 text-sm space-y-1">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Postfix Evaluation</h5>
+                            <ul className="text-gray-700 text-sm space-y-1">
                               <li>• Operands pushed directly to stack</li>
                               <li>• Operators pop two operands, apply operation</li>
                               <li>• Result pushed back to stack</li>
@@ -838,12 +838,12 @@ int applyOperation(int a, int b, char op) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Stack-Based Languages</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Stack-Based Languages</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Forth & PostScript</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Forth & PostScript</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Concatenative programming</li>
                             <li>• No variables, only stack</li>
                             <li>• Functions consume/produce stack values</li>
@@ -851,8 +851,8 @@ int applyOperation(int a, int b, char op) {
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">JVM Bytecode</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">JVM Bytecode</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Operand stack for computations</li>
                             <li>• Load/store instructions</li>
                             <li>• Stack-based virtual machine</li>
@@ -865,17 +865,17 @@ int applyOperation(int a, int b, char op) {
                 </div>
 
                 {/* Mathematical Analysis */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-orange-400 mb-6">Mathematical Analysis of Stack Operations</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Mathematical Analysis of Stack Operations</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Time Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Time Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-green-400 font-medium mb-2">Push/Pop Operations: O(1)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-green-700 font-medium mb-2">Push/Pop Operations: O(1)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Constant Time Guarantee:</strong></p>
                               <p>• Direct pointer manipulation</p>
                               <p>• No traversal or searching</p>
@@ -884,9 +884,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-yellow-400 font-medium mb-2">Search Operation: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-amber-700 font-medium mb-2">Search Operation: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Linear Search Required:</strong></p>
                               <p>• Must traverse entire stack</p>
                               <p>• No random access capability</p>
@@ -898,11 +898,11 @@ int applyOperation(int a, int b, char op) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Space Complexity Analysis</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Space Complexity Analysis</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-blue-400 font-medium mb-2">Array Implementation: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-indigo-600 font-medium mb-2">Array Implementation: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Space Usage:</strong></p>
                               <p>• Fixed capacity allocation</p>
                               <p>• No per-element overhead</p>
@@ -911,9 +911,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Linked List: O(n)</h5>
-                            <div className="text-gray-300 text-sm space-y-2">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Linked List: O(n)</h5>
+                            <div className="text-gray-700 text-sm space-y-2">
                               <p><strong>Space Overhead:</strong></p>
                               <p>• Pointer per element</p>
                               <p>• Dynamic allocation</p>
@@ -925,20 +925,20 @@ int applyOperation(int a, int b, char op) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-yellow-400 mb-4">Stack Properties & Theorems</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-amber-700 mb-4">Stack Properties & Theorems</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="text-center">
                           <div className="text-green-400 font-bold text-lg mb-2">LIFO Property</div>
-                          <div className="text-gray-300 text-sm">Last in, first out ordering</div>
+                          <div className="text-gray-700 text-sm">Last in, first out ordering</div>
                         </div>
                         <div className="text-center">
                           <div className="text-yellow-400 font-bold text-lg mb-2">Bounded Capacity</div>
-                          <div className="text-gray-300 text-sm">Maximum size constraints</div>
+                          <div className="text-gray-700 text-sm">Maximum size constraints</div>
                         </div>
                         <div className="text-center">
                           <div className="text-blue-400 font-bold text-lg mb-2">Atomic Operations</div>
-                          <div className="text-gray-300 text-sm">Indivisible push/pop actions</div>
+                          <div className="text-gray-700 text-sm">Indivisible push/pop actions</div>
                         </div>
                       </div>
                     </div>
@@ -946,17 +946,17 @@ int applyOperation(int a, int b, char op) {
                 </div>
 
                 {/* Stack in Algorithm Design */}
-                <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden">
+                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold text-orange-400 mb-6">Stack in Algorithm Design & Analysis</h3>
+                    <h3 className="text-2xl font-bold text-indigo-600 mb-6">Stack in Algorithm Design & Analysis</h3>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Algorithmic Paradigms</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Algorithmic Paradigms</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Monotonic Stack</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Monotonic Stack</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Maintains increasing/decreasing order</p>
                               <p>• O(n) time for next greater element</p>
                               <p>• Removes elements that violate monotonicity</p>
@@ -964,9 +964,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Stack Simulation</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Stack Simulation</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Simulates recursive processes</p>
                               <p>• Avoids recursion depth limits</p>
                               <p>• Iterative tree/graph traversals</p>
@@ -974,9 +974,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-purple-400 font-medium mb-2">Parentheses Matching</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-purple-700 font-medium mb-2">Parentheses Matching</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Validates nested structures</p>
                               <p>• Checks XML/HTML tag matching</p>
                               <p>• Compiler syntax validation</p>
@@ -987,11 +987,11 @@ int applyOperation(int a, int b, char op) {
                       </div>
 
                       <div>
-                        <h4 className="text-xl font-semibold text-cyan-400 mb-4">Advanced Applications</h4>
+                        <h4 className="text-xl font-semibold text-indigo-600 mb-4">Advanced Applications</h4>
                         <div className="space-y-4">
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Expression Evaluation</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Expression Evaluation</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Infix to postfix conversion</p>
                               <p>• Shunting-yard algorithm</p>
                               <p>• Calculator implementations</p>
@@ -999,9 +999,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Backtracking Algorithms</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Backtracking Algorithms</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• N-Queens problem solution</p>
                               <p>• Maze solving algorithms</p>
                               <p>• Constraint satisfaction</p>
@@ -1009,9 +1009,9 @@ int applyOperation(int a, int b, char op) {
                             </div>
                           </div>
 
-                          <div className="bg-gray-700/50 p-4 rounded-lg">
-                            <h5 className="text-orange-400 font-medium mb-2">Undo/Redo Systems</h5>
-                            <div className="text-gray-300 text-sm">
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 className="text-orange-700 font-medium mb-2">Undo/Redo Systems</h5>
+                            <div className="text-gray-700 text-sm">
                               <p>• Command pattern implementation</p>
                               <p>• Text editor operations</p>
                               <p>• Transaction rollback</p>
@@ -1022,12 +1022,12 @@ int applyOperation(int a, int b, char op) {
                       </div>
                     </div>
 
-                    <div className="mt-6 bg-gray-700/50 p-6 rounded-xl">
-                      <h4 className="text-xl font-semibold text-green-400 mb-4">Why Stacks are Fundamental</h4>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                      <h4 className="text-xl font-semibold text-green-700 mb-4">Why Stacks are Fundamental</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">Computational Thinking</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">Computational Thinking</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• LIFO principle understanding</li>
                             <li>• Recursion and call stacks</li>
                             <li>• Expression evaluation</li>
@@ -1035,8 +1035,8 @@ int applyOperation(int a, int b, char op) {
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-cyan-400 font-medium mb-3">System Architecture</h5>
-                          <ul className="text-gray-300 text-sm space-y-1">
+                          <h5 className="text-indigo-600 font-medium mb-3">System Architecture</h5>
+                          <ul className="text-gray-700 text-sm space-y-1">
                             <li>• Runtime stack management</li>
                             <li>• Memory allocation strategies</li>
                             <li>• Context switching</li>
@@ -1053,70 +1053,70 @@ int applyOperation(int a, int b, char op) {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-8 mb-12">
-              <h2 className="text-3xl font-bold text-white mb-6">Stacks Overview</h2>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Stacks Overview</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">What are Stacks?</h3>
-                  <p className="text-gray-300 mb-6">
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">What are Stacks?</h3>
+                  <p className="text-gray-700 mb-6">
                     A stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle.
                     Elements are added and removed from the same end, called the "top" of the stack.
                     Think of it like a stack of plates - you can only add or remove from the top.
                   </p>
 
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">Key Characteristics</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Key Characteristics</h3>
                   <ul className="space-y-3 text-gray-300">
                     <li className="flex items-start">
-                      <span className="text-orange-400 mr-2">📚</span>
+                      <span className="text-orange-700 mr-2">📚</span>
                       <span><strong>LIFO Order:</strong> Last element added is first to be removed</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-orange-400 mr-2">🎯</span>
+                      <span className="text-orange-700 mr-2">🎯</span>
                       <span><strong>Single Access Point:</strong> All operations happen at the top</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-orange-400 mr-2">⚡</span>
+                      <span className="text-orange-700 mr-2">⚡</span>
                       <span><strong>Efficient Operations:</strong> Push, pop, and peek are O(1)</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="text-orange-400 mr-2">🏗️</span>
+                      <span className="text-orange-700 mr-2">🏗️</span>
                       <span><strong>Simple Implementation:</strong> Can be built with arrays or linked lists</span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-semibold text-orange-400 mb-4">Basic Operations</h3>
+                  <h3 className="text-2xl font-semibold text-indigo-600 mb-4">Basic Operations</h3>
                   <div className="space-y-4">
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Push</h4>
-                      <p className="text-gray-300">Add element to the top of stack</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Push</h4>
+                      <p className="text-gray-700">Add element to the top of stack</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>stack.push(5); // Add 5 to top</code>
                       </pre>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Pop</h4>
-                      <p className="text-gray-300">Remove and return top element</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Pop</h4>
+                      <p className="text-gray-700">Remove and return top element</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>int val = stack.pop(); // Remove top element</code>
                       </pre>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">Peek/Top</h4>
-                      <p className="text-gray-300">View top element without removing</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">Peek/Top</h4>
+                      <p className="text-gray-700">View top element without removing</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>int top = stack.peek(); // View top element</code>
                       </pre>
                     </div>
 
-                    <div className="bg-gray-700/50 p-4 rounded-xl">
-                      <h4 className="text-lg font-semibold text-cyan-400 mb-2">isEmpty</h4>
-                      <p className="text-gray-300">Check if stack is empty</p>
-                      <pre className="bg-gray-900 text-gray-300 p-2 rounded text-xs mt-2">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                      <h4 className="text-lg font-semibold text-indigo-600 mb-2">isEmpty</h4>
+                      <p className="text-gray-700">Check if stack is empty</p>
+                      <pre className="bg-gray-900 text-gray-100 p-2 rounded text-xs mt-2 border border-gray-700">
                         <code>bool empty = stack.isEmpty();</code>
                       </pre>
                     </div>
@@ -1125,9 +1125,9 @@ int applyOperation(int a, int b, char op) {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-orange-400 mb-3">Time Complexity</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-orange-50 border border-orange-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-orange-700 mb-3">Time Complexity</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Push: O(1)</li>
                     <li>• Pop: O(1)</li>
                     <li>• Peek: O(1)</li>
@@ -1135,15 +1135,15 @@ int applyOperation(int a, int b, char op) {
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-cyan-400 mb-3">Space Complexity</h4>
-                  <p className="text-gray-300">O(n) for storing elements</p>
-                  <p className="text-sm text-gray-400 mt-2">Amortized for dynamic arrays</p>
+                <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-indigo-600 mb-3">Space Complexity</h4>
+                  <p className="text-gray-700">O(n) for storing elements</p>
+                  <p className="text-sm text-gray-600 mt-2">Amortized for dynamic arrays</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-700/50 p-6 rounded-xl">
-                  <h4 className="text-xl font-semibold text-purple-400 mb-3">Common Use Cases</h4>
-                  <ul className="text-gray-300 text-sm space-y-1">
+                <div className="bg-purple-50 border border-purple-200 p-6 rounded-xl">
+                  <h4 className="text-xl font-semibold text-purple-700 mb-3">Common Use Cases</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Function call stack</li>
                     <li>• Expression evaluation</li>
                     <li>• Undo/redo operations</li>
@@ -1157,31 +1157,31 @@ int applyOperation(int a, int b, char op) {
           {/* Implementations Section */}
           {activeSection === "implementations" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Stack Implementations</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Stack Implementations</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {implementations.map((impl) => (
                   <div
                     key={impl.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{impl.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{impl.name}</h3>
                         <div className="flex flex-wrap gap-2">
                           {Object.entries(impl.complexity).map(([key, value]) => (
-                            <span key={key} className="px-3 py-1 bg-orange-900/50 text-orange-300 text-sm rounded-lg">
+                            <span key={key} className="px-3 py-1 bg-orange-100 text-orange-700 border border-orange-200 text-sm rounded-lg">
                               {key.toUpperCase()}: {value}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{impl.description}</p>
+                      <p className="text-gray-700 mb-6">{impl.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{impl.code}</code>
                         </pre>
                       </div>
@@ -1195,32 +1195,32 @@ int applyOperation(int a, int b, char op) {
           {/* Algorithms Section */}
           {activeSection === "algorithms" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Stack Algorithms</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Stack Algorithms</h2>
 
               <div className="grid grid-cols-1 gap-8">
                 {algorithms.map((algorithm) => (
                   <div
                     key={algorithm.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 overflow-hidden transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="p-6">
                       <div className="flex flex-wrap justify-between items-start mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2">{algorithm.name}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{algorithm.name}</h3>
                         <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-green-900/50 text-green-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-green-100 text-green-700 border border-green-200 text-sm rounded-lg">
                             Time: {algorithm.complexity.time}
                           </span>
-                          <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 text-sm rounded-lg">
                             Space: {algorithm.complexity.space}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-gray-300 mb-6">{algorithm.description}</p>
+                      <p className="text-gray-700 mb-6">{algorithm.description}</p>
 
-                      <div className="bg-gray-700/50 p-4 rounded-xl">
-                        <h4 className="text-lg font-semibold text-cyan-400 mb-3">C++ Implementation</h4>
-                        <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
+                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <h4 className="text-lg font-semibold text-indigo-600 mb-3">C++ Implementation</h4>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                           <code>{algorithm.code}</code>
                         </pre>
                       </div>
@@ -1234,19 +1234,19 @@ int applyOperation(int a, int b, char op) {
           {/* Applications Section */}
           {activeSection === "applications" && (
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center">Stack Applications</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Stack Applications</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {applications.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700 p-6 transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/20"
+                    className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="mb-4">
-                      <h3 className="text-xl font-bold text-orange-400 mb-2">{app.name}</h3>
-                      <p className="text-gray-300 text-sm mb-3">{app.description}</p>
-                      <div className="bg-orange-900/20 border border-orange-700/50 p-3 rounded-lg">
-                        <p className="text-orange-300 text-sm"><strong>Use Case:</strong> {app.useCase}</p>
+                      <h3 className="text-xl font-bold text-indigo-600 mb-2">{app.name}</h3>
+                      <p className="text-gray-700 text-sm mb-3">{app.description}</p>
+                      <div className="bg-orange-50 border border-orange-200 p-3 rounded-lg">
+                        <p className="text-orange-700 text-sm"><strong>Use Case:</strong> {app.useCase}</p>
                       </div>
                     </div>
                   </div>
@@ -1256,81 +1256,81 @@ int applyOperation(int a, int b, char op) {
           )}
 
           {/* Practice Problems Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Practice Problems & Interview Questions
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-green-400 mb-3">🟢 Easy Stack Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-green-700 mb-3">🟢 Easy Stack Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Implement Stack using Queues</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Valid Parentheses</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Next Greater Element I</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-400 mr-2">•</span>
+                    <span className="text-green-700 mr-2">•</span>
                     <span>Baseball Game</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-yellow-400 mb-3">🟡 Medium Stack Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-amber-700 mb-3">🟡 Medium Stack Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Min Stack</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Evaluate Reverse Polish Notation</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Decode String</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Simplify Path</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-yellow-400 mr-2">•</span>
+                    <span className="text-amber-700 mr-2">•</span>
                     <span>Remove K Digits</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-                <h3 className="text-xl font-semibold text-red-400 mb-3">🔴 Hard Stack Problems</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+                <h3 className="text-xl font-semibold text-red-700 mb-3">🔴 Hard Stack Problems</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Largest Rectangle in Histogram</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Maximal Rectangle</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Trapping Rain Water</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Sliding Window Maximum</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-red-400 mr-2">•</span>
+                    <span className="text-red-700 mr-2">•</span>
                     <span>Basic Calculator III</span>
                   </li>
                 </ul>
@@ -1338,22 +1338,22 @@ int applyOperation(int a, int b, char op) {
             </div>
 
             {/* Interview Questions */}
-            <div className="bg-gray-700/50 p-6 rounded-xl border border-gray-600">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">💡 Interview Questions</h3>
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 border border-gray-600">
+              <h3 className="text-xl font-semibold text-purple-700 mb-4">💡 Interview Questions</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interviewProblems.map((problem, idx) => (
-                  <div key={idx} className="bg-gray-800/50 p-4 rounded-lg">
+                  <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="text-cyan-400 font-semibold">{problem.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-900/50 text-green-300' :
-                          problem.difficulty === 'Medium' ? 'bg-yellow-900/50 text-yellow-300' :
-                            'bg-red-900/50 text-red-300'
+                      <h4 className="text-indigo-600 font-semibold">{problem.name}</h4>
+                      <span className={`px-2 py-1 text-xs rounded ${problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                          problem.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
                         }`}>
                         {problem.difficulty}
                       </span>
                     </div>
-                    <p className="text-gray-300 text-sm mb-2">{problem.description}</p>
-                    <p className="text-xs text-gray-400 italic">{problem.hint}</p>
+                    <p className="text-gray-700 text-sm mb-2">{problem.description}</p>
+                    <p className="text-xs text-gray-600 italic">{problem.hint}</p>
                   </div>
                 ))}
               </div>
@@ -1361,64 +1361,64 @@ int applyOperation(int a, int b, char op) {
           </div>
 
           {/* Stack Cheat Sheet */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl border border-gray-700 p-8 transition-all duration-500 hover:border-red-500 hover:shadow-2xl hover:shadow-red-500/10">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
               Stack Cheat Sheet
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-orange-400 mb-4">Time Complexities</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-orange-700 mb-4">Time Complexities</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Push operation:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Push operation:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Pop operation:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Pop operation:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Peek/Top operation:</span>
-                    <span className="text-green-400 font-mono">O(1)</span>
+                    <span className="text-gray-700">Peek/Top operation:</span>
+                    <span className="text-green-700 font-mono">O(1)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Search operation:</span>
-                    <span className="text-yellow-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Search operation:</span>
+                    <span className="text-amber-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Valid parentheses:</span>
-                    <span className="text-green-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Valid parentheses:</span>
+                    <span className="text-green-700 font-mono">O(n)</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-gray-800/50 rounded">
-                    <span className="text-gray-300">Next greater element:</span>
-                    <span className="text-green-400 font-mono">O(n)</span>
+                    <span className="text-gray-700">Next greater element:</span>
+                    <span className="text-green-700 font-mono">O(n)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-700/50 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold text-orange-400 mb-4">Common Patterns</h3>
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-xl font-semibold text-orange-700 mb-4">Common Patterns</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Monotonic Stack:</div>
-                    <div className="text-gray-400">Maintain increasing/decreasing order</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Monotonic Stack:</div>
+                    <div className="text-gray-600">Maintain increasing/decreasing order</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Two Stacks:</div>
-                    <div className="text-gray-400">Implement queue, evaluate expressions</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Two Stacks:</div>
+                    <div className="text-gray-600">Implement queue, evaluate expressions</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Stack + Hash Map:</div>
-                    <div className="text-gray-400">Track indices, frequencies, or mappings</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Stack + Hash Map:</div>
+                    <div className="text-gray-600">Track indices, frequencies, or mappings</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Recursive to Iterative:</div>
-                    <div className="text-gray-400">Convert recursive solutions to stack-based</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Recursive to Iterative:</div>
+                    <div className="text-gray-600">Convert recursive solutions to stack-based</div>
                   </div>
-                  <div className="bg-gray-800/50 p-3 rounded">
-                    <div className="text-cyan-400 font-medium mb-1">Parentheses Matching:</div>
-                    <div className="text-gray-400">Push opening, pop matching closing</div>
+                  <div className="bg-gray-100 p-3 rounded">
+                    <div className="text-indigo-600 font-medium mb-1">Parentheses Matching:</div>
+                    <div className="text-gray-600">Push opening, pop matching closing</div>
                   </div>
                 </div>
               </div>
