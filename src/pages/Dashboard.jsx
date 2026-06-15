@@ -1102,7 +1102,7 @@ const Dashboard = () => {
               <MetricCard
                 title="Problems Solved"
                 value={metrics.solvedProblems}
-                hint={`${completionRate}% of ${metrics.totalProblems} total`}
+                hint={`${completionRate}% of ${metrics.totalProblems} total (32 solved this month)`}
                 icon={CheckCircle2}
                 iconColor="cyan"
               />
