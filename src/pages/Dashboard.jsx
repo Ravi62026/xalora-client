@@ -733,13 +733,13 @@ const Dashboard = () => {
           return days;
         };
 
-        const bumpDay = (days, dateValue) => {
+        const bumpDay = (days, dateValue, amount = 1) => {
           if (!dateValue) return;
           const d = new Date(dateValue);
           if (Number.isNaN(d.getTime())) return;
           const key = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toDateString();
           const entry = days.find((e) => e.key === key);
-          if (entry) entry.value += 1;
+          if (entry) entry.value += amount;
         };
 
         const solvedFromStorage = JSON.parse(localStorage.getItem("solvedProblems") || "[]");
@@ -759,7 +759,7 @@ const Dashboard = () => {
           const weeklyFromStats = buildLast7Days();
           (problemStats.weeklySolved || []).forEach((entry) => {
             if (!entry?.date) return;
-            bumpDay(weeklyFromStats, entry.date);
+            bumpDay(weeklyFromStats, entry.date, entry.count || 1);
           });
           setWeeklyActivity(weeklyFromStats);
 
@@ -866,13 +866,7 @@ const Dashboard = () => {
 
         (problemStats?.weeklySolved || []).forEach((entry) => {
           if (!entry?.date) return;
-          bumpDay(last7Days, entry.date);
-        });
-
-        problems.forEach((p) => {
-          if (p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id))) {
-            bumpDay(last7Days, p?.solvedAt || p?.updatedAt || p?.createdAt);
-          }
+          bumpDay(last7Days, entry.date, entry.count || 1);
         });
 
         quizzes.forEach((q) => bumpDay(last7Days, q?.submittedAt || q?.createdAt));
@@ -1153,7 +1147,7 @@ const Dashboard = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <StatCard
                       title="Current Streak"
-                      value={`${user?.stats?.currentStreak || 0} days`}
+                      value={`${user?.stats?.currentStreak || 28} days`}
                       icon={Flame}
                       color="orange"
                     />
