@@ -887,19 +887,35 @@ const Dashboard = () => {
           return { at: dateFormatter.format(d), atValue: d.getTime() };
         };
 
-        const activities = [
-          ...problems
-            .filter((p) => p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id)))
-            .map((p) => {
+        const problemActivityMap = new Map();
+        (problemStats?.recentSolved || []).forEach((p) => {
+          const { at, atValue } = safeAt(p?.solvedAt);
+          problemActivityMap.set(p?._id?.toString() || p?.title, {
+            type: "problem",
+            title: p?.title || "Solved a problem",
+            at,
+            atValue,
+            meta: p?.difficulty || "DSA",
+          });
+        });
+        problems
+          .filter((p) => p?.userStatus === "Solved" || (p?._id && solvedProblemIds.has(p._id)))
+          .forEach((p) => {
+            const key = p?._id?.toString() || p?.title;
+            if (!problemActivityMap.has(key)) {
               const { at, atValue } = safeAt(p?.solvedAt || p?.updatedAt || p?.createdAt);
-              return {
+              problemActivityMap.set(key, {
                 type: "problem",
                 title: p?.title || "Solved a problem",
                 at,
                 atValue,
                 meta: p?.difficulty || "DSA",
-              };
-            }),
+              });
+            }
+          });
+
+        const activities = [
+          ...Array.from(problemActivityMap.values()),
           ...quizzes.map((q) => {
             const { at, atValue } = safeAt(q?.submittedAt || q?.createdAt);
             return {
