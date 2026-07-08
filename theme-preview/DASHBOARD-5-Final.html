@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard 5 - Final</title>
+    <title>Dashboard - Xalora</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -97,13 +97,6 @@
             margin-left: auto;
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white; font-size: 0.6rem; font-weight: 800;
-            padding: 0.15rem 0.45rem; border-radius: 20px;
-        }
-
-        .nav-badge-new {
-            margin-left: auto;
-            background: rgba(79,70,229,0.1); color: #4f46e5;
-            font-size: 0.6rem; font-weight: 800;
             padding: 0.15rem 0.45rem; border-radius: 20px;
         }
 
@@ -216,6 +209,19 @@
         .topbar-user-name { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
         .topbar-user-role { font-size: 0.68rem; color: #9ca3af; }
 
+        /* Role switcher */
+        .role-switcher {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: white; border: 1px solid rgba(120,119,198,0.2);
+            border-radius: 999px; padding: 0.25rem 0.6rem;
+            font-size: 0.7rem; font-weight: 700; color: #4f46e5;
+        }
+        .role-switcher select {
+            border: none; outline: none; background: transparent;
+            font-size: 0.7rem; font-weight: 700; color: #4f46e5;
+            cursor: pointer; font-family: inherit;
+        }
+
         /* ===================== PAGE CONTENT ===================== */
         .content { padding: 2rem; }
 
@@ -241,7 +247,7 @@
             background: rgba(79,70,229,0.06);
         }
 
-        .hero-text { position: relative; z-index: 2; max-width: 400px; }
+        .hero-text { position: relative; z-index: 2; max-width: 420px; }
 
         .hero-text h2 {
             font-size: 1.85rem; font-weight: 900; color: #0f172a;
@@ -378,57 +384,38 @@
         .card-view:hover { color: #7c3aed; }
         .card-body { padding: 0.5rem 1.3rem 1.2rem; }
 
-        /* Learning path items */
-        .lp-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); }
-        .lp-item:last-child { border: none; }
+        /* Interview/session items */
+        .session-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .session-item:last-child { border: none; }
 
-        .lp-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
-
-        .lp-icon-wrap {
-            width: 28px; height: 28px; border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; flex-shrink: 0;
-        }
-
-        .lp-title { font-size: 0.83rem; font-weight: 700; color: #0f172a; flex: 1; margin-left: 0.6rem; }
-        .lp-sub { font-size: 0.7rem; color: #9ca3af; margin: 0 0 0.35rem 2.1rem; }
-        .lp-pct { font-size: 0.78rem; font-weight: 800; color: #4f46e5; }
-
-        .lp-bar-bg { height: 5px; background: #f3f4f6; border-radius: 3px; margin-left: 2.1rem; overflow: hidden; }
-        .lp-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #4f46e5, #7c3aed); }
-
-        /* Recent activity items */
-        .act-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
-        .act-item:last-child { border: none; }
-
-        .act-icon {
+        .session-icon {
             width: 32px; height: 32px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.85rem; flex-shrink: 0;
         }
 
-        .act-info { flex: 1; }
-        .act-title { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
-        .act-sub { font-size: 0.7rem; color: #9ca3af; margin-top: 0.1rem; }
+        .session-info { flex: 1; }
+        .session-title { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .session-sub { font-size: 0.7rem; color: #9ca3af; margin-top: 0.1rem; }
 
-        .score-badge {
+        .status-badge {
             padding: 0.25rem 0.6rem;
             border-radius: 20px;
             font-size: 0.72rem; font-weight: 800;
             flex-shrink: 0;
         }
 
-        .score-badge.excellent { background: rgba(16,185,129,0.1); color: #059669; }
-        .score-badge.good { background: rgba(59,130,246,0.1); color: #1d4ed8; }
-        .score-badge.avg { background: rgba(245,158,11,0.1); color: #d97706; }
+        .status-badge.completed { background: rgba(16,185,129,0.1); color: #059669; }
+        .status-badge.in-progress { background: rgba(245,158,11,0.1); color: #d97706; }
+        .status-badge.created { background: rgba(59,130,246,0.1); color: #1d4ed8; }
 
-        .act-time { font-size: 0.68rem; color: #d1d5db; flex-shrink: 0; }
+        .session-time { font-size: 0.68rem; color: #d1d5db; flex-shrink: 0; }
 
-        /* Upcoming interviews */
-        .interview-item { padding: 0.8rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
-        .interview-item:last-child { border: none; }
+        /* Internship items */
+        .internship-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .internship-item:last-child { border: none; }
 
-        .company-logo {
+        .internship-logo {
             width: 36px; height: 36px; border-radius: 9px;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.1rem; flex-shrink: 0;
@@ -436,12 +423,12 @@
             background: white;
         }
 
-        .interview-info { flex: 1; }
-        .company-name { font-size: 0.85rem; font-weight: 800; color: #0f172a; }
-        .interview-role { font-size: 0.72rem; color: #6b7280; margin-top: 0.1rem; }
-        .interview-date { font-size: 0.68rem; color: #9ca3af; margin-top: 0.2rem; }
+        .internship-info { flex: 1; }
+        .internship-title { font-size: 0.85rem; font-weight: 800; color: #0f172a; }
+        .internship-sub { font-size: 0.72rem; color: #6b7280; margin-top: 0.1rem; }
+        .internship-difficulty { font-size: 0.68rem; color: #9ca3af; margin-top: 0.2rem; }
 
-        .prepare-btn {
+        .enroll-btn {
             padding: 0.45rem 0.9rem;
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white; border: none; border-radius: 6px;
@@ -449,9 +436,36 @@
             transition: all 0.2s; flex-shrink: 0;
         }
 
-        .prepare-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79,70,229,0.3); }
+        .enroll-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79,70,229,0.3); }
 
-        /* ---- Motivational Banner ---- */
+        /* Quick Actions (no upcoming interviews) */
+        .quick-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quick-action-item {
+            display: flex; align-items: center; gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(79,70,229,0.02);
+            border: 1px solid rgba(120,119,198,0.08);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action-item:hover { border-color: #4f46e5; background: rgba(79,70,229,0.04); }
+
+        .qa-icon {
+            width: 36px; height: 36px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+
+        .qa-info { flex: 1; }
+        .qa-title { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .qa-sub { font-size: 0.7rem; color: #9ca3af; }
+
+        .qa-arrow { color: #d1d5db; font-size: 0.8rem; }
+
+        /* ---- Motivational / Announcement Banner ---- */
         .motivational {
             background: white;
             border-radius: 14px;
@@ -476,6 +490,116 @@
         .motiv-stat-lbl { font-size: 0.7rem; color: #9ca3af; font-weight: 600; }
 
         .motiv-divider { width: 1px; background: rgba(120,119,198,0.12); align-self: stretch; }
+
+        /* ---- Subscription pill ---- */
+        .plan-pill {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.75rem; border-radius: 999px;
+            font-size: 0.72rem; font-weight: 800;
+            background: rgba(79,70,229,0.08); color: #4f46e5;
+            border: 1px solid rgba(79,70,229,0.15);
+        }
+        .plan-pill.pro { background: rgba(245,158,11,0.1); color: #b45309; border-color: rgba(245,158,11,0.25); }
+        .plan-pill.org { background: rgba(16,185,129,0.1); color: #065f46; border-color: rgba(16,185,129,0.25); }
+
+        /* ---- Role-specific section visibility ---- */
+        .role-section { display: none; }
+        .role-section.active { display: block; }
+
+        /* ---- Resume items ---- */
+        .resume-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .resume-item:last-child { border: none; }
+
+        .resume-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
+        }
+
+        .resume-info { flex: 1; }
+        .resume-title { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .resume-sub { font-size: 0.7rem; color: #9ca3af; margin-top: 0.1rem; }
+
+        /* ---- Quiz items ---- */
+        .quiz-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .quiz-item:last-child { border: none; }
+
+        .quiz-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
+        }
+
+        .quiz-info { flex: 1; }
+        .quiz-title { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .quiz-sub { font-size: 0.7rem; color: #9ca3af; margin-top: 0.1rem; }
+
+        /* ---- Leaderboard items ---- */
+        .lb-item { padding: 0.7rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .lb-item:last-child { border: none; }
+
+        .lb-rank {
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 800; flex-shrink: 0;
+        }
+
+        .lb-rank.gold { background: rgba(245,158,11,0.15); color: #b45309; }
+        .lb-rank.silver { background: rgba(156,163,175,0.15); color: #4b5563; }
+        .lb-rank.bronze { background: rgba(180,130,80,0.15); color: #92400e; }
+        .lb-rank.normal { background: rgba(79,70,229,0.08); color: #4f46e5; }
+
+        .lb-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.72rem; color: white; flex-shrink: 0;
+        }
+
+        .lb-info { flex: 1; }
+        .lb-name { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .lb-sub { font-size: 0.7rem; color: #9ca3af; }
+
+        .lb-score { font-size: 0.82rem; font-weight: 800; color: #4f46e5; }
+
+        /* ---- Problem topic chips ---- */
+        .topic-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .topic-chip {
+            padding: 0.4rem 0.8rem;
+            background: rgba(79,70,229,0.06);
+            border: 1px solid rgba(120,119,198,0.12);
+            border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; color: #4f46e5;
+        }
+        .topic-chip.easy { background: rgba(16,185,129,0.08); color: #059669; border-color: rgba(16,185,129,0.2); }
+        .topic-chip.medium { background: rgba(245,158,11,0.08); color: #d97706; border-color: rgba(245,158,11,0.2); }
+        .topic-chip.hard { background: rgba(239,68,68,0.08); color: #dc2626; border-color: rgba(239,68,68,0.15); }
+
+        /* member rows */
+        .member-row { padding: 0.7rem 0; border-bottom: 1px solid rgba(120,119,198,0.06); display: flex; align-items: center; gap: 0.8rem; }
+        .member-row:last-child { border: none; }
+
+        .member-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.72rem; color: white; flex-shrink: 0;
+        }
+
+        .member-info { flex: 1; }
+        .member-name { font-size: 0.82rem; font-weight: 700; color: #0f172a; }
+        .member-sub { font-size: 0.7rem; color: #9ca3af; }
+
+        .member-score { font-size: 0.78rem; font-weight: 800; color: #4f46e5; }
+        .member-interviews { font-size: 0.7rem; color: #6b7280; text-align: right; }
+
+        /* ---- API annotation ---- */
+        .api-note {
+            padding: 0.3rem 0.6rem;
+            background: rgba(79,70,229,0.04);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            color: #9ca3af;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -491,34 +615,55 @@
     <nav class="sidebar-nav">
         <div class="nav-section">Main</div>
         <div class="nav-item active"><span class="nav-icon">🏠</span> Dashboard</div>
-        <div class="nav-item"><span class="nav-icon">🎯</span> DSA Practice <span class="nav-badge">1K+</span></div>
-        <div class="nav-item"><span class="nav-icon">🤖</span> Mock Interviews <span class="nav-badge-new">AI</span></div>
-        <div class="nav-item"><span class="nav-icon">📝</span> Assessments</div>
-        <div class="nav-item"><span class="nav-icon">💼</span> Resume Analyzer</div>
+
+        <!-- Individual / Student -->
+        <div class="role-section" data-role="individual">
+            <div class="nav-item"><span class="nav-icon">🎯</span> Problems <span class="nav-badge" id="navBadgeProblems">1K+</span></div>
+            <div class="nav-item"><span class="nav-icon">🤖</span> AI Interviews <span class="nav-badge">AI</span></div>
+            <div class="nav-item"><span class="nav-icon">📝</span> Quizzes</div>
+            <div class="nav-item"><span class="nav-icon">📄</span> Resume Analyzer</div>
+            <div class="nav-item"><span class="nav-icon">💻</span> Compiler</div>
+            <div class="nav-item"><span class="nav-icon">💼</span> Internships</div>
+        </div>
+
+        <!-- College: student-facing -->
+        <div class="role-section" data-role="college-student">
+            <div class="nav-item"><span class="nav-icon">🎯</span> DSA Practice</div>
+            <div class="nav-item"><span class="nav-icon">🤖</span> AI Interviews</div>
+            <div class="nav-item"><span class="nav-icon">📝</span> Assessments</div>
+            <div class="nav-item"><span class="nav-icon">🏆</span> Leaderboard</div>
+            <div class="nav-item"><span class="nav-icon">💼</span> Internships</div>
+        </div>
+
+        <!-- College / Company org team (admin/manager/viewer) -->
+        <div class="role-section" data-role="org-team">
+            <div class="nav-item"><span class="nav-icon">👥</span> Members</div>
+            <div class="nav-item"><span class="nav-icon">📊</span> Analytics</div>
+            <div class="nav-item"><span class="nav-icon">📝</span> Assessments</div>
+            <div class="nav-item"><span class="nav-icon">💼</span> Internships</div>
+        </div>
 
         <div class="nav-section">Learn</div>
-        <div class="nav-item"><span class="nav-icon">📚</span> Learning Path</div>
-        <div class="nav-item"><span class="nav-icon">📊</span> Analytics</div>
-        <div class="nav-item"><span class="nav-icon">🏆</span> Achievements</div>
-        <div class="nav-item"><span class="nav-icon">💼</span> Job Opportunities</div>
-        <div class="nav-item"><span class="nav-icon">👥</span> Community</div>
+        <div class="nav-item"><span class="nav-icon">📚</span> Topics & DS/Algo</div>
+        <div class="nav-item"><span class="nav-icon">📊</span> Analytics <span class="nav-badge-new">New</span></div>
 
         <div class="nav-section">Account</div>
         <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+        <div class="nav-item"><span class="nav-icon">🏢</span> Organization</div>
     </nav>
 
     <div class="upgrade-card">
         <span class="upgrade-icon">👑</span>
-        <div class="upgrade-title">Upgrade to Pro</div>
-        <div class="upgrade-desc">Unlock AI insights, advanced mock interviews and more.</div>
-        <button class="upgrade-btn">Upgrade Now</button>
+        <div class="upgrade-title" id="upgradeTitle">Upgrade to Pulse / Nexus</div>
+        <div class="upgrade-desc">Unlock more AI interviews, advanced analytics, and internship portal access.</div>
+        <button class="upgrade-btn">View Plans</button>
     </div>
 
     <div class="sidebar-user">
-        <div class="s-avatar">AV</div>
+        <div class="s-avatar" id="sAvatar">AV</div>
         <div>
-            <div class="s-name">Aditya Verma</div>
-            <div class="s-role">Computer Science</div>
+            <div class="s-name" id="sName">Aditya Verma</div>
+            <div class="s-role" id="sidebarRole">Individual</div>
         </div>
     </div>
 </div>
@@ -532,7 +677,7 @@
             <span class="topbar-menu">☰</span>
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input class="search-input" type="text" placeholder="Search anything...">
+                <input class="search-input" type="text" placeholder="Search problems, quizzes, interviews...">
             </div>
         </div>
         <div class="topbar-right">
@@ -541,255 +686,870 @@
                 <div class="notif-dot"></div>
             </div>
             <div class="topbar-user">
-                <div class="topbar-avatar">AV</div>
+                <div class="topbar-avatar" id="tAvatar">AV</div>
                 <div class="topbar-user-info">
-                    <div class="topbar-user-name">Aditya Verma</div>
-                    <div class="topbar-user-role">Computer Science</div>
+                    <div class="topbar-user-name" id="tName">Aditya Verma</div>
+                    <div class="topbar-user-role">
+                        <span id="planPill" class="plan-pill">Spark Plan</span>
+                    </div>
                 </div>
+            </div>
+            <div class="role-switcher">
+                <span>Role:</span>
+                <select id="roleSelect" onchange="switchRole(this.value)">
+                    <option value="individual">Individual</option>
+                    <option value="college-student">College Student</option>
+                    <option value="org-team">Org Team</option>
+                </select>
             </div>
         </div>
     </div>
 
     <div class="content">
 
-        <!-- Hero Banner -->
-        <div class="hero-banner">
-            <div class="hero-text">
-                <h2>Your AI-Powered<br><span>Placement Partner</span></h2>
-                <p>Practice. Improve. Get Hired. Ace interviews, assessments and coding rounds with AI-driven feedback and personalized learning.</p>
-                <div class="hero-actions">
-                    <button class="hero-btn-primary">▶ Start Mock Interview</button>
-                    <button class="hero-btn-secondary">📄 Resume Analysis</button>
+        <!-- ===================== INDIVIDUAL DASHBOARD ===================== -->
+        <!-- API endpoints: /api/v1/problems/stats, /api/v1/quizzes/analytics, /api/v1/interviews, /api/v1/resume/history, /api/v1/internships, /api/v1/internships/user/enrollments -->
+        <div id="dashboard-individual" class="role-section active">
+            <div class="hero-banner">
+                <div class="hero-text">
+                    <h2>Hi, Aditya! 👋<br><span>Your Practice Dashboard</span></h2>
+                    <p>Track DSA progress, review AI interview performance, analyze quizzes, and discover internships.</p>
+                    <div class="hero-actions">
+                        <!-- Fetches: POST /api/v1/interview/start -->
+                        <button class="hero-btn-primary">▶ Start AI Interview</button>
+                        <!-- Fetches: POST /api/v1/resume/analyze -->
+                        <button class="hero-btn-secondary">📄 Analyze Resume</button>
+                    </div>
+                </div>
+                <div class="hero-illustration">
+                    <div class="hero-robot">🎯</div>
+                    <div class="hero-cards-stack">
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">✅</span>
+                            <div>
+                                <div class="hero-mini-label">Problems Solved</div>
+                                <div class="hero-mini-val" id="heroSolved">1,248</div>
+                            </div>
+                        </div>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">🤖</span>
+                            <div>
+                                <div class="hero-mini-label">Avg. Interview Score</div>
+                                <div class="hero-mini-val" id="heroInterviewScore">82%</div>
+                            </div>
+                        </div>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">🪙</span>
+                            <div>
+                                <div class="hero-mini-label">JBP Coins</div>
+                                <div class="hero-mini-val" id="heroJbpCoins">4,320</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="hero-illustration">
-                <div class="hero-robot">🤖</div>
-                <div class="hero-cards-stack">
-                    <div class="hero-mini-card">
-                        <span class="hero-mini-card-icon">🎯</span>
-                        <div>
-                            <div class="hero-mini-label">Problems Solved</div>
-                            <div class="hero-mini-val">1,248</div>
+
+            <!-- Stats Row: GET /api/v1/problems/stats + /api/v1/quizzes/analytics + /api/v1/interviews -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v1">🎯</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Problems Solved</div>
+                        <div class="stat-value" id="statSolved">1,248</div>
+                        <div class="stat-change up">+32 this week</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v2">🤖</div>
+                    <div class="stat-info">
+                        <div class="stat-label">AI Interviews</div>
+                        <div class="stat-value" id="statInterviews">14</div>
+                        <div class="stat-change up">+3 this week</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v3">📝</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Quizzes Passed</div>
+                        <div class="stat-value" id="statQuizzes">22</div>
+                        <div class="stat-change up">+5 this week</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v4">🪙</div>
+                    <div class="stat-info">
+                        <div class="stat-label">JBP Coins</div>
+                        <div class="stat-value" id="statJbpCoins">4,320</div>
+                        <div class="stat-change up">+420 this week</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Column Section -->
+            <div class="three-col">
+                <!-- DSA Progress: GET /api/v1/problems/stats → recentSolved, weeklySolved -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">DSA Progress</div>
+                        <span class="api-note">GET /api/v1/problems/stats</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="lp-item">
+                            <div class="lp-top">
+                                <div class="lp-icon-wrap" style="background:rgba(79,70,229,0.1);">🎯</div>
+                                <span class="lp-title">Arrays & Strings</span>
+                                <span class="lp-pct" id="topicArrays">78%</span>
+                            </div>
+                            <div class="topic-chips">
+                                <span class="topic-chip easy">Easy 12</span>
+                                <span class="topic-chip medium">Medium 8</span>
+                                <span class="topic-chip hard">Hard 2</span>
+                            </div>
+                        </div>
+                        <div class="lp-item">
+                            <div class="lp-top">
+                                <div class="lp-icon-wrap" style="background:rgba(16,185,129,0.1);">🌳</div>
+                                <span class="lp-title">Trees & Graphs</span>
+                                <span class="lp-pct" id="topicTrees" style="color:#059669;">52%</span>
+                            </div>
+                            <div class="topic-chips">
+                                <span class="topic-chip easy">Easy 5</span>
+                                <span class="topic-chip medium">Medium 6</span>
+                                <span class="topic-chip hard">Hard 1</span>
+                            </div>
+                        </div>
+                        <div class="lp-item">
+                            <div class="lp-top">
+                                <div class="lp-icon-wrap" style="background:rgba(245,158,11,0.1);">⚡</div>
+                                <span class="lp-title">Dynamic Programming</span>
+                                <span class="lp-pct" id="topicDP" style="color:#d97706;">35%</span>
+                            </div>
+                            <div class="topic-chips">
+                                <span class="topic-chip easy">Easy 3</span>
+                                <span class="topic-chip medium">Medium 4</span>
+                                <span class="topic-chip hard">Hard 2</span>
+                            </div>
+                        </div>
+                        <div class="lp-item">
+                            <div class="lp-top">
+                                <div class="lp-icon-wrap" style="background:rgba(59,130,246,0.1);">🗣️</div>
+                                <span class="lp-title">Behavioral & HR</span>
+                                <span class="lp-pct" id="topicHR" style="color:#1d4ed8;">64%</span>
+                            </div>
+                            <div class="topic-chips">
+                                <span class="topic-chip easy">Practice 8</span>
+                                <span class="topic-chip medium">Mock 4</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="hero-mini-card">
-                        <span class="hero-mini-card-icon">⚡</span>
-                        <div>
-                            <div class="hero-mini-label">Average Score</div>
-                            <div class="hero-mini-val">85% · Excellent</div>
+                </div>
+
+                <!-- Recent Activity: GET /api/v1/interviews + /api/v1/problems/stats + /api/v1/quizzes/analytics + /api/v1/resume/history + /api/v1/internships/user/enrollments -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activity</div>
+                        <span class="api-note">multi-source</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="session-item">
+                            <div class="session-icon" style="background:rgba(79,70,229,0.1);">🤖</div>
+                            <div class="session-info">
+                                <div class="session-title">AI Interview Completed</div>
+                                <div class="session-sub">Technical Round · 7 questions</div>
+                            </div>
+                            <!-- From InterviewReport.overallScore -->
+                            <span class="status-badge completed">86%</span>
+                            <!-- From InterviewSession.createdAt -->
+                            <span class="session-time">2h ago</span>
+                        </div>
+                        <div class="session-item">
+                            <div class="session-icon" style="background:rgba(16,185,129,0.1);">✅</div>
+                            <div class="session-info">
+                                <div class="session-title">Problem Solved</div>
+                                <div class="session-sub">Binary Tree Level Order Traversal</div>
+                            </div>
+                            <!-- From UserProblemStatus.status -->
+                            <span class="status-badge completed">Accepted</span>
+                            <!-- From UserProblemStatus.solvedAt -->
+                            <span class="session-time">5h ago</span>
+                        </div>
+                        <div class="session-item">
+                            <div class="session-icon" style="background:rgba(245,158,11,0.1);">📝</div>
+                            <div class="session-info">
+                                <div class="session-title">Quiz Passed</div>
+                                <div class="session-sub">JavaScript Fundamentals</div>
+                            </div>
+                            <!-- From QuizSubmission.score + passed -->
+                            <span class="status-badge completed">78%</span>
+                            <!-- From QuizSubmission.submittedAt -->
+                            <span class="session-time">1d ago</span>
+                        </div>
+                        <div class="session-item">
+                            <div class="session-icon" style="background:rgba(59,130,246,0.1);">📄</div>
+                            <div class="session-info">
+                                <div class="session-title">Resume Analyzed</div>
+                                <div class="session-sub">Frontend Resume v2</div>
+                            </div>
+                            <!-- From ResumeAnalysis.analysisResult overallScore -->
+                            <span class="status-badge completed">AI Review</span>
+                            <!-- From ResumeAnalysis.createdAt -->
+                            <span class="session-time">1d ago</span>
+                        </div>
+                        <div class="session-item">
+                            <div class="session-icon" style="background:rgba(16,185,129,0.1);">💼</div>
+                            <div class="session-info">
+                                <div class="session-title">Internship Enrolled</div>
+                                <div class="session-sub">Fullstack Internship Program</div>
+                            </div>
+                            <!-- From InternshipEnrollment.status -->
+                            <span class="status-badge completed">Enrolled</span>
+                            <!-- From InternshipEnrollment.enrolledAt -->
+                            <span class="session-time">2d ago</span>
                         </div>
                     </div>
-                    <div class="hero-mini-card">
-                        <span class="hero-mini-card-icon">🏅</span>
-                        <div>
-                            <div class="hero-mini-label">Global Rank</div>
-                            <div class="hero-mini-val">Top 12%</div>
+                </div>
+
+                <!-- Quick Actions: no upcoming interviews on platform; these are available actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Quick Actions</div>
+                        <span class="api-note">open features</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-actions">
+                            <div class="quick-action-item">
+                                <div class="qa-icon" style="background:rgba(79,70,229,0.1);">🎯</div>
+                                <div class="qa-info">
+                                    <div class="qa-title">Practice DSA</div>
+                                    <div class="qa-sub">Start a random problem from your weak topics</div>
+                                </div>
+                                <span class="qa-arrow">→</span>
+                            </div>
+                            <div class="quick-action-item">
+                                <div class="qa-icon" style="background:rgba(16,185,129,0.1);">🤖</div>
+                                <div class="qa-info">
+                                    <div class="qa-title">Mock Interview</div>
+                                    <div class="qa-sub">Technical + Behavioral round</div>
+                                </div>
+                                <span class="qa-arrow">→</span>
+                            </div>
+                            <div class="quick-action-item">
+                                <div class="qa-icon" style="background:rgba(245,158,11,0.1);">📝</div>
+                                <div class="qa-info">
+                                    <div class="qa-title">Take a Quiz</div>
+                                    <div class="qa-sub">Topic-wise assessment</div>
+                                </div>
+                                <span class="qa-arrow">→</span>
+                            </div>
+                            <div class="quick-action-item">
+                                <div class="qa-icon" style="background:rgba(59,130,246,0.1);">📄</div>
+                                <div class="qa-info">
+                                    <div class="qa-title">Resume Analyzer</div>
+                                    <div class="qa-sub">Upload PDF, get AI feedback</div>
+                                </div>
+                                <span class="qa-arrow">→</span>
+                            </div>
+                            <div class="quick-action-item">
+                                <div class="qa-icon" style="background:rgba(16,185,129,0.1);">💼</div>
+                                <div class="qa-info">
+                                    <div class="qa-title">Browse Internships</div>
+                                    <div class="qa-sub">GET /api/v1/internships</div>
+                                </div>
+                                <span class="qa-arrow">→</span>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Motivational -->
+            <div class="motivational">
+                <div class="motivational-icon">🏆</div>
+                <div class="motivational-text">
+                    <h3>Keep Going, Aditya! 🚀</h3>
+                    <p>Based on your weekly stats: 32 new problems solved, 3 AI interviews completed, and 5 quizzes cleared.</p>
+                </div>
+                <div class="motivational-stats">
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">🔥</div>
+                        <div class="motiv-stat-val">12</div>
+                        <div class="motiv-stat-lbl">Day Streak</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">🏅</div>
+                        <div class="motiv-stat-val">Top 12%</div>
+                        <div class="motiv-stat-lbl">Among learners</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">⚡</div>
+                        <div class="motiv-stat-val">82%</div>
+                        <div class="motiv-stat-lbl">Avg. Interview Score</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stats Row -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon-wrap v1">🎯</div>
-                <div class="stat-info">
-                    <div class="stat-label">DSA Problems Solved</div>
-                    <div class="stat-value">1,248</div>
-                    <div class="stat-change up">+32 this week</div>
+        <!-- ===================== COLLEGE STUDENT DASHBOARD ===================== -->
+        <!-- API: /api/v1/college/:orgId/leaderboard, /api/v1/college/:orgId/my-rank, /api/v1/problems/stats, /api/v1/quizzes/analytics, /api/v1/interviews -->
+        <div id="dashboard-college-student" class="role-section">
+            <div class="hero-banner">
+                <div class="hero-text">
+                    <h2>Hi, Aditya! 👋<br><span>Your College Dashboard</span></h2>
+                    <p>Track placement readiness, compete with peers, review assessment performance, and apply for internships.</p>
+                    <div class="hero-actions">
+                        <button class="hero-btn-primary">🏆 View Leaderboard</button>
+                        <button class="hero-btn-secondary">📝 Take Assessment</button>
+                    </div>
+                </div>
+                <div class="hero-illustration">
+                    <div class="hero-robot">🎓</div>
+                    <div class="hero-cards-stack">
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">🏆</span>
+                            <div>
+                                <div class="hero-mini-label">College Rank</div>
+                                <div class="hero-mini-val" id="collegeRank">#4</div>
+                            </div>
+                        </div>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">⚡</span>
+                            <div>
+                                <div class="hero-mini-label">Avg. Score</div>
+                                <div class="hero-mini-val" id="collegeAvgScore">81%</div>
+                            </div>
+                        </div>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">📝</span>
+                            <div>
+                                <div class="hero-mini-label">Assessments Given</div>
+                                <div class="hero-mini-val" id="collegeAssessments">6 / 8</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon-wrap v2">🤖</div>
-                <div class="stat-info">
-                    <div class="stat-label">Mock Interviews</div>
-                    <div class="stat-value">24</div>
-                    <div class="stat-change up">+6 this week</div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v1">🎯</div>
+                    <div class="stat-info">
+                        <div class="stat-label">DSA Problems Solved</div>
+                        <div class="stat-value" id="collegeDsaSolved">842</div>
+                        <div class="stat-change up">Top 15% in college</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v2">🤖</div>
+                    <div class="stat-info">
+                        <div class="stat-label">AI Interviews</div>
+                        <div class="stat-value" id="collegeInterviews">9</div>
+                        <div class="stat-change up">+2 this month</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v3">📊</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Assessments Cleared</div>
+                        <div class="stat-value" id="collegeAssessmentsCleared">6 / 8</div>
+                        <div class="stat-change up">2 remaining</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v4">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Internships Applied</div>
+                        <div class="stat-value" id="collegeInternships">3</div>
+                        <div class="stat-change up">1 pending</div>
+                    </div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon-wrap v3">📝</div>
-                <div class="stat-info">
-                    <div class="stat-label">Assessments Taken</div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-change up">+3 this week</div>
+
+            <div class="three-col">
+                <!-- Leaderboard: GET /api/v1/college/:orgId/leaderboard -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">College Leaderboard</div>
+                        <span class="api-note">GET /api/v1/college/:orgId/leaderboard</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="lb-item">
+                            <div class="lb-rank gold">1</div>
+                            <div class="lb-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">RS</div>
+                            <div class="lb-info">
+                                <div class="lb-name">Rahul Sharma</div>
+                                <div class="lb-sub">CSE · 4th Year</div>
+                            </div>
+                            <div class="lb-score">Score 96</div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-rank silver">2</div>
+                            <div class="lb-avatar" style="background:linear-gradient(135deg,#6b7280,#4b5563);">PP</div>
+                            <div class="lb-info">
+                                <div class="lb-name">Priya Patel</div>
+                                <div class="lb-sub">CSE · 3rd Year</div>
+                            </div>
+                            <div class="lb-score">Score 92</div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-rank bronze">3</div>
+                            <div class="lb-avatar" style="background:linear-gradient(135deg,#b45309,#92400e);">AS</div>
+                            <div class="lb-info">
+                                <div class="lb-name">Arjun Singh</div>
+                                <div class="lb-sub">IT · 4th Year</div>
+                            </div>
+                            <div class="lb-score">Score 89</div>
+                        </div>
+                        <div class="lb-item">
+                            <div class="lb-rank normal">4</div>
+                            <div class="lb-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">AV</div>
+                            <div class="lb-info">
+                                <div class="lb-name">Aditya Verma <span style="color:#4f46e5;font-weight:800;">(You)</span></div>
+                                <div class="lb-sub">CSE · 3rd Year</div>
+                            </div>
+                            <div class="lb-score">Score 86</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessments: GET /api/v1/quizzes + /api/v1/quizzes/analytics -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Assessments</div>
+                        <span class="api-note">GET /api/v1/quizzes</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="quiz-item">
+                            <div class="quiz-icon" style="background:rgba(16,185,129,0.1);">✅</div>
+                            <div class="quiz-info">
+                                <div class="quiz-title">College Coding Test · Round 2</div>
+                                <div class="quiz-sub">DBMS & SQL · 25 min</div>
+                            </div>
+                            <!-- From QuizSubmission.score -->
+                            <span class="status-badge completed">92%</span>
+                            <!-- From QuizSubmission.submittedAt -->
+                            <span class="session-time">1d ago</span>
+                        </div>
+                        <div class="quiz-item">
+                            <div class="quiz-icon" style="background:rgba(79,70,229,0.1);">🤖</div>
+                            <div class="quiz-info">
+                                <div class="quiz-title">AI Interview · Technical Round</div>
+                                <div class="quiz-sub">7 questions · Report available</div>
+                            </div>
+                            <!-- From InterviewReport.overallScore -->
+                            <span class="status-badge completed">86%</span>
+                            <!-- From InterviewSession.createdAt -->
+                            <span class="session-time">2d ago</span>
+                        </div>
+                        <div class="quiz-item">
+                            <div class="quiz-icon" style="background:rgba(245,158,11,0.1);">📊</div>
+                            <div class="quiz-info">
+                                <div class="quiz-title">DSA Weekly Assessment</div>
+                                <div class="quiz-sub">Arrays, Strings, Two Pointers</div>
+                            </div>
+                            <span class="status-badge completed">78%</span>
+                            <span class="session-time">3d ago</span>
+                        </div>
+                        <div class="quiz-item">
+                            <div class="quiz-icon" style="background:rgba(59,130,246,0.1);">📝</div>
+                            <div class="quiz-info">
+                                <div class="quiz-title">Aptitude & Reasoning</div>
+                                <div class="quiz-sub">30 questions · 45 min</div>
+                            </div>
+                            <span class="status-badge completed">74%</span>
+                            <span class="session-time">4d ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internships: GET /api/v1/internships + /api/v1/internships/user/enrollments -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Internship Opportunities</div>
+                        <span class="api-note">GET /api/v1/internships</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="internship-item">
+                            <div class="internship-logo">🔵</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Google STEP Internship</div>
+                                <div class="internship-sub">SDE Intern · 45 days</div>
+                                <div class="internship-difficulty">Tech: React, Node.js, Python · Difficulty: intermediate</div>
+                            </div>
+                            <!-- GET /api/v1/internships/:id/enroll -->
+                            <button class="enroll-btn">Enroll</button>
+                        </div>
+                        <div class="internship-item">
+                            <div class="internship-logo">🪟</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Microsoft Engage Mentorship</div>
+                                <div class="internship-sub">Engineering Intern · 30 days</div>
+                                <div class="internship-difficulty">Tech: C#, Azure, SQL · Difficulty: intermediate</div>
+                            </div>
+                            <button class="enroll-btn">Enroll</button>
+                        </div>
+                        <div class="internship-item">
+                            <div class="internship-logo">📦</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Amazon Future Engineer</div>
+                                <div class="internship-sub">SDE Intern · 60 days</div>
+                                <div class="internship-difficulty">Tech: Java, AWS, Microservices · Difficulty: advanced</div>
+                            </div>
+                            <button class="enroll-btn">Enroll</button>
+                        </div>
+                        <div class="internship-item">
+                            <div class="internship-logo">🟢</div>
+                            <div class="internship-info">
+                                <div class="internship-title">TechCorp Backend Internship</div>
+                                <div class="internship-sub">Backend Intern · 45 days</div>
+                                <div class="internship-difficulty">Tech: Node.js, MongoDB, Docker · Difficulty: intermediate</div>
+                            </div>
+                            <button class="enroll-btn">Enroll</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon-wrap v4">⚡</div>
-                <div class="stat-info">
-                    <div class="stat-label">Average Score</div>
-                    <div class="stat-value">78%</div>
-                    <div class="stat-change up">+8% this week</div>
+
+            <div class="motivational">
+                <div class="motivational-icon">🏆</div>
+                <div class="motivational-text">
+                    <h3>You’re in the top 10% of your college! 🚀</h3>
+                    <p>Leaderboard rank #4 · Complete 2 more assessments to unlock the Premium Placement badge.</p>
+                </div>
+                <div class="motivational-stats">
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">🔥</div>
+                        <div class="motiv-stat-val">18</div>
+                        <div class="motiv-stat-lbl">Day Streak</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">🏅</div>
+                        <div class="motiv-stat-val">#4</div>
+                        <div class="motiv-stat-lbl">College Rank</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">⚡</div>
+                        <div class="motiv-stat-val">81%</div>
+                        <div class="motiv-stat-lbl">Avg. Score</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 3 Column Section -->
-        <div class="three-col">
-
-            <!-- Learning Path -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Your Learning Path</div>
-                    <span class="card-view">View All</span>
+        <!-- ===================== ORG TEAM DASHBOARD ===================== -->
+        <!-- API: /api/v1/organization/:orgId, /api/v1/organization/:orgId/analytics/members, /api/v1/internships, /api/v1/interviews -->
+        <div id="dashboard-org-team" class="role-section">
+            <div class="hero-banner">
+                <div class="hero-text">
+                    <h2>Organization<br><span>Admin Dashboard</span></h2>
+                    <p>Manage members, review analytics, track placements, and oversee internship programs and assessments.</p>
+                    <div class="hero-actions">
+                        <button class="hero-btn-primary">👥 Manage Members</button>
+                        <button class="hero-btn-secondary">📊 View Analytics</button>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="lp-item">
-                        <div class="lp-top">
-                            <div class="lp-icon-wrap" style="background:rgba(79,70,229,0.1);">🎯</div>
-                            <span class="lp-title">Data Structures & Algorithms</span>
-                            <span class="lp-pct">75%</span>
+                <div class="hero-illustration">
+                    <div class="hero-robot">🏢</div>
+                    <div class="hero-cards-stack">
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">👥</span>
+                            <div>
+                                <div class="hero-mini-label">Total Members</div>
+                                <div class="hero-mini-val" id="orgTotalMembers">1,248</div>
+                            </div>
                         </div>
-                        <div class="lp-sub">Arrays, Strings, Linked List, Trees, Graphs</div>
-                        <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:75%"></div></div>
-                    </div>
-                    <div class="lp-item">
-                        <div class="lp-top">
-                            <div class="lp-icon-wrap" style="background:rgba(16,185,129,0.1);">🏗️</div>
-                            <span class="lp-title">System Design Basics</span>
-                            <span class="lp-pct" style="color:#059669;">40%</span>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">📊</span>
+                            <div>
+                                <div class="hero-mini-label">Avg. Score</div>
+                                <div class="hero-mini-val" id="orgAvgScore">76%</div>
+                            </div>
                         </div>
-                        <div class="lp-sub">LLD, HLD, Scalability, Databases</div>
-                        <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:40%;background:linear-gradient(90deg,#10b981,#059669);"></div></div>
-                    </div>
-                    <div class="lp-item">
-                        <div class="lp-top">
-                            <div class="lp-icon-wrap" style="background:rgba(245,158,11,0.1);">⚡</div>
-                            <span class="lp-title">Object-Oriented Programming</span>
-                            <span class="lp-pct" style="color:#d97706;">60%</span>
+                        <div class="hero-mini-card">
+                            <span class="hero-mini-card-icon">💼</span>
+                            <div>
+                                <div class="hero-mini-label">Active Internships</div>
+                                <div class="hero-mini-val" id="orgInternships">4</div>
+                            </div>
                         </div>
-                        <div class="lp-sub">OOPs Concepts, SOLID Principles</div>
-                        <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:60%;background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
-                    </div>
-                    <div class="lp-item">
-                        <div class="lp-top">
-                            <div class="lp-icon-wrap" style="background:rgba(59,130,246,0.1);">💬</div>
-                            <span class="lp-title">Behavioral Interviews</span>
-                            <span class="lp-pct" style="color:#1d4ed8;">20%</span>
-                        </div>
-                        <div class="lp-sub">HR Questions, Resume, Communication</div>
-                        <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:20%;background:linear-gradient(90deg,#3b82f6,#06b6d4);"></div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Activity -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Recent Activity</div>
-                    <span class="card-view">View All</span>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v1">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Members</div>
+                        <div class="stat-value" id="orgStatMembers">1,248</div>
+                        <div class="stat-change up">+48 this month</div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="act-item">
-                        <div class="act-icon" style="background:rgba(79,70,229,0.1);">🤖</div>
-                        <div class="act-info">
-                            <div class="act-title">AI Mock Interview Completed</div>
-                            <div class="act-sub">Frontend Developer</div>
-                        </div>
-                        <span class="score-badge excellent">85%</span>
-                        <span class="act-time">2h ago</span>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v2">📝</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Assessments Conducted</div>
+                        <div class="stat-value" id="orgStatAssessments">18</div>
+                        <div class="stat-change up">+3 this month</div>
                     </div>
-                    <div class="act-item">
-                        <div class="act-icon" style="background:rgba(16,185,129,0.1);">🎯</div>
-                        <div class="act-info">
-                            <div class="act-title">DSA Problem Solved</div>
-                            <div class="act-sub">Binary Tree Inorder Traversal</div>
-                        </div>
-                        <span class="score-badge excellent">100%</span>
-                        <span class="act-time">5h ago</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v3">📊</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Avg. Interview Score</div>
+                        <div class="stat-value" id="orgStatInterviewScore">76%</div>
+                        <div class="stat-change up">+4% vs last month</div>
                     </div>
-                    <div class="act-item">
-                        <div class="act-icon" style="background:rgba(245,158,11,0.1);">📝</div>
-                        <div class="act-info">
-                            <div class="act-title">Assessment Completed</div>
-                            <div class="act-sub">Amazon SDE Online Assessment</div>
-                        </div>
-                        <span class="score-badge avg">72%</span>
-                        <span class="act-time">1d ago</span>
-                    </div>
-                    <div class="act-item">
-                        <div class="act-icon" style="background:rgba(59,130,246,0.1);">💼</div>
-                        <div class="act-info">
-                            <div class="act-title">Resume Analyzed</div>
-                            <div class="act-sub">Software Engineer Resume.pdf</div>
-                        </div>
-                        <span class="score-badge good">88%</span>
-                        <span class="act-time">1d ago</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-wrap v4">💼</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Internships Managed</div>
+                        <div class="stat-value" id="orgStatInternships">4</div>
+                        <div class="stat-change up">2 active now</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Upcoming Interviews -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Upcoming Interviews</div>
-                    <span class="card-view">View All</span>
+            <div class="three-col">
+                <!-- Members Analytics: GET /api/v1/organization/:orgId/analytics/members -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Top Performing Members</div>
+                        <span class="api-note">GET /org/:orgId/analytics/members</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">🥇</div>
+                            <div class="member-info">
+                                <div class="member-name">Rahul Sharma</div>
+                                <div class="member-sub">CSE · 4th Year</div>
+                            </div>
+                            <div>
+                                <div class="member-score">Score 96</div>
+                                <div class="member-interviews">DSA: 245 · Interviews: 5</div>
+                            </div>
+                        </div>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#6b7280,#4b5563);">🥈</div>
+                            <div class="member-info">
+                                <div class="member-name">Priya Patel</div>
+                                <div class="member-sub">CSE · 3rd Year</div>
+                            </div>
+                            <div>
+                                <div class="member-score">Score 92</div>
+                                <div class="member-interviews">DSA: 198 · Interviews: 4</div>
+                            </div>
+                        </div>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#b45309,#92400e);">🥉</div>
+                            <div class="member-info">
+                                <div class="member-name">Arjun Singh</div>
+                                <div class="member-sub">IT · 4th Year</div>
+                            </div>
+                            <div>
+                                <div class="member-score">Score 89</div>
+                                <div class="member-interviews">DSA: 210 · Interviews: 3</div>
+                            </div>
+                        </div>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">4</div>
+                            <div class="member-info">
+                                <div class="member-name">Sneha Gupta</div>
+                                <div class="member-sub">CSE · 3rd Year</div>
+                            </div>
+                            <div>
+                                <div class="member-score">Score 87</div>
+                                <div class="member-interviews">DSA: 176 · Interviews: 4</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="interview-item">
-                        <div class="company-logo">🔵</div>
-                        <div class="interview-info">
-                            <div class="company-name">Google</div>
-                            <div class="interview-role">Software Engineer Intern</div>
-                            <div class="interview-date">10 May, 2026 · 10:00 AM</div>
-                        </div>
-                        <button class="prepare-btn">Prepare</button>
+
+                <!-- Recent Activity: GET /api/v1/organization/:orgId/analytics/members + /api/v1/interviews -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Recent Activity</div>
+                        <span class="api-note">org analytics</span>
                     </div>
-                    <div class="interview-item">
-                        <div class="company-logo">🪟</div>
-                        <div class="interview-info">
-                            <div class="company-name">Microsoft</div>
-                            <div class="interview-role">SDE Intern</div>
-                            <div class="interview-date">15 May, 2026 · 02:00 PM</div>
+                    <div class="card-body">
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">✅</div>
+                            <div class="member-info">
+                                <div class="member-name">Assessment Completed</div>
+                                <div class="member-sub">Rahul Sharma · College Coding Test</div>
+                            </div>
+                            <span class="session-time">1h ago</span>
                         </div>
-                        <button class="prepare-btn">Prepare</button>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">👤</div>
+                            <div class="member-info">
+                                <div class="member-name">New Member Joined</div>
+                                <div class="member-sub">Vikram Joshi · CSE · 2nd Year</div>
+                            </div>
+                            <span class="session-time">3h ago</span>
+                        </div>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">🤖</div>
+                            <div class="member-info">
+                                <div class="member-name">Interview Completed</div>
+                                <div class="member-sub">Priya Patel · Technical Round · 91%</div>
+                            </div>
+                            <span class="session-time">5h ago</span>
+                        </div>
+                        <div class="member-row">
+                            <div class="member-avatar" style="background:linear-gradient(135deg,#3b82f6,#06b6d4);">💡</div>
+                            <div class="member-info">
+                                <div class="member-name">Internship Enrolled</div>
+                                <div class="member-sub">Arjun Singh · TechCorp Backend</div>
+                            </div>
+                            <span class="session-time">6h ago</span>
+                        </div>
                     </div>
-                    <div class="interview-item">
-                        <div class="company-logo">📦</div>
-                        <div class="interview-info">
-                            <div class="company-name">Amazon</div>
-                            <div class="interview-role">SDE Intern</div>
-                            <div class="interview-date">20 May, 2026 · 11:30 AM</div>
+                </div>
+
+                <!-- Internships Management: GET /api/v1/internships (org-setter view) -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Internship Programs</div>
+                        <span class="api-note">GET /api/v1/internships</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="internship-item">
+                            <div class="internship-logo">🔵</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Google STEP Internship</div>
+                                <div class="internship-sub">SDE Intern · 45 days</div>
+                                <div class="internship-difficulty">Tech: React, Node.js, Python · Difficulty: intermediate</div>
+                            </div>
+                            <button class="enroll-btn">Manage</button>
                         </div>
-                        <button class="prepare-btn">Prepare</button>
+                        <div class="internship-item">
+                            <div class="internship-logo">🪟</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Microsoft Engage Mentorship</div>
+                                <div class="internship-sub">Engineering Intern · 30 days</div>
+                                <div class="internship-difficulty">Tech: C#, Azure, SQL · Difficulty: intermediate</div>
+                            </div>
+                            <button class="enroll-btn">Manage</button>
+                        </div>
+                        <div class="internship-item">
+                            <div class="internship-logo">📦</div>
+                            <div class="internship-info">
+                                <div class="internship-title">Amazon Future Engineer</div>
+                                <div class="internship-sub">SDE Intern · 60 days</div>
+                                <div class="internship-difficulty">Tech: Java, AWS, Microservices · Difficulty: advanced</div>
+                            </div>
+                            <button class="enroll-btn">Manage</button>
+                        </div>
+                        <div class="internship-item">
+                            <div class="internship-logo">🟢</div>
+                            <div class="internship-info">
+                                <div class="internship-title">TechCorp Backend Internship</div>
+                                <div class="internship-sub">Backend Intern · 45 days</div>
+                                <div class="internship-difficulty">Tech: Node.js, MongoDB, Docker · Difficulty: intermediate</div>
+                            </div>
+                            <button class="enroll-btn">Manage</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <!-- Motivational Banner -->
-        <div class="motivational">
-            <div class="motivational-icon">🏆</div>
-            <div class="motivational-text">
-                <h3>Keep Going, Aditya! 🚀</h3>
-                <p>Consistency today, success tomorrow. You're in the top 12% of all learners!</p>
-            </div>
-            <div class="motivational-stats">
-                <div class="motiv-stat">
-                    <div class="motiv-stat-icon">🔥</div>
-                    <div class="motiv-stat-val">12</div>
-                    <div class="motiv-stat-lbl">Day Streak</div>
+            <div class="motivational">
+                <div class="motivational-icon">🚀</div>
+                <div class="motivational-text">
+                    <h3>Great progress this month! 📈</h3>
+                    <p>36 members cleared assessment rounds. 4 active internship programs running. 12 new enrollments this week.</p>
                 </div>
-                <div class="motiv-divider"></div>
-                <div class="motiv-stat">
-                    <div class="motiv-stat-icon">🏅</div>
-                    <div class="motiv-stat-val">Top 12%</div>
-                    <div class="motiv-stat-lbl">Among all learners</div>
-                </div>
-                <div class="motiv-divider"></div>
-                <div class="motiv-stat">
-                    <div class="motiv-stat-icon">⚡</div>
-                    <div class="motiv-stat-val">85%</div>
-                    <div class="motiv-stat-lbl">Avg. Score</div>
+                <div class="motivational-stats">
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">👥</div>
+                        <div class="motiv-stat-val">1,248</div>
+                        <div class="motiv-stat-lbl">Total Members</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">📊</div>
+                        <div class="motiv-stat-val">76%</div>
+                        <div class="motiv-stat-lbl">Avg. Score</div>
+                    </div>
+                    <div class="motiv-divider"></div>
+                    <div class="motiv-stat">
+                        <div class="motiv-stat-icon">💼</div>
+                        <div class="motiv-stat-val">4</div>
+                        <div class="motiv-stat-lbl">Active Internships</div>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+
+<script>
+    const roleConfig = {
+        individual: {
+            sidebarRole: 'Individual · Personal Workspace',
+            planPill: 'Spark Plan',
+            pillClass: '',
+            upgradeTitle: 'Upgrade to Pulse / Nexus',
+            name: 'Aditya Verma',
+            initials: 'AV'
+        },
+        'college-student': {
+            sidebarRole: 'Student · MIT College',
+            planPill: 'College Plan',
+            pillClass: 'pro',
+            upgradeTitle: 'Upgrade to Premium',
+            name: 'Aditya Verma',
+            initials: 'AV'
+        },
+        'org-team': {
+            sidebarRole: 'Org Admin · MIT College',
+            planPill: 'Organization',
+            pillClass: 'org',
+            upgradeTitle: 'Manage Subscription',
+            name: 'Aditya Verma',
+            initials: 'AV'
+        }
+    };
+
+    function switchRole(role) {
+        document.querySelectorAll('.role-section').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        document.querySelectorAll('.sidebar-nav .role-section').forEach(function(el) {
+            el.style.display = 'none';
+        });
+
+        var targetId = 'dashboard-' + role;
+        var target = document.getElementById(targetId);
+        if (target) {
+            target.classList.add('active');
+        }
+
+        var sidebarSections = document.querySelectorAll('.sidebar-nav .role-section[data-role="' + role + '"]');
+        sidebarSections.forEach(function(el) {
+            el.style.display = 'block';
+        });
+
+        var cfg = roleConfig[role] || roleConfig.individual;
+        document.getElementById('sidebarRole').textContent = cfg.sidebarRole;
+        document.getElementById('planPill').textContent = cfg.planPill;
+        document.getElementById('planPill').className = 'plan-pill ' + (cfg.pillClass || '');
+        document.getElementById('upgradeTitle').textContent = cfg.upgradeTitle;
+        document.getElementById('sName').textContent = cfg.name;
+        document.getElementById('tName').textContent = cfg.name;
+        document.getElementById('sAvatar').textContent = cfg.initials;
+        document.getElementById('tAvatar').textContent = cfg.initials;
+    }
+
+    // Initialize
+    switchRole('individual');
+</script>
 
 </body>
 </html>

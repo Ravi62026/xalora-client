@@ -99,6 +99,15 @@ const Community = () => {
     }
   ];
 
+  const colorClasses = {
+    emerald: "bg-emerald-50 text-emerald-600 border border-emerald-100",
+    blue: "bg-blue-50 text-blue-600 border border-blue-100",
+    purple: "bg-purple-50 text-purple-600 border border-purple-100",
+    cyan: "bg-cyan-50 text-cyan-600 border border-cyan-100",
+    teal: "bg-teal-50 text-teal-600 border border-teal-100",
+    lime: "bg-lime-50 text-lime-600 border border-lime-100"
+  };
+
   const communityStats = [
     { label: "Members", value: "50K+" },
     { label: "Discussions", value: "100K+" },
@@ -108,16 +117,16 @@ const Community = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 transform transition-all duration-500 hover:scale-105">
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Xalora Community
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto transform transition-all duration-700 hover:text-gray-200">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               Connect with fellow learners, share knowledge, and grow together
             </p>
           </div>
@@ -127,10 +136,10 @@ const Community = () => {
             {communityStats.map((stat, index) => (
               <div 
                 key={index} 
-                className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-6 text-center transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10 transform hover:-translate-y-2 hover:scale-105"
+                className="bg-white/80 border border-slate-200 rounded-2xl p-6 text-center transition-all duration-300 hover:shadow-md transform hover:-translate-y-1"
               >
-                <div className="text-3xl font-bold text-emerald-400 mb-2 transition-all duration-300 hover:text-emerald-300">{stat.value}</div>
-                <div className="text-gray-400 transition-all duration-300 hover:text-gray-300">{stat.label}</div>
+                <div className="text-3xl font-black text-indigo-600 mb-2">{stat.value}</div>
+                <div className="text-slate-500 font-semibold text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -138,8 +147,8 @@ const Community = () => {
           {/* Forums Section */}
           <div className="mb-16">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-white transition-all duration-300 hover:text-emerald-400">Discussion Forums</h2>
-              <button className="mt-4 md:mt-0 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg font-medium text-white hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 transform hover:scale-105">
+              <h2 className="text-3xl font-black text-slate-900">Discussion Forums</h2>
+              <button className="mt-4 md:mt-0 px-6 py-3 bg-indigo-600 rounded-xl font-bold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
                 Start New Discussion
               </button>
             </div>
@@ -148,23 +157,23 @@ const Community = () => {
               {forums.map((forum) => (
                 <div 
                   key={forum.id} 
-                  className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-6 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10 transform hover:-translate-y-2 hover:scale-105"
+                  className="bg-white/80 border border-slate-200 rounded-2xl p-6 transition-all duration-300 hover:shadow-md hover:border-indigo-500/20 transform hover:-translate-y-1"
                 >
                   <div className="flex items-start mb-4">
-                    <div className={`bg-${forum.color}-500/20 p-3 rounded-lg mr-4 text-2xl transition-all duration-300 hover:scale-110`}>
+                    <div className={`${colorClasses[forum.color] || "bg-slate-100 text-slate-600"} p-3 rounded-lg mr-4 text-2xl transition-all duration-300`}>
                       {forum.icon}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-white transition-all duration-300 hover:text-emerald-400">{forum.title}</h3>
-                      <p className="text-gray-400 text-sm transition-all duration-300 hover:text-gray-300">{forum.description}</p>
+                      <h3 className="text-xl font-bold text-slate-900 mb-1">{forum.title}</h3>
+                      <p className="text-slate-500 text-sm leading-relaxed">{forum.description}</p>
                     </div>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <div className="text-gray-400 transition-all duration-300 hover:text-gray-300">
-                      <span className="text-white font-medium transition-all duration-300 hover:text-emerald-400">{forum.posts}</span> posts
+                  <div className="flex justify-between text-sm pt-4 border-t border-slate-100">
+                    <div className="text-slate-500">
+                      <span className="text-slate-800 font-bold">{forum.posts}</span> posts
                     </div>
-                    <div className="text-gray-400 transition-all duration-300 hover:text-gray-300">
-                      <span className="text-white font-medium transition-all duration-300 hover:text-emerald-400">{forum.members}</span> members
+                    <div className="text-slate-500">
+                      <span className="text-slate-800 font-bold">{forum.members}</span> members
                     </div>
                   </div>
                 </div>
@@ -174,39 +183,39 @@ const Community = () => {
 
           {/* Recent Discussions */}
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white mb-8 transition-all duration-300 hover:text-emerald-400">Recent Discussions</h2>
-            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden">
+            <h2 className="text-3xl font-black text-slate-900 mb-8">Recent Discussions</h2>
+            <div className="bg-white/80 rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
               {recentDiscussions.map((discussion) => (
                 <div 
                   key={discussion.id} 
-                  className="p-6 border-b border-gray-700 last:border-b-0 transition-all duration-300 hover:bg-gray-700/30"
+                  className="p-6 border-b border-slate-100 last:border-b-0 transition-all duration-300 hover:bg-slate-50"
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-2 transition-all duration-300 hover:text-emerald-400">{discussion.title}</h3>
+                      <h3 className="text-lg font-bold text-slate-900 mb-2 hover:text-indigo-600 transition-colors cursor-pointer">{discussion.title}</h3>
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-full transition-all duration-300 hover:bg-gray-600 hover:scale-105">
+                        <span className="px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full border border-slate-200/60 font-semibold">
                           {discussion.category}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center text-sm text-gray-400">
-                      <div className="mr-4 transition-all duration-300 hover:text-gray-300">
-                        <span className="text-white font-medium transition-all duration-300 hover:text-emerald-400">{discussion.replies}</span> replies
+                    <div className="flex items-center text-sm text-slate-500 font-medium">
+                      <div className="mr-4">
+                        <span className="text-slate-800 font-bold">{discussion.replies}</span> replies
                       </div>
-                      <div className="mr-4 transition-all duration-300 hover:text-gray-300">
-                        <span className="text-white font-medium transition-all duration-300 hover:text-emerald-400">{discussion.views}</span> views
+                      <div className="mr-4">
+                        <span className="text-slate-800 font-bold">{discussion.views}</span> views
                       </div>
-                      <div className="transition-all duration-300 hover:text-gray-300">{discussion.time}</div>
+                      <div className="text-slate-400">{discussion.time}</div>
                     </div>
                   </div>
                   <div className="mt-3 flex items-center text-sm">
-                    <div className="bg-gray-700 rounded-full w-6 h-6 flex items-center justify-center mr-2 transition-all duration-300 hover:scale-110">
-                      <span className="text-emerald-400 text-xs font-bold">
+                    <div className="bg-slate-100 border border-slate-200 rounded-full w-6 h-6 flex items-center justify-center mr-2">
+                      <span className="text-indigo-600 text-xs font-bold">
                         {discussion.author.split(' ').map(n => n[0]).join('')}
                       </span>
                     </div>
-                    <span className="text-gray-400 transition-all duration-300 hover:text-gray-300">by <span className="text-white transition-all duration-300 hover:text-emerald-400">{discussion.author}</span></span>
+                    <span className="text-slate-500">by <span className="text-slate-800 font-bold hover:text-indigo-600 cursor-pointer">{discussion.author}</span></span>
                   </div>
                 </div>
               ))}
@@ -214,30 +223,30 @@ const Community = () => {
           </div>
 
           {/* Community Guidelines */}
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl border border-emerald-500/20 p-8 mb-16 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10">
-            <h2 className="text-3xl font-bold text-white mb-6 transition-all duration-300 hover:text-emerald-400">Community Guidelines</h2>
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-8 mb-16 shadow-sm">
+            <h2 className="text-3xl font-black text-slate-900 mb-6">Community Guidelines</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-xl font-bold text-emerald-400 mb-3 transition-all duration-300 hover:text-emerald-300">Be Respectful</h3>
-                <p className="text-gray-300 transition-all duration-300 hover:text-gray-200">
+              <div className="bg-white p-6 rounded-xl border border-slate-200/60">
+                <h3 className="text-xl font-bold text-emerald-600 mb-3">Be Respectful</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
                   Treat all community members with respect and kindness. Harassment, hate speech, and personal attacks are not tolerated.
                 </p>
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-blue-400 mb-3 transition-all duration-300 hover:text-blue-300">Stay On Topic</h3>
-                <p className="text-gray-300 transition-all duration-300 hover:text-gray-200">
+              <div className="bg-white p-6 rounded-xl border border-slate-200/60">
+                <h3 className="text-xl font-bold text-blue-600 mb-3">Stay On Topic</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
                   Keep discussions relevant to the forum category. Off-topic posts may be moved or removed.
                 </p>
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-purple-400 mb-3 transition-all duration-300 hover:text-purple-300">Help Each Other</h3>
-                <p className="text-gray-300 transition-all duration-300 hover:text-gray-200">
+              <div className="bg-white p-6 rounded-xl border border-slate-200/60">
+                <h3 className="text-xl font-bold text-purple-600 mb-3">Help Each Other</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
                   Share knowledge, provide constructive feedback, and help others learn. Be patient with beginners.
                 </p>
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-cyan-400 mb-3 transition-all duration-300 hover:text-cyan-300">No Spam</h3>
-                <p className="text-gray-300 transition-all duration-300 hover:text-gray-200">
+              <div className="bg-white p-6 rounded-xl border border-slate-200/60">
+                <h3 className="text-xl font-bold text-cyan-600 mb-3">No Spam</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
                   Do not post promotional content, advertisements, or repetitive posts. This is a learning community.
                 </p>
               </div>
@@ -245,12 +254,12 @@ const Community = () => {
           </div>
 
           {/* Join CTA */}
-          <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8 text-center transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10">
-            <h2 className="text-3xl font-bold text-white mb-4 transition-all duration-300 hover:text-emerald-400">Ready to Join the Community?</h2>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto transition-all duration-300 hover:text-gray-200">
+          <div className="bg-white/80 border border-slate-200 p-8 text-center rounded-2xl shadow-sm">
+            <h2 className="text-3xl font-black text-slate-900 mb-4">Ready to Join the Community?</h2>
+            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
               Connect with thousands of learners, share your knowledge, and accelerate your growth.
             </p>
-            <button className="px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl font-bold text-white hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 transform hover:scale-105 text-lg">
+            <button className="px-8 py-4 bg-indigo-600 rounded-xl font-bold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100 text-lg">
               Join Now - It's Free!
             </button>
           </div>

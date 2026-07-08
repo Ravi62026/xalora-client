@@ -259,16 +259,16 @@ const AptitudeSession = () => {
   if (!isAuthenticated) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center px-4">
-          <div className="max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 text-center shadow-2xl backdrop-blur">
-            <h2 className="text-2xl font-bold text-white">Login required</h2>
-            <p className="mt-3 text-sm text-white/70">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center px-4">
+          <div className="max-w-md w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <h2 className="text-2xl font-bold text-slate-900">Login required</h2>
+            <p className="mt-3 text-sm text-slate-600">
               You need to be logged in before entering the aptitude room.
             </p>
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-100"
             >
               <ShieldCheck className="h-4 w-4" />
               Go to login
@@ -282,73 +282,73 @@ const AptitudeSession = () => {
   if (stage === "result" && result) {
     const trackAccent =
       selectedTrack.accent === "emerald"
-        ? "text-emerald-300"
+        ? "text-emerald-600"
         : selectedTrack.accent === "cyan"
-        ? "text-cyan-300"
+        ? "text-cyan-600"
         : selectedTrack.accent === "amber"
-        ? "text-amber-300"
-        : "text-sky-300";
+        ? "text-amber-600"
+        : "text-indigo-600";
 
     return (
       <Layout showNavbar={false} showFooter={false}>
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black py-8 sm:py-12">
+        <div className="min-h-screen xalora-grid-bg py-8 sm:py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-6 flex items-center justify-between gap-4">
               <button
                 type="button"
                 onClick={exitToQuiz}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to quiz hub
               </button>
-              <span className={`text-xs font-semibold uppercase tracking-[0.22em] ${trackAccent}`}>
+              <span className={`text-xs font-bold uppercase tracking-[0.22em] ${trackAccent}`}>
                 Aptitude result
               </span>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-              <section className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-sm">
-                <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+              <section className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                   Result summary
                 </p>
-                <h1 className="mt-3 text-3xl font-bold text-white">
+                <h1 className="mt-3 text-3xl font-black text-slate-900">
                   {selectedTrack.title}
                 </h1>
-                <p className="mt-3 text-sm leading-6 text-white/70">
+                <p className="mt-3 text-sm leading-6 text-slate-600">
                   Your aptitude session finished in a focused exam room with
                   focus-loss tracking, no camera request, and a single-question
                   flow.
                 </p>
 
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                       Score
                     </p>
-                    <p className="mt-2 text-3xl font-bold text-white">{result.score}%</p>
+                    <p className="mt-2 text-3xl font-black text-slate-900">{result.score}%</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                       Correct answers
                     </p>
-                    <p className="mt-2 text-3xl font-bold text-white">
+                    <p className="mt-2 text-3xl font-black text-slate-900">
                       {result.correctCount}/{result.totalQuestions}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                       Time used
                     </p>
-                    <p className="mt-2 text-3xl font-bold text-white">
+                    <p className="mt-2 text-3xl font-black text-slate-900">
                       {formatTime(result.timeTaken)}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                       Focus violations
                     </p>
-                    <p className="mt-2 text-3xl font-bold text-white">
+                    <p className="mt-2 text-3xl font-black text-slate-900">
                       {result.violations}
                     </p>
                   </div>
@@ -358,7 +358,7 @@ const AptitudeSession = () => {
                   <button
                     type="button"
                     onClick={restartSession}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20"
+                    className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-4 py-3 text-sm font-bold text-white shadow-md shadow-indigo-100"
                   >
                     <RefreshCw className="h-4 w-4" />
                     Retake aptitude
@@ -366,7 +366,7 @@ const AptitudeSession = () => {
                   <button
                     type="button"
                     onClick={exitToQuiz}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-colors hover:border-white/20 hover:bg-white/10"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-55"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Return to quiz hub
@@ -374,8 +374,8 @@ const AptitudeSession = () => {
                 </div>
               </section>
 
-              <section className="rounded-3xl border border-white/10 bg-slate-950/70 p-6 shadow-2xl backdrop-blur-sm">
-                <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+              <section className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                   Section-wise view
                 </p>
                 <div className="mt-5 space-y-4">
@@ -385,20 +385,20 @@ const AptitudeSession = () => {
                     return (
                       <div
                         key={section}
-                        className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                        className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <p className="text-sm font-semibold text-white">{section}</p>
-                            <p className="mt-1 text-xs text-white/50">
+                            <p className="text-sm font-bold text-slate-800">{section}</p>
+                            <p className="mt-1 text-xs text-slate-500">
                               {stats.correct} correct, {stats.unanswered} unanswered
                             </p>
                           </div>
-                          <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm font-semibold text-white">
+                          <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-bold text-slate-800">
                             {accuracy}%
                           </span>
                         </div>
-                        <div className="mt-3 h-2 rounded-full bg-white/10">
+                        <div className="mt-3 h-2 rounded-full bg-slate-200">
                           <div
                             className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500"
                             style={{ width: `${accuracy}%` }}
@@ -409,12 +409,12 @@ const AptitudeSession = () => {
                   })}
                 </div>
 
-                <div className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
-                  <div className="flex items-center gap-2 font-semibold">
+                <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+                  <div className="flex items-center gap-2 font-bold text-emerald-900">
                     <Award className="h-4 w-4" />
                     What this screen proves
                   </div>
-                  <p className="mt-2 text-emerald-50/80 leading-6">
+                  <p className="mt-2 text-emerald-700 leading-6 font-medium">
                     The user can start from the quiz hub, choose a lane, lock
                     the room, answer a question flow, and finish inside a strict
                     exam shell without any camera or sharing request.
@@ -430,12 +430,12 @@ const AptitudeSession = () => {
 
   const trackAccent =
     selectedTrack.accent === "emerald"
-      ? "text-emerald-300"
+      ? "text-emerald-600"
       : selectedTrack.accent === "cyan"
-      ? "text-cyan-300"
+      ? "text-cyan-600"
       : selectedTrack.accent === "amber"
-      ? "text-amber-300"
-      : "text-sky-300";
+      ? "text-amber-600"
+      : "text-indigo-600";
   const currentQuestionNumber = currentQuestionIndex + 1;
   const progressWidth =
     questions.length > 0 ? Math.min(100, (currentQuestionNumber / questions.length) * 100) : 0;
@@ -443,48 +443,48 @@ const AptitudeSession = () => {
 
   return (
     <Layout showNavbar={false} showFooter={false}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black">
-        <div className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
+      <div className="min-h-screen xalora-grid-bg">
+        <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-xl shadow-sm">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400 font-bold">
                 Aptitude exam room
               </p>
-              <h1 className="mt-1 text-xl font-semibold text-white sm:text-2xl">
+              <h1 className="mt-1 text-xl font-black text-slate-900 sm:text-2xl">
                 {selectedTrack.title}
               </h1>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
-                <Timer className="h-3.5 w-3.5" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 font-semibold">
+                <Timer className="h-3.5 w-3.5 text-indigo-600" />
                 {formatTime(timeLeft)}
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
-                <ShieldCheck className="h-3.5 w-3.5" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 font-semibold">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
                 {selectedMode}
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 font-semibold">
                 {fullscreenActive ? (
                   <>
-                    <Maximize2 className="h-3.5 w-3.5" />
+                    <Maximize2 className="h-3.5 w-3.5 text-indigo-600" />
                     fullscreen active
                   </>
                 ) : (
                   <>
-                    <MonitorOff className="h-3.5 w-3.5" />
+                    <MonitorOff className="h-3.5 w-3.5 text-red-500" />
                     fullscreen off
                   </>
                 )}
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-white/70">
-                <AlertTriangle className="h-3.5 w-3.5" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-slate-700 font-semibold">
+                <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
                 violations {violationCount}
               </span>
               <button
                 type="button"
                 onClick={enterFullscreenAgain}
-                className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1.5 text-white/80 transition-colors hover:bg-emerald-500/20"
+                className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-indigo-700 font-bold transition-colors hover:bg-indigo-100"
               >
                 <Maximize2 className="h-3.5 w-3.5" />
                 fullscreen
@@ -498,24 +498,24 @@ const AptitudeSession = () => {
             <button
               type="button"
               onClick={exitToQuiz}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50"
             >
               <ArrowLeft className="h-4 w-4" />
               Exit session
             </button>
-            <span className={`text-xs font-semibold uppercase tracking-[0.22em] ${trackAccent}`}>
+            <span className={`text-xs font-bold uppercase tracking-[0.22em] ${trackAccent}`}>
               {selectedTrack.label} lane
             </span>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[280px,1fr]">
             <aside className="space-y-4">
-              <section className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur-sm">
+              <section className="rounded-3xl border border-slate-200 bg-white/80 p-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                     Question map
                   </p>
-                  <span className="text-xs text-white/50">
+                  <span className="text-xs text-slate-500 font-semibold">
                     {currentQuestionNumber}/{questions.length}
                   </span>
                 </div>
@@ -531,14 +531,14 @@ const AptitudeSession = () => {
                         key={question.id}
                         type="button"
                         onClick={() => jumpToQuestion(index)}
-                        className={`flex h-10 items-center justify-center rounded-xl border text-xs font-semibold transition-all ${
+                        className={`flex h-10 items-center justify-center rounded-xl border text-xs font-bold transition-all ${
                           isActive
-                            ? "border-cyan-400/40 bg-cyan-500/20 text-cyan-100"
+                            ? "border-indigo-300 bg-indigo-100 text-indigo-800"
                             : isReviewed
-                            ? "border-amber-400/30 bg-amber-500/15 text-amber-100"
+                            ? "border-amber-200 bg-amber-50 text-amber-700"
                             : isAnswered
-                            ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-100"
-                            : "border-white/10 bg-black/20 text-white/60 hover:border-white/20 hover:bg-white/10"
+                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100/80"
                         }`}
                       >
                         {index + 1}
@@ -548,15 +548,15 @@ const AptitudeSession = () => {
                 </div>
               </section>
 
-              <section className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur-sm">
-                <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+              <section className="rounded-3xl border border-slate-200 bg-white/80 p-4 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                   Topic buckets
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selectedTrack.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-white/70"
+                      className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600"
                     >
                       {topic}
                     </span>
@@ -564,36 +564,36 @@ const AptitudeSession = () => {
                 </div>
               </section>
 
-              <section className="rounded-3xl border border-white/10 bg-slate-950/70 p-4 shadow-2xl backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                  <ShieldCheck className="h-4 w-4 text-emerald-300" />
+              <section className="rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-800">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   Strict room rules
                 </div>
-                <div className="mt-3 space-y-3 text-sm text-white/65">
+                <div className="mt-3 space-y-3 text-sm text-slate-600">
                   <div className="flex gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     <span>No camera permission is required.</span>
                   </div>
                   <div className="flex gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     <span>Tab switching triggers a pause in strict mode.</span>
                   </div>
                   <div className="flex gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     <span>Questions advance one at a time with review markers.</span>
                   </div>
                 </div>
               </section>
             </aside>
 
-            <main className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur-sm sm:p-6">
+            <main className="rounded-3xl border border-slate-200 bg-white/80 p-4 shadow-sm sm:p-6">
               {focusBlocked && (
-                <div className="mb-5 rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
+                <div className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
                   <div className="flex items-start gap-3">
-                    <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+                    <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                     <div>
-                      <p className="font-semibold text-amber-100">Focus changed</p>
-                      <p className="mt-1 text-sm leading-6 text-amber-50/80">
+                      <p className="font-bold text-amber-800">Focus changed</p>
+                      <p className="mt-1 text-sm leading-6 text-amber-700">
                         {pausedReason || "The exam is paused until you return focus."}
                       </p>
                       <div className="mt-4 flex flex-wrap gap-3">
@@ -604,7 +604,7 @@ const AptitudeSession = () => {
                               releaseFocusLock();
                               enterFullscreenAgain();
                             }}
-                            className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-semibold text-slate-950"
+                            className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-amber-100"
                           >
                             Resume exam
                           </button>
@@ -613,7 +613,7 @@ const AptitudeSession = () => {
                           <button
                             type="button"
                             onClick={() => handleSubmit(true)}
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition-colors hover:border-white/20 hover:bg-white/10"
+                            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50"
                           >
                             Submit now
                           </button>
@@ -625,12 +625,12 @@ const AptitudeSession = () => {
               )}
 
               {hardLock && (
-                <div className="mb-5 rounded-2xl border border-red-400/30 bg-red-500/10 p-4">
+                <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 p-4">
                   <div className="flex items-start gap-3">
-                    <MonitorOff className="mt-0.5 h-5 w-5 shrink-0 text-red-300" />
+                    <MonitorOff className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
                     <div>
-                      <p className="font-semibold text-red-100">Session locked</p>
-                      <p className="mt-1 text-sm leading-6 text-red-50/80">
+                      <p className="font-bold text-red-800">Session locked</p>
+                      <p className="mt-1 text-sm leading-6 text-red-700">
                         Repeated focus losses locked the room. You can submit now or exit the session.
                       </p>
                     </div>
@@ -641,17 +641,17 @@ const AptitudeSession = () => {
               {currentQuestion && (
                 <>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-200">
+                    <span className="rounded-full bg-cyan-50 text-cyan-700 border border-cyan-100 px-3 py-1 text-xs font-semibold">
                       {currentQuestion.section}
                     </span>
-                    <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70">
+                    <span className="rounded-full bg-slate-50 text-slate-600 border border-slate-200 px-3 py-1 text-xs font-semibold">
                       {currentQuestion.topic}
                     </span>
-                    <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70">
+                    <span className="rounded-full bg-slate-50 text-slate-600 border border-slate-200 px-3 py-1 text-xs font-semibold">
                       Question {currentQuestionNumber} of {questions.length}
                     </span>
                     {reviewFlags[currentQuestion.id] && (
-                      <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-200">
+                      <span className="rounded-full bg-amber-50 text-amber-700 border border-amber-100 px-3 py-1 text-xs font-semibold">
                         Marked for review
                       </span>
                     )}
@@ -659,11 +659,11 @@ const AptitudeSession = () => {
 
                   <div className="mt-5">
                     <div className="mb-4">
-                      <div className="mb-2 flex items-center justify-between gap-3 text-sm text-white/50">
+                      <div className="mb-2 flex items-center justify-between gap-3 text-sm text-slate-500 font-semibold">
                         <span>Progress</span>
                         <span>{Math.round(progressWidth)}%</span>
                       </div>
-                      <div className="h-2 rounded-full bg-white/10">
+                      <div className="h-2 rounded-full bg-slate-100">
                         <div
                           className="h-2 rounded-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500"
                           style={{ width: `${progressWidth}%` }}
@@ -671,7 +671,7 @@ const AptitudeSession = () => {
                       </div>
                     </div>
 
-                    <h2 className="text-2xl font-semibold leading-relaxed text-white">
+                    <h2 className="text-2xl font-black leading-relaxed text-slate-900">
                       {currentQuestion.prompt}
                     </h2>
                   </div>
@@ -687,20 +687,20 @@ const AptitudeSession = () => {
                           onClick={() => updateAnswer(index)}
                           className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left transition-all ${
                             isSelected
-                              ? "border-emerald-400/40 bg-emerald-500/15"
-                              : "border-white/10 bg-black/20 hover:border-white/20 hover:bg-white/10"
+                              ? "border-emerald-200 bg-emerald-50/60"
+                              : "border-slate-200 bg-slate-50 hover:bg-slate-100/50"
                           } ${hardLock ? "cursor-not-allowed opacity-60" : ""}`}
                         >
                           <span
                             className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold ${
                               isSelected
-                                ? "border-emerald-300 bg-emerald-300/20 text-emerald-100"
-                                : "border-white/10 bg-white/5 text-white/65"
+                                ? "border-emerald-300 bg-white text-emerald-700 font-bold"
+                                : "border-slate-200 bg-white text-slate-500"
                             }`}
                           >
                             {String.fromCharCode(65 + index)}
                           </span>
-                          <span className="text-sm leading-6 text-white/85">
+                          <span className="text-sm leading-6 text-slate-700 font-bold">
                             {option}
                           </span>
                         </button>
@@ -708,13 +708,13 @@ const AptitudeSession = () => {
                     })}
                   </div>
 
-                  <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
+                  <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-5">
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => jumpToQuestion(currentQuestionIndex - 1)}
                         disabled={currentQuestionIndex === 0}
-                        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         <ArrowLeft className="h-4 w-4" />
                         Previous
@@ -722,7 +722,7 @@ const AptitudeSession = () => {
                       <button
                         type="button"
                         onClick={toggleReviewFlag}
-                        className="inline-flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm font-medium text-amber-100 transition-colors hover:bg-amber-500/20"
+                        className="inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-700 transition-colors hover:bg-amber-100"
                       >
                         <Flag className="h-4 w-4" />
                         {reviewFlags[currentQuestion.id] ? "Unmark" : "Mark review"}
@@ -734,7 +734,7 @@ const AptitudeSession = () => {
                         <button
                           type="button"
                           onClick={() => jumpToQuestion(currentQuestionIndex + 1)}
-                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20"
+                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-4 py-3 text-sm font-bold text-white shadow-md shadow-indigo-100"
                         >
                           Next
                           <ArrowRight className="h-4 w-4" />
@@ -743,7 +743,7 @@ const AptitudeSession = () => {
                         <button
                           type="button"
                           onClick={() => handleSubmit(false)}
-                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20"
+                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-4 py-3 text-sm font-bold text-white shadow-md shadow-indigo-100"
                         >
                           <Award className="h-4 w-4" />
                           Submit aptitude
@@ -760,5 +760,16 @@ const AptitudeSession = () => {
     </Layout>
   );
 };
+
+const ChevronRightGlyph = ({ isActive }) => (
+  <span
+    className={`inline-flex items-center gap-1 text-xs font-semibold ${
+      isActive ? "text-slate-800" : "text-slate-400"
+    }`}
+  >
+    View
+    <ArrowRight className="h-3.5 w-3.5" />
+  </span>
+);
 
 export default AptitudeSession;

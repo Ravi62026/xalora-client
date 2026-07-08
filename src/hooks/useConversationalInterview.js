@@ -60,6 +60,7 @@ export default function useConversationalInterview(config = {}) {
     // | reconnecting | error
     const [mode, setMode]                   = useState("text");
     const [transcript, setTranscript]       = useState([]);
+    const [streamingText, setStreamingText] = useState(""); // word-by-word reveal for current agent turn
     const [agentText, setAgentText]         = useState("");
     const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
     const [isUserSpeaking, setIsUserSpeaking]   = useState(false);
@@ -86,13 +87,18 @@ export default function useConversationalInterview(config = {}) {
     const activeSourceRef     = useRef(null);
     const micStreamRef        = useRef(null);
     const workletNodeRef      = useRef(null);  // AudioWorkletNode (replaces ScriptProcessor)
+    const workletSinkRef      = useRef(null);  // silent sink keeps AudioWorklet processing
     const processorRef        = useRef(null);  // fallback ScriptProcessor
     const audioQueueRef       = useRef([]);
     const isPlayingRef        = useRef(false);
     const isMutedRef          = useRef(false);   // sync ref for audio thread closure
     const deepgramReadyRef    = useRef(false);   // sync ref for audio thread closure
+    const startMicrophoneRef  = useRef(null);
+    const microphoneStartingRef = useRef(false);
     const reconnectAttemptsRef = useRef(0);
     const reconnectTimerRef   = useRef(null);
+    const streamTimerRef      = useRef(null);   // interval for word-by-word text reveal
+    const pendingAgentTextRef = useRef(null);   // agent text waiting for audio to arrive
     const lastSessionParamsRef = useRef({});  // for Deepgram reconnect
 
     // ── Network Monitoring ────────────────────────────────────────
@@ -231,36 +237,136 @@ export default function useConversationalInterview(config = {}) {
             setDeepgramReady(true);
             deepgramReadyRef.current = true;
             setMode("voice");
+            setStatus("active");
             setReconnectInfo(null);
             setSilenceWarning(null);
-            if (data?.reconnected) {
-                setStatus("active");
+
+            // Server can auto-start Deepgram for conversational sessions. In that
+            // path no manual question is needed, so startVoiceMode() may never run.
+            if (!micStreamRef.current && !microphoneStartingRef.current) {
+                microphoneStartingRef.current = true;
+                startMicrophoneRef.current?.()
+                    .then(() => console.log("🎙️ [ConvHook] Microphone auto-started after Deepgram ready"))
+                    .catch((err) => {
+                        console.error("❌ [ConvHook] Failed to auto-start microphone after Deepgram ready:", err);
+                        setError(err.message || "Microphone failed to start");
+                    })
+                    .finally(() => {
+                        microphoneStartingRef.current = false;
+                    });
             }
         });
 
         socket.on("deepgram:transcript", (data) => {
-            setIsUserSpeaking(false); // User finished their utterance
-            setTranscript(prev => [...prev, {
-                role: "user",
-                text: data.text,
-                timestamp: Date.now()
-            }]);
+            console.log("🎤 [VOICE-MIC-STT] Candidate Spoke (Transcribed):", data.text);
+            setIsUserSpeaking(false);
+            // Merge consecutive user fragments into one bubble so the candidate's
+            // full answer appears as a single paragraph (Deepgram sends multiple
+            // final transcripts before the agent responds).
+            setTranscript(prev => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "user" && !last?.sealed) {
+                    // Append to existing user bubble
+                    const updated = [...prev];
+                    updated[updated.length - 1] = {
+                        ...last,
+                        text: last.text + " " + data.text,
+                        timestamp: Date.now()
+                    };
+                    return updated;
+                }
+                // New user turn
+                return [...prev, { role: "user", text: data.text, timestamp: Date.now() }];
+            });
         });
 
         socket.on("deepgram:agent-text", (data) => {
-            setAgentText(data.text || "");
-            setIsUserSpeaking(false); // Agent is responding, user is done
-            setTranscript(prev => [...prev, {
-                role: "agent",
-                text: data.text,
-                timestamp: Date.now()
-            }]);
+            console.log("🤖 [VOICE-AI-TTS] Agent Responded (Text):", data.text);
+            const fullText = data.text || "";
+            setAgentText(fullText);
+            setIsUserSpeaking(false);
+            // Seal the last user bubble so next user turn starts fresh
+            setTranscript(prev => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "user" && !last?.sealed) {
+                    const copy = [...prev];
+                    copy[copy.length - 1] = { ...last, sealed: true };
+                    return copy;
+                }
+                return prev;
+            });
+            // Cache text — streaming starts when audio actually arrives so text
+            // and voice are in sync (audio arrives ~500ms-1s after text event).
+            pendingAgentTextRef.current = fullText;
         });
 
+        // Server sends ONE complete WAV buffer per agent turn (after AgentAudioDone).
+        // We trigger word-by-word text streaming HERE — when audio actually arrives —
+        // so text reveal and voice stay in sync instead of racing ahead.
         socket.on("deepgram:agent-audio", (audioData) => {
-            audioQueueRef.current.push(audioData);
+            let arrayBuffer;
+            if (audioData instanceof ArrayBuffer) {
+                arrayBuffer = audioData;
+            } else if (ArrayBuffer.isView(audioData)) {
+                arrayBuffer = audioData.buffer.slice(audioData.byteOffset, audioData.byteOffset + audioData.byteLength);
+            } else if (audioData && audioData.type === "Buffer" && Array.isArray(audioData.data)) {
+                arrayBuffer = new Uint8Array(audioData.data).buffer;
+            } else {
+                arrayBuffer = new Uint8Array(audioData).buffer;
+            }
+            audioQueueRef.current.push(arrayBuffer);
             setIsAgentSpeaking(true);
             playNextAudio();
+
+            // Kick off word-by-word text streaming now that audio is here
+            const fullText = pendingAgentTextRef.current;
+            pendingAgentTextRef.current = null;
+            if (!fullText) return;
+
+            // Clear any stale stream
+            if (streamTimerRef.current) {
+                clearInterval(streamTimerRef.current);
+                streamTimerRef.current = null;
+            }
+
+            const words = fullText.split(" ");
+            let wordIdx = 0;
+            setStreamingText("");
+
+            setTranscript(prev => [...prev, {
+                role: "agent",
+                text: fullText,
+                streaming: true,
+                timestamp: Date.now()
+            }]);
+
+            // Estimate words per second from audio duration would require
+            // decoding — instead use a pace that matches typical TTS speed (~2.5 wps)
+            const msPerWord = Math.max(120, Math.min(250, (words.length > 0 ? 2500 / words.length : 200)));
+
+            streamTimerRef.current = setInterval(() => {
+                wordIdx++;
+                setStreamingText(words.slice(0, wordIdx).join(" "));
+
+                if (wordIdx >= words.length) {
+                    clearInterval(streamTimerRef.current);
+                    streamTimerRef.current = null;
+                    setTranscript(prev => {
+                        const copy = [...prev];
+                        const last = copy[copy.length - 1];
+                        if (last?.role === "agent" && last?.streaming) {
+                            copy[copy.length - 1] = { ...last, streaming: false };
+                        }
+                        return copy;
+                    });
+                    setStreamingText("");
+                }
+            }, msPerWord);
+        });
+
+        socket.on("deepgram:agent-audio-done", () => {
+            // Audio already queued via deepgram:agent-audio — this is just a UI signal
+            console.log("🔇 [ConvHook] Agent audio turn complete");
         });
 
         socket.on("deepgram:user-speaking", () => {
@@ -268,6 +374,21 @@ export default function useConversationalInterview(config = {}) {
             setIsAgentSpeaking(false);
             audioQueueRef.current = [];          // barge-in: clear queued audio
             setSilenceWarning(null);
+            // Clear streaming text on barge-in — finalize last agent bubble
+            if (streamTimerRef.current) {
+                clearInterval(streamTimerRef.current);
+                streamTimerRef.current = null;
+            }
+            setStreamingText("");
+            pendingAgentTextRef.current = null;
+            // Seal last agent bubble and last user bubble so turns don't bleed
+            setTranscript(prev => {
+                if (!prev.length) return prev;
+                const copy = [...prev];
+                const last = copy[copy.length - 1];
+                if (!last.sealed) copy[copy.length - 1] = { ...last, sealed: true };
+                return copy;
+            });
 
             // Stop current playback for barge-in!
             if (activeSourceRef.current) {
@@ -312,11 +433,11 @@ export default function useConversationalInterview(config = {}) {
 
         // ── Phase 7: Fallback to manual ──
         socket.on("deepgram:fallback", (data) => {
-            console.warn("⚠️ [ConvHook] Deepgram giving up — falling back to manual mode");
+            console.warn("⚠️ [ConvHook] Deepgram giving up — falling back to manual mode", data);
             setDeepgramReady(false);
             deepgramReadyRef.current = false;
             setMode("text");
-            setError("Voice connection failed after multiple attempts. Switching to text mode.");
+            setError(data?.reason || "Voice connection failed after multiple attempts. Switching to text mode.");
             onFallbackToManual?.();
         });
 
@@ -347,6 +468,11 @@ export default function useConversationalInterview(config = {}) {
             clearTimeout(reconnectTimerRef.current);
             reconnectTimerRef.current = null;
         }
+        if (streamTimerRef.current) {
+            clearInterval(streamTimerRef.current);
+            streamTimerRef.current = null;
+        }
+        setStreamingText("");
         if (socketRef.current) {
             socketRef.current.disconnect();
             socketRef.current = null;
@@ -490,6 +616,11 @@ export default function useConversationalInterview(config = {}) {
 
     const startMicrophone = useCallback(async () => {
         try {
+            if (micStreamRef.current && micAudioContextRef.current?.state !== "closed") {
+                console.log("🎤 [ConvHook] Microphone already active");
+                return;
+            }
+
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount:     1,
@@ -533,6 +664,7 @@ export default function useConversationalInterview(config = {}) {
 
                     workletNodeRef.current = workletNode;
 
+                    let packetCount = 0;
                     // Audio thread → main thread (zero-copy transferable buffer)
                     workletNode.port.onmessage = (e) => {
                         if (e.data?.type !== "audio") return;
@@ -544,10 +676,20 @@ export default function useConversationalInterview(config = {}) {
                         ) return;
 
                         socketRef.current.emit("deepgram:audio", e.data.buffer);
+                        packetCount++;
+                        if (packetCount % 50 === 0) {
+                            console.log(`📤 [MIC-CAPTURE] Sent ${packetCount} audio packets to server...`);
+                        }
                     };
 
                     source.connect(workletNode);
-                    // Worklet does not need to connect to destination (we only capture)
+                    // Keep the worklet in the audio graph so browsers continue
+                    // calling process(); gain=0 prevents local echo.
+                    const sink = micAudioContextRef.current.createGain();
+                    sink.gain.value = 0;
+                    workletNode.connect(sink);
+                    sink.connect(micAudioContextRef.current.destination);
+                    workletSinkRef.current = sink;
                     console.log("🎤 [ConvHook] Microphone started (AudioWorklet — audio thread ✅)");
                     return;
                 } catch (workletErr) {
@@ -561,6 +703,7 @@ export default function useConversationalInterview(config = {}) {
             const processor = micAudioContextRef.current.createScriptProcessor(2048, 1, 1);
             processorRef.current = processor;
 
+            let fallbackPacketCount = 0;
             processor.onaudioprocess = (e) => {
                 if (isMutedRef.current || !socketRef.current?.connected || !deepgramReadyRef.current) return;
 
@@ -571,6 +714,10 @@ export default function useConversationalInterview(config = {}) {
                     int16Data[i]  = s < 0 ? s * 0x8000 : s * 0x7FFF;
                 }
                 socketRef.current.emit("deepgram:audio", int16Data.buffer);
+                fallbackPacketCount++;
+                if (fallbackPacketCount % 50 === 0) {
+                    console.log(`📤 [MIC-CAPTURE-FALLBACK] Sent ${fallbackPacketCount} audio packets to server...`);
+                }
             };
 
             source.connect(processor);
@@ -592,6 +739,12 @@ export default function useConversationalInterview(config = {}) {
             } catch { /* ignore */ }
             workletNodeRef.current = null;
         }
+        if (workletSinkRef.current) {
+            try {
+                workletSinkRef.current.disconnect();
+            } catch { /* ignore */ }
+            workletSinkRef.current = null;
+        }
 
         // Stop legacy ScriptProcessor (fallback)
         if (processorRef.current) {
@@ -609,6 +762,10 @@ export default function useConversationalInterview(config = {}) {
         console.log("🎤 [ConvHook] Microphone stopped");
     }, []);
 
+    useEffect(() => {
+        startMicrophoneRef.current = startMicrophone;
+    }, [startMicrophone]);
+
     const mute   = useCallback(() => { setIsMuted(true);  isMutedRef.current = true;  }, []);
     const unmute = useCallback(() => { setIsMuted(false); isMutedRef.current = false; }, []);
 
@@ -618,54 +775,30 @@ export default function useConversationalInterview(config = {}) {
         if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
         isPlayingRef.current = true;
 
-        const audioData = audioQueueRef.current.shift();
+        const arrayBuffer = audioQueueRef.current.shift();
 
         try {
-            // Create/reuse a 24kHz context for TTS output
             if (!playbackAudioContextRef.current || playbackAudioContextRef.current.state === "closed") {
                 playbackAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({
-                    sampleRate: 24000
+                    latencyHint: "interactive"
                 });
             }
-
-            // Resume if suspended by browser
             if (playbackAudioContextRef.current.state === "suspended") {
                 await playbackAudioContextRef.current.resume();
             }
 
-            // Safely convert audioData (which could be ArrayBuffer or Uint8Array/Buffer) to Int16Array
-            let buffer;
-            if (audioData instanceof ArrayBuffer) {
-                buffer = audioData;
-            } else if (ArrayBuffer.isView(audioData)) {
-                buffer = audioData.buffer.slice(
-                    audioData.byteOffset,
-                    audioData.byteOffset + audioData.byteLength
-                );
-            } else if (audioData && audioData.type === "Buffer" && Array.isArray(audioData.data)) {
-                buffer = new Uint8Array(audioData.data).buffer;
-            } else {
-                buffer = new Uint8Array(audioData).buffer;
-            }
-
-            const int16Array   = new Int16Array(buffer);
-            const float32Array = new Float32Array(int16Array.length);
-            for (let i = 0; i < int16Array.length; i++) {
-                float32Array[i] = int16Array[i] / 32768.0;
-            }
-
-            const audioBuffer = playbackAudioContextRef.current.createBuffer(1, float32Array.length, 24000);
-            audioBuffer.getChannelData(0).set(float32Array);
+            // decodeAudioData handles WAV header automatically — correct sampleRate,
+            // no manual Int16→Float32 conversion, no header bytes misread as audio.
+            const audioBuffer = await playbackAudioContextRef.current.decodeAudioData(arrayBuffer);
 
             const source = playbackAudioContextRef.current.createBufferSource();
             source.buffer = audioBuffer;
             source.connect(playbackAudioContextRef.current.destination);
-
-            // Store the active source to allow barge-in interruption!
             activeSourceRef.current = source;
 
             source.onended = () => {
                 isPlayingRef.current = false;
+                activeSourceRef.current = null;
                 if (audioQueueRef.current.length > 0) {
                     playNextAudio();
                 } else {
@@ -676,6 +809,10 @@ export default function useConversationalInterview(config = {}) {
         } catch (err) {
             console.error("❌ [ConvHook] Audio playback error:", err);
             isPlayingRef.current = false;
+            // Try next in queue even on error
+            if (audioQueueRef.current.length > 0) {
+                playNextAudio();
+            }
         }
     }, []);
 
@@ -747,7 +884,7 @@ export default function useConversationalInterview(config = {}) {
         mute, unmute, isMuted, checkMicQuality,
 
         // Conversation State
-        transcript, agentText, isAgentSpeaking,
+        transcript, agentText, streamingText, isAgentSpeaking,
         isUserSpeaking, evaluation, turnInfo, intent,
 
         // Phase 7

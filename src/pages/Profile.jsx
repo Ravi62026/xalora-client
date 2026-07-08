@@ -107,7 +107,6 @@ const Profile = () => {
   const [updateError, setUpdateError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Check if user is organization member (only if they have actual orgId)
   const isOrgUser = !!orgDetails?.organization;
 
   useEffect(() => {
@@ -331,8 +330,8 @@ const Profile = () => {
   if (loading && !user) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-400" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-600" />
         </div>
       </Layout>
     );
@@ -340,54 +339,54 @@ const Profile = () => {
 
   return (
     <Layout>
-      <section className="min-h-screen bg-[radial-gradient(circle_at_10%_10%,rgba(45,212,191,0.18),transparent_35%),radial-gradient(circle_at_90%_20%,rgba(56,189,248,0.16),transparent_35%),linear-gradient(145deg,#020617,#0b1120,#030712)] py-8 sm:py-10 lg:py-12">
+      <section className="min-h-screen bg-slate-50 py-8 sm:py-10 lg:py-12">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 rounded-3xl border border-cyan-400/20 bg-gradient-to-r from-cyan-500/15 via-transparent to-emerald-500/10 p-5 backdrop-blur sm:p-7">
+          <div className="mb-6 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 p-5 sm:p-7">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Account Center</p>
-                <h1 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Profile and Settings</h1>
-                <p className="mt-2 max-w-2xl text-sm text-slate-300 sm:text-base">
+                <p className="text-xs uppercase tracking-[0.2em] text-indigo-600 font-bold">Account Center</p>
+                <h1 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">Profile and Settings</h1>
+                <p className="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
                   {isOrgMember
                     ? "Manage your personal and organization-linked account details in one place."
                     : "Manage your personal details, review your plan, and track daily AI usage in one place."}
                 </p>
                 {isOrgMember && (
-                  <p className="mt-1 text-xs text-emerald-200">
+                  <p className="mt-1 text-xs text-indigo-700">
                     You belong to{" "}
-                    <span className="font-semibold text-white">{orgName}</span> as{" "}
-                    <span className="font-semibold text-white">{orgRole}</span>{" "}
+                    <span className="font-semibold text-slate-900">{orgName}</span> as{" "}
+                    <span className="font-semibold text-slate-900">{orgRole}</span>{" "}
                     so billing is handled by your organization’s super admin.
                   </p>
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
                 {!isCompanyCandidate && (
-                <Link
-                  to="/pricing"
-                  onClick={(event) => {
-                    if (upgradeDisabled) {
-                      event.preventDefault();
+                  <Link
+                    to="/pricing"
+                    onClick={(event) => {
+                      if (upgradeDisabled) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className={`inline-flex items-center rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                      upgradeDisabled
+                        ? "border-slate-200 bg-white text-slate-400 cursor-not-allowed"
+                        : "border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                    }`}
+                    aria-disabled={upgradeDisabled}
+                    title={
+                      upgradeDisabled
+                        ? "Billing is managed at the organization level by the super admin."
+                        : "Upgrade Plan"
                     }
-                  }}
-                  className={`inline-flex items-center rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                    upgradeDisabled
-                      ? "border-cyan-300/15 bg-white/5 text-slate-400 cursor-not-allowed"
-                      : "border-cyan-300/35 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/20"
-                  }`}
-                  aria-disabled={upgradeDisabled}
-                  title={
-                    upgradeDisabled
-                      ? "Billing is managed at the organization level by the super admin."
-                      : "Upgrade Plan"
-                  }
-                >
-                  Upgrade Plan
-                </Link>
+                  >
+                    Upgrade Plan
+                  </Link>
                 )}
                 <Link
                   to="/"
-                  className="inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+                  className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                 >
                   Back Home
                 </Link>
@@ -396,42 +395,42 @@ const Profile = () => {
           </div>
 
           {error && (
-            <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
           {updateError && (
-            <div className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {updateError}
             </div>
           )}
           {successMessage && (
-            <div className="mb-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
               {successMessage}
             </div>
           )}
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
             <aside className="space-y-6 xl:col-span-4">
-              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_16px_40px_-20px_rgba(6,182,212,0.45)] backdrop-blur">
-                <div className="bg-gradient-to-r from-cyan-600/45 to-blue-600/20 p-6">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
                   <div className="flex items-start gap-4">
                     {formData.avatar ? (
                       <img
                         src={formData.avatar}
                         alt={formData.name || "User"}
-                        className="h-20 w-20 shrink-0 rounded-2xl border border-cyan-200/45 object-cover"
+                        className="h-20 w-20 shrink-0 rounded-2xl border border-indigo-200/60 object-cover"
                       />
                     ) : (
-                      <div className="h-20 w-20 shrink-0 rounded-2xl border border-cyan-200/45 bg-cyan-500/20 text-white flex items-center justify-center text-2xl font-semibold">
+                      <div className="h-20 w-20 shrink-0 rounded-2xl border border-indigo-200/60 bg-indigo-500/20 text-white flex items-center justify-center text-2xl font-semibold">
                         {avatarInitial}
                       </div>
                     )}
                     <div className="min-w-0">
                       <h2 className="truncate text-2xl font-semibold text-white">{formData.name || "User"}</h2>
-                      <p className="mt-1 truncate text-sm text-cyan-100">@{formData.username || "username"}</p>
-                      <p className="mt-1 break-all text-xs text-slate-200">{formData.email || "No email"}</p>
-                      <span className="mt-3 inline-flex rounded-full border border-emerald-200/35 bg-emerald-400/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-100">
+                      <p className="mt-1 truncate text-sm text-indigo-100">@{formData.username || "username"}</p>
+                      <p className="mt-1 break-all text-xs text-indigo-100">{formData.email || "No email"}</p>
+                      <span className="mt-3 inline-flex rounded-full border border-emerald-200/40 bg-emerald-400/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-100">
                         {roleLabel}
                       </span>
                     </div>
@@ -441,9 +440,9 @@ const Profile = () => {
                 {!isOrgMember && (
                   <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 xl:grid-cols-1">
                     {statCards.map((card) => (
-                      <div key={card.label} className="rounded-2xl border border-white/10 bg-slate-900/50 p-4">
-                        <p className="text-xs uppercase tracking-wide text-slate-400">{card.label}</p>
-                        <p className="mt-1 text-2xl font-bold text-white">{card.value}</p>
+                      <div key={card.label} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-slate-500">{card.label}</p>
+                        <p className="mt-1 text-2xl font-bold text-slate-900">{card.value}</p>
                         <p className="mt-1 text-xs text-slate-500">{card.hint}</p>
                       </div>
                     ))}
@@ -451,9 +450,8 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                 {isCompanyCandidate ? (
-                  // Company Candidate Card
                   <>
                     <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-5">
                       <p className="text-xs uppercase tracking-wide text-white/75">Company Screening</p>
@@ -462,31 +460,30 @@ const Profile = () => {
                         Position: <span className="font-semibold">{orgDetails?.position || "Candidate"}</span>
                       </p>
                     </div>
-                    <div className="space-y-3 p-5 text-sm">
+                    <div className="space-y-3 p-5 text-sm text-slate-700">
                       <div>
-                        <p className="text-xs text-slate-400">Assigned Interview Rounds</p>
+                        <p className="text-xs text-slate-500">Assigned Interview Rounds</p>
                         <div className="mt-1 flex flex-wrap gap-1.5">
                           {orgDetails.interviewRounds.map((round) => (
-                            <span key={round} className="rounded-lg bg-amber-500/15 border border-amber-500/25 px-2.5 py-1 text-xs font-semibold text-amber-200 capitalize">
+                            <span key={round} className="rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1 text-xs font-semibold text-amber-700 capitalize">
                               {round.replace(/_/g, " ")}
                             </span>
                           ))}
                         </div>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-400">Interview Attempts</p>
-                        <p className="text-sm font-medium text-white">3 attempts allowed</p>
+                        <p className="text-xs text-slate-500">Interview Attempts</p>
+                        <p className="text-sm font-medium text-slate-900">3 attempts allowed</p>
                       </div>
                       {orgDetails?.deadlineDays && (
                         <div>
-                          <p className="text-xs text-slate-400">Deadline</p>
-                          <p className="text-sm font-medium text-white">{orgDetails.deadlineDays} days from invite acceptance</p>
+                          <p className="text-xs text-slate-500">Deadline</p>
+                          <p className="text-sm font-medium text-slate-900">{orgDetails.deadlineDays} days from invite acceptance</p>
                         </div>
                       )}
                     </div>
                   </>
                 ) : isOrgUser ? (
-                  // Organization Plan Card
                   <>
                     <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-5">
                       <p className="text-xs uppercase tracking-wide text-white/75">Organization Plan</p>
@@ -495,7 +492,7 @@ const Profile = () => {
                         Role: <span className="font-semibold capitalize">{orgRole}</span>
                       </p>
                     </div>
-                    <div className="space-y-2 p-5 text-sm text-slate-200">
+                    <div className="space-y-2 p-5 text-sm text-slate-700">
                       <p>- Organization management dashboard access</p>
                       <p>- Collaborative learning environment</p>
                       <p>- Team performance tracking</p>
@@ -503,7 +500,6 @@ const Profile = () => {
                     </div>
                   </>
                 ) : (
-                  // Individual Plan Card
                   <>
                     <div className={`bg-gradient-to-r ${currentPlan.tone} p-5`}>
                       <p className="text-xs uppercase tracking-wide text-white/75">Current Plan</p>
@@ -514,7 +510,7 @@ const Profile = () => {
                         </p>
                       )}
                     </div>
-                    <div className="space-y-2 p-5 text-sm text-slate-200">
+                    <div className="space-y-2 p-5 text-sm text-slate-700">
                       {currentPlan.features.map((item) => (
                         <p key={item}>- {item}</p>
                       ))}
@@ -528,56 +524,56 @@ const Profile = () => {
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 {!isOrgUser && (
                   <>
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                      <h3 className="text-lg font-semibold text-white">AI Requests</h3>
-                      <p className="mt-1 text-sm text-slate-300">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <h3 className="text-lg font-semibold text-slate-900">AI Requests</h3>
+                      <p className="mt-1 text-sm text-slate-600">
                         {aiUsage
                           ? `${aiUsage.requestsUsed} of ${aiUsage.requestsLimit} used today`
                           : "Usage data unavailable"}
                       </p>
-                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-100">
                         <div
-                          className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                          className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-emerald-500 transition-all"
                           style={{ width: `${usagePercent}%` }}
                         />
                       </div>
-                      <p className="mt-2 text-xs text-slate-400">
+                      <p className="mt-2 text-xs text-slate-500">
                         {aiUsage ? `${aiUsage.requestsRemaining} requests remaining` : "No active quota"}
                       </p>
                     </div>
 
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                      <h3 className="text-lg font-semibold text-white">File Uploads</h3>
-                      <p className="mt-1 text-sm text-slate-300">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <h3 className="text-lg font-semibold text-slate-900">File Uploads</h3>
+                      <p className="mt-1 text-sm text-slate-600">
                         {aiUsage
                           ? `${aiUsage.fileUploadsUsed} of ${aiUsage.fileUploadsLimit} used today`
                           : "Upload data unavailable"}
                       </p>
-                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-100">
                         <div
-                          className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 transition-all"
+                          className="h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all"
                           style={{ width: `${uploadPercent}%` }}
                         />
                       </div>
-                      <p className="mt-2 text-xs text-slate-400">
+                      <p className="mt-2 text-xs text-slate-500">
                         {aiUsage ? `${aiUsage.fileUploadsRemaining} uploads remaining` : "No active quota"}
                       </p>
                     </div>
 
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                      <h3 className="text-lg font-semibold text-white">🎤 AI Interviews</h3>
-                      <p className="mt-1 text-sm text-slate-300">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <h3 className="text-lg font-semibold text-slate-900">🎤 AI Interviews</h3>
+                      <p className="mt-1 text-sm text-slate-600">
                         {interviewUsage
                           ? `${normalizedInterviewUsage.used} of ${normalizedInterviewUsage.limit} used this month`
                           : "Interview data unavailable"}
                       </p>
-                      <div className="mt-4 h-3 w-full rounded-full bg-slate-800">
+                      <div className="mt-4 h-3 w-full rounded-full bg-slate-100">
                         <div
-                          className="h-3 rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500 transition-all"
+                          className="h-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all"
                           style={{ width: `${interviewPercent}%` }}
                         />
                       </div>
-                      <p className="mt-2 text-xs text-slate-400">
+                      <p className="mt-2 text-xs text-slate-500">
                         {interviewUsage
                           ? `${normalizedInterviewUsage.remaining} interviews remaining`
                           : "No active quota"}
@@ -586,39 +582,39 @@ const Profile = () => {
                   </>
                 )}
                 {isOrgUser && (
-                  <div className={`rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur ${isCompanyCandidate ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
-                    <h3 className="text-lg font-semibold text-white">
+                  <div className={`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ${isCompanyCandidate ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
+                    <h3 className="text-lg font-semibold text-slate-900">
                       {isCompanyCandidate ? 'Interview Assignment' : 'Organization Info'}
                     </h3>
                     <div className="mt-4 space-y-3">
                       <div>
-                        <p className="text-xs text-slate-400">Organization</p>
-                        <p className="text-sm font-medium text-white">{orgName}</p>
+                        <p className="text-xs text-slate-500">Organization</p>
+                        <p className="text-sm font-medium text-slate-900">{orgName}</p>
                       </div>
                       {isCompanyCandidate ? (
                         <>
                           <div>
-                            <p className="text-xs text-slate-400">Position</p>
-                            <p className="text-sm font-medium text-white">{orgDetails?.position || "Candidate"}</p>
+                            <p className="text-xs text-slate-500">Position</p>
+                            <p className="text-sm font-medium text-slate-900">{orgDetails?.position || "Candidate"}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-400">Assigned Rounds</p>
+                            <p className="text-xs text-slate-500">Assigned Rounds</p>
                             <div className="mt-1 flex flex-wrap gap-1.5">
                               {orgDetails.interviewRounds.map((round) => (
-                                <span key={round} className="rounded-lg bg-amber-500/15 border border-amber-500/25 px-2.5 py-1 text-xs font-semibold text-amber-200 capitalize">
+                                <span key={round} className="rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1 text-xs font-semibold text-amber-700 capitalize">
                                   {round.replace(/_/g, " ")}
                                 </span>
                               ))}
                             </div>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-400">Max Attempts</p>
-                            <p className="text-sm font-medium text-white">3 interviews</p>
+                            <p className="text-xs text-slate-500">Max Attempts</p>
+                            <p className="text-sm font-medium text-slate-900">3 interviews</p>
                           </div>
                           {orgDetails?.deadlineDays && (
                             <div>
-                              <p className="text-xs text-slate-400">Deadline</p>
-                              <p className="text-sm font-medium text-white">{orgDetails.deadlineDays} days from invite acceptance</p>
+                              <p className="text-xs text-slate-500">Deadline</p>
+                              <p className="text-sm font-medium text-slate-900">{orgDetails.deadlineDays} days from invite acceptance</p>
                             </div>
                           )}
                           <Link
@@ -631,12 +627,12 @@ const Profile = () => {
                       ) : (
                         <>
                           <div>
-                            <p className="text-xs text-slate-400">Your Role</p>
-                            <p className="text-sm font-medium text-white capitalize">{orgRole}</p>
+                            <p className="text-xs text-slate-500">Your Role</p>
+                            <p className="text-sm font-medium text-slate-900 capitalize">{orgRole}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-400">Organization Type</p>
-                            <p className="text-sm font-medium text-white capitalize">{orgType}</p>
+                            <p className="text-xs text-slate-500">Organization Type</p>
+                            <p className="text-sm font-medium text-slate-900 capitalize">{orgType}</p>
                           </div>
                           <Link
                             to={getOrgDashboardRoute()}
@@ -651,16 +647,16 @@ const Profile = () => {
                 )}
               </div>
 
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur sm:p-7">
-                <h3 className="text-xl font-semibold text-white">Edit Profile</h3>
-                <p className="mt-1 text-sm text-slate-300">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+                <h3 className="text-xl font-semibold text-slate-900">Edit Profile</h3>
+                <p className="mt-1 text-sm text-slate-600">
                   Update your name, username, email, and avatar URL.
                 </p>
 
                 <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="name">
+                      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="name">
                         Full Name
                       </label>
                       <input
@@ -668,12 +664,12 @@ const Profile = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                         placeholder="Your full name"
                       />
                     </div>
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="username">
+                      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="username">
                         Username
                       </label>
                       <input
@@ -681,7 +677,7 @@ const Profile = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                         placeholder="Username"
                       />
                     </div>
@@ -689,7 +685,7 @@ const Profile = () => {
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="email">
+                      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="email">
                         Email
                       </label>
                       <input
@@ -698,12 +694,12 @@ const Profile = () => {
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                         placeholder="your@email.com"
                       />
                     </div>
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="avatar">
+                      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="avatar">
                         Avatar URL
                       </label>
                       <input
@@ -711,24 +707,24 @@ const Profile = () => {
                         name="avatar"
                         value={formData.avatar}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400"
+                        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                         placeholder="https://..."
                       />
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-cyan-400/25 bg-cyan-400/5 p-4">
-                    <p className="text-xs text-cyan-100">
+                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
+                    <p className="text-xs text-indigo-700">
                       Session auth uses secure httpOnly cookies with token rotation. Your account changes are applied immediately.
                     </p>
                   </div>
 
                   <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-xs text-slate-400">Need billing changes? Use the pricing page to switch plans.</p>
+                    <p className="text-xs text-slate-500">Need billing changes? Use the pricing page to switch plans.</p>
                     <button
                       type="submit"
                       disabled={updateLoading}
-                      className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:from-cyan-600 hover:to-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white transition hover:from-indigo-700 hover:to-purple-700 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {updateLoading ? "Saving..." : "Save Changes"}
                     </button>

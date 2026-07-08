@@ -58,7 +58,7 @@ const NavDropdown = ({ label, items, closeMobileMenu, isActive }) => {
             </button>
 
             {isOpen && (
-                <div className="absolute top-16 left-0 mt-2 w-60 bg-white rounded-xl border border-indigo-100 shadow-xl shadow-gray-200/60 py-2 z-50">
+                <div className="absolute top-full left-0 mt-2 w-60 bg-white rounded-xl border border-indigo-100 shadow-xl shadow-gray-200/60 py-2 z-50">
                     {items.map((item, index) => {
                         const itemClass = "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors duration-150";
 
@@ -125,8 +125,21 @@ const Navbar = () => {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [isSwitchingWorkspace, setIsSwitchingWorkspace] = useState(false);
     const [isWorkspaceChooserOpen, setIsWorkspaceChooserOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const profileRef = useRef(null);
     const workspaceChooserShownRef = useRef(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 20) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     useEffect(() => {
         setIsMobileMenuOpen(false);
@@ -279,9 +292,18 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="xalora-grid-bg sticky top-0 z-50 w-full">
+        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+            isScrolled 
+                ? "bg-white/80 backdrop-blur-md shadow-sm" 
+                : "xalora-grid-bg"
+        }`}>
             {/* Max-width container — border-bottom here so the indigo line is contained, not edge-to-edge */}
-            <div className="max-w-[1200px] mx-auto flex items-center justify-between border-b-2 border-indigo-600" style={{ padding: '1.2rem 2rem' }}>
+            <div 
+                className={`max-w-[1200px] mx-auto flex items-center justify-between border-b-2 transition-all duration-300 ${
+                    isScrolled ? "border-indigo-600/30" : "border-indigo-600"
+                }`}
+                style={{ padding: isScrolled ? '0.6rem 2rem' : '1.2rem 2rem' }}
+            >
                     {/* Logo */}
                     <Link to="/" className="flex items-center shrink-0" onClick={closeMobileMenu}>
                         <span className="font-extrabold text-[1.3rem]" style={{ color: '#4f46e5' }}>xalora</span>

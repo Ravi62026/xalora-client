@@ -770,8 +770,8 @@ const InterviewRound = () => {
         setAnswer('');
         setCodeAnswer(''); // Reset code editor for new question
 
-        // Speak the question using TTS
-        if (response.data.question?.text) {
+        // Speak the question using TTS (manual mode only)
+        if (response.data.question?.text && sessionData?.interviewStyle !== 'conversational') {
           speakQuestion(response.data.question.text);
         }
       } else {
@@ -1738,6 +1738,7 @@ const InterviewRound = () => {
 
   // Auto-start mic when TTS finishes speaking + start 10s silence nudge timer
   useEffect(() => {
+    if (sessionData?.interviewStyle === 'conversational') return;
     if (!isSpeaking && currentQuestion && !isComplete && !isLoading && mediaReady) {
       // TTS just finished — start mic immediately (zero delay for instant listening)
       const micDelay = setTimeout(() => {
@@ -1908,29 +1909,29 @@ const InterviewRound = () => {
           to   { transform: scaleY(1);   opacity: 1;   }
         }
       `}</style>
-      <div className="ai-interview-root min-h-screen bg-[radial-gradient(circle_at_top,_rgba(12,24,35,0.9),_rgba(4,6,12,0.95))] text-slate-100">
+      <div className="ai-interview-root min-h-screen xalora-grid-bg text-slate-800">
         {/* Floating Dev Mode Toggle */}
         <button
           onClick={toggleDevMode}
           className={`fixed bottom-4 left-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full border shadow-lg transition-all ${
-            isDevMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-800/50 text-slate-400 border-slate-700/50'
+            isDevMode ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-100 text-slate-600 border-slate-300'
           }`}
         >
           DEV: {isDevMode ? 'ON' : 'OFF'}
         </button>
 
-        <header className="border-b border-slate-800/70 bg-slate-950/70 backdrop-blur">
+        <header className="border-b border-slate-200/80 bg-white/85 backdrop-blur shadow-sm">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-4">
               <img src="/logo_xalora.png" alt="Xalora" className="h-8 w-auto" />
               <div>
-                <p className="text-[10px] uppercase tracking-[0.4em] text-emerald-200/80">AI Interview</p>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-emerald-600 font-bold">AI Interview</p>
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-lg font-semibold text-white">{roundConfig.name}</p>
-                  <span className="rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-xs text-slate-200">
+                  <p className="text-lg font-bold text-slate-900">{roundConfig.name}</p>
+                  <span className="rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700 font-semibold">
                     {isSpecificMode ? 'Specific Round' : `Round ${roundNum}/7`}
                   </span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500 font-medium">
                     Q{questionNumber}{totalFollowupsAnswered > 0 ? ` · ${totalFollowupsAnswered} follow-up${totalFollowupsAnswered > 1 ? 's' : ''}` : ''} / ~{roundConfig.maxQuestions}
                   </span>
                 </div>
@@ -1941,9 +1942,9 @@ const InterviewRound = () => {
               <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${statusClasses}`}>
                 {interviewStatus}
               </span>
-              <div className="rounded-xl border border-slate-700/60 bg-slate-900/70 px-3 py-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Duration</p>
-                <p className="text-lg font-semibold text-cyan-200">{formatTime(duration)}</p>
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">Duration</p>
+                <p className="text-lg font-bold text-indigo-600">{formatTime(duration)}</p>
               </div>
             </div>
           </div>
@@ -1982,12 +1983,11 @@ const InterviewRound = () => {
             </div>
           ) : (
             <>
-              <section className="relative overflow-hidden rounded-[32px] border border-slate-800/80 bg-slate-950/70 shadow-2xl shadow-black/40">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,68,76,0.35),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(10,18,38,0.8),_transparent_60%)]" />
+              <section className="relative overflow-hidden rounded-[32px] border border-slate-200/80 bg-white/80 shadow-md">
                 <div className="relative flex gap-4 p-4">
                   {/* Candidate Video - Left side */}
                   <div className="relative w-[45%] flex-shrink-0">
-                    <div className={`relative aspect-[4/3] rounded-2xl border ${isListening ? 'border-emerald-400/60 shadow-lg shadow-emerald-500/10' : 'border-slate-700/60'} bg-slate-900/80 overflow-hidden transition-all`}>
+                    <div className={`relative aspect-[4/3] rounded-2xl border ${isListening ? 'border-emerald-500 shadow-md shadow-emerald-500/10' : 'border-slate-200'} bg-slate-50 overflow-hidden transition-all`}>
                       {stream && isVideoOn ? (
                         <video
                           ref={(videoElement) => {
@@ -2050,7 +2050,7 @@ const InterviewRound = () => {
                   <div className="flex-1 flex flex-col gap-3 min-w-0">
                     {/* Question badge */}
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
+                      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs text-emerald-700 font-semibold">
                         {isFollowup ? `Q${questionNumber} · Follow-up ${followupIndexForCurrentQ}` : `Question ${questionNumber}`}
                       </span>
                     </div>
@@ -2063,10 +2063,10 @@ const InterviewRound = () => {
                         opacity: questionVisible ? 1 : 0,
                         transform: questionVisible ? 'translateY(0)' : 'translateY(10px)',
                       }}
-                      className="rounded-2xl border border-slate-700/60 bg-slate-950/85 px-5 py-4 shadow-lg shadow-black/40"
+                      className="rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm text-slate-800"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500">Question</p>
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">Question</p>
                         <div className="flex items-center gap-3">
                           {/* Sound wave bars while AI is speaking */}
                           {isSpeaking && (
@@ -2085,7 +2085,7 @@ const InterviewRound = () => {
                               </div>
                               <button
                                 onClick={stopAISpeaking}
-                                className="flex items-center gap-1 rounded-full bg-slate-700/80 hover:bg-red-500/30 border border-slate-600/50 hover:border-red-500/40 px-2 py-0.5 text-[10px] text-slate-300 hover:text-red-300 transition-colors"
+                                className="flex items-center gap-1 rounded-full bg-slate-100 hover:bg-red-55 border border-slate-200 hover:border-red-200 px-2 py-0.5 text-[10px] text-slate-650 hover:text-red-650 transition-colors cursor-pointer"
                                 title="Stop AI speaking"
                               >
                                 <VolumeX className="w-3 h-3" />
@@ -2093,7 +2093,7 @@ const InterviewRound = () => {
                               </button>
                             </>
                           )}
-                          {isFollowup && <span className="text-[10px] text-amber-300 font-medium">Follow-up</span>}
+                          {isFollowup && <span className="text-[10px] text-amber-700 font-semibold">Follow-up</span>}
                         </div>
                       </div>
 
@@ -2105,19 +2105,19 @@ const InterviewRound = () => {
                             {[0, 1, 2].map(i => (
                               <span
                                 key={i}
-                                className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce"
+                                className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-bounce"
                                 style={{ animationDelay: `${i * 150}ms` }}
                               />
                             ))}
                           </div>
                         </div>
                       ) : (
-                        <div className="prose prose-invert prose-sm max-w-none">
+                        <div className="prose prose-sm max-w-none text-slate-800">
                           {isTyping ? (
                             /* Typewriter mode — plain text with blinking cursor */
-                            <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">
+                            <p className="text-sm text-slate-705 leading-relaxed whitespace-pre-wrap">
                               {streamedText}
-                              <span className="inline-block w-0.5 h-[1em] bg-emerald-400 ml-0.5 align-middle animate-pulse" />
+                              <span className="inline-block w-0.5 h-[1em] bg-emerald-500 ml-0.5 align-middle animate-pulse" />
                             </p>
                           ) : (
                             /* Done streaming — render full markdown */
@@ -2125,25 +2125,25 @@ const InterviewRound = () => {
                               components={{
                                 p: ({children, ...props}) => {
                                   const hasBlock = Array.isArray(children)
-                                    ? children.some(c => c?.type === 'pre' || c?.type === 'div' || (typeof c === 'object' && c?.props?.className?.includes?.('bg-slate-800')))
+                                    ? children.some(c => c?.type === 'pre' || c?.type === 'div' || (typeof c === 'object' && c?.props?.className?.includes?.('bg-slate-100')))
                                     : false;
-                                  if (hasBlock) return <div className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</div>;
-                                  return <p className="text-sm text-slate-200 mb-2 leading-relaxed" {...props}>{children}</p>;
+                                  if (hasBlock) return <div className="text-sm text-slate-705 mb-2 leading-relaxed" {...props}>{children}</div>;
+                                  return <p className="text-sm text-slate-705 mb-2 leading-relaxed" {...props}>{children}</p>;
                                 },
                                 code: ({inline, className, children, ...props}) => {
                                   const isInline = inline || !className;
                                   return isInline
-                                    ? <code className="bg-slate-800 px-1.5 py-0.5 rounded text-xs text-cyan-300 font-mono" {...props}>{children}</code>
-                                    : <pre className="bg-slate-800/60 border border-slate-700 rounded-lg px-3 py-2 mb-2 overflow-x-auto"><code className="text-xs text-cyan-100 font-mono" {...props}>{children}</code></pre>;
+                                    ? <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs text-cyan-800 font-mono" {...props}>{children}</code>
+                                    : <pre className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 mb-2 overflow-x-auto"><code className="text-xs text-cyan-800 font-mono" {...props}>{children}</code></pre>;
                                 },
                                 pre: ({children}) => <>{children}</>,
-                                li: ({...props}) => <li className="text-sm text-slate-200 ml-4 mb-1" {...props} />,
+                                li: ({...props}) => <li className="text-sm text-slate-705 ml-4 mb-1" {...props} />,
                                 ul: ({...props}) => <ul className="list-disc mb-2" {...props} />,
                                 ol: ({...props}) => <ol className="list-decimal mb-2" {...props} />,
-                                blockquote: ({...props}) => <blockquote className="border-l-2 border-slate-600 pl-3 italic text-slate-300 text-sm mb-2" {...props} />,
-                                h1: ({...props}) => <h1 className="text-base font-bold text-white mb-2" {...props} />,
-                                h2: ({...props}) => <h2 className="text-sm font-bold text-slate-100 mb-2" {...props} />,
-                                h3: ({...props}) => <h3 className="text-sm font-semibold text-slate-200 mb-1" {...props} />,
+                                blockquote: ({...props}) => <blockquote className="border-l-2 border-slate-300 pl-3 italic text-slate-500 text-sm mb-2" {...props} />,
+                                h1: ({...props}) => <h1 className="text-base font-bold text-slate-900 mb-2" {...props} />,
+                                h2: ({...props}) => <h2 className="text-sm font-bold text-slate-800 mb-2" {...props} />,
+                                h3: ({...props}) => <h3 className="text-sm font-semibold text-slate-705 mb-1" {...props} />,
                               }}
                             >
                               {displayQuestion || streamedText || 'Waiting for question...'}
@@ -2157,15 +2157,15 @@ const InterviewRound = () => {
               </section>
 
               <section className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
-                <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
+                <div className="rounded-3xl border border-slate-205 bg-white p-5 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-200">Your Answer</p>
+                    <p className="text-sm font-bold text-slate-800">Your Answer</p>
                     <div className="flex items-center gap-2">
                       {isTechnicalRound && (
                         <select
                           value={editorLanguage}
                           onChange={(e) => setEditorLanguage(e.target.value)}
-                          className="rounded-full bg-slate-800 border border-slate-700 px-3 py-1 text-xs text-slate-200 outline-none focus:border-cyan-500"
+                          className="rounded-full bg-slate-50 border border-slate-200 px-3 py-1 text-xs text-slate-700 outline-none focus:border-indigo-650 cursor-pointer"
                         >
                           <option value="javascript">JavaScript</option>
                           <option value="typescript">TypeScript</option>
@@ -2180,7 +2180,7 @@ const InterviewRound = () => {
                       )}
                       <div
                         onClick={isSpeaking ? stopAISpeaking : undefined}
-                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${isListening ? 'bg-emerald-400/90 text-slate-950' : isSpeaking ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30' : 'bg-slate-800 text-slate-400'}`}
+                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition ${isListening ? 'bg-emerald-500 text-white' : isSpeaking ? 'bg-amber-50 text-amber-700 border border-amber-200 cursor-pointer hover:bg-red-50 hover:text-red-600 hover:border-red-200' : 'bg-slate-100 text-slate-500'}`}
                         title={isSpeaking ? 'Click to stop AI and start speaking' : ''}
                       >
                         {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Mic className={`h-3 w-3 ${isListening ? 'animate-pulse' : ''}`} />}
@@ -2198,14 +2198,14 @@ const InterviewRound = () => {
                         value={answer}
                         onChange={(e) => setAnswer(e.target.value)}
                         placeholder="Explain your approach verbally or via voice input..."
-                        className="h-20 w-full resize-none rounded-xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+                        className="h-20 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none"
                         disabled={isLoading}
                       />
                       {/* Code Editor */}
-                      <div className="rounded-xl border border-slate-700/60 overflow-hidden">
-                        <div className="flex items-center justify-between bg-slate-800/80 px-3 py-1.5 border-b border-slate-700/40">
-                          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Code Editor</span>
-                          <span className="text-[10px] text-slate-500">{editorLanguage}</span>
+                      <div className="rounded-xl border border-slate-200 overflow-hidden">
+                        <div className="flex items-center justify-between bg-slate-50 px-3 py-1.5 border-b border-slate-200">
+                          <span className="text-[10px] uppercase tracking-wider text-slate-505 font-bold">Code Editor</span>
+                          <span className="text-[10px] text-slate-400">{editorLanguage}</span>
                         </div>
                         <Editor
                           height="200px"
@@ -2237,7 +2237,7 @@ const InterviewRound = () => {
                       value={answer}
                       onChange={(e) => setAnswer(e.target.value)}
                       placeholder="Respond in your own words. Voice input stays on top."
-                      className="mt-4 h-36 w-full resize-none rounded-2xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none"
+                      className="mt-4 h-36 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none"
                       disabled={isLoading}
                     />
                   )}
@@ -2274,73 +2274,73 @@ const InterviewRound = () => {
                   </div>
 
                   {feedback && (
-                    <div className="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-xs text-emerald-100/90">
+                    <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-850">
                       <div className="flex items-start gap-2">
-                        <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-300" />
+                        <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-600" />
                         <div>
-                          <p>{feedback}</p>
-                          {isFollowup && <p className="mt-1 text-emerald-200/70">Follow-up answered. Moving on.</p>}
+                          <p className="font-semibold">{feedback}</p>
+                          {isFollowup && <p className="mt-1 text-emerald-700/70">Follow-up answered. Moving on.</p>}
                         </div>
                       </div>
                     </div>
                   )}
 
                   {error && (
-                    <div className="mt-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-200">
+                    <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-4 w-4" />
-                        <p>{error}</p>
+                        <p className="font-semibold">{error}</p>
                       </div>
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-4">
-                  <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
-                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Progress</p>
-                    <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-bold">Progress</p>
+                    <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-sky-400 transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500 transition-all duration-500"
                         style={{ width: `${Math.min(100, (questionNumber / roundConfig.maxQuestions) * 100)}%` }}
                       />
                     </div>
-                    <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
-                      <span>
+                    <div className="mt-2 flex items-center justify-between text-xs text-slate-505">
+                      <span className="font-semibold">
                         Q{questionNumber}{isFollowup ? ` · Follow-up ${followupIndexForCurrentQ}` : ''}
                       </span>
-                      <span>~{roundConfig.maxQuestions} questions</span>
+                      <span className="font-semibold">~{roundConfig.maxQuestions} questions</span>
                     </div>
                   </div>
 
                   {lastScore !== null && (
-                    <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5">
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Last Score</p>
-                      <p className="mt-3 text-3xl font-semibold text-emerald-300">{lastScore}/100</p>
-                      <p className="mt-1 text-xs text-slate-400">AI evaluation snapshot</p>
+                    <div className="rounded-3xl border border-slate-205 bg-white p-5 shadow-sm">
+                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-bold">Last Score</p>
+                      <p className="mt-3 text-3xl font-extrabold text-emerald-600">{lastScore}/100</p>
+                      <p className="mt-1 text-xs text-slate-500 font-medium">AI evaluation snapshot</p>
                     </div>
                   )}
 
-                  <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-5 space-y-3">
-                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Controls</p>
+                  <div className="rounded-3xl border border-slate-205 bg-white p-5 space-y-3 shadow-sm">
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-bold">Controls</p>
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={toggleVideo}
-                        className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 px-3 py-1.5 text-xs text-slate-200 transition hover:border-slate-500"
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 px-3 py-1.5 text-xs text-slate-700 font-semibold transition cursor-pointer"
                       >
-                        {isVideoOn ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
+                        {isVideoOn ? <Video className="h-3 w-3 text-slate-500" /> : <VideoOff className="h-3 w-3 text-red-500" />}
                         {isVideoOn ? 'Camera On' : 'Camera Off'}
                       </button>
                       <button
                         onClick={isScreenSharing ? stopScreenShare : startScreenShare}
-                        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition ${isScreenSharing ? 'border-emerald-400/60 bg-emerald-400/10 text-emerald-200 hover:border-emerald-300' : 'border-slate-700/70 text-slate-200 hover:border-slate-500'}`}
+                        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${isScreenSharing ? 'border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-450' : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'}`}
                       >
-                        {isScreenSharing ? <Monitor className="h-3 w-3" /> : <MonitorOff className="h-3 w-3" />}
+                        {isScreenSharing ? <Monitor className="h-3 w-3 text-emerald-600" /> : <MonitorOff className="h-3 w-3 text-slate-400" />}
                         {isScreenSharing ? 'Stop Share' : 'Share Screen'}
                       </button>
                       <button
                         onClick={handleSkipQuestion}
                         disabled={isLoading || isComplete}
-                        className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 px-3 py-1.5 text-xs text-amber-200 transition hover:border-amber-300 disabled:opacity-40"
+                        className="inline-flex items-center gap-2 rounded-full border border-amber-250 bg-amber-50 hover:bg-amber-100/50 px-3 py-1.5 text-xs text-amber-800 font-semibold transition disabled:opacity-40 cursor-pointer"
                       >
                         Skip Question
                       </button>
@@ -2348,14 +2348,14 @@ const InterviewRound = () => {
                         <button
                           onClick={handleSkipRound}
                           disabled={isLoading || isComplete}
-                          className="inline-flex items-center gap-2 rounded-full border border-orange-400/40 px-3 py-1.5 text-xs text-orange-200 transition hover:border-orange-300 disabled:opacity-40"
+                          className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 hover:bg-orange-100/50 px-3 py-1.5 text-xs text-orange-805 font-semibold transition disabled:opacity-40 cursor-pointer"
                         >
                           Skip Round
                         </button>
                       )}
                       <button
                         onClick={handleEndCall}
-                        className="inline-flex items-center gap-2 rounded-full border border-red-400/40 px-3 py-1.5 text-xs text-red-200 transition hover:border-red-300"
+                        className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 hover:bg-red-100 px-3 py-1.5 text-xs text-red-700 font-semibold transition cursor-pointer"
                       >
                         <PhoneOff className="h-3 w-3" />
                         End Interview
@@ -2375,26 +2375,26 @@ const InterviewRound = () => {
           const currentViolationCount = warningType === 'tab_switch' ? tabSwitchCount : warningType === 'camera_off' ? cameraOffCount : screenShareStopCount;
           const isFatal = currentViolationCount >= maxWarnings;
           return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-              <div className="mx-4 max-w-md rounded-3xl border border-red-500/40 bg-slate-900/95 p-8 shadow-2xl shadow-red-500/20">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-500/20">
-                  <ShieldAlert className="h-8 w-8 text-red-400" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+              <div className="mx-4 max-w-md w-full rounded-3xl border border-red-200 bg-white p-8 shadow-2xl">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-500 border border-red-100">
+                  <ShieldAlert className="h-8 w-8" />
                 </div>
-                <h3 className="mt-5 text-center text-xl font-bold text-white">Suspicious Activity Detected</h3>
-                <p className="mt-3 text-center text-sm text-slate-300 leading-relaxed">{warningMessage}</p>
+                <h3 className="mt-5 text-center text-xl font-bold text-slate-900">Suspicious Activity Detected</h3>
+                <p className="mt-3 text-center text-sm text-slate-600 leading-relaxed">{warningMessage}</p>
                 <div className="mt-3 flex justify-center gap-2 flex-wrap">
                   {tabSwitchCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs text-red-300">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs text-red-700 font-semibold">
                       Tabs: {tabSwitchCount}/{maxWarnings}
                     </span>
                   )}
                   {cameraOffCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1 text-xs text-orange-300">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs text-orange-705 font-semibold">
                       Camera: {cameraOffCount}/{maxWarnings}
                     </span>
                   )}
                   {screenShareStopCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs text-amber-300">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs text-amber-705 font-semibold">
                       Share: {screenShareStopCount}/{maxWarnings}
                     </span>
                   )}
@@ -2403,7 +2403,7 @@ const InterviewRound = () => {
                   <div className="mt-6 flex flex-col gap-3">
                     <button
                       onClick={handleFullscreen}
-                      className="w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-500 py-3 text-sm font-semibold text-white transition hover:from-blue-500 hover:to-blue-400 flex items-center justify-center gap-2"
+                      className="w-full rounded-full bg-indigo-600 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 flex items-center justify-center gap-2 cursor-pointer border-0"
                     >
                       <Maximize2 className="h-4 w-4" />
                       {isFullscreen ? 'Fullscreen Active' : 'Enter Fullscreen'}
@@ -2411,7 +2411,7 @@ const InterviewRound = () => {
                     {(warningType !== 'tab_switch' || isFullscreen) && (
                       <button
                         onClick={() => setShowWarningModal(false)}
-                        className="w-full rounded-full bg-gradient-to-r from-red-600 to-orange-600 py-3 text-sm font-semibold text-white transition hover:from-red-500 hover:to-orange-500"
+                        className="w-full rounded-full bg-slate-800 py-3 text-sm font-semibold text-white transition hover:bg-slate-900 cursor-pointer border-0"
                       >
                         I Understand, Continue Interview
                       </button>
@@ -2419,8 +2419,8 @@ const InterviewRound = () => {
                   </div>
                 )}
                 {isFatal && (
-                  <div className="mt-6 flex items-center justify-center gap-2 text-sm text-red-300">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-400 border-t-transparent" />
+                  <div className="mt-6 flex items-center justify-center gap-2 text-sm text-red-600 font-semibold">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-650 border-t-transparent" />
                     Redirecting to report...
                   </div>
                 )}
@@ -2431,27 +2431,27 @@ const InterviewRound = () => {
 
         {/* Mandatory Screen Share Prompt */}
         {showScreenSharePrompt && mediaReady && !isComplete && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md">
-            <div className="mx-4 max-w-lg rounded-3xl border border-cyan-500/30 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cyan-500/15 ring-2 ring-cyan-400/30">
-                <Monitor className="h-10 w-10 text-cyan-400" />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-md">
+            <div className="mx-4 max-w-lg w-full rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 border border-cyan-150 ring-4 ring-cyan-50">
+                <Monitor className="h-10 w-10" />
               </div>
-              <h3 className="mt-6 text-center text-2xl font-bold text-white">Screen Sharing Required</h3>
-              <p className="mt-3 text-center text-sm text-slate-300 leading-relaxed">
-                To ensure a fair interview experience, you must share your <span className="font-semibold text-cyan-300">entire screen</span> before the interview can begin. This is mandatory for proctoring purposes.
+              <h3 className="mt-6 text-center text-2xl font-bold text-slate-900">Screen Sharing Required</h3>
+              <p className="mt-3 text-center text-sm text-slate-650 leading-relaxed">
+                To ensure a fair interview experience, you must share your <span className="font-semibold text-cyan-700">entire screen</span> before the interview can begin. This is mandatory for proctoring purposes.
               </p>
 
-              <div className="mt-5 rounded-2xl border border-slate-700/60 bg-slate-800/50 px-4 py-3 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">How to share:</p>
-                <ol className="list-decimal list-inside space-y-1 text-xs text-slate-300">
-                  <li>Click the <span className="font-medium text-white">"Share Entire Screen"</span> button below</li>
-                  <li>Select <span className="font-medium text-white">"Entire Screen"</span> from the dialog</li>
-                  <li>Click <span className="font-medium text-white">"Share"</span> to confirm</li>
+              <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 space-y-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">How to share:</p>
+                <ol className="list-decimal list-inside space-y-1 text-xs text-slate-600">
+                  <li>Click the <span className="font-medium text-slate-900">"Share Entire Screen"</span> button below</li>
+                  <li>Select <span className="font-medium text-slate-900">"Entire Screen"</span> from the dialog</li>
+                  <li>Click <span className="font-medium text-slate-900">"Share"</span> to confirm</li>
                 </ol>
               </div>
 
               {screenShareError && (
-                <div className="mt-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-200">
+                <div className="mt-4 rounded-2xl border border-red-205 bg-red-50 px-4 py-3 text-xs text-red-700 font-semibold">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
                     <p>{screenShareError}</p>
@@ -2461,14 +2461,14 @@ const InterviewRound = () => {
 
               <button
                 onClick={startScreenShare}
-                className="mt-6 w-full flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 py-3.5 text-sm font-semibold text-white transition hover:from-cyan-400 hover:to-emerald-400 shadow-lg shadow-cyan-500/25"
+                className="mt-6 w-full flex items-center justify-center gap-2 rounded-full bg-indigo-600 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-600/10 cursor-pointer border-0"
               >
                 <Monitor className="h-4 w-4" />
                 Share Entire Screen
               </button>
 
-              <p className="mt-4 text-center text-[11px] text-slate-500">
-                <Shield className="inline h-3 w-3 mr-1 align-text-bottom" />
+              <p className="mt-4 text-center text-[11px] text-slate-400 font-medium">
+                <Shield className="inline h-3 w-3 mr-1 align-text-bottom text-slate-400" />
                 Your screen is monitored only during the interview for integrity.
               </p>
             </div>
@@ -2478,63 +2478,63 @@ const InterviewRound = () => {
         {/* Proctoring status bar */}
         {!isComplete && (
           <div className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2">
-            <div className="flex items-center gap-3 rounded-full border border-slate-700/60 bg-slate-900/90 px-4 py-2.5 shadow-xl backdrop-blur text-xs">
+            <div className="flex items-center gap-3 rounded-full border border-slate-200/80 bg-white/95 px-5 py-2.5 shadow-xl backdrop-blur text-xs text-slate-700">
               {/* Tab Switches */}
               <div className="flex items-center gap-1.5">
                 {tabSwitchCount === 0 ? (
-                  <Shield className="h-4 w-4 text-emerald-400" />
+                  <Shield className="h-4 w-4 text-emerald-600" />
                 ) : (
-                  <ShieldAlert className="h-4 w-4 text-red-400" />
+                  <ShieldAlert className="h-4 w-4 text-red-550" />
                 )}
-                <span className={`font-medium ${tabSwitchCount === 0 ? 'text-emerald-300' : 'text-red-300'}`}>
+                <span className={`font-semibold ${tabSwitchCount === 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   {tabSwitchCount === 0 ? 'Tabs: OK' : `Tabs: ${tabSwitchCount}/${maxWarnings}`}
                 </span>
               </div>
 
-              <div className="h-4 w-px bg-slate-700" />
+              <div className="h-4 w-px bg-slate-200" />
 
               {/* Camera Status */}
               <div className="flex items-center gap-1.5">
                 {cameraOffCount === 0 ? (
-                  <Video className="h-4 w-4 text-emerald-400" />
+                  <Video className="h-4 w-4 text-emerald-650" />
                 ) : (
-                  <VideoOff className="h-4 w-4 text-red-400" />
+                  <VideoOff className="h-4 w-4 text-red-550" />
                 )}
-                <span className={`font-medium ${cameraOffCount === 0 ? 'text-emerald-300' : 'text-red-300'}`}>
+                <span className={`font-semibold ${cameraOffCount === 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   {cameraOffCount === 0 ? 'Camera: OK' : `Camera: ${cameraOffCount}/${maxWarnings}`}
                 </span>
               </div>
 
-              <div className="h-4 w-px bg-slate-700" />
+              <div className="h-4 w-px bg-slate-200" />
 
               {/* Screen Share Status */}
               <div className="flex items-center gap-1.5">
                 {isScreenSharing && screenShareStopCount === 0 ? (
-                  <Monitor className="h-4 w-4 text-emerald-400" />
+                  <Monitor className="h-4 w-4 text-emerald-650" />
                 ) : isScreenSharing ? (
-                  <Monitor className="h-4 w-4 text-orange-400" />
+                  <Monitor className="h-4 w-4 text-orange-600" />
                 ) : (
-                  <MonitorOff className="h-4 w-4 text-slate-500" />
+                  <MonitorOff className="h-4 w-4 text-slate-400" />
                 )}
-                <span className={`font-medium ${isScreenSharing && screenShareStopCount === 0 ? 'text-emerald-300' : isScreenSharing ? 'text-orange-300' : 'text-slate-500'}`}>
+                <span className={`font-semibold ${isScreenSharing && screenShareStopCount === 0 ? 'text-emerald-700' : isScreenSharing ? 'text-orange-700' : 'text-slate-400'}`}>
                   {isScreenSharing ? (screenShareStopCount === 0 ? 'Share: OK' : `Share: ${screenShareStopCount}/${maxWarnings}`) : 'Not Sharing'}
                 </span>
               </div>
 
-              <div className="h-4 w-px bg-slate-700" />
+              <div className="h-4 w-px bg-slate-200" />
 
               {/* Face Detection Status */}
               <div className="flex items-center gap-1.5">
                 {!faceDetectionReady ? (
-                  <Eye className="h-4 w-4 text-slate-500" />
+                  <Eye className="h-4 w-4 text-slate-400" />
                 ) : faceStatus === 'ok' ? (
-                  <Eye className="h-4 w-4 text-emerald-400" />
+                  <Eye className="h-4 w-4 text-emerald-650" />
                 ) : (
-                  <EyeOff className="h-4 w-4 text-red-400 animate-pulse" />
+                  <EyeOff className="h-4 w-4 text-red-550 animate-pulse" />
                 )}
-                <span className={`font-medium ${
-                  !faceDetectionReady ? 'text-slate-500' :
-                  faceStatus === 'ok' ? 'text-emerald-300' : 'text-red-300'
+                <span className={`font-semibold ${
+                  !faceDetectionReady ? 'text-slate-400' :
+                  faceStatus === 'ok' ? 'text-emerald-700' : 'text-red-700'
                 }`}>
                   {!faceDetectionReady ? 'Face: Loading' :
                    faceStatus === 'ok' ? 'Face: OK' :

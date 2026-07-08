@@ -22,16 +22,16 @@ const CodeCanvas = ({ code, language, onCopy }) => {
     if (!code) return null;
 
     return (
-        <div className="mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-950/90 shadow-[0_0_0_1px_rgba(34,211,238,0.08),0_18px_45px_rgba(2,6,23,0.45)]">
-            <div className="flex items-center justify-between border-b border-cyan-500/10 bg-slate-900/80 px-4 py-3">
+        <div className="mb-6 overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-800 bg-slate-950 px-4 py-3">
                 <div>
-                    <p className="text-sm font-semibold text-cyan-300">Code Canvas</p>
+                    <p className="text-sm font-semibold text-indigo-400">Code Canvas</p>
                     <p className="text-xs text-slate-400">{language || 'source'} • read carefully before answering</p>
                 </div>
                 <button
                     type="button"
                     onClick={() => onCopy?.(code)}
-                    className="rounded-lg border border-cyan-400/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-200 transition hover:bg-cyan-500/20"
+                    className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/20"
                 >
                     Copy code
                 </button>
@@ -210,10 +210,10 @@ const TakeQuiz = () => {
     if (!isAuthenticated) {
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-                    <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-2xl">
-                        <h2 className="text-2xl font-bold text-white mb-4">Please Login</h2>
-                        <p className="text-white/80">You need to be logged in to take quizzes.</p>
+                <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
+                    <div className="text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-4">Please Login</h2>
+                        <p className="text-slate-600">You need to be logged in to take quizzes.</p>
                     </div>
                 </div>
             </Layout>
@@ -223,8 +223,8 @@ const TakeQuiz = () => {
     if (loading) {
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
                 </div>
             </Layout>
         );
@@ -255,40 +255,40 @@ const TakeQuiz = () => {
 
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12">
+                <div className="min-h-screen xalora-grid-bg py-12">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-lg shadow-lg p-8 border border-white/10">
-                            <h1 className="text-3xl font-bold text-white text-center mb-8">Quiz Results</h1>
+                        <div className="bg-white/80 border border-slate-200 rounded-2xl shadow-sm p-8">
+                            <h1 className="text-3xl font-black text-slate-900 text-center mb-8">Quiz Results</h1>
 
                             <div className="text-center mb-8">
                                 {submissionError && (
-                                    <div className="mb-4 rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-3 text-red-200">
+                                    <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 font-semibold">
                                         {submissionError}
                                     </div>
                                 )}
-                                <div className="text-6xl font-bold mb-4">
+                                <div className="text-6xl font-black text-slate-900 mb-4">
                                     {result.score}%
                                 </div>
-                                <div className="text-xl text-gray-300">
+                                <div className="text-xl text-slate-600 font-medium">
                                     {result.correctCount} out of {result.totalQuestions} correct
                                 </div>
-                                <div className={`text-lg font-semibold mt-4 ${result.passed ? 'text-green-400' : 'text-red-400'}`}>
+                                <div className={`text-lg font-black mt-4 ${result.passed ? 'text-emerald-600' : 'text-red-600'}`}>
                                     {result.passed ? 'PASSED' : 'FAILED'}
                                 </div>
                                 
                                 {/* JBP Coins Reward */}
                                 {result.jbpCoinsEarned > 0 && (
-                                    <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                                         <div className="flex items-center justify-center mb-2">
-                                            <svg className="h-6 w-6 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <svg className="h-6 w-6 text-yellow-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd"/>
                                             </svg>
-                                            <span className="text-lg font-semibold text-yellow-700">
+                                            <span className="text-lg font-bold text-yellow-800">
                                                 🎉 Congratulations! You earned {result.jbpCoinsEarned} JBP Coins!
                                             </span>
                                         </div>
-                                        <p className="text-sm text-yellow-600">
+                                        <p className="text-sm text-yellow-700 leading-relaxed">
                                             {result.message}
                                         </p>
                                     </div>
@@ -296,12 +296,12 @@ const TakeQuiz = () => {
                                 
                                 {/* Certificate Download for Passed Quizzes */}
                                 {result.passed && result.submissionId && (
-                                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                                         <div className="flex items-center justify-center mb-2">
-                                            <svg className="h-6 w-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg className="h-6 w-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
-                                            <span className="text-lg font-semibold text-blue-700">
+                                            <span className="text-lg font-bold text-blue-800">
                                                 🎓 Download Your Certificate
                                             </span>
                                         </div>
@@ -310,7 +310,7 @@ const TakeQuiz = () => {
                                         </p>
                                         <button
                                             onClick={handleDownloadCertificate}
-                                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 flex items-center mx-auto"
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-indigo-100 flex items-center mx-auto"
                                         >
                                             <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -322,8 +322,8 @@ const TakeQuiz = () => {
                                 
                                 {/* Encouragement message for failed attempts */}
                                 {!result.passed && (
-                                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                        <p className="text-blue-700">
+                                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                                        <p className="text-blue-800 font-medium">
                                             {result.message}
                                         </p>
                                         <p className="text-sm text-blue-600 mt-2">
@@ -335,38 +335,38 @@ const TakeQuiz = () => {
 
                             <div className="space-y-4">
                                 {result.results.map((item, index) => (
-                                    <div key={index} className={`p-4 rounded-lg border ${item.isCorrect ? 'bg-green-900/30 border-green-700/50' : 'bg-red-900/30 border-red-700/50'}`}>
-                                        <div className="font-semibold mb-2 text-white">
+                                    <div key={index} className={`p-5 rounded-2xl border ${item.isCorrect ? 'bg-emerald-50/60 border-emerald-200' : 'bg-red-50/60 border-red-200'}`}>
+                                        <div className="font-bold mb-2 text-slate-800 text-lg">
                                             Question {index + 1}: {item.questionText}
                                         </div>
                                         <div className="flex flex-wrap gap-2 mb-3">
-                                            <span className="px-2 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-[11px] border border-cyan-500/20">
+                                            <span className="px-2 py-1 rounded-lg bg-cyan-50 text-cyan-700 text-[11px] border border-cyan-100 font-semibold">
                                                 {formatQuestionType(quiz.questions[index]?.questionType)}
                                             </span>
                                             {quiz.questions[index]?.language && (
-                                                <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] border border-emerald-500/20">
+                                                <span className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] border border-emerald-100 font-semibold">
                                                     {quiz.questions[index].language}
                                                 </span>
                                             )}
                                         </div>
                                         {quiz.questions[index]?.codeSnippet && (
-                                            <div className="mb-3 rounded-xl border border-slate-700/70 bg-slate-950/80 p-3">
+                                            <div className="mb-3 rounded-xl border border-slate-700 bg-slate-900 p-3">
                                                 <pre className="overflow-x-auto text-xs leading-5 text-slate-100 whitespace-pre-wrap">
                                                     <code>{quiz.questions[index].codeSnippet}</code>
                                                 </pre>
                                             </div>
                                         )}
-                                        <div className="text-sm text-gray-300 mb-2">
-                                            Your answer: {item.userAnswer !== null ? quiz.questions[index].options[item.userAnswer] : 'Not answered'}
+                                        <div className="text-sm text-slate-700 mb-2 font-medium">
+                                            Your answer: {item.userAnswer !== null ? quiz.questions[index].options[item.userAnswer] : <span className="text-slate-400">Not answered</span>}
                                         </div>
                                         {!item.isCorrect && (
-                                            <div className="text-sm text-red-300 mb-2">
+                                            <div className="text-sm text-red-600 mb-2 font-bold">
                                                 Correct answer: {quiz.questions[index].options[item.correctAnswer]}
                                             </div>
                                         )}
                                         {item.explanation && (
-                                            <div className="text-sm text-gray-200">
-                                                Explanation: {item.explanation}
+                                            <div className="text-sm text-slate-600 pt-2 border-t border-slate-200/40">
+                                                <span className="font-bold text-slate-700">Explanation:</span> {item.explanation}
                                             </div>
                                         )}
                                     </div>
@@ -376,7 +376,7 @@ const TakeQuiz = () => {
                             <div className="text-center mt-8">
                                 <button
                                     onClick={() => navigate('/quiz')}
-                                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300"
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-indigo-100"
                                 >
                                     Back to Quizzes
                                 </button>
@@ -391,10 +391,10 @@ const TakeQuiz = () => {
     if (!quiz) {
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black flex items-center justify-center">
-                    <div className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-2xl">
-                        <h2 className="text-2xl font-bold text-white mb-4">Quiz Not Found</h2>
-                        <p className="text-white/80">The quiz you're looking for doesn't exist.</p>
+                <div className="min-h-screen xalora-grid-bg flex items-center justify-center">
+                    <div className="text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-4">Quiz Not Found</h2>
+                        <p className="text-slate-600">The quiz you're looking for doesn't exist.</p>
                     </div>
                 </div>
             </Layout>
@@ -405,30 +405,30 @@ const TakeQuiz = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12">
+            <div className="min-h-screen xalora-grid-bg py-12">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg shadow-lg p-8 border border-white/10">
+                    <div className="bg-white/80 border border-slate-200 rounded-2xl shadow-sm p-8">
                         <div className="flex justify-between items-center mb-8">
-                            <h1 className="text-2xl font-bold text-white">{quiz.title}</h1>
-                            <div className="text-xl font-mono text-red-400">
+                            <h1 className="text-2xl font-black text-slate-900">{quiz.title}</h1>
+                            <div className="text-xl font-mono text-red-600 font-bold">
                                 Time: {formatTime(timeLeft)}
                             </div>
                         </div>
 
                         {submissionError && (
-                            <div className="mb-6 rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-red-200">
+                            <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 font-semibold">
                                 {submissionError}
                             </div>
                         )}
 
                         <div className="mb-8">
-                            <div className="flex justify-between text-sm text-gray-600 mb-4">
+                            <div className="flex justify-between text-sm text-slate-500 mb-4 font-semibold">
                                 <span>Question {currentQuestion + 1} of {quiz.questions.length}</span>
                                 <span>Answered: {answers.filter(a => a !== null).length}</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-slate-100 rounded-full h-2">
                                 <div
-                                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
                                     style={{ width: `${((currentQuestion + 1) / quiz.questions.length) * 100}%` }}
                                 ></div>
                             </div>
@@ -436,19 +436,19 @@ const TakeQuiz = () => {
 
                         <div className="mb-8">
                             <div className="flex flex-wrap gap-2 mb-4">
-                                <span className="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 text-xs sm:text-sm border border-cyan-500/20">
+                                <span className="px-3 py-1 rounded-full bg-cyan-50 text-cyan-700 text-xs sm:text-sm border border-cyan-100 font-semibold">
                                     {formatQuestionType(question.questionType)}
                                 </span>
-                                <span className="px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-xs sm:text-sm border border-violet-500/20">
+                                <span className="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs sm:text-sm border border-purple-100 font-semibold">
                                     {question.difficulty || 'medium'}
                                 </span>
                                 {question.language && (
-                                    <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs sm:text-sm border border-emerald-500/20">
+                                    <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs sm:text-sm border border-emerald-100 font-semibold">
                                         {question.language}
                                     </span>
                                 )}
                             </div>
-                            <h2 className="text-xl font-semibold mb-4 text-white leading-relaxed">{question.questionText}</h2>
+                            <h2 className="text-xl font-black mb-4 text-slate-900 leading-relaxed">{question.questionText}</h2>
                             <CodeCanvas
                                 code={question.codeSnippet}
                                 language={question.language}
@@ -456,16 +456,16 @@ const TakeQuiz = () => {
                             />
                             <div className="space-y-3">
                                 {question.options.map((option, index) => (
-                                    <label key={index} className="flex items-center space-x-3 cursor-pointer bg-white/5 hover:bg-white/10 p-3 rounded-lg transition-colors">
+                                    <label key={index} className="flex items-center space-x-3 cursor-pointer bg-slate-50 hover:bg-slate-100/80 p-3 rounded-xl border border-slate-200/50 transition-colors">
                                         <input
                                             type="radio"
                                             name={`question-${currentQuestion}`}
                                             value={index}
                                             checked={answers[currentQuestion] === index}
                                             onChange={() => handleAnswerSelect(currentQuestion, index)}
-                                            className="w-4 h-4 text-purple-500 focus:ring-purple-500 bg-gray-700 border-gray-600"
+                                            className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
                                         />
-                                        <span className="text-gray-200">{option}</span>
+                                        <span className="text-slate-700 font-semibold">{option}</span>
                                     </label>
                                 ))}
                             </div>
@@ -475,7 +475,7 @@ const TakeQuiz = () => {
                             <button
                                 onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
                                 disabled={currentQuestion === 0}
-                                className="bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+                                className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-6 rounded-xl border border-slate-300/40 disabled:opacity-40 disabled:hover:bg-slate-100 transition-colors"
                             >
                                 Previous
                             </button>
@@ -483,7 +483,7 @@ const TakeQuiz = () => {
                             {currentQuestion < quiz.questions.length - 1 ? (
                                 <button
                                     onClick={() => setCurrentQuestion(currentQuestion + 1)}
-                                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300"
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-indigo-100"
                                 >
                                     Next
                                 </button>
@@ -491,7 +491,7 @@ const TakeQuiz = () => {
                                 <button
                                     onClick={handleSubmit}
                                     disabled={submitting}
-                                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-700 disabled:to-gray-800 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+                                    className="bg-emerald-600 hover:bg-emerald-700 disabled:from-slate-100 disabled:to-slate-200 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-emerald-100"
                                 >
                                     {submitting ? 'Submitting...' : 'Submit Quiz'}
                                 </button>

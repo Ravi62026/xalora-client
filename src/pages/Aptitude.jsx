@@ -34,24 +34,24 @@ const TRACK_ICONS = {
 
 const ACCENT_STYLES = {
   emerald: {
-    card: "border-emerald-400/30 bg-emerald-500/10",
-    badge: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
-    strong: "text-emerald-300",
+    card: "border-emerald-200 bg-emerald-50/60",
+    badge: "border-emerald-100 bg-emerald-50 text-emerald-700 font-semibold",
+    strong: "text-emerald-800 font-bold",
   },
   cyan: {
-    card: "border-cyan-400/30 bg-cyan-500/10",
-    badge: "border-cyan-400/20 bg-cyan-500/10 text-cyan-200",
-    strong: "text-cyan-300",
+    card: "border-cyan-200 bg-cyan-50/60",
+    badge: "border-cyan-100 bg-cyan-50 text-cyan-700 font-semibold",
+    strong: "text-cyan-800 font-bold",
   },
   amber: {
-    card: "border-amber-400/30 bg-amber-500/10",
-    badge: "border-amber-400/20 bg-amber-500/10 text-amber-200",
-    strong: "text-amber-300",
+    card: "border-amber-200 bg-amber-50/60",
+    badge: "border-amber-100 bg-amber-50 text-amber-700 font-semibold",
+    strong: "text-amber-800 font-bold",
   },
   blue: {
-    card: "border-sky-400/30 bg-sky-500/10",
-    badge: "border-sky-400/20 bg-sky-500/10 text-sky-200",
-    strong: "text-sky-300",
+    card: "border-sky-200 bg-sky-50/60",
+    badge: "border-sky-100 bg-sky-50 text-sky-700 font-semibold",
+    strong: "text-sky-800 font-bold",
   },
 };
 
@@ -141,16 +141,16 @@ const Aptitude = () => {
   if (!isAuthenticated) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center px-4">
-          <div className="max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 text-center shadow-2xl backdrop-blur">
-            <h2 className="text-2xl font-bold text-white">Login required</h2>
-            <p className="mt-3 text-sm text-white/70">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center px-4">
+          <div className="max-w-md w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <h2 className="text-2xl font-bold text-slate-900">Login required</h2>
+            <p className="mt-3 text-sm text-slate-600">
               You need to be logged in before starting an aptitude test.
             </p>
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-100"
             >
               <PlayCircle className="h-4 w-4" />
               Go to login
@@ -163,21 +163,21 @@ const Aptitude = () => {
 
   return (
     <Layout showFooter={false}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black py-8 sm:py-12">
+      <div className="min-h-screen xalora-grid-bg py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
-              <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200">
+              <p className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-700">
                 <Sparkles className="h-3.5 w-3.5" />
                 Aptitude test start
               </p>
-              <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
                 Pick a track, lock the room, and begin the aptitude test.
               </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
-                This is the front-end launch flow for aptitude. Quant,
-                Reasoning, Verbal, and Mixed are separated so the user knows
-                exactly what they are starting before the exam room opens.
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                This is the launch flow for aptitude. Quant,
+                Reasoning, Verbal, and Mixed are separated so you know
+                exactly what you are starting before the exam room opens.
               </p>
             </div>
 
@@ -185,7 +185,7 @@ const Aptitude = () => {
               <button
                 type="button"
                 onClick={() => navigate("/quiz")}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/20 hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Quiz Hub
@@ -194,19 +194,19 @@ const Aptitude = () => {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <section className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-sm sm:p-6">
+            <section className="rounded-3xl border border-slate-200 bg-white/80 p-5 shadow-sm sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                     Step 1
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-white">
+                  <h2 className="mt-2 text-2xl font-black text-slate-900">
                     Choose the aptitude lane
                   </h2>
                 </div>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-white/70">
+                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
                   <Layers3 className="h-3.5 w-3.5" />
-                  Sections are split by topic family
+                  Sections split by topic family
                 </span>
               </div>
 
@@ -224,27 +224,27 @@ const Aptitude = () => {
                       onClick={() => setTrackId(track.id)}
                       className={`group rounded-2xl border p-4 text-left transition-all duration-200 hover:-translate-y-0.5 ${
                         isSelected
-                          ? `${trackAccent.card} ring-1 ring-white/10`
-                          : "border-white/10 bg-black/10 hover:border-white/20 hover:bg-white/10"
+                          ? `${trackAccent.card} ring-1 ring-slate-200/50`
+                          : "border-slate-200 bg-slate-50 hover:bg-slate-100/50"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">
-                          <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">
+                          <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400 font-bold">
                             {track.label}
                           </p>
-                          <h3 className="mt-2 text-lg font-semibold text-white">
+                          <h3 className="mt-2 text-lg font-black text-slate-900">
                             {track.title}
                           </h3>
-                          <p className="mt-2 text-sm leading-6 text-white/65">
+                          <p className="mt-2 text-sm leading-6 text-slate-600">
                             {track.description}
                           </p>
                         </div>
                         <div
                           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${
                             isSelected
-                              ? "border-white/15 bg-black/20 text-white"
-                              : "border-white/10 bg-white/5 text-white/80"
+                              ? "border-slate-300 bg-white text-indigo-600"
+                              : "border-slate-200 bg-slate-100 text-slate-700"
                           }`}
                         >
                           <TrackCardIcon className="h-5 w-5" />
@@ -253,22 +253,22 @@ const Aptitude = () => {
 
                       <div className="mt-4 flex flex-wrap gap-2">
                         <span
-                          className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${
-                            isSelected ? trackAccent.badge : "border-white/10 bg-white/5 text-white/70"
+                          className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+                            isSelected ? trackAccent.badge : "border-slate-200 bg-white text-slate-600"
                           }`}
                         >
                           {track.durationMinutes} min
                         </span>
                         <span
-                          className={`rounded-full border px-2.5 py-1 text-[11px] font-medium ${
-                            isSelected ? trackAccent.badge : "border-white/10 bg-white/5 text-white/70"
+                          className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
+                            isSelected ? trackAccent.badge : "border-slate-200 bg-white text-slate-600"
                           }`}
                         >
                           {track.questionCount} questions
                         </span>
                       </div>
 
-                      <div className="mt-4 flex items-center justify-between text-xs text-white/55">
+                      <div className="mt-4 flex items-center justify-between text-xs text-slate-500 font-semibold">
                         <span>Topics</span>
                         <ChevronRightGlyph isActive={isSelected} />
                       </div>
@@ -278,71 +278,71 @@ const Aptitude = () => {
               </div>
             </section>
 
-            <aside className="rounded-3xl border border-white/10 bg-slate-950/70 p-5 shadow-2xl backdrop-blur-sm sm:p-6">
+            <aside className="rounded-3xl border border-slate-200 bg-white/80 p-5 shadow-sm sm:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400 font-bold">
                     Step 2
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-white">
+                  <h2 className="mt-2 text-2xl font-black text-slate-900">
                     Review the selected setup
                   </h2>
                 </div>
                 <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-xl border ${accent.card} text-white`}
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl border ${accent.card} text-slate-800`}
                 >
                   <TrackIcon className="h-5 w-5" />
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-[11px] uppercase tracking-[0.24em] text-white/45">
+              <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400 font-bold">
                   Selected track
                 </p>
-                <h3 className="mt-2 text-xl font-semibold text-white">
+                <h3 className="mt-2 text-xl font-bold text-slate-900">
                   {selectedTrack.title}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-white/70">
+                <p className="mt-2 text-sm leading-6 text-slate-600">
                   {selectedTrack.summary}
                 </p>
 
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
-                    Duration
-                  </p>
-                    <p className="mt-1 text-lg font-semibold text-white">
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
+                      Duration
+                    </p>
+                    <p className="mt-1 text-lg font-bold text-slate-900">
                       {selectedTrack.durationMinutes} min
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                       Questions
                     </p>
-                  <p className="mt-1 text-lg font-semibold text-white">
-                    {selectedTrack.questionCount}
-                  </p>
+                    <p className="mt-1 text-lg font-bold text-slate-900">
+                      {selectedTrack.questionCount}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-                <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+                <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-3 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 font-bold">
                     Demo question bank
                   </p>
-                  <p className="mt-1 text-sm text-white/75">
+                  <p className="mt-1 text-sm text-slate-600 font-medium">
                     {selectedSession.questions.length} sample questions are loaded
-                    for the front-end flow right now.
+                    for the session.
                   </p>
                 </div>
               </div>
 
               <div className="mt-4">
-                <p className="text-sm font-semibold text-white">Topic buckets</p>
+                <p className="text-sm font-bold text-slate-800">Topic buckets</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {selectedTrack.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
+                      className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600"
                     >
                       {topic}
                     </span>
@@ -351,7 +351,7 @@ const Aptitude = () => {
               </div>
 
               <div className="mt-5">
-                <p className="text-sm font-semibold text-white">Exam mode</p>
+                <p className="text-sm font-bold text-slate-800">Exam mode</p>
                 <div className="mt-3 grid gap-3">
                   {MODE_OPTIONS.map((option) => {
                     const isSelected = option.id === mode;
@@ -362,19 +362,19 @@ const Aptitude = () => {
                         onClick={() => setMode(option.id)}
                         className={`rounded-2xl border px-4 py-3 text-left transition-colors ${
                           isSelected
-                            ? "border-emerald-400/30 bg-emerald-500/10"
-                            : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                            ? "border-emerald-200 bg-emerald-50/60"
+                            : "border-slate-200 bg-slate-50 hover:bg-slate-100/50"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <span className="text-sm font-semibold text-white">
+                          <span className="text-sm font-bold text-slate-800">
                             {option.label}
                           </span>
                           {isSelected && (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                           )}
                         </div>
-                        <p className="mt-1 text-xs leading-5 text-white/60">
+                        <p className="mt-1 text-xs leading-5 text-slate-500 font-medium">
                           {option.description}
                         </p>
                       </button>
@@ -386,23 +386,23 @@ const Aptitude = () => {
               <button
                 type="button"
                 onClick={handleStart}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-transform hover:-translate-y-0.5"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 hover:bg-indigo-700 px-5 py-4 text-sm font-bold text-white shadow-md shadow-indigo-100 transition-transform hover:-translate-y-0.5"
               >
                 <PlayCircle className="h-5 w-5" />
                 Start Exam Room
               </button>
 
-              <div className="mt-4 grid gap-2 rounded-2xl border border-white/10 bg-black/20 p-4 text-xs text-white/65">
+              <div className="mt-4 grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600 font-semibold">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-emerald-300" />
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   No camera permission is requested.
                 </div>
                 <div className="flex items-center gap-2">
-                  <Maximize2 className="h-4 w-4 text-cyan-300" />
+                  <Maximize2 className="h-4 w-4 text-indigo-600" />
                   Fullscreen is attempted when the session starts.
                 </div>
                 <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-300" />
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
                   Focus-loss is monitored in strict mode.
                 </div>
               </div>
@@ -415,20 +415,20 @@ const Aptitude = () => {
               return (
                 <div
                   key={step.title}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg shadow-black/20"
+                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/20 text-white">
-                      <StepIcon className="h-5 w-5 text-cyan-300" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700">
+                      <StepIcon className="h-5 w-5 text-indigo-600" />
                     </div>
-                    <span className="text-xs uppercase tracking-[0.18em] text-white/40">
+                    <span className="text-xs uppercase tracking-[0.18em] text-slate-400 font-bold">
                       0{index + 1}
                     </span>
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-white">
+                  <h3 className="mt-4 text-lg font-bold text-slate-900">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-white/65">
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
                     {step.body}
                   </p>
                 </div>
@@ -443,8 +443,8 @@ const Aptitude = () => {
 
 const ChevronRightGlyph = ({ isActive }) => (
   <span
-    className={`inline-flex items-center gap-1 text-xs font-medium ${
-      isActive ? "text-white/90" : "text-white/45"
+    className={`inline-flex items-center gap-1 text-xs font-semibold ${
+      isActive ? "text-slate-800" : "text-slate-400"
     }`}
   >
     View

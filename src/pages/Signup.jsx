@@ -643,17 +643,15 @@ const Signup = () => {
                                         </div>
                                     </div>
                                     <div className="mt-6 flex items-center justify-center gap-4">
-                                        <div className="shrink-0 w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center">
-                                            <GoogleLogin
-                                                onSuccess={handleGoogleSuccess}
-                                                onError={() => {
-                                                    console.log('Login Failed');
-                                                }}
-                                                type="icon"
-                                                theme="outline"
-                                                shape="circle"
-                                            />
-                                        </div>
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleSuccess}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                            type="icon"
+                                            theme="outline"
+                                            shape="circle"
+                                        />
                                         <button
                                             type="button"
                                             onClick={handleGithubSignup}

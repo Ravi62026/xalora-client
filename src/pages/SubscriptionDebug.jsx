@@ -92,50 +92,50 @@ const SubscriptionDebug = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-6">
+            <h1 className="text-4xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 mb-6">
               Subscription Debug
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               Debugging tools for subscription and payment integration
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-8 mb-8 border border-white/10">
-            <h2 className="text-2xl font-bold text-white mb-6">User Information</h2>
+          <div className="bg-white/80 rounded-2xl shadow-sm p-8 mb-8 border border-slate-200">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">User Information</h2>
             {user ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-900/50 rounded-xl p-4">
-                  <p className="text-gray-400">User ID</p>
-                  <p className="text-white font-mono text-sm">{user._id}</p>
+                <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
+                  <p className="text-slate-500 font-semibold text-sm">User ID</p>
+                  <p className="text-slate-800 font-mono text-sm">{user._id}</p>
                 </div>
-                <div className="bg-gray-900/50 rounded-xl p-4">
-                  <p className="text-gray-400">Name</p>
-                  <p className="text-white">{user.name}</p>
+                <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
+                  <p className="text-slate-500 font-semibold text-sm">Name</p>
+                  <p className="text-slate-800 font-bold">{user.name}</p>
                 </div>
-                <div className="bg-gray-900/50 rounded-xl p-4">
-                  <p className="text-gray-400">Email</p>
-                  <p className="text-white">{user.email}</p>
+                <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
+                  <p className="text-slate-500 font-semibold text-sm">Email</p>
+                  <p className="text-slate-800 font-bold">{user.email}</p>
                 </div>
-                <div className="bg-gray-900/50 rounded-xl p-4">
-                  <p className="text-gray-400">Role</p>
-                  <p className="text-white">{user.role}</p>
+                <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
+                  <p className="text-slate-500 font-semibold text-sm">Role</p>
+                  <p className="text-slate-800 font-bold">{user.role}</p>
                 </div>
               </div>
             ) : (
-              <p className="text-gray-400">No user information available</p>
+              <p className="text-slate-500">No user information available</p>
             )}
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-8 mb-8 border border-white/10">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Debug Actions</h2>
+          <div className="bg-white/80 rounded-2xl shadow-sm p-8 mb-8 border border-slate-200">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+              <h2 className="text-2xl font-bold text-slate-900">Debug Actions</h2>
               <button
                 onClick={loadDebugInfo}
                 disabled={loading}
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-indigo-100 disabled:opacity-50"
               >
                 {loading ? "Loading..." : "Refresh Debug Info"}
               </button>
@@ -144,13 +144,13 @@ const SubscriptionDebug = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <button
                 onClick={testGetKey}
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md shadow-purple-100"
               >
                 Test Get Razorpay Key
               </button>
               <button
                 onClick={testCreateOrder}
-                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md shadow-amber-100"
               >
                 Test Create Order (Free)
               </button>
@@ -158,49 +158,49 @@ const SubscriptionDebug = () => {
           </div>
 
           {Object.keys(debugInfo).length > 0 && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-white/10">
-              <h2 className="text-2xl font-bold text-white mb-6">Debug Information</h2>
+            <div className="bg-white/80 rounded-2xl shadow-sm p-8 border border-slate-200">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">Debug Information</h2>
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">Current Subscription</h3>
-                  <pre className="bg-gray-900/50 rounded-xl p-4 text-gray-300 text-sm overflow-x-auto">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">Current Subscription</h3>
+                  <pre className="bg-slate-900 rounded-xl p-4 text-slate-100 text-sm overflow-x-auto">
                     {JSON.stringify(debugInfo.currentSubscription, null, 2)}
                   </pre>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">Plan Features</h3>
-                  <pre className="bg-gray-900/50 rounded-xl p-4 text-gray-300 text-sm overflow-x-auto">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">Plan Features</h3>
+                  <pre className="bg-slate-900 rounded-xl p-4 text-slate-100 text-sm overflow-x-auto">
                     {JSON.stringify(debugInfo.planFeatures, null, 2)}
                   </pre>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">Feature Access</h3>
-                  <pre className="bg-gray-900/50 rounded-xl p-4 text-gray-300 text-sm overflow-x-auto">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">Feature Access</h3>
+                  <pre className="bg-slate-900 rounded-xl p-4 text-slate-100 text-sm overflow-x-auto">
                     {JSON.stringify(debugInfo.featureAccess, null, 2)}
                   </pre>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">Subscription Status</h3>
-                  <div className="bg-gray-900/50 rounded-xl p-4">
-                    <p className="text-white mb-2">Active: <span className="font-mono">{String(debugInfo.isActive)}</span></p>
-                    <p className="text-white">Plan Name: <span className="font-mono">{debugInfo.planName}</span></p>
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">Subscription Status</h3>
+                  <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
+                    <p className="text-slate-700 font-semibold mb-2">Active: <span className="font-mono text-slate-900 font-bold">{String(debugInfo.isActive)}</span></p>
+                    <p className="text-slate-700 font-semibold">Plan Name: <span className="font-mono text-slate-900 font-bold">{debugInfo.planName}</span></p>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">AI Usage</h3>
-                  <pre className="bg-gray-900/50 rounded-xl p-4 text-gray-300 text-sm overflow-x-auto">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">AI Usage</h3>
+                  <pre className="bg-slate-900 rounded-xl p-4 text-slate-100 text-sm overflow-x-auto">
                     {JSON.stringify(debugInfo.aiUsage, null, 2)}
                   </pre>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-3">Payment History</h3>
-                  <pre className="bg-gray-900/50 rounded-xl p-4 text-gray-300 text-sm overflow-x-auto">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-3">Payment History</h3>
+                  <pre className="bg-slate-900 rounded-xl p-4 text-slate-100 text-sm overflow-x-auto">
                     {JSON.stringify(debugInfo.paymentHistory, null, 2)}
                   </pre>
                 </div>

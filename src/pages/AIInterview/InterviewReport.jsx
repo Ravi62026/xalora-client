@@ -673,11 +673,11 @@ const InterviewReport = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center px-4">
           <div className="text-center">
-            <Loader2 className="w-12 h-12 sm:w-16 sm:h-16 text-blue-500 animate-spin mx-auto mb-6" />
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Generating Your Report...</h2>
-            <p className="text-sm sm:text-base text-gray-400">Our AI is analyzing your interview performance</p>
+            <Loader2 className="w-12 h-12 sm:w-16 sm:h-16 text-indigo-600 animate-spin mx-auto mb-6" />
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">Generating Your Report...</h2>
+            <p className="text-sm sm:text-base text-slate-600 font-medium">Our AI is analyzing your interview performance</p>
           </div>
         </div>
       </Layout>
@@ -688,14 +688,14 @@ const InterviewReport = () => {
   if (error) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4 sm:px-6">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center px-4 sm:px-6">
           <div className="text-center max-w-md">
             <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-red-500 mx-auto mb-6" />
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Error Generating Report</h2>
-            <p className="text-sm sm:text-base text-gray-400 mb-6">{error}</p>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">Error Generating Report</h2>
+            <p className="text-sm sm:text-base text-slate-600 mb-6 font-semibold">{error}</p>
             <button
               onClick={() => navigate('/ai-interview/setup')}
-              className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold"
+              className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md shadow-indigo-100"
             >
               Start New Interview
             </button>
@@ -709,14 +709,14 @@ const InterviewReport = () => {
   if (!reportData) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+        <div className="min-h-screen xalora-grid-bg flex items-center justify-center p-6">
           <div className="text-center max-w-md">
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-white mb-2">No Report Available</h2>
-            <p className="text-gray-400 mb-6">Please complete an interview first to view your report.</p>
+            <h2 className="text-2xl font-black text-slate-900 mb-2">No Report Available</h2>
+            <p className="text-slate-600 mb-6 font-semibold">Please complete an interview first to view your report.</p>
             <button
               onClick={() => navigate('/ai-interview/setup')}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold"
+              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md shadow-indigo-100"
             >
               Start Interview
             </button>
@@ -735,41 +735,41 @@ const InterviewReport = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="min-h-screen xalora-grid-bg px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Interview Report 📊</h1>
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-slate-400 text-sm sm:text-base">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 mb-2">Interview Report 📊</h1>
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-slate-500 text-sm sm:text-base font-semibold">
                   <span className="flex items-center gap-1">
-                    <User className="w-4 h-4 flex-shrink-0" />
+                    <User className="w-4 h-4 flex-shrink-0 text-indigo-600" />
                     <span className="truncate">{displayCandidateName}</span>
                   </span>
                   <span className="flex items-center gap-1">
-                    <Briefcase className="w-4 h-4 flex-shrink-0" />
+                    <Briefcase className="w-4 h-4 flex-shrink-0 text-indigo-600" />
                     <span className="truncate">{displayPosition}</span>
                   </span>
                 </div>
               </div>
               <div className="w-full lg:w-auto lg:text-right">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2 lg:justify-end">
                   <Calendar className="w-4 h-4 text-slate-400" />
-                  <span className="text-white font-semibold text-sm sm:text-base">{new Date().toLocaleDateString()}</span>
+                  <span className="text-slate-700 font-bold text-sm sm:text-base">{new Date().toLocaleDateString()}</span>
                 </div>
 
                 {/* Hiring Recommendation Badge */}
-                <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-${hiringBadge.color}-500/20 border border-${hiringBadge.color}-500/30`}>
-                  <HiringIcon className={`w-4 h-4 sm:w-5 sm:h-5 text-${hiringBadge.color}-400`} />
-                  <span className={`font-bold text-sm sm:text-base text-${hiringBadge.color}-400`}>{hiringBadge.text}</span>
+                <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-${hiringBadge.color}-50 border border-${hiringBadge.color}-200`}>
+                  <HiringIcon className={`w-4 h-4 sm:w-5 sm:h-5 text-${hiringBadge.color}-700`} />
+                  <span className={`font-bold text-sm sm:text-base text-${hiringBadge.color}-700`}>{hiringBadge.text}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Overall Score Card */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6 sm:p-8 mb-6 sm:mb-8 border border-slate-700/50">
+          <div className="bg-white/80 rounded-2xl shadow-sm p-6 sm:p-8 mb-6 sm:mb-8 border border-slate-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {/* Score Circle */}
               <div className="flex items-center justify-center">
@@ -781,7 +781,7 @@ const InterviewReport = () => {
                       cy="100"
                       r="90"
                       fill="none"
-                      stroke="rgba(100, 116, 139, 0.2)"
+                      stroke="rgba(100, 116, 139, 0.15)"
                       strokeWidth="8"
                     />
                     {/* Progress circle */}
@@ -804,8 +804,8 @@ const InterviewReport = () => {
                     </defs>
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className="text-5xl font-bold text-white">{animatedScore}</div>
-                    <div className="text-slate-400 text-sm">/100</div>
+                    <div className="text-5xl font-black text-slate-900">{animatedScore}</div>
+                    <div className="text-slate-500 text-sm font-semibold">/100</div>
                   </div>
                 </div>
               </div>
@@ -813,8 +813,8 @@ const InterviewReport = () => {
               {/* Summary */}
               <div className="flex flex-col justify-center">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-white mb-2">Overall Performance</h2>
-                  <p className="text-slate-300">
+                  <h2 className="text-2xl font-black text-slate-900 mb-2">Overall Performance</h2>
+                  <p className="text-slate-600 font-medium leading-relaxed">
                     {reportData.overallScore >= 85
                       ? '🎉 Excellent! You demonstrated outstanding technical skills and communication abilities.'
                       : reportData.overallScore >= 70
@@ -830,8 +830,8 @@ const InterviewReport = () => {
                   <div className="space-y-3">
                     {reportData.roundAnalysis.map((round, idx) => (
                       <div key={idx} className="flex items-center justify-between">
-                        <span className="text-slate-300 capitalize">{round.roundType?.replace('_', ' ')}</span>
-                        <span className={`font-semibold ${getScoreColor(round.score)}`}>
+                        <span className="text-slate-600 font-semibold capitalize">{round.roundType?.replace('_', ' ')}</span>
+                        <span className={`font-black ${getScoreColor(round.score)}`}>
                           {round.score || 0}%
                         </span>
                       </div>
@@ -846,23 +846,23 @@ const InterviewReport = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* Radar Chart */}
             {reportData.skillAssessment && Array.isArray(reportData.skillAssessment) && reportData.skillAssessment.length > 0 && (
-              <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-700/50">
-                <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">Skills Analysis</h2>
+              <div className="bg-white/80 rounded-2xl shadow-sm p-6 sm:p-8 border border-slate-200">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-6">Skills Analysis</h2>
                 <RadarChart skills={reportData.skillAssessment} />
               </div>
             )}
 
             {/* Skill Bars */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-6 sm:p-8 border border-slate-700/50">
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">Detailed Breakdown</h2>
+            <div className="bg-white/80 rounded-2xl shadow-sm p-6 sm:p-8 border border-slate-200">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-6">Detailed Breakdown</h2>
               <div className="space-y-4">
                 {reportData.skillAssessment && Array.isArray(reportData.skillAssessment) && reportData.skillAssessment.map((skillItem, idx) => (
                   <div key={idx}>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-slate-300 font-medium">{skillItem.skill}</span>
-                      <span className={`font-bold ${getScoreColor(skillItem.confidence || 0)}`}>{skillItem.confidence || 0}%</span>
+                      <span className="text-slate-700 font-bold">{skillItem.skill}</span>
+                      <span className={`font-black ${getScoreColor(skillItem.confidence || 0)}`}>{skillItem.confidence || 0}%</span>
                     </div>
-                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${getScoreBg(skillItem.confidence || 0)} rounded-full transition-all duration-1000`}
                         style={{ width: `${skillItem.confidence || 0}%` }}
@@ -879,8 +879,8 @@ const InterviewReport = () => {
 
           {/* Round-wise Performance */}
           {reportData.rounds && reportData.rounds.length > 0 && (
-            <div className="bg-slate-800/50 rounded-2xl p-6 mb-8 border border-slate-700">
-              <h2 className="text-2xl font-bold text-white mb-6">Round-wise Performance</h2>
+            <div className="bg-white/80 rounded-2xl p-6 mb-8 border border-slate-200 shadow-sm">
+              <h2 className="text-2xl font-black text-slate-900 mb-6">Round-wise Performance</h2>
 
               {/* Round Tabs */}
               <div className="flex flex-wrap gap-2 mb-6">
@@ -888,13 +888,13 @@ const InterviewReport = () => {
                   <button
                     key={idx}
                     onClick={() => setActiveRound(idx)}
-                    className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeRound === idx
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                    className={`px-6 py-3 rounded-lg font-bold transition-all ${activeRound === idx
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100'
+                      : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
                       }`}
                   >
                     {round.roundName}
-                    <span className="ml-2 text-sm opacity-75">({round.score}/100)</span>
+                    <span className="ml-2 text-sm opacity-75 font-semibold">({round.score}/100)</span>
                   </button>
                 ))}
               </div>
@@ -903,23 +903,23 @@ const InterviewReport = () => {
               {reportData.rounds[activeRound] && (
                 <div>
                   {/* Round Header */}
-                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700">
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
                     <div>
-                      <h3 className="text-xl font-bold text-white">{reportData.rounds[activeRound].roundName}</h3>
-                      <p className="text-sm text-slate-400 mt-1">
+                      <h3 className="text-xl font-black text-slate-900">{reportData.rounds[activeRound].roundName}</h3>
+                      <p className="text-sm text-slate-500 mt-1 font-semibold">
                         {reportData.rounds[activeRound].questionsAnswered} / {reportData.rounds[activeRound].questionsAsked} questions answered
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-slate-400">Round Score</p>
-                      <p className="text-3xl font-bold text-blue-400">{reportData.rounds[activeRound].score}/100</p>
+                      <p className="text-sm text-slate-500 font-bold">Round Score</p>
+                      <p className="text-3xl font-black text-indigo-600">{reportData.rounds[activeRound].score}/100</p>
                     </div>
                   </div>
 
                   {/* Q&A Cards */}
                   {reportData.rounds[activeRound].qaDetails && reportData.rounds[activeRound].qaDetails.length > 0 && (
                     <div className="mb-6">
-                      <h4 className="text-lg font-semibold text-white mb-4">Questions & Answers</h4>
+                      <h4 className="text-lg font-black text-slate-900 mb-4">Questions & Answers</h4>
                       {reportData.rounds[activeRound].qaDetails.map((qa, idx) => (
                         <QACard key={idx} qa={qa} index={idx} />
                       ))}
@@ -929,7 +929,7 @@ const InterviewReport = () => {
                   {/* Round Analysis */}
                   {reportData.rounds[activeRound].roundAnalysis && (
                     <div>
-                      <h4 className="text-lg font-semibold text-white mb-4">Round Analysis</h4>
+                      <h4 className="text-lg font-black text-slate-900 mb-4">Round Analysis</h4>
                       <RoundAnalysis analysis={reportData.rounds[activeRound].roundAnalysis} />
                     </div>
                   )}
@@ -940,8 +940,8 @@ const InterviewReport = () => {
 
           {/* Overall Analysis */}
           {reportData.overallAnalysis && (
-            <div className="bg-slate-800/50 rounded-2xl p-8 mb-8 border border-slate-700">
-              <h2 className="text-2xl font-bold text-white mb-6">Overall Analysis</h2>
+            <div className="bg-white/80 rounded-2xl p-8 mb-8 border border-slate-200 shadow-sm">
+              <h2 className="text-2xl font-black text-slate-900 mb-6">Overall Analysis</h2>
               <RoundAnalysis analysis={reportData.overallAnalysis} />
             </div>
           )}
@@ -950,27 +950,27 @@ const InterviewReport = () => {
           {reportData.proctoring && (
             <div className={`rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 border ${
               reportData.proctoring.terminatedForCheating
-                ? 'bg-gradient-to-br from-red-900/40 to-orange-900/30 border-red-600/40'
+                ? 'bg-red-50 border border-red-200'
                 : reportData.proctoring.tabSwitchCount > 0
-                  ? 'bg-gradient-to-br from-yellow-900/30 to-orange-900/20 border-yellow-600/30'
-                  : 'bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border-emerald-600/30'
+                  ? 'bg-yellow-50 border border-yellow-200'
+                  : 'bg-emerald-50 border border-emerald-200'
             }`}>
               <div className="flex items-center gap-3 mb-6">
                 {reportData.proctoring.terminatedForCheating ? (
-                  <ShieldAlert className="w-6 h-6 text-red-400" />
+                  <ShieldAlert className="w-6 h-6 text-red-600" />
                 ) : reportData.proctoring.tabSwitchCount > 0 ? (
-                  <ShieldAlert className="w-6 h-6 text-yellow-400" />
+                  <ShieldAlert className="w-6 h-6 text-yellow-600" />
                 ) : (
-                  <Shield className="w-6 h-6 text-emerald-400" />
+                  <Shield className="w-6 h-6 text-emerald-600" />
                 )}
-                <h2 className={`text-xl sm:text-2xl font-bold ${
-                  reportData.proctoring.terminatedForCheating ? 'text-red-400' :
-                  reportData.proctoring.tabSwitchCount > 0 ? 'text-yellow-400' : 'text-emerald-400'
+                <h2 className={`text-xl sm:text-2xl font-black ${
+                  reportData.proctoring.terminatedForCheating ? 'text-red-950' :
+                  reportData.proctoring.tabSwitchCount > 0 ? 'text-yellow-950' : 'text-emerald-950'
                 }`}>
                   Interview Integrity
                 </h2>
                 {reportData.proctoring.terminatedForCheating && (
-                  <span className="ml-auto rounded-full bg-red-500/20 border border-red-500/40 px-3 py-1 text-xs font-semibold text-red-300">
+                  <span className="ml-auto rounded-full bg-red-100 border border-red-300 px-3 py-1 text-xs font-bold text-red-700">
                     TERMINATED
                   </span>
                 )}
@@ -978,38 +978,38 @@ const InterviewReport = () => {
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
                 {/* Integrity Score */}
-                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Integrity Score</p>
-                  <p className={`mt-2 text-3xl font-bold ${
-                    reportData.proctoring.integrityScore >= 80 ? 'text-emerald-400' :
-                    reportData.proctoring.integrityScore >= 50 ? 'text-yellow-400' : 'text-red-400'
+                <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-sm">
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Integrity Score</p>
+                  <p className={`mt-2 text-3xl font-black ${
+                    reportData.proctoring.integrityScore >= 80 ? 'text-emerald-600' :
+                    reportData.proctoring.integrityScore >= 50 ? 'text-yellow-600' : 'text-red-600'
                   }`}>
                     {reportData.proctoring.integrityScore}/100
                   </p>
                 </div>
 
                 {/* Tab Switches */}
-                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Tab Switches</p>
-                  <p className={`mt-2 text-3xl font-bold ${reportData.proctoring.tabSwitchCount > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-sm">
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Tab Switches</p>
+                  <p className={`mt-2 text-3xl font-black ${reportData.proctoring.tabSwitchCount > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                     {reportData.proctoring.tabSwitchCount}
                   </p>
                 </div>
 
                 {/* Warnings */}
-                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Warnings Issued</p>
-                  <p className={`mt-2 text-3xl font-bold ${reportData.proctoring.warningsIssued > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-sm">
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Warnings Issued</p>
+                  <p className={`mt-2 text-3xl font-black ${reportData.proctoring.warningsIssued > 0 ? 'text-orange-600' : 'text-emerald-600'}`}>
                     {reportData.proctoring.warningsIssued}/3
                   </p>
                 </div>
 
                 {/* Screen Share */}
-                <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700/40">
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">Screen Share</p>
+                <div className="rounded-xl bg-white p-4 border border-slate-200 shadow-sm">
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Screen Share</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <Monitor className={`h-5 w-5 ${reportData.proctoring.screenShareUsed ? 'text-emerald-400' : 'text-slate-500'}`} />
-                    <span className={`text-sm font-medium ${reportData.proctoring.screenShareUsed ? 'text-emerald-300' : 'text-slate-500'}`}>
+                    <Monitor className={`h-5 w-5 ${reportData.proctoring.screenShareUsed ? 'text-emerald-600' : 'text-slate-400'}`} />
+                    <span className={`text-sm font-bold ${reportData.proctoring.screenShareUsed ? 'text-emerald-700' : 'text-slate-400'}`}>
                       {reportData.proctoring.screenShareUsed ? 'Used' : 'Not Used'}
                     </span>
                   </div>
@@ -1019,22 +1019,22 @@ const InterviewReport = () => {
               {/* Violation Timeline */}
               {reportData.proctoring.violations && reportData.proctoring.violations.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
+                  <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-indigo-600" />
                     Violation Timeline
                   </h3>
                   <div className="space-y-2 max-h-48 overflow-y-auto">
                     {reportData.proctoring.violations.map((v, idx) => (
-                      <div key={idx} className="flex items-center gap-3 rounded-lg bg-slate-800/40 px-4 py-2 border border-slate-700/30">
-                        <span className="flex-shrink-0 h-2 w-2 rounded-full bg-red-400"></span>
-                        <span className="text-xs text-slate-400 font-mono">
+                      <div key={idx} className="flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-2 border border-slate-200">
+                        <span className="flex-shrink-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        <span className="text-xs text-slate-500 font-mono font-semibold">
                           {new Date(v.timestamp).toLocaleTimeString()}
                         </span>
-                        <span className="text-xs text-slate-300 capitalize">
+                        <span className="text-xs text-slate-800 capitalize font-bold">
                           {v.type?.replace(/_/g, ' ')}
                         </span>
                         {v.details && (
-                          <span className="text-xs text-slate-500 truncate ml-auto">{v.details}</span>
+                          <span className="text-xs text-slate-600 truncate ml-auto font-medium">{v.details}</span>
                         )}
                       </div>
                     ))}
@@ -1044,9 +1044,9 @@ const InterviewReport = () => {
 
               {/* Clean record message */}
               {reportData.proctoring.tabSwitchCount === 0 && !reportData.proctoring.terminatedForCheating && (
-                <div className="flex items-center gap-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-3">
-                  <Shield className="h-5 w-5 text-emerald-400" />
-                  <p className="text-sm text-emerald-200">
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3">
+                  <Shield className="h-5 w-5 text-emerald-600" />
+                  <p className="text-sm text-emerald-800 font-semibold">
                     No suspicious activity detected. Candidate maintained interview integrity throughout the session.
                   </p>
                 </div>
@@ -1054,9 +1054,9 @@ const InterviewReport = () => {
 
               {/* Terminated message */}
               {reportData.proctoring.terminatedForCheating && (
-                <div className="mt-4 flex items-center gap-3 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
-                  <ShieldAlert className="h-5 w-5 text-red-400" />
-                  <p className="text-sm text-red-200">
+                <div className="mt-4 flex items-center gap-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3">
+                  <ShieldAlert className="h-5 w-5 text-red-600" />
+                  <p className="text-sm text-red-800 font-semibold">
                     Interview was automatically terminated due to repeated tab switching ({reportData.proctoring.warningsIssued} warnings exceeded the limit). Results may not accurately reflect candidate ability.
                   </p>
                 </div>
@@ -1067,34 +1067,34 @@ const InterviewReport = () => {
           {/* Strengths & Weaknesses */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Strengths */}
-            <div className="bg-gradient-to-br from-green-900/30 to-emerald-900/30 rounded-2xl shadow-2xl p-8 border border-green-700/30">
-              <h2 className="text-2xl font-bold text-green-400 mb-6 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6" />
+            <div className="bg-emerald-50 rounded-2xl p-8 border border-emerald-200 shadow-sm">
+              <h2 className="text-2xl font-black text-emerald-800 mb-6 flex items-center gap-2">
+                <TrendingUp className="w-6 h-6 text-emerald-600" />
                 Strengths
               </h2>
               <ul className="space-y-3">
                 {reportData.strengths?.map((strength, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className="text-green-400 text-xl mt-1">✓</span>
-                    <span className="text-slate-300">{strength}</span>
+                    <span className="text-emerald-600 text-xl font-black mt-0.5">✓</span>
+                    <span className="text-slate-700 font-medium">{strength}</span>
                   </li>
-                )) || <li className="text-slate-400">No strengths identified yet</li>}
+                )) || <li className="text-slate-500 font-semibold">No strengths identified yet</li>}
               </ul>
             </div>
 
             {/* Areas to Improve */}
-            <div className="bg-gradient-to-br from-orange-900/30 to-yellow-900/30 rounded-2xl shadow-2xl p-8 border border-orange-700/30">
-              <h2 className="text-2xl font-bold text-orange-400 mb-6 flex items-center gap-2">
-                <TrendingDown className="w-6 h-6" />
+            <div className="bg-red-50 rounded-2xl p-8 border border-red-200 shadow-sm">
+              <h2 className="text-2xl font-black text-red-800 mb-6 flex items-center gap-2">
+                <TrendingDown className="w-6 h-6 text-red-600" />
                 Areas to Improve
               </h2>
               <ul className="space-y-3">
                 {reportData.improvementsNeeded?.map((weakness, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className="text-orange-400 text-xl mt-1">⚠</span>
-                    <span className="text-slate-300">{weakness}</span>
+                    <span className="text-red-600 text-xl font-black mt-0.5">⚠</span>
+                    <span className="text-slate-700 font-medium">{weakness}</span>
                   </li>
-                )) || <li className="text-slate-400">No improvements identified yet</li>}
+                )) || <li className="text-slate-500 font-semibold">No improvements identified yet</li>}
               </ul>
             </div>
           </div>
@@ -1102,55 +1102,55 @@ const InterviewReport = () => {
           {/* AI Feedback & Recommendations */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* AI Feedback */}
-            <div className="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 rounded-2xl shadow-2xl p-8 border border-blue-700/30">
-              <h2 className="text-2xl font-bold text-blue-400 mb-4 flex items-center gap-2">
-                <Zap className="w-6 h-6" />
+            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-200 shadow-sm">
+              <h2 className="text-2xl font-black text-blue-800 mb-4 flex items-center gap-2">
+                <Zap className="w-6 h-6 text-blue-600" />
                 AI Feedback
               </h2>
-              <p className="text-slate-300 leading-relaxed">
+              <p className="text-slate-700 leading-relaxed font-semibold">
                 {reportData.overallFeedback || 'No feedback available'}
               </p>
             </div>
 
             {/* Recommendations */}
-            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-2xl shadow-2xl p-8 border border-purple-700/30">
-              <h2 className="text-2xl font-bold text-purple-400 mb-4 flex items-center gap-2">
-                <Code className="w-6 h-6" />
+            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-200 shadow-sm">
+              <h2 className="text-2xl font-black text-purple-800 mb-4 flex items-center gap-2">
+                <Code className="w-6 h-6 text-purple-600" />
                 Recommendations
               </h2>
               <ul className="space-y-3">
                 {reportData.recommendations?.map((rec, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className="text-purple-400 text-lg">→</span>
-                    <span className="text-slate-300">{rec}</span>
+                    <span className="text-purple-600 text-lg font-black">→</span>
+                    <span className="text-slate-700 font-medium">{rec}</span>
                   </li>
-                )) || <li className="text-slate-400">No recommendations available</li>}
+                )) || <li className="text-slate-500 font-semibold">No recommendations available</li>}
               </ul>
             </div>
           </div>
 
           {/* Round Details */}
           {reportData.roundAnalysis && reportData.roundAnalysis.length > 0 && (
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-8 mb-8 border border-slate-700/50">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                <MessageCircle className="w-6 h-6" />
+            <div className="bg-white/80 rounded-2xl p-8 mb-8 border border-slate-200 shadow-sm">
+              <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                <MessageCircle className="w-6 h-6 text-indigo-600" />
                 Round-by-Round Analysis
               </h2>
               <div className="space-y-6">
                 {reportData.roundAnalysis.map((round, idx) => (
-                  <div key={idx} className="bg-slate-700/30 rounded-xl p-6 border border-slate-600/30">
+                  <div key={idx} className="bg-slate-50 rounded-xl p-6 border border-slate-200">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold text-white capitalize">
+                      <h3 className="text-lg font-black text-slate-900 capitalize">
                         Round {idx + 1}: {round.roundType?.replace('_', ' ')}
                       </h3>
-                      <span className={`px-3 py-1 rounded-full font-bold ${round.score >= 80 ? 'bg-green-500/20 text-green-400' :
-                        round.score >= 60 ? 'bg-blue-500/20 text-blue-400' :
-                          'bg-orange-500/20 text-orange-400'
+                      <span className={`px-3 py-1 rounded-full font-bold ${round.score >= 80 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                        round.score >= 60 ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                          'bg-orange-50 text-orange-700 border border-orange-200'
                         }`}>
                         {round.score || 0}/100
                       </span>
                     </div>
-                    <p className="text-slate-300">{round.feedback || 'No feedback for this round'}</p>
+                    <p className="text-slate-700 font-medium">{round.feedback || 'No feedback for this round'}</p>
                   </div>
                 ))}
               </div>
@@ -1161,31 +1161,30 @@ const InterviewReport = () => {
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
             <button
               onClick={() => navigate('/')}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300/40 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-sm text-sm sm:text-base"
             >
-              <Home className="w-5 h-5" />
+              <Home className="w-5 h-5 text-slate-600" />
               Back to Home
             </button>
             <button
               onClick={() => navigate('/ai-interview/setup')}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-100 text-sm sm:text-base"
             >
               <RotateCcw className="w-5 h-5" />
               Retake Interview
             </button>
             <button
               onClick={() => {
-                // TODO: Implement share functionality
                 alert('Share feature coming soon!');
               }}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md shadow-cyan-100 text-sm sm:text-base"
             >
               <Share2 className="w-5 h-5" />
               Share Report
             </button>
             <button
               onClick={handleDownloadPDF}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2 shadow-lg text-sm sm:text-base"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-100 text-sm sm:text-base"
             >
               <Download className="w-5 h-5" />
               Download Report

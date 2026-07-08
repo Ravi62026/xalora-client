@@ -50,14 +50,14 @@ const PaymentHistory = () => {
 
     const getStatusBadge = (status) => {
         const statusClasses = {
-            completed: "bg-green-100 text-green-800",
-            pending: "bg-yellow-100 text-yellow-800",
-            failed: "bg-red-100 text-red-800",
-            refunded: "bg-blue-100 text-blue-800",
+            completed: "bg-emerald-50 text-emerald-700 border border-emerald-100 font-semibold",
+            pending: "bg-amber-50 text-amber-700 border border-amber-100 font-semibold",
+            failed: "bg-red-50 text-red-700 border border-red-100 font-semibold",
+            refunded: "bg-blue-50 text-blue-700 border border-blue-100 font-semibold",
         };
 
         return (
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusClasses[status] || "bg-gray-100 text-gray-800"}`}>
+            <span className={`px-3 py-1 rounded-full text-xs ${statusClasses[status] || "bg-slate-50 text-slate-700 border border-slate-200"}`}>
                 {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
         );
@@ -164,10 +164,10 @@ const PaymentHistory = () => {
     if (loading) {
         return (
             <Layout>
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12">
+                <div className="min-h-screen xalora-grid-bg py-12">
                     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-center h-96">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
                         </div>
                     </div>
                 </div>
@@ -177,20 +177,20 @@ const PaymentHistory = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12">
+            <div className="min-h-screen xalora-grid-bg py-12">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-8">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-3xl font-bold text-white">Payment History</h1>
-                                <p className="mt-2 text-white/70">
+                                <h1 className="text-3xl font-black text-slate-900">Payment History</h1>
+                                <p className="mt-2 text-slate-600">
                                     View your payment history and download receipts
                                 </p>
                             </div>
                             <Link
                                 to="/profile"
-                                className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center transition-colors duration-300"
+                                className="text-indigo-600 hover:text-indigo-700 text-sm font-bold flex items-center transition-colors duration-300"
                             >
                                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -202,37 +202,37 @@ const PaymentHistory = () => {
 
                     {/* Error messages */}
                     {error && (
-                        <div className="mb-6 p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-lg">
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 font-semibold rounded-xl">
                             {error}
                         </div>
                     )}
 
                     {/* Receipt error messages */}
                     {receiptError && (
-                        <div className="mb-6 p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-lg">
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 font-semibold rounded-xl">
                             {receiptError}
                         </div>
                     )}
 
                     {/* Payment History Table */}
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg border border-white/10 overflow-hidden">
-                        <div className="px-6 py-4 border-b border-gray-700">
-                            <h2 className="text-xl font-semibold text-white">Transaction History</h2>
+                    <div className="bg-white/80 border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div className="px-6 py-4 border-b border-slate-100">
+                            <h2 className="text-xl font-bold text-slate-900">Transaction History</h2>
                         </div>
 
                         {payments.length === 0 ? (
                             <div className="px-6 py-12 text-center">
-                                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <h3 className="mt-2 text-lg font-medium text-white">No payment history</h3>
-                                <p className="mt-1 text-gray-400">
+                                <h3 className="mt-2 text-lg font-bold text-slate-900">No payment history</h3>
+                                <p className="mt-1 text-slate-500">
                                     You haven't made any payments yet.
                                 </p>
                                 <div className="mt-6">
                                     <Link
                                         to="/pricing"
-                                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-medium rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300"
+                                        className="inline-flex items-center px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100"
                                     >
                                         View Plans
                                     </Link>
@@ -240,44 +240,44 @@ const PaymentHistory = () => {
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-700">
+                                <table className="min-w-full divide-y divide-slate-100">
                                     <thead>
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                        <tr className="bg-slate-50/50">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Payment ID
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Date
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Plan
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Amount
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Status
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                                 Actions
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-700">
+                                    <tbody className="divide-y divide-slate-100 bg-white">
                                         {payments.map((payment) => (
-                                            <tr key={payment.paymentId} className="hover:bg-white/5 transition-colors duration-200">
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                            <tr key={payment.paymentId} className="hover:bg-slate-50/50 transition-colors duration-200">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                                     <div className="font-mono">{payment.paymentId}</div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                                                     {formatDate(payment.paymentDate)}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-medium">
                                                     {payment.notes?.planId ? 
                                                         `Xalora ${payment.notes.planId.charAt(0).toUpperCase() + payment.notes.planId.slice(1)}` : 
                                                         "Subscription"}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-bold">
                                                     {formatCurrency(payment.amount, payment.currency)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -286,9 +286,9 @@ const PaymentHistory = () => {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                     <button
                                                         onClick={() => handleDownloadReceipt(payment.paymentId)}
-                                                        className="text-emerald-400 hover:text-emerald-300 font-medium flex items-center"
+                                                        className="text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1"
                                                     >
-                                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                         </svg>
                                                         Download Receipt
@@ -303,14 +303,14 @@ const PaymentHistory = () => {
                     </div>
 
                     {/* Info Section */}
-                    <div className="mt-8 bg-gradient-to-r from-emerald-900/30 to-teal-900/30 backdrop-blur-sm rounded-2xl shadow-lg border border-emerald-700/30 p-6">
+                    <div className="mt-8 bg-slate-50 border border-slate-200/85 rounded-2xl shadow-sm p-6">
                         <div className="flex items-start">
-                            <svg className="h-6 w-6 text-emerald-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="h-6 w-6 text-slate-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div>
-                                <h3 className="text-lg font-medium text-white">Need help with your payments?</h3>
-                                <p className="mt-2 text-emerald-100">
+                                <h3 className="text-lg font-bold text-slate-900">Need help with your payments?</h3>
+                                <p className="mt-2 text-slate-600 text-sm leading-relaxed">
                                     If you have any questions about your payments or need assistance with receipts, 
                                     please contact our support team at support@xalora.com or visit our Help Center.
                                 </p>

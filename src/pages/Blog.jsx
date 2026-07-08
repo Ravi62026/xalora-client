@@ -81,55 +81,55 @@ const Blog = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 transform transition-all duration-500 hover:scale-105">
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Xalora Blog
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto transform transition-all duration-700 hover:text-gray-200">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               Insights, tutorials, and industry trends to help you master technical skills
             </p>
           </div>
 
           {/* Featured Post */}
           {featuredPost && (
-            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden mb-12 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10 transform hover:-translate-y-2">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 overflow-hidden mb-12 transition-all duration-300 hover:shadow-md">
               <div className="md:flex">
                 <div className="md:w-2/3 p-8">
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-emerald-900/50 text-emerald-300 text-sm rounded-full transition-all duration-300 hover:bg-emerald-800 hover:scale-105">
+                    <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
                       Featured
                     </span>
-                    <span className="px-3 py-1 bg-blue-900/50 text-blue-300 text-sm rounded-full transition-all duration-300 hover:bg-blue-800 hover:scale-105">
+                    <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full border border-indigo-100">
                       {featuredPost.category}
                     </span>
                   </div>
-                  <h2 className="text-3xl font-bold text-white mb-4 transition-all duration-300 hover:text-emerald-400">{featuredPost.title}</h2>
-                  <p className="text-gray-400 mb-6 text-lg transition-all duration-300 hover:text-gray-300">{featuredPost.excerpt}</p>
+                  <h2 className="text-3xl font-bold text-slate-900 mb-4">{featuredPost.title}</h2>
+                  <p className="text-slate-600 mb-6 text-lg leading-relaxed">{featuredPost.excerpt}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="bg-gray-700 rounded-full w-10 h-10 flex items-center justify-center mr-3 transition-all duration-300 hover:scale-110">
-                        <span className="text-emerald-400 font-bold">AJ</span>
+                      <div className="bg-slate-100 rounded-full w-10 h-10 flex items-center justify-center mr-3 border border-slate-200">
+                        <span className="text-indigo-600 font-bold">AJ</span>
                       </div>
                       <div>
-                        <p className="text-white font-medium transition-all duration-300 hover:text-emerald-400">{featuredPost.author}</p>
-                        <p className="text-gray-500 text-sm transition-all duration-300 hover:text-gray-400">{featuredPost.date} · {featuredPost.readTime}</p>
+                        <p className="text-slate-800 font-bold text-sm">{featuredPost.author}</p>
+                        <p className="text-slate-400 text-xs font-semibold">{featuredPost.date} · {featuredPost.readTime}</p>
                       </div>
                     </div>
-                    <button className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg font-medium text-white hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 transform hover:scale-105">
+                    <button className="px-6 py-3 bg-indigo-600 rounded-xl font-bold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
                       Read Article
                     </button>
                   </div>
                 </div>
-                <div className="md:w-1/3 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 flex items-center justify-center p-8 transition-all duration-300 hover:from-emerald-500/20 hover:to-cyan-500/20">
+                <div className="md:w-1/3 bg-slate-50 flex items-center justify-center p-8 border-l border-slate-100">
                   <img 
                     src={featuredPost.image} 
                     alt={featuredPost.title} 
-                    className="rounded-xl w-full h-64 object-cover transition-all duration-300 hover:scale-105"
+                    className="rounded-xl w-full h-64 object-cover shadow-sm"
                   />
                 </div>
               </div>
@@ -141,10 +141,10 @@ const Blog = () => {
             {categories.map((category, index) => (
               <button
                 key={index}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
                   category === "All"
-                    ? "bg-emerald-600 text-white hover:bg-emerald-500"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm"
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
                 }`}
               >
                 {category}
@@ -157,34 +157,34 @@ const Blog = () => {
             {blogPosts.filter(post => !post.featured).map((post) => (
               <div 
                 key={post.id} 
-                className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transform hover:-translate-y-2 hover:scale-105"
+                className="bg-white/80 border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-500/20 rounded-2xl"
               >
                 <img 
                   src={post.image} 
                   alt={post.title} 
-                  className="w-full h-48 object-cover transition-all duration-300 hover:scale-105"
+                  className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-full transition-all duration-300 hover:bg-gray-600 hover:scale-105">
+                    <span className="px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full border border-slate-200/60 font-semibold">
                       {post.category}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3 transition-all duration-300 hover:text-blue-400">{post.title}</h3>
-                  <p className="text-gray-400 mb-4 transition-all duration-300 hover:text-gray-300">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2">{post.title}</h3>
+                  <p className="text-slate-600 mb-4 text-sm leading-relaxed line-clamp-3">{post.excerpt}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                     <div className="flex items-center">
-                      <div className="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center mr-2 transition-all duration-300 hover:scale-110">
-                        <span className="text-emerald-400 text-xs font-bold">
+                      <div className="bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center mr-2 border border-slate-200">
+                        <span className="text-indigo-600 text-xs font-bold">
                           {post.author.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
                       <div>
-                        <p className="text-white text-sm font-medium transition-all duration-300 hover:text-emerald-400">{post.author}</p>
-                        <p className="text-gray-500 text-xs transition-all duration-300 hover:text-gray-400">{post.date}</p>
+                        <p className="text-slate-800 text-xs font-bold">{post.author}</p>
+                        <p className="text-slate-400 text-[10px] font-semibold">{post.date}</p>
                       </div>
                     </div>
-                    <span className="text-gray-500 text-sm transition-all duration-300 hover:text-gray-400">{post.readTime}</span>
+                    <span className="text-slate-400 text-xs font-semibold">{post.readTime}</span>
                   </div>
                 </div>
               </div>
@@ -192,18 +192,18 @@ const Blog = () => {
           </div>
 
           {/* Newsletter Signup */}
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl border border-emerald-500/20 p-8 mt-16 text-center transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10">
-            <h2 className="text-3xl font-bold text-white mb-4 transition-all duration-300 hover:text-emerald-400">Stay Updated</h2>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto transition-all duration-300 hover:text-gray-200">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-8 mt-16 text-center shadow-sm">
+            <h2 className="text-3xl font-black text-slate-900 mb-4">Stay Updated</h2>
+            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
               Get the latest articles, tutorials, and industry insights delivered straight to your inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-emerald-400/50 focus:bg-white/15 transition-all duration-300"
+                className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 transition-all duration-300"
               />
-              <button className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl font-medium text-white hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+              <button className="px-6 py-3 bg-indigo-600 rounded-xl font-bold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100 whitespace-nowrap">
                 Subscribe
               </button>
             </div>
@@ -211,7 +211,7 @@ const Blog = () => {
         </div>
       </div>
     </Layout>
-  );
+  );;
 };
 
 export default Blog;

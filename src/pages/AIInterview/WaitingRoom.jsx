@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Camera, Mic, Volume2, CheckCircle, XCircle, AlertCircle, User, Briefcase, Sparkles, Clock, FileText, ArrowLeft, Monitor, Shield } from 'lucide-react';
+import { Camera, Mic, Volume2, CheckCircle, XCircle, AlertCircle, User, Briefcase, Sparkles, Clock, FileText, ArrowLeft, Monitor, Shield, Video, VideoOff } from 'lucide-react';
 import { Layout } from '../../components';
 import interviewService from '../../services/interviewService';
 
@@ -39,8 +39,7 @@ const WaitingRoom = () => {
       }
     };
     checkSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId]);
+  }, [sessionId, navigate]);
 
   // Navigate when countdown reaches 0
   useEffect(() => {
@@ -48,8 +47,7 @@ const WaitingRoom = () => {
       const firstRound = sessionData?.specificRound || 'formal_qa';
       navigate(`/ai-interview/${sessionId}/round/${firstRound}`);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countdown]);
+  }, [countdown, isStarting, navigate, sessionData, sessionId]);
 
   // Load session data from localStorage
   useEffect(() => {
@@ -62,14 +60,13 @@ const WaitingRoom = () => {
         navigate('/ai-interview/setup');
       }
     } else {
-      // No session data, redirect to setup
       navigate('/ai-interview/setup');
     }
   }, [navigate]);
 
   useEffect(() => {
     return () => {
-      // Cleanup camera stream when unmounting (screen share stream is kept alive for InterviewRound)
+      // Cleanup camera stream when unmounting
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
       }
@@ -93,7 +90,6 @@ const WaitingRoom = () => {
       });
     } catch (error) {
       console.error('Media permissions error:', error);
-      // Try audio only
       try {
         const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         setStream(audioStream);
@@ -128,7 +124,6 @@ const WaitingRoom = () => {
         monitorTypeSurfaces: 'include'
       });
 
-      // Check if user selected entire screen (monitor)
       const videoTrack = displayStream.getVideoTracks()[0];
       const settings = videoTrack.getSettings();
       if (settings.displaySurface && settings.displaySurface !== 'monitor') {
@@ -142,7 +137,6 @@ const WaitingRoom = () => {
       setScreenShareStatus('granted');
       setScreenShareError('');
 
-      // Enter fullscreen mode for proctoring
       try {
         if (!document.fullscreenElement) {
           await document.documentElement.requestFullscreen();
@@ -151,10 +145,8 @@ const WaitingRoom = () => {
         console.warn('Fullscreen request failed:', fsErr);
       }
 
-      // Store in window so InterviewRound can pick it up
       window.__interviewScreenShare = displayStream;
 
-      // Listen for user stopping screen share
       videoTrack.onended = () => {
         setScreenShareStream(null);
         setScreenShareStatus('denied');
@@ -173,7 +165,6 @@ const WaitingRoom = () => {
   };
 
   const startInterview = () => {
-    // Microphone is required, camera is optional
     if (permissions.microphone !== 'granted') {
       alert('Microphone access is required for the interview.');
       return;
@@ -186,7 +177,6 @@ const WaitingRoom = () => {
     setIsStarting(true);
     setCountdown(3);
 
-    // Countdown before starting
     const countdownInterval = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
@@ -205,10 +195,10 @@ const WaitingRoom = () => {
   };
 
   const getStatusBadge = (status) => {
-    if (status === 'granted') return <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded border border-green-500/20">Ready</span>;
-    if (status === 'denied') return <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded border border-red-500/20">Blocked</span>;
-    if (status === 'pending') return <span className="text-xs px-2 py-0.5 bg-gray-500/20 text-gray-400 rounded border border-gray-500/20">Action Required</span>;
-    return <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded border border-yellow-500/20">Checking...</span>;
+    if (status === 'granted') return <span className="text-xs px-2 py-0.5 bg-green-50 text-green-700 rounded border border-green-200 font-bold">Ready</span>;
+    if (status === 'denied') return <span className="text-xs px-2 py-0.5 bg-red-50 text-red-700 rounded border border-red-200 font-bold">Blocked</span>;
+    if (status === 'pending') return <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded border border-slate-200 font-bold">Action Required</span>;
+    return <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-700 rounded border border-amber-200 font-bold">Checking...</span>;
   };
 
   const ROUND_CONFIG_MAP = {
@@ -232,14 +222,24 @@ const WaitingRoom = () => {
     { name: 'JD Based', duration: '10-12 min', color: 'amber', questions: '5-7' },
   ];
 
+  const badgeColorMap = {
+    blue: 'bg-blue-50 border border-blue-200 text-blue-700',
+    purple: 'bg-purple-50 border border-purple-200 text-purple-700',
+    emerald: 'bg-emerald-50 border border-emerald-200 text-emerald-700',
+    orange: 'bg-orange-50 border border-orange-200 text-orange-700',
+    pink: 'bg-pink-50 border border-pink-200 text-pink-700',
+    cyan: 'bg-cyan-50 border border-cyan-200 text-cyan-700',
+    amber: 'bg-amber-50 border border-amber-200 text-amber-705'
+  };
+
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative">
+      <div className="min-h-screen xalora-grid-bg text-slate-800 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative">
         {/* Floating Dev Mode Toggle */}
         <button
           onClick={() => setIsDevMode(!isDevMode)}
           className={`fixed top-4 right-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full border shadow-lg transition-all ${
-            isDevMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-slate-800/50 text-slate-400 border-slate-700/50'
+            isDevMode ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-100 text-slate-655 border-slate-200'
           }`}
         >
           DEV: {isDevMode ? 'ON' : 'OFF'}
@@ -249,7 +249,7 @@ const WaitingRoom = () => {
           {/* Back Button */}
           <button
             onClick={() => navigate('/ai-interview/setup')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+            className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors mb-6 cursor-pointer border-0 bg-transparent font-bold text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Setup
@@ -257,174 +257,163 @@ const WaitingRoom = () => {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full border border-emerald-500/30 mb-4">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
-              <span className="text-emerald-300 text-xs sm:text-sm font-medium">System Check Complete</span>
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200 mb-4 shadow-sm">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-705" />
+              <span className="text-emerald-755 text-xs sm:text-sm font-bold">System Check Complete</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent mb-2">
-              🎥 XALORA AI INTERVIEW
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 mb-2">
+              XALORA AI INTERVIEW
             </h1>
-            <p className="text-sm sm:text-base text-gray-400">AI-Powered Voice Interview with Real-time Analysis</p>
+            <p className="text-sm sm:text-base text-slate-500 font-semibold">AI-Powered Voice Interview with Real-time Analysis</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            {/* Camera Preview */}
-            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-xl p-4 sm:p-6">
-              <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2 text-white">
-                <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
-                Camera Preview
-              </h2>
-              <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-inner border border-gray-700/50">
-                {!hasRequestedPermissions ? (
-                  // Initial Professional Prompt Before Requesting Use
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 px-6 text-center z-10">
-                    <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 border border-blue-500/20">
-                      <Camera className="w-8 h-8 text-blue-400" />
+            
+            {/* Camera Preview Card */}
+            <div className="bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-6 flex flex-col justify-between">
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
+                  <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" />
+                  Camera Preview
+                </h2>
+                <div className="relative aspect-video bg-slate-50 rounded-xl overflow-hidden shadow-inner border border-slate-200">
+                  {!hasRequestedPermissions ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100/85 backdrop-blur-sm px-6 text-center z-10">
+                      <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mb-4 border border-indigo-200 shadow-inner">
+                        <Camera className="w-7 h-7 text-indigo-650" />
+                      </div>
+                      <h3 className="text-base font-bold text-slate-800 mb-2">Equipment Check</h3>
+                      <p className="text-xs text-slate-550 mb-6 max-w-sm leading-relaxed font-semibold">
+                        We need access to your camera and microphone to conduct the AI interview. Your privacy is protected.
+                      </p>
+                      <button
+                        onClick={requestPermissions}
+                        className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/10 cursor-pointer border-0"
+                      >
+                        Allow Access
+                      </button>
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Equipment Check</h3>
-                    <p className="text-sm text-gray-400 mb-6 max-w-sm leading-relaxed">
-                      We need access to your camera and microphone to conduct the AI interview. Your privacy is protected.
-                    </p>
-                    <button
-                      onClick={requestPermissions}
-                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 flex items-center gap-2 transform hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <CheckCircle className="w-4 h-4" />
-                      Allow Access
-                    </button>
-                  </div>
-                ) : permissions.camera === 'checking' ? (
-                  // Checking State (waiting for browser prompt)
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                    <div className="w-10 h-10 border-3 border-blue-500/30 border-t-blue-500 border-r-blue-500 rounded-full animate-spin mb-4"></div>
-                    <p className="text-gray-300 font-medium">Waiting for permission...</p>
-                    <p className="text-xs text-gray-500 mt-2">Please click 'Allow' in your browser popup.</p>
-                  </div>
-                ) : permissions.camera === 'denied' && permissions.microphone === 'denied' ? (
-                  // Completely Blocked State
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 px-6 text-center z-10">
-                    <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4 border border-red-500/20">
-                      <XCircle className="w-8 h-8 text-red-500" />
+                  ) : permissions.camera === 'checking' ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100/90">
+                      <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                      <p className="text-slate-700 font-bold text-sm">Waiting for permission...</p>
+                      <p className="text-[10px] text-slate-500 mt-1 font-semibold">Please click 'Allow' in your browser popup.</p>
                     </div>
-                    <h3 className="text-lg font-semibold text-white mb-2">Access Blocked</h3>
-                    <p className="text-sm text-gray-400 mb-6 max-w-sm line-clamp-3">
-                      Your browser is blocking access. Please click the lock icon <span className="inline-block align-middle mx-1">🔒</span> in the left of your URL bar to allow camera and microphone, then refresh.
-                    </p>
-                    <button
-                      onClick={() => window.location.reload()}
-                      className="px-6 py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-xl transition-all"
-                    >
-                      I've allowed it, refresh page
-                    </button>
-                  </div>
-                ) : stream && permissions.camera === 'granted' ? (
-                  // Success stream
-                  <video
-                    autoPlay
-                    muted
-                    playsInline
-                    ref={(videoElement) => {
-                      if (videoElement && stream) {
-                        // Proper srcObject assignment to avoid stale stream issues
-                        if (videoElement.srcObject !== stream) {
-                          videoElement.srcObject = stream;
+                  ) : permissions.camera === 'denied' && permissions.microphone === 'denied' ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-50 border border-red-200 px-6 text-center z-10">
+                      <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4 border border-red-200 text-red-750">
+                        <XCircle className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-base font-black text-red-950 mb-1">Access Blocked</h3>
+                      <p className="text-xs text-red-800 mb-6 max-w-sm font-semibold leading-relaxed">
+                        Your browser is blocking access. Please click the lock icon 🔒 in the URL bar to allow camera and microphone, then refresh.
+                      </p>
+                      <button
+                        onClick={() => window.location.reload()}
+                        className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl cursor-pointer border-0 shadow"
+                      >
+                        Refresh Page
+                      </button>
+                    </div>
+                  ) : stream && permissions.camera === 'granted' ? (
+                    <video
+                      autoPlay
+                      muted
+                      playsInline
+                      ref={(videoElement) => {
+                        if (videoElement && stream) {
+                          if (videoElement.srcObject !== stream) {
+                            videoElement.srcObject = stream;
+                          }
                         }
-                      }
-                    }}
-                    className="w-full h-full object-cover transform scale-x-[-1]" // Mirrored for better UX
-                    onLoadedMetadata={() => {
-                      // Ensure video plays when metadata is loaded
-                      console.log('[WaitingRoom] Video stream loaded and ready');
-                    }}
-                    onError={(e) => {
-                      // Log video errors for debugging
-                      console.error('[WaitingRoom] Video error:', e, { 
-                        videoWidth: e.target?.videoWidth, 
-                        readyState: e.target?.readyState, 
-                        srcObject: !!e.target?.srcObject 
-                      });
-                    }}
-                  />
-                ) : (
-                  // Audio-only or gracefully degraded state
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                    <div className="text-center text-gray-400 px-4">
-                      {permissions.microphone === 'granted' ? (
-                        <>
-                          <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mb-4 mx-auto border border-yellow-500/20">
-                            <Mic className="w-8 h-8 text-yellow-500" />
-                          </div>
-                          <p className="text-white font-medium text-base">Audio Only Mode</p>
-                          <p className="text-sm text-gray-400 mt-2">Camera access is denied or unavailable.</p>
-                        </>
-                      ) : (
-                        <>
-                          <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 opacity-30" />
-                          <p className="text-sm sm:text-base text-gray-500">Camera off</p>
-                        </>
-                      )}
+                      }}
+                      className="w-full h-full object-cover transform scale-x-[-1]"
+                      onLoadedMetadata={() => {
+                        console.log('[WaitingRoom] Video stream loaded and ready');
+                      }}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-100/90">
+                      <div className="text-center text-slate-650 px-4">
+                        {permissions.microphone === 'granted' ? (
+                          <>
+                            <div className="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mb-3 mx-auto border border-amber-250">
+                              <Mic className="w-7 h-7 text-amber-700" />
+                            </div>
+                            <p className="text-slate-800 font-bold text-sm">Audio Only Mode</p>
+                            <p className="text-xs text-slate-500 mt-1 font-semibold">Camera access is denied or unavailable.</p>
+                          </>
+                        ) : (
+                          <>
+                            <VideoOff className="w-10 h-10 mx-auto mb-3 opacity-30 text-slate-400" />
+                            <p className="text-xs text-slate-400 font-semibold">Camera off</p>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Countdown Overlay */}
-                {isStarting && countdown > 0 && (
-                  <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                    <div className="text-center">
-                      <p className="text-5xl sm:text-6xl font-bold text-white mb-4">{countdown}</p>
-                      <p className="text-lg sm:text-xl text-gray-300">Starting interview...</p>
+                  {/* Countdown Overlay */}
+                  {isStarting && countdown > 0 && (
+                    <div className="absolute inset-0 bg-white/95 backdrop-blur-md flex items-center justify-center z-30">
+                      <div className="text-center animate-in zoom-in-95 duration-200">
+                        <p className="text-6xl font-black text-slate-900 mb-2">{countdown}</p>
+                        <p className="text-sm text-slate-600 font-bold uppercase tracking-wider">Starting interview...</p>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
-              {/* Device Status */}
-              <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
-                <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <Camera className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                    <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Camera</span>
+              {/* Device Status items */}
+              <div className="mt-6 space-y-2">
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                    <Camera className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                    <span className="font-semibold text-slate-700 text-sm truncate">Camera</span>
                     {getStatusBadge(permissions.camera)}
                   </div>
                   {getStatusIcon(permissions.camera)}
                 </div>
-                <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                    <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Microphone</span>
+                
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                    <Mic className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                    <span className="font-semibold text-slate-700 text-sm truncate">Microphone</span>
                     {getStatusBadge(permissions.microphone)}
                     {permissions.microphone !== 'granted' && (
-                      <span className="text-xs text-red-400 hidden sm:inline">(Required)</span>
+                      <span className="text-xs text-red-500 font-bold ml-1">(Required)</span>
                     )}
                   </div>
                   {getStatusIcon(permissions.microphone)}
                 </div>
-                <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                    <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Speaker</span>
+
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                    <Volume2 className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                    <span className="font-semibold text-slate-700 text-sm truncate">Speaker</span>
                     {getStatusBadge(permissions.speaker)}
                   </div>
                   {getStatusIcon(permissions.speaker)}
                 </div>
 
-                {/* Screen Share */}
+                {/* Screen Share row */}
                 {!isDevMode && (
                   <>
-                    <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg border border-gray-600">
-                      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                        <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                        <span className="font-medium text-gray-300 text-sm sm:text-base truncate">Screen Share</span>
+                    <div className="flex items-center justify-between p-3 bg-slate-55 rounded-xl border border-slate-200">
+                      <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                        <Monitor className="w-4 h-4 text-slate-500 flex-shrink-0" />
+                        <span className="font-semibold text-slate-700 text-sm truncate">Screen Share</span>
                         {getStatusBadge(screenShareStatus)}
                         {screenShareStatus !== 'granted' && (
-                          <span className="text-xs text-red-400 hidden sm:inline">(Required)</span>
+                          <span className="text-xs text-red-500 font-bold ml-1">(Required)</span>
                         )}
                       </div>
                       <div className="flex items-center gap-2">
                         {screenShareStatus !== 'granted' && permissions.microphone === 'granted' && (
                           <button
                             onClick={requestScreenShare}
-                            className="px-3 py-1 text-xs font-medium rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white transition-colors flex items-center gap-1"
+                            className="px-3 py-1 text-xs font-bold rounded-lg bg-cyan-600 hover:bg-cyan-705 text-white transition-colors flex items-center gap-1 cursor-pointer border-0"
                           >
                             <Monitor className="w-3 h-3" />
                             Share
@@ -434,7 +423,7 @@ const WaitingRoom = () => {
                       </div>
                     </div>
                     {screenShareError && (
-                      <p className="text-xs text-red-400 px-3 flex items-center gap-1">
+                      <p className="text-xs text-red-650 px-3 flex items-center gap-1 font-semibold">
                         <AlertCircle className="w-3 h-3 flex-shrink-0" />
                         {screenShareError}
                       </p>
@@ -444,58 +433,62 @@ const WaitingRoom = () => {
               </div>
             </div>
 
-            {/* Right Column */}
+            {/* Right Column details list */}
             <div className="space-y-4 sm:space-y-6">
-              {/* Interview Details */}
-              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-xl p-4 sm:p-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-white flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-purple-400" />
+              
+              {/* Interview Details Card */}
+              <div className="bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-purple-650" />
                   Interview Details
                 </h2>
-                <div className="space-y-3 sm:space-y-4">
+                <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0" />
+                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-650 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <label className="text-xs text-gray-500">Candidate</label>
-                      <p className="text-white font-semibold text-sm sm:text-base truncate">
+                      <label className="text-[10px] text-slate-400 uppercase font-black tracking-wider block">Candidate</label>
+                      <p className="text-slate-800 font-extrabold text-sm sm:text-base truncate">
                         {sessionData?.candidateInfo?.name || 'Loading...'}
                       </p>
                     </div>
                   </div>
+                  
                   <div className="flex items-center gap-3">
-                    <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0" />
+                    <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-650 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <label className="text-xs text-gray-500">Position</label>
-                      <p className="text-white font-semibold text-sm sm:text-base truncate">
+                      <label className="text-[10px] text-slate-400 uppercase font-black tracking-wider block">Position</label>
+                      <p className="text-slate-800 font-extrabold text-sm sm:text-base truncate">
                         {sessionData?.position || 'Loading...'}
                       </p>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-3">
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <label className="text-xs text-gray-500">Estimated Duration</label>
-                      <p className="text-white font-semibold text-sm sm:text-base">
+                      <label className="text-[10px] text-slate-400 uppercase font-black tracking-wider block">Estimated Duration</label>
+                      <p className="text-slate-800 font-extrabold text-sm sm:text-base">
                         {sessionData?.interviewMode === 'full' ? '60-90 minutes' : sessionData?.interviewMode === 'specific' ? '10-15 minutes' : '30-45 minutes'}
                       </p>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-3">
-                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 flex-shrink-0" />
+                    <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <label className="text-xs text-gray-500">Interview Mode</label>
-                      <p className="text-white font-semibold text-sm sm:text-base">
-                        {sessionData?.interviewMode === 'specific' ? 'Specific Round' : 'Full Interview'}
+                      <label className="text-[10px] text-slate-400 uppercase font-black tracking-wider block">Interview Mode</label>
+                      <p className="text-slate-800 font-extrabold text-sm sm:text-base">
+                        {sessionData?.interviewMode === 'specific' ? 'Specific Practice Round' : 'Full loop loop'}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Round Overview */}
-              <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl shadow-xl p-6">
-                <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-cyan-400" />
+              {/* Selected Round Overview */}
+              <div className="bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-sm p-6">
+                <h2 className="text-xl font-bold mb-4 text-slate-850 flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-indigo-600" />
                   {sessionData?.interviewMode === 'specific' ? 'Selected Round' : 'Round Overview'}
                 </h2>
                 <div className="space-y-2">
@@ -505,76 +498,77 @@ const WaitingRoom = () => {
                       ROUND_CONFIG_MAP[sessionData?.specificRound] === round.name
                     )
                     .map((round, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-700/30 rounded-lg">
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl shadow-inner">
                         <div className="flex items-center gap-3">
-                          <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold bg-${round.color}-500/20 text-${round.color}-400`}>
+                          <span className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-black shadow-sm ${badgeColorMap[round.color]}`}>
                             {sessionData?.interviewMode === 'specific' ? '★' : index + 1}
                           </span>
-                          <span className="text-gray-300 font-medium">{round.name}</span>
+                          <span className="text-slate-700 font-bold">{round.name}</span>
                         </div>
                         <div className="text-right">
-                          <p className="text-gray-400 text-sm">{round.duration}</p>
+                          <p className="text-slate-500 text-xs font-semibold">{round.duration}</p>
                         </div>
                       </div>
                     ))}
                 </div>
               </div>
 
-              {/* Tips */}
-              <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-2xl p-6 border border-blue-700/30">
-                <h3 className="font-semibold mb-3 flex items-center gap-2 text-blue-400">
+              {/* Guidelines / Tips */}
+              <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 shadow-inner">
+                <h3 className="font-bold mb-3 flex items-center gap-2 text-indigo-805">
                   <AlertCircle className="w-5 h-5" />
                   Interview Tips
                 </h3>
-                <ul className="space-y-2 text-sm text-gray-300">
+                <ul className="space-y-2.5 text-xs text-slate-650 font-semibold">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">•</span>
+                    <span className="text-indigo-500 mt-0.5">•</span>
                     <span>Sit in a quiet, well-lit room</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">•</span>
-                    <span>Look at the camera while speaking</span>
+                    <span className="text-indigo-500 mt-0.5">•</span>
+                    <span>Look directly at the camera while speaking</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">•</span>
+                    <span className="text-indigo-500 mt-0.5">•</span>
                     <span>Speak clearly and at a moderate pace</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">•</span>
-                    <span>Take your time to think before answering</span>
+                    <span className="text-indigo-500 mt-0.5">•</span>
+                    <span>Take your time to formulate your answer</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">•</span>
-                    <span>Use the STAR method for behavioral questions</span>
+                    <span className="text-indigo-500 mt-0.5">•</span>
+                    <span>Use the STAR method for behavioral answers</span>
                   </li>
                 </ul>
               </div>
 
-              {/* Start Button */}
+              {/* Start Interview Action */}
               <button
                 onClick={startInterview}
                 disabled={permissions.microphone !== 'granted' || (!isDevMode && screenShareStatus !== 'granted') || isStarting}
-                className="w-full py-3 sm:py-4 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl shadow-red-500/30 transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-gradient-to-r from-indigo-650 to-purple-650 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold text-base sm:text-lg shadow-lg shadow-indigo-600/10 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 cursor-pointer border-0"
               >
                 {isStarting ? (
                   <>Starting in {countdown}...</>
                 ) : (
-                  <>🚀 Start Interview</>
+                  <>🚀 Start Practice Round</>
                 )}
               </button>
 
               {permissions.microphone !== 'granted' && (
-                <p className="text-center text-red-400 text-xs sm:text-sm px-4">
+                <p className="text-center text-red-700 text-xs sm:text-sm px-4 font-bold">
                   Please grant microphone access to start the interview
                 </p>
               )}
               {permissions.microphone === 'granted' && !isDevMode && screenShareStatus !== 'granted' && (
-                <p className="text-center text-cyan-400 text-xs sm:text-sm px-4 flex items-center justify-center gap-1">
-                  <Shield className="w-3 h-3" />
+                <p className="text-center text-cyan-750 text-xs sm:text-sm px-4 flex items-center justify-center gap-1 font-bold">
+                  <Shield className="w-3.5 h-3.5" />
                   Please share your entire screen to start the interview
                 </p>
               )}
             </div>
+            
           </div>
         </div>
       </div>

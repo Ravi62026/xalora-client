@@ -870,8 +870,8 @@ public class Solution {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="flex items-center justify-center min-h-screen xalora-grid-bg">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
         </div>
       </Layout>
     );
@@ -880,9 +880,11 @@ public class Solution {
   if (error || !problem) {
     return (
       <Layout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-red-50 border border-red-200 text-red-600 rounded-lg p-4">
-            {error || "Problem not found"}
+        <div className="min-h-screen xalora-grid-bg py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 font-bold">
+              {error || "Problem not found"}
+            </div>
           </div>
         </div>
       </Layout>
@@ -967,19 +969,19 @@ public class Solution {
 
   return (
     <Layout showNavbar={false} showFooter={false}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black overflow-y-auto">
-        <div className="h-16 border-b border-white/10 bg-slate-950/90 backdrop-blur">
+      <div className="min-h-screen xalora-grid-bg overflow-y-auto">
+        <div className="h-16 border-b border-slate-200 bg-white/90 backdrop-blur shadow-sm">
           <div className="mx-auto flex h-full max-w-[1800px] items-center justify-between px-3 sm:px-5">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-slate-200 transition hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50 font-bold"
             >
               <img src="/logo_xalora.png" alt="Home" className="h-7 w-auto sm:h-8" />
               <span className="hidden sm:inline">Home</span>
             </Link>
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5 text-xs text-slate-200 transition hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-700 transition hover:bg-slate-50 font-bold"
             >
               <img src="/logo_xalora.png" alt="Dashboard" className="h-7 w-auto sm:h-8" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -989,23 +991,23 @@ public class Solution {
 
         {interviewSessionId && (
           <div className="mx-auto w-full max-w-[1800px] px-3 sm:px-5 py-3">
-            <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <p className="text-emerald-200 text-sm font-semibold">Interview Coding Mode</p>
-                <p className="text-emerald-200/70 text-xs">Solve the problem and continue the interview flow.</p>
+                <p className="text-emerald-800 text-sm font-bold">Interview Coding Mode</p>
+                <p className="text-emerald-700 text-xs font-semibold">Solve the problem and continue the interview flow.</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={handleInterviewSkip}
                   disabled={interviewSubmitting || executing}
-                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-emerald-500/60 text-emerald-100 bg-emerald-500/10 hover:bg-emerald-500/20 transition disabled:opacity-50"
+                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-emerald-300 text-emerald-700 bg-white hover:bg-emerald-50 transition disabled:opacity-50 font-bold"
                 >
                   Skip Question
                 </button>
                 <button
                   onClick={() => handleInterviewCompletion(executionResult?.verdict || "Submitted")}
                   disabled={interviewSubmitting || executing || !executionResult?.verdict || executionResult.verdict === "Processing"}
-                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-slate-500/60 text-slate-100 bg-slate-600/20 hover:bg-slate-600/30 transition disabled:opacity-50"
+                  className="px-4 py-2 text-xs sm:text-sm rounded-lg border border-indigo-200 text-indigo-700 bg-white hover:bg-indigo-50 transition disabled:opacity-50 font-bold"
                 >
                   Next Question
                 </button>

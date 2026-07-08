@@ -79,31 +79,31 @@ const HelpCenter = () => {
 
   return (
     <Layout showNavbar={true}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-black py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen xalora-grid-bg py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 transform transition-all duration-500 hover:scale-105">
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 transform transition-all duration-500 hover:scale-105">
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Help Center
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto transform transition-all duration-700 hover:text-gray-200">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               Find answers to common questions and get help with using our platform
             </p>
           </div>
 
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-16">
-            <div className="relative">
+            <div className="relative shadow-sm rounded-2xl">
               <input
                 type="text"
                 placeholder="Search for help..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-emerald-400/50 focus:bg-white/15 transition-all duration-300 pl-14 transform hover:scale-[1.02]"
+                className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 transition-all duration-300 pl-14"
               />
-              <svg className="absolute left-5 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="absolute left-5 top-1/2 transform -translate-y-1/2 h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -111,54 +111,54 @@ const HelpCenter = () => {
 
           {/* Quick Links */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-6 transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10 transform hover:-translate-y-2 hover:scale-105">
-              <div className="bg-emerald-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 transition-all duration-300 hover:scale-110">
-                <svg className="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-white/80 border border-slate-200 p-6 rounded-2xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-1">
+              <div className="bg-emerald-50 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 border border-emerald-100">
+                <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 transition-all duration-300 hover:text-emerald-400">Account Issues</h3>
-              <p className="text-gray-400 mb-4 transition-all duration-300 hover:text-gray-300">Troubleshoot login, signup, and account management problems.</p>
-              <button className="text-emerald-400 font-medium hover:text-emerald-300 transition-all duration-300 transform hover:scale-105">
-                View Articles →
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Account Issues</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">Troubleshoot login, signup, and account management problems.</p>
+              <button className="text-emerald-600 font-bold hover:text-emerald-700 transition-all flex items-center gap-1">
+                View Articles <span>→</span>
               </button>
             </div>
 
-            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-6 transition-all duration-300 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transform hover:-translate-y-2 hover:scale-105">
-              <div className="bg-blue-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 transition-all duration-300 hover:scale-110">
-                <svg className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-white/80 border border-slate-200 p-6 rounded-2xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-1">
+              <div className="bg-blue-50 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 border border-blue-100">
+                <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 transition-all duration-300 hover:text-blue-400">Billing & Payments</h3>
-              <p className="text-gray-400 mb-4 transition-all duration-300 hover:text-gray-300">Get help with subscriptions, payments, and refunds.</p>
-              <button className="text-blue-400 font-medium hover:text-blue-300 transition-all duration-300 transform hover:scale-105">
-                View Articles →
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Billing & Payments</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">Get help with subscriptions, payments, and refunds.</p>
+              <button className="text-blue-600 font-bold hover:text-blue-700 transition-all flex items-center gap-1">
+                View Articles <span>→</span>
               </button>
             </div>
 
-            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 p-6 transition-all duration-300 hover:border-purple-500 hover:shadow-xl hover:shadow-purple-500/10 transform hover:-translate-y-2 hover:scale-105">
-              <div className="bg-purple-500/20 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 transition-all duration-300 hover:scale-110">
-                <svg className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-white/80 border border-slate-200 p-6 rounded-2xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-1">
+              <div className="bg-purple-50 p-3 rounded-lg w-12 h-12 flex items-center justify-center mb-4 border border-purple-100">
+                <svg className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 transition-all duration-300 hover:text-purple-400">Technical Support</h3>
-              <p className="text-gray-400 mb-4 transition-all duration-300 hover:text-gray-300">Resolve issues with our platform, editor, or tools.</p>
-              <button className="text-purple-400 font-medium hover:text-purple-300 transition-all duration-300 transform hover:scale-105">
-                View Articles →
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Technical Support</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">Resolve issues with our platform, editor, or tools.</p>
+              <button className="text-purple-600 font-bold hover:text-purple-700 transition-all flex items-center gap-1">
+                View Articles <span>→</span>
               </button>
             </div>
           </div>
 
           {/* FAQ Section */}
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white text-center mb-12 transition-all duration-300 hover:text-emerald-400">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-black text-slate-900 text-center mb-12">Frequently Asked Questions</h2>
             
             {Object.keys(groupedFAQs).map((category) => (
               <div key={category} className="mb-12">
-                <h3 className="text-2xl font-bold text-white mb-6 flex items-center transition-all duration-300 hover:text-emerald-400">
-                  <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                  <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     {category}
                   </span>
                 </h3>
@@ -167,15 +167,15 @@ const HelpCenter = () => {
                   {groupedFAQs[category].map((faq) => (
                     <div 
                       key={faq.id} 
-                      className="bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden transition-all duration-300 hover:border-emerald-500/50 transform hover:-translate-y-1"
+                      className="bg-white/80 rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all duration-300 hover:border-indigo-500/20"
                     >
                       <button
                         className="w-full p-6 text-left flex justify-between items-center"
                         onClick={() => toggleFAQ(faq.id)}
                       >
-                        <h4 className="text-lg font-semibold text-white transition-all duration-300 hover:text-emerald-400">{faq.question}</h4>
+                        <h4 className="text-lg font-bold text-slate-800">{faq.question}</h4>
                         <svg 
-                          className={`h-5 w-5 text-gray-400 transition-transform duration-300 ${expandedFAQ === faq.id ? 'rotate-180' : ''}`}
+                          className={`h-5 w-5 text-slate-500 transition-transform duration-300 ${expandedFAQ === faq.id ? 'rotate-180' : ''}`}
                           fill="none" 
                           viewBox="0 0 24 24" 
                           stroke="currentColor"
@@ -185,8 +185,8 @@ const HelpCenter = () => {
                       </button>
                       
                       {expandedFAQ === faq.id && (
-                        <div className="px-6 pb-6 pt-2 border-t border-gray-700">
-                          <p className="text-gray-400 transition-all duration-300 hover:text-gray-300">{faq.answer}</p>
+                        <div className="px-6 pb-6 pt-2 border-t border-slate-100">
+                          <p className="text-slate-600 leading-relaxed text-sm sm:text-base">{faq.answer}</p>
                         </div>
                       )}
                     </div>
@@ -197,16 +197,16 @@ const HelpCenter = () => {
           </div>
 
           {/* Contact Support */}
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl border border-emerald-500/20 p-8 text-center transition-all duration-300 hover:border-emerald-500 hover:shadow-xl hover:shadow-emerald-500/10">
-            <h2 className="text-3xl font-bold text-white mb-4 transition-all duration-300 hover:text-emerald-400">Still Need Help?</h2>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto transition-all duration-300 hover:text-gray-200">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-8 text-center shadow-sm">
+            <h2 className="text-3xl font-black text-slate-900 mb-4">Still Need Help?</h2>
+            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
               Can't find what you're looking for? Our support team is here to help you 24/7.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg font-medium text-white hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 transform hover:scale-105">
+              <button className="px-6 py-3 bg-indigo-600 rounded-xl font-bold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
                 Contact Support
               </button>
-              <button className="px-6 py-3 bg-gray-700 rounded-lg font-medium text-white hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+              <button className="px-6 py-3 bg-white border border-slate-300 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all">
                 Live Chat
               </button>
             </div>
