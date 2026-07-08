@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import {
   ArrowLeft,
   Download,
-  CheckCircle,
+  CheckCircle, 
   XCircle,
   Clock,
   Target,
